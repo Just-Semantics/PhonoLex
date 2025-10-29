@@ -433,9 +433,9 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
 
           <Box sx={{ mt: 4, p: 2, bgcolor: 'primary.50', borderRadius: 1 }}>
             <Typography variant="caption" color="text.secondary" align="center" display="block">
-              PhonoLex v2.0 • Open Source MIT License
+              PhonoLex v2.0.0 • Licensed under CC BY-SA 3.0
               <br />
-              Phonological data and computational tools
+              ShareAlike license required due to PHOIBLE data
             </Typography>
           </Box>
         </Box>
