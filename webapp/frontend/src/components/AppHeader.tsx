@@ -406,25 +406,6 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
           <Divider sx={{ my: 3 }} />
 
           <Typography variant="h6" gutterBottom fontWeight={600}>
-            Documentation
-          </Typography>
-          <Typography variant="body2" paragraph color="text.secondary">
-            API reference, user guides, technical docs
-          </Typography>
-          <Button
-            variant="outlined"
-            startIcon={<DocsIcon />}
-            href="https://docs.example.com"
-            target="_blank"
-            fullWidth
-            sx={{ mb: 3 }}
-          >
-            Read the Docs
-          </Button>
-
-          <Divider sx={{ my: 3 }} />
-
-          <Typography variant="h6" gutterBottom fontWeight={600}>
             Contact
           </Typography>
           <Typography variant="body2" color="text.secondary" paragraph>
