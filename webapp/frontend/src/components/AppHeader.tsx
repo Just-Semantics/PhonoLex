@@ -305,9 +305,9 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
 
           <Box sx={{ mt: 3, p: 2, bgcolor: 'primary.50', borderRadius: 1 }}>
             <Typography variant="caption" color="text.secondary" align="center" display="block">
-              PhonoLex v2.0 • Built with FastAPI + React + PostgreSQL + pgvector
+              PhonoLex v2.0.0 • Built with FastAPI + React + PostgreSQL + pgvector
               <br />
-              Open source data resource for phonological research
+              Licensed under CC BY-SA 3.0 • Data resource for phonological research
             </Typography>
           </Box>
         </Box>
