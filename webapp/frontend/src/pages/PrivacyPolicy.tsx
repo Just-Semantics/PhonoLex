@@ -114,8 +114,8 @@ const PrivacyPolicy: React.FC = () => {
           </Typography>
           <Typography variant="body1" paragraph>
             For questions about this Privacy Policy, please contact{' '}
-            <Link href="mailto:social@neumannsworkshop.org" underline="hover">
-              social@neumannsworkshop.org
+            <Link href="mailto:contact@justsemantics.net" underline="hover">
+              contact@justsemantics.net
             </Link>.
           </Typography>
         </Box>

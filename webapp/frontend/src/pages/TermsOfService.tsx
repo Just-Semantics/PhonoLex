@@ -98,7 +98,7 @@ const TermsOfService: React.FC = () => {
           </Typography>
           <Typography variant="body1" paragraph>
             PhonoLex is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License (CC BY-SA 3.0) due to incorporated data sources. Source code is available on{' '}
-            <Link href="https://github.com/neumanns-workshop/PhonoLex" target="_blank" rel="noopener noreferrer">
+            <Link href="https://github.com/Just-Semantics/PhonoLex" target="_blank" rel="noopener noreferrer">
               GitHub
             </Link>.
           </Typography>
@@ -153,8 +153,8 @@ const TermsOfService: React.FC = () => {
           </Typography>
           <Typography variant="body1" paragraph>
             For questions about these Terms, please contact{' '}
-            <Link href="mailto:social@neumannsworkshop.org" underline="hover">
-              social@neumannsworkshop.org
+            <Link href="mailto:contact@justsemantics.net" underline="hover">
+              contact@justsemantics.net
             </Link>.
           </Typography>
         </Box>

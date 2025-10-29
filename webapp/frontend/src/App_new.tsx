@@ -139,7 +139,7 @@ const App: React.FC = () => {
             {' • '}
             <Link href="/terms" underline="hover">Terms</Link>
             {' • '}
-            <Link href="https://github.com/neumanns-workshop/PhonoLex" target="_blank" rel="noopener noreferrer" underline="hover">
+            <Link href="https://github.com/Just-Semantics/PhonoLex" target="_blank" rel="noopener noreferrer" underline="hover">
               GitHub
             </Link>
           </Typography>

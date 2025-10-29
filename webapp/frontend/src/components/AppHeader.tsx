@@ -341,7 +341,7 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
             <Button
               variant="outlined"
               startIcon={<GitHubIcon />}
-              href="https://github.com/neumanns-workshop/PhonoLex"
+              href="https://github.com/Just-Semantics/PhonoLex"
               target="_blank"
             >
               View on GitHub
@@ -448,7 +448,7 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
           <Button
             variant="outlined"
             startIcon={<GitHubIcon />}
-            href="https://github.com/neumanns-workshop/PhonoLex"
+            href="https://github.com/Just-Semantics/PhonoLex"
             target="_blank"
             fullWidth
             sx={{ mb: 3 }}
@@ -467,11 +467,11 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
           <Button
             variant="outlined"
             startIcon={<EmailIcon />}
-            href="mailto:social@neumannsworkshop.org"
+            href="mailto:contact@justsemantics.net"
             fullWidth
             sx={{ mb: 3 }}
           >
-            social@neumannsworkshop.org
+            contact@justsemantics.net
           </Button>
 
           <Typography variant="body2" color="text.secondary">
