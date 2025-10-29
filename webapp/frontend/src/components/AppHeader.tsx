@@ -425,10 +425,23 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
           <Divider sx={{ my: 3 }} />
 
           <Typography variant="h6" gutterBottom fontWeight={600}>
-            Research & Collaboration
+            Contact
           </Typography>
+          <Typography variant="body2" color="text.secondary" paragraph>
+            General inquiries, collaboration, and support
+          </Typography>
+          <Button
+            variant="outlined"
+            startIcon={<EmailIcon />}
+            href="mailto:social@neumannsworkshop.org"
+            fullWidth
+            sx={{ mb: 3 }}
+          >
+            social@neumannsworkshop.org
+          </Button>
+
           <Typography variant="body2" color="text.secondary">
-            Inquiries via GitHub Issues or institutional channels.
+            Bug reports and feature requests via GitHub Issues.
           </Typography>
 
           <Box sx={{ mt: 4, p: 2, bgcolor: 'primary.50', borderRadius: 1 }}>

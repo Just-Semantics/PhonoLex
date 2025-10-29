@@ -152,9 +152,9 @@ const TermsOfService: React.FC = () => {
             Contact
           </Typography>
           <Typography variant="body1" paragraph>
-            For questions about these Terms, please visit our{' '}
-            <Link href="https://github.com/neumanns-workshop/PhonoLex" target="_blank" rel="noopener noreferrer">
-              GitHub repository
+            For questions about these Terms, please contact{' '}
+            <Link href="mailto:social@neumannsworkshop.org" underline="hover">
+              social@neumannsworkshop.org
             </Link>.
           </Typography>
         </Box>
