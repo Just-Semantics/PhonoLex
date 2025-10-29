@@ -212,6 +212,59 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
           <Divider sx={{ my: 3 }} />
 
           <Typography variant="h6" gutterBottom fontWeight={600}>
+            How It Works
+          </Typography>
+
+          <Typography variant="body2" color="text.secondary" paragraph>
+            PhonoLex uses a four-layer hierarchical architecture to represent phonological structure:
+          </Typography>
+
+          <Box component="ol" sx={{ pl: 3, mb: 2, '& li': { mb: 1 } }}>
+            <Typography component="li" variant="body2" color="text.secondary">
+              <strong>Layer 1 (Raw Features):</strong> Universal phonological features from PHOIBLE database
+              (38 distinctive features covering 2,716 languages)
+            </Typography>
+            <Typography component="li" variant="body2" color="text.secondary">
+              <strong>Layer 2 (Normalized Vectors):</strong> Continuous representations of phonemes with
+              interpolated trajectories for diphthongs
+            </Typography>
+            <Typography component="li" variant="body2" color="text.secondary">
+              <strong>Layer 3 (Contextual Embeddings):</strong> BERT-style transformer trained on 147K words
+              (CMU Dictionary + ipa-dict) to capture phonotactic patterns
+            </Typography>
+            <Typography component="li" variant="body2" color="text.secondary">
+              <strong>Layer 4 (Syllable Structure):</strong> Onset-nucleus-coda embeddings aggregated from
+              Layer 3, enabling position-aware similarity (discriminates anagrams: "cat" ≠ "act")
+            </Typography>
+          </Box>
+
+          <Typography variant="body2" color="text.secondary" paragraph>
+            <strong>Similarity Computation:</strong>
+          </Typography>
+
+          <Box component="ul" sx={{ pl: 3, mb: 2, '& li': { mb: 0.5 } }}>
+            <Typography component="li" variant="body2" color="text.secondary">
+              <strong>Exact rhymes:</strong> Phoneme-level matching from specified syllable position (e.g., last 2 syllables)
+            </Typography>
+            <Typography component="li" variant="body2" color="text.secondary">
+              <strong>Near rhymes:</strong> Syllable embedding similarity using soft Levenshtein distance
+              (respects rhyme mode constraints while allowing vowel/consonant variation)
+            </Typography>
+            <Typography component="li" variant="body2" color="text.secondary">
+              <strong>Overall similarity:</strong> Hierarchical comparison of syllable sequences capturing
+              onset-nucleus-coda structure
+            </Typography>
+          </Box>
+
+          <Typography variant="body2" color="text.secondary" paragraph>
+            <strong>Data Sources:</strong> CMU Pronouncing Dictionary (125K words), PHOIBLE (phonological features),
+            SUBTLEX-US (frequency), MRC Psycholinguistic Database (imageability, familiarity), Warriner norms (valence,
+            arousal, dominance), and additional psycholinguistic datasets.
+          </Typography>
+
+          <Divider sx={{ my: 3 }} />
+
+          <Typography variant="h6" gutterBottom fontWeight={600}>
             Disclaimer
           </Typography>
           <Box sx={{ bgcolor: 'warning.50', p: 2, borderRadius: 1, border: 1, borderColor: 'warning.light' }}>
