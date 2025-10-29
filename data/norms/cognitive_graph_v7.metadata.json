@@ -1,0 +1,87 @@
+{
+  "created": "2025-10-17T13:38:54.344701",
+  "version": "7.0",
+  "sources": {
+    "SWOW-EN": {
+      "name": "Small World of Words (English)",
+      "citation": "De Deyne, S., Navarro, D. J., Perfors, A., Brysbaert, M., & Storms, G. (2019). The \"Small World of Words\" English word association norms for over 12,000 cue words. Behavior Research Methods, 51(3), 987-1006.",
+      "url": "https://smallworldofwords.org/en/project",
+      "license": "CC BY-NC-SA 4.0",
+      "description": "Free association norms from ~12K cue words, ~90K participants",
+      "version": null,
+      "date_accessed": null
+    },
+    "SPP": {
+      "name": "Semantic Priming Project",
+      "citation": "Hutchison, K. A., Balota, D. A., Neely, J. H., Cortese, M. J., Cohen-Shikora, E. R., Tse, C. S., ... & Buchanan, E. (2013). The semantic priming project. Behavior Research Methods, 45(4), 1099-1114.",
+      "url": "http://spp.montana.edu/",
+      "license": "Available for research use",
+      "description": "Lexical decision and naming data for 1,661 word pairs",
+      "version": null,
+      "date_accessed": null
+    },
+    "Warriner-VAD": {
+      "name": "Warriner Affective Norms",
+      "citation": "Warriner, A. B., Kuperman, V., & Brysbaert, M. (2013). Norms of valence, arousal, and dominance for 13,915 English lemmas. Behavior Research Methods, 45(4), 1191-1207.",
+      "url": "https://link.springer.com/article/10.3758/s13428-012-0314-x",
+      "license": "Available for research use",
+      "description": "Valence, arousal, and dominance ratings for ~14K words",
+      "version": null,
+      "date_accessed": null
+    },
+    "Brysbaert-Concreteness": {
+      "name": "Brysbaert Concreteness Norms",
+      "citation": "Brysbaert, M., Warriner, A. B., & Kuperman, V. (2014). Concreteness ratings for 40 thousand generally known English word lemmas. Behavior Research Methods, 46(3), 904-911.",
+      "url": "https://link.springer.com/article/10.3758/s13428-013-0403-5",
+      "license": "Available for research use",
+      "description": "Concreteness ratings for ~40K words",
+      "version": null,
+      "date_accessed": null
+    },
+    "Lancaster-Sensorimotor": {
+      "name": "Lancaster Sensorimotor Norms",
+      "citation": "Lynott, D., Connell, L., Brysbaert, M., Brand, J., & Carney, J. (2020). The Lancaster Sensorimotor Norms: multidimensional measures of perceptual and action strength for 40,000 English words. Behavior Research Methods, 52(3), 1271-1291.",
+      "url": "https://doi.org/10.3758/s13428-019-01316-z",
+      "license": "CC BY 4.0",
+      "description": "Perceptual (6 modalities) and action (5 body parts) strength ratings for ~40K words",
+      "version": null,
+      "date_accessed": null
+    },
+    "SUBTLEX-US": {
+      "name": "SUBTLEX-US Word Frequency Norms",
+      "citation": "Brysbaert, M., & New, B. (2009). Moving beyond Kucera and Francis: A critical evaluation of current word frequency norms and the introduction of a new and improved word frequency measure for American English. Behavior Research Methods, 41(4), 977-990.",
+      "url": "https://www.ugent.be/pp/experimentele-psychologie/en/research/documents/subtlexus",
+      "license": "Available for research use",
+      "description": "Word frequency and contextual diversity from 51 million words of film subtitles (~74K words)",
+      "version": null,
+      "date_accessed": null
+    },
+    "Diveica-Socialness": {
+      "name": "Socialness Norms",
+      "citation": "Diveica, V., Pexman, P. M., & Binney, R. J. (2021). Quantifying social semantics: An inclusive definition of socialness and ratings for 8,388 English words. Behavior Research Methods, 55, 461-473.",
+      "url": "https://doi.org/10.3758/s13428-021-01810-0",
+      "license": "CC BY 4.0",
+      "description": "Socialness ratings (1-7 scale) for ~8.4K words - how related to social interactions",
+      "version": null,
+      "date_accessed": null
+    },
+    "Brysbaert-Prevalence": {
+      "name": "Word Prevalence Norms",
+      "citation": "Brysbaert, M., Mandera, P., McCormick, S. F., & Keuleers, E. (2019). Word prevalence norms for 62,000 English lemmas. Behavior Research Methods, 51(2), 467-479.",
+      "url": "https://link.springer.com/article/10.3758/s13428-018-1077-9",
+      "license": "Available for research use",
+      "description": "Percentage of people who know each word - word knowledge across population (~62K words, age-stratified)",
+      "version": null,
+      "date_accessed": null
+    },
+    "Scott-Glasgow": {
+      "name": "Glasgow Norms",
+      "citation": "Scott, G. G., Keitel, A., Becirspahic, M., Yao, B., & Sereno, S. C. (2019). The Glasgow Norms: Ratings of 5,500 words on nine scales. Behavior Research Methods, 51(3), 1258-1270.",
+      "url": "https://doi.org/10.3758/s13428-018-1099-3",
+      "license": "CC BY 4.0",
+      "description": "Multi-dimensional ratings: imageability, familiarity, age of acquisition, size, gender association (~5.5K words)",
+      "version": null,
+      "date_accessed": null
+    }
+  }
+}

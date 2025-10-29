@@ -1,0 +1,179 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "phonolex"
+version = "2.0.0"
+description = "Phonological analysis toolkit with hierarchical embeddings and database-centric web application"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "PhonoLex Team"}
+]
+keywords = [
+    "phonology",
+    "linguistics",
+    "embeddings",
+    "natural language processing",
+    "speech"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Text Processing :: Linguistic",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "numpy>=1.24.0",
+    "torch>=2.0.0",
+    "pandas>=2.0.0",
+    "networkx>=3.0",
+    "scikit-learn>=1.3.0",
+]
+
+[project.optional-dependencies]
+webapp = [
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "sqlalchemy>=2.0.0",
+    "psycopg2-binary>=2.9.9",
+    "pgvector>=0.4.0",
+    "pydantic>=2.0.0",
+    "python-dotenv>=1.0.0",
+]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.9.0",
+    "ruff>=0.0.292",
+    "mypy>=1.5.0",
+    "ipython>=8.15.0",
+    "jupyter>=1.0.0",
+]
+all = [
+    "phonolex[webapp,dev]"
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/phonolex"
+Documentation = "https://github.com/yourusername/phonolex/tree/main/docs"
+Repository = "https://github.com/yourusername/phonolex"
+Issues = "https://github.com/yourusername/phonolex/issues"
+
+[project.scripts]
+phonolex-api = "webapp.backend.main:main"
+
+[tool.setuptools]
+packages = ["phonolex", "webapp"]
+
+[tool.setuptools.package-dir]
+phonolex = "src/phonolex"
+webapp = "webapp"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--showlocals",
+]
+testpaths = ["webapp/backend/tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "unit: Fast unit tests (no DB required)",
+    "integration: Integration tests (require DB)",
+    "service: Service layer tests",
+    "api: API endpoint tests",
+    "performance: Performance benchmark tests",
+    "slow: Tests taking > 1 second",
+    "critical: Critical path tests",
+]
+
+[tool.black]
+line-length = 100
+target-version = ['py310', 'py311', 'py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+  | node_modules
+  | archive
+)/
+'''
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+]
+ignore = [
+    "E501",  # line too long (handled by black)
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    "*.egg-info",
+    "archive",
+    "outputs",
+    "node_modules",
+    "venv_test",
+]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+exclude = [
+    "archive/",
+    "outputs/",
+    "venv_test/",
+]
+
+[[tool.mypy.overrides]]
+module = [
+    "torch.*",
+    "networkx.*",
+    "sklearn.*",
+    "pgvector.*",
+]
+ignore_missing_imports = true

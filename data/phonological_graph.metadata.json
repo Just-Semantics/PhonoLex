@@ -1,0 +1,30 @@
+{
+  "created": "2025-10-27T13:09:40.127940",
+  "n_nodes": 26076,
+  "n_edges": 56433,
+  "node_properties": [
+    "word",
+    "ipa",
+    "phonemes",
+    "phoneme_count",
+    "syllables",
+    "syllable_count",
+    "frequency",
+    "log_frequency",
+    "concreteness",
+    "wcm_score",
+    "msh_stage"
+  ],
+  "query_functions": [
+    "find_minimal_pairs(word, max_results)",
+    "find_maximal_oppositions(word, excluded_phonemes, max_results)",
+    "find_phoneme_neighbors(word, max_edit_distance, max_results)",
+    "find_rhymes(word, rhyme_type, perfect_only, threshold, max_results)",
+    "find_similar_words_by_embedding(word, threshold, max_results)"
+  ],
+  "indices": {
+    "words_by_length": 19,
+    "words_by_initial_phoneme": 37,
+    "words_by_final_phoneme": 34
+  }
+}

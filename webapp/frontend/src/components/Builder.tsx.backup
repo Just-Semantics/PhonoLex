@@ -1,0 +1,845 @@
+/**
+ * Builder Component - THE POWER TOOL
+ *
+ * Custom word list builder with:
+ * - Pattern matching (STARTS_WITH, ENDS_WITH, CONTAINS)
+ * - Property filters (syllables, WCM, MSH, AoA)
+ * - Exclusion rules (phoneme blacklist, feature blacklist)
+ * - Combined queries with AND logic
+ */
+
+import React, { useState } from 'react';
+import {
+  Box,
+  Grid,
+  Card,
+  CardContent,
+  Typography,
+  TextField,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Chip,
+  Stack,
+  Alert,
+  CircularProgress,
+  IconButton,
+  Paper,
+  Checkbox,
+  FormControlLabel,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from '@mui/material';
+import {
+  Add as AddIcon,
+  Delete as DeleteIcon,
+  Build as BuildIcon,
+  Clear as ClearIcon,
+  Keyboard as KeyboardIcon,
+  ExpandMore as ExpandMoreIcon,
+} from '@mui/icons-material';
+import api from '../services/phonolexApi';
+import type { BuilderRequest, Pattern, PatternType, Word } from '../services/phonolexApi';
+import WordResultsDisplay from './WordResultsDisplay';
+import PhonemePickerDialog from './PhonemePickerDialog';
+
+const Builder: React.FC = () => {
+  // Patterns state
+  const [patterns, setPatterns] = useState<Pattern[]>([
+    { type: 'STARTS_WITH', phoneme: 'k' },
+  ]);
+
+  // Property filters state
+  const [filters, setFilters] = useState({
+    // Structural
+    minSyllables: undefined as number | undefined,
+    maxSyllables: undefined as number | undefined,
+    minPhonemes: undefined as number | undefined,
+    maxPhonemes: undefined as number | undefined,
+    wordLength: undefined as string | undefined,  // 'short', 'medium', 'long'
+
+    // Clinical
+    minWcm: undefined as number | undefined,
+    maxWcm: undefined as number | undefined,
+    minMsh: undefined as number | undefined,
+    maxMsh: undefined as number | undefined,
+    complexity: undefined as string | undefined,  // 'low', 'medium', 'high'
+
+    // Psycholinguistic
+    minAoa: undefined as number | undefined,
+    maxAoa: undefined as number | undefined,
+    minFrequency: undefined as number | undefined,
+    maxFrequency: undefined as number | undefined,
+    minImageability: undefined as number | undefined,
+    maxImageability: undefined as number | undefined,
+    minFamiliarity: undefined as number | undefined,
+    maxFamiliarity: undefined as number | undefined,
+    minConcreteness: undefined as number | undefined,
+    maxConcreteness: undefined as number | undefined,
+
+    // Affective
+    minValence: undefined as number | undefined,
+    maxValence: undefined as number | undefined,
+    minArousal: undefined as number | undefined,
+    maxArousal: undefined as number | undefined,
+    minDominance: undefined as number | undefined,
+    maxDominance: undefined as number | undefined,
+  });
+
+  // Exclusions state
+  const [excludePhonemes, setExcludePhonemes] = useState<string[]>([]);
+  const [excludePhonemeInput, setExcludePhonemeInput] = useState('');
+
+  // Results state
+  const [results, setResults] = useState<Word[] | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Phoneme picker state
+  const [phonemePickerOpen, setPhonemePickerOpen] = useState(false);
+  const [phonemePickerTarget, setPhonemePickerTarget] = useState<
+    { type: 'pattern'; index: number } | { type: 'exclusion' } | null
+  >(null);
+
+  // Handle phoneme selection
+  const handlePhonemeSelect = (phoneme: string) => {
+    if (phonemePickerTarget?.type === 'pattern') {
+      updatePattern(phonemePickerTarget.index, 'phoneme', phoneme);
+    } else if (phonemePickerTarget?.type === 'exclusion') {
+      setExcludePhonemeInput(phoneme);
+    }
+    setPhonemePickerOpen(false);
+    setPhonemePickerTarget(null);
+  };
+
+  // Open phoneme picker
+  const openPhonemePicker = (target: { type: 'pattern'; index: number } | { type: 'exclusion' }) => {
+    setPhonemePickerTarget(target);
+    setPhonemePickerOpen(true);
+  };
+
+  // Add pattern
+  const addPattern = () => {
+    setPatterns([...patterns, { type: 'STARTS_WITH', phoneme: '' }]);
+  };
+
+  // Remove pattern
+  const removePattern = (index: number) => {
+    setPatterns(patterns.filter((_, i) => i !== index));
+  };
+
+  // Update pattern
+  const updatePattern = (index: number, field: keyof Pattern, value: any) => {
+    const updated = [...patterns];
+    updated[index] = { ...updated[index], [field]: value };
+    setPatterns(updated);
+  };
+
+  // Add exclusion
+  const addExclusion = () => {
+    if (excludePhonemeInput.trim() && !excludePhonemes.includes(excludePhonemeInput.trim())) {
+      setExcludePhonemes([...excludePhonemes, excludePhonemeInput.trim()]);
+      setExcludePhonemeInput('');
+    }
+  };
+
+  // Remove exclusion
+  const removeExclusion = (phoneme: string) => {
+    setExcludePhonemes(excludePhonemes.filter((p) => p !== phoneme));
+  };
+
+  // Build word list
+  const handleBuild = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const request: BuilderRequest = {
+        patterns: patterns.filter((p) => p.phoneme.trim() !== ''),
+        filters: {
+          min_syllables: filters.minSyllables,
+          max_syllables: filters.maxSyllables,
+          min_wcm: filters.minWcm,
+          max_wcm: filters.maxWcm,
+          min_msh: filters.minMsh,
+          max_msh: filters.maxMsh,
+          min_aoa: filters.minAoa,
+          max_aoa: filters.maxAoa,
+        },
+        exclusions: {
+          exclude_phonemes: excludePhonemes.length > 0 ? excludePhonemes : undefined,
+        },
+        limit: 200,
+      };
+
+      const data = await api.buildWordList(request);
+      setResults(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Build failed');
+      setResults(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Clear all
+  const handleClear = () => {
+    setPatterns([{ type: 'STARTS_WITH', phoneme: 'k' }]);
+    setFilters({
+      minSyllables: undefined,
+      maxSyllables: undefined,
+      minWcm: undefined,
+      maxWcm: undefined,
+      minMsh: undefined,
+      maxMsh: undefined,
+      minAoa: undefined,
+      maxAoa: undefined,
+    });
+    setExcludePhonemes([]);
+    setExcludePhonemeInput('');
+    setResults(null);
+    setError(null);
+  };
+
+  return (
+    <Box>
+      <Typography variant="h5" gutterBottom>
+        Custom Word List Builder
+      </Typography>
+      <Typography variant="body2" color="text.secondary" gutterBottom>
+        Build highly specific word lists using pattern matching, property filters, and exclusions
+      </Typography>
+
+      <Stack spacing={2} sx={{ mt: 3 }}>
+        {/* Pattern Matching */}
+        <Accordion defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ width: '100%', pr: 2 }}>
+              <Typography variant="h6">Patterns</Typography>
+              <Button
+                size="small"
+                startIcon={<AddIcon />}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addPattern();
+                }}
+                variant="outlined"
+              >
+                Add
+              </Button>
+            </Stack>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Stack spacing={2}>
+              <Typography variant="body2" color="text.secondary">
+                Multiple patterns use AND logic (all must match). Separate multiple phonemes with spaces (e.g., "s t" for /st/)
+              </Typography>
+
+              <Stack spacing={2}>
+                {patterns.map((pattern, idx) => (
+                  <Paper key={idx} variant="outlined" sx={{ p: 2 }}>
+                    <Stack spacing={1}>
+                      <Stack direction="row" spacing={2} alignItems="center">
+                        <FormControl size="small" sx={{ minWidth: 140 }}>
+                          <InputLabel>Type</InputLabel>
+                          <Select
+                            value={pattern.type}
+                            label="Type"
+                            onChange={(e) =>
+                              updatePattern(idx, 'type', e.target.value as PatternType)
+                            }
+                          >
+                            <MenuItem value="STARTS_WITH">Starts With</MenuItem>
+                            <MenuItem value="ENDS_WITH">Ends With</MenuItem>
+                            <MenuItem value="CONTAINS">Contains</MenuItem>
+                          </Select>
+                        </FormControl>
+
+                        <TextField
+                          label="Phoneme(s)"
+                          value={pattern.phoneme}
+                          onChange={(e) => updatePattern(idx, 'phoneme', e.target.value)}
+                          size="small"
+                          placeholder="Click keyboard to select"
+                          fullWidth
+                          InputProps={{
+                            endAdornment: (
+                              <IconButton
+                                onClick={() => openPhonemePicker({ type: 'pattern', index: idx })}
+                                edge="end"
+                                color="primary"
+                                size="small"
+                              >
+                                <KeyboardIcon />
+                              </IconButton>
+                            ),
+                          }}
+                        />
+
+                        <IconButton
+                          size="small"
+                          color="error"
+                          onClick={() => removePattern(idx)}
+                          disabled={patterns.length === 1}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Stack>
+
+                      {/* Medial Only checkbox - only shown for CONTAINS patterns */}
+                      {pattern.type === 'CONTAINS' && (
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={pattern.medial_only || false}
+                              onChange={(e) => updatePattern(idx, 'medial_only', e.target.checked)}
+                              size="small"
+                            />
+                          }
+                          label={
+                            <Typography variant="body2" color="text.secondary">
+                              Medial only (excludes initial/final positions)
+                            </Typography>
+                          }
+                          sx={{ ml: 0.5 }}
+                        />
+                      )}
+                    </Stack>
+                  </Paper>
+                ))}
+              </Stack>
+            </Stack>
+          </AccordionDetails>
+        </Accordion>
+
+        {/* Property Filters */}
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Box>
+              <Typography variant="h6">Property Filters</Typography>
+              <Typography variant="caption" color="text.secondary">
+                Structural, clinical, psycholinguistic, and affective properties
+              </Typography>
+            </Box>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Stack spacing={1}>
+                {/* Structural Properties */}
+                <Accordion>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography variant="subtitle2">Structural Properties</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Stack spacing={2}>
+                      {/* Syllables */}
+                      <Box>
+                        <Typography variant="caption" color="text.secondary">Syllables</Typography>
+                        <Grid container spacing={1}>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Min"
+                              type="number"
+                              value={filters.minSyllables ?? ''}
+                              onChange={(e) => setFilters({ ...filters, minSyllables: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                              inputProps={{ min: 1 }}
+                            />
+                          </Grid>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Max"
+                              type="number"
+                              value={filters.maxSyllables ?? ''}
+                              onChange={(e) => setFilters({ ...filters, maxSyllables: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                              inputProps={{ min: 1 }}
+                            />
+                          </Grid>
+                        </Grid>
+                      </Box>
+
+                      {/* Phonemes */}
+                      <Box>
+                        <Typography variant="caption" color="text.secondary">Phonemes</Typography>
+                        <Grid container spacing={1}>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Min"
+                              type="number"
+                              value={filters.minPhonemes ?? ''}
+                              onChange={(e) => setFilters({ ...filters, minPhonemes: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                              inputProps={{ min: 1 }}
+                            />
+                          </Grid>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Max"
+                              type="number"
+                              value={filters.maxPhonemes ?? ''}
+                              onChange={(e) => setFilters({ ...filters, maxPhonemes: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                              inputProps={{ min: 1 }}
+                            />
+                          </Grid>
+                        </Grid>
+                      </Box>
+
+                      {/* Word Length Category */}
+                      <FormControl size="small" fullWidth>
+                        <InputLabel>Word Length</InputLabel>
+                        <Select
+                          value={filters.wordLength ?? ''}
+                          label="Word Length"
+                          onChange={(e) => setFilters({ ...filters, wordLength: e.target.value || undefined })}
+                        >
+                          <MenuItem value="">Any</MenuItem>
+                          <MenuItem value="short">Short</MenuItem>
+                          <MenuItem value="medium">Medium</MenuItem>
+                          <MenuItem value="long">Long</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Stack>
+                  </AccordionDetails>
+                </Accordion>
+
+                {/* Clinical Properties */}
+                <Accordion defaultExpanded>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography variant="subtitle2">Clinical Properties</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Stack spacing={2}>
+                      {/* WCM */}
+                      <Box>
+                        <Typography variant="caption" color="text.secondary">Word Complexity Measure (WCM)</Typography>
+                        <Grid container spacing={1}>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Min"
+                              type="number"
+                              value={filters.minWcm ?? ''}
+                              onChange={(e) => setFilters({ ...filters, minWcm: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Max"
+                              type="number"
+                              value={filters.maxWcm ?? ''}
+                              onChange={(e) => setFilters({ ...filters, maxWcm: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                            />
+                          </Grid>
+                        </Grid>
+                      </Box>
+
+                      {/* MSH */}
+                      <Box>
+                        <Typography variant="caption" color="text.secondary">Motor Speech Hierarchy (MSH) Stage</Typography>
+                        <Grid container spacing={1}>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Min"
+                              type="number"
+                              value={filters.minMsh ?? ''}
+                              onChange={(e) => setFilters({ ...filters, minMsh: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                              inputProps={{ min: 1, max: 6 }}
+                            />
+                          </Grid>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Max"
+                              type="number"
+                              value={filters.maxMsh ?? ''}
+                              onChange={(e) => setFilters({ ...filters, maxMsh: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                              inputProps={{ min: 1, max: 6 }}
+                            />
+                          </Grid>
+                        </Grid>
+                      </Box>
+
+                      {/* Complexity Category */}
+                      <FormControl size="small" fullWidth>
+                        <InputLabel>Complexity</InputLabel>
+                        <Select
+                          value={filters.complexity ?? ''}
+                          label="Complexity"
+                          onChange={(e) => setFilters({ ...filters, complexity: e.target.value || undefined })}
+                        >
+                          <MenuItem value="">Any</MenuItem>
+                          <MenuItem value="low">Low</MenuItem>
+                          <MenuItem value="medium">Medium</MenuItem>
+                          <MenuItem value="high">High</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Stack>
+                  </AccordionDetails>
+                </Accordion>
+
+                {/* Psycholinguistic Properties */}
+                <Accordion>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography variant="subtitle2">Psycholinguistic Properties</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Stack spacing={2}>
+                      {/* Age of Acquisition */}
+                      <Box>
+                        <Typography variant="caption" color="text.secondary">Age of Acquisition (years)</Typography>
+                        <Grid container spacing={1}>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Min"
+                              type="number"
+                              value={filters.minAoa ?? ''}
+                              onChange={(e) => setFilters({ ...filters, minAoa: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Max"
+                              type="number"
+                              value={filters.maxAoa ?? ''}
+                              onChange={(e) => setFilters({ ...filters, maxAoa: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                            />
+                          </Grid>
+                        </Grid>
+                      </Box>
+
+                      {/* Frequency */}
+                      <Box>
+                        <Typography variant="caption" color="text.secondary">Word Frequency</Typography>
+                        <Grid container spacing={1}>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Min"
+                              type="number"
+                              value={filters.minFrequency ?? ''}
+                              onChange={(e) => setFilters({ ...filters, minFrequency: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Max"
+                              type="number"
+                              value={filters.maxFrequency ?? ''}
+                              onChange={(e) => setFilters({ ...filters, maxFrequency: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                            />
+                          </Grid>
+                        </Grid>
+                      </Box>
+
+                      {/* Imageability */}
+                      <Box>
+                        <Typography variant="caption" color="text.secondary">Imageability</Typography>
+                        <Grid container spacing={1}>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Min"
+                              type="number"
+                              value={filters.minImageability ?? ''}
+                              onChange={(e) => setFilters({ ...filters, minImageability: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Max"
+                              type="number"
+                              value={filters.maxImageability ?? ''}
+                              onChange={(e) => setFilters({ ...filters, maxImageability: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                            />
+                          </Grid>
+                        </Grid>
+                      </Box>
+
+                      {/* Familiarity */}
+                      <Box>
+                        <Typography variant="caption" color="text.secondary">Familiarity</Typography>
+                        <Grid container spacing={1}>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Min"
+                              type="number"
+                              value={filters.minFamiliarity ?? ''}
+                              onChange={(e) => setFilters({ ...filters, minFamiliarity: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Max"
+                              type="number"
+                              value={filters.maxFamiliarity ?? ''}
+                              onChange={(e) => setFilters({ ...filters, maxFamiliarity: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                            />
+                          </Grid>
+                        </Grid>
+                      </Box>
+
+                      {/* Concreteness */}
+                      <Box>
+                        <Typography variant="caption" color="text.secondary">Concreteness</Typography>
+                        <Grid container spacing={1}>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Min"
+                              type="number"
+                              value={filters.minConcreteness ?? ''}
+                              onChange={(e) => setFilters({ ...filters, minConcreteness: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Max"
+                              type="number"
+                              value={filters.maxConcreteness ?? ''}
+                              onChange={(e) => setFilters({ ...filters, maxConcreteness: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                            />
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </Stack>
+                  </AccordionDetails>
+                </Accordion>
+
+                {/* Affective Properties */}
+                <Accordion>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography variant="subtitle2">Affective Properties</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Stack spacing={2}>
+                      {/* Valence */}
+                      <Box>
+                        <Typography variant="caption" color="text.secondary">Valence (pleasantness)</Typography>
+                        <Grid container spacing={1}>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Min"
+                              type="number"
+                              value={filters.minValence ?? ''}
+                              onChange={(e) => setFilters({ ...filters, minValence: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Max"
+                              type="number"
+                              value={filters.maxValence ?? ''}
+                              onChange={(e) => setFilters({ ...filters, maxValence: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                            />
+                          </Grid>
+                        </Grid>
+                      </Box>
+
+                      {/* Arousal */}
+                      <Box>
+                        <Typography variant="caption" color="text.secondary">Arousal (intensity)</Typography>
+                        <Grid container spacing={1}>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Min"
+                              type="number"
+                              value={filters.minArousal ?? ''}
+                              onChange={(e) => setFilters({ ...filters, minArousal: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Max"
+                              type="number"
+                              value={filters.maxArousal ?? ''}
+                              onChange={(e) => setFilters({ ...filters, maxArousal: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                            />
+                          </Grid>
+                        </Grid>
+                      </Box>
+
+                      {/* Dominance */}
+                      <Box>
+                        <Typography variant="caption" color="text.secondary">Dominance (control)</Typography>
+                        <Grid container spacing={1}>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Min"
+                              type="number"
+                              value={filters.minDominance ?? ''}
+                              onChange={(e) => setFilters({ ...filters, minDominance: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                            />
+                          </Grid>
+                          <Grid item xs={6}>
+                            <TextField
+                              label="Max"
+                              type="number"
+                              value={filters.maxDominance ?? ''}
+                              onChange={(e) => setFilters({ ...filters, maxDominance: e.target.value ? Number(e.target.value) : undefined })}
+                              size="small"
+                              fullWidth
+                            />
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </Stack>
+                  </AccordionDetails>
+                </Accordion>
+              </Stack>
+          </AccordionDetails>
+        </Accordion>
+
+        {/* Exclusions */}
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Box>
+              <Typography variant="h6">Exclusions</Typography>
+              <Typography variant="caption" color="text.secondary">
+                Exclude words containing specific phonemes
+              </Typography>
+            </Box>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Stack spacing={2}>
+              <Stack direction="row" spacing={2}>
+                <TextField
+                  label="Phoneme to exclude"
+                  value={excludePhonemeInput}
+                  onChange={(e) => setExcludePhonemeInput(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && addExclusion()}
+                  size="small"
+                  placeholder="Click keyboard to select"
+                  fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton
+                        onClick={() => openPhonemePicker({ type: 'exclusion' })}
+                        edge="end"
+                        color="primary"
+                        size="small"
+                      >
+                        <KeyboardIcon />
+                      </IconButton>
+                    ),
+                  }}
+                />
+                <Button
+                  variant="outlined"
+                  startIcon={<AddIcon />}
+                  onClick={addExclusion}
+                >
+                  Add
+                </Button>
+              </Stack>
+
+              {excludePhonemes.length > 0 && (
+                <Stack direction="row" spacing={1} flexWrap="wrap">
+                  {excludePhonemes.map((phoneme) => (
+                    <Chip
+                      key={phoneme}
+                      label={phoneme}
+                      onDelete={() => removeExclusion(phoneme)}
+                      color="error"
+                      variant="outlined"
+                    />
+                  ))}
+                </Stack>
+              )}
+            </Stack>
+          </AccordionDetails>
+        </Accordion>
+      </Stack>
+
+      {/* Actions */}
+      <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
+        <Button
+          variant="contained"
+          size="large"
+          startIcon={<BuildIcon />}
+          onClick={handleBuild}
+          disabled={loading || patterns.every((p) => !p.phoneme.trim())}
+          fullWidth
+        >
+          Build Word List
+        </Button>
+        <Button
+          variant="outlined"
+          startIcon={<ClearIcon />}
+          onClick={handleClear}
+        >
+          Clear
+        </Button>
+      </Stack>
+
+      {/* Status Messages */}
+      <Box sx={{ mt: 3 }}>
+        {loading && (
+          <Alert severity="info" icon={<CircularProgress size={20} />}>
+            Building word list...
+          </Alert>
+        )}
+        {error && <Alert severity="error">{error}</Alert>}
+      </Box>
+
+      {/* Results */}
+      {results && !loading && (
+        <Box sx={{ mt: 3 }}>
+          <WordResultsDisplay results={results} />
+        </Box>
+      )}
+
+      {/* Phoneme Picker Dialog */}
+      <PhonemePickerDialog
+        open={phonemePickerOpen}
+        onClose={() => {
+          setPhonemePickerOpen(false);
+          setPhonemePickerTarget(null);
+        }}
+        onSelect={handlePhonemeSelect}
+      />
+    </Box>
+  );
+};
+
+export default Builder;

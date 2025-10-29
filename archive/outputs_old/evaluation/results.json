@@ -1,0 +1,11 @@
+{
+  "feature_reconstruction": {
+    "mse": 0.22588306665420532,
+    "mean_correlation": 0.51717231032821
+  },
+  "similarity": {
+    "spearman_correlation": 0.9908679711539182,
+    "p_value": 0.0
+  },
+  "natural_classes": {}
+}

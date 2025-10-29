@@ -1,0 +1,35 @@
+{
+  "created": "2025-10-27T06:39:46.362918",
+  "n_words": 125774,
+  "n_columns": 15,
+  "columns": [
+    "word",
+    "ipa",
+    "phoneme_count",
+    "aoa",
+    "imageability",
+    "familiarity",
+    "frequency",
+    "log_frequency",
+    "valence",
+    "arousal",
+    "dominance",
+    "concreteness",
+    "syllable_count",
+    "initial_phoneme",
+    "final_phoneme"
+  ],
+  "coverage": {
+    "phoneme_count": 125774,
+    "aoa": 4622,
+    "imageability": 4622,
+    "familiarity": 4622,
+    "frequency": 48728,
+    "log_frequency": 48728,
+    "valence": 13379,
+    "arousal": 13379,
+    "dominance": 13379,
+    "concreteness": 25519,
+    "syllable_count": 125774
+  }
+}
