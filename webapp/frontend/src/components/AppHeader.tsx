@@ -381,7 +381,7 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
           </Box>
 
           <Typography variant="body2" paragraph color="text.secondary">
-            Open source project. Contributions, bug reports, and feedback welcome.
+            Licensed under CC BY-SA 3.0. Contributions, bug reports, and feedback welcome.
           </Typography>
 
           <Divider sx={{ my: 3 }} />
