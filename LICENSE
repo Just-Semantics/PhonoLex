@@ -1,0 +1,125 @@
+Creative Commons Attribution-ShareAlike 3.0 Unported License (CC BY-SA 3.0)
+
+PhonoLex v2.0.0
+Copyright (c) 2025 Just Semantics
+
+This work is licensed under the Creative Commons Attribution-ShareAlike 3.0
+Unported License. To view a copy of this license, visit:
+http://creativecommons.org/licenses/by-sa/3.0/
+
+===============================================================================
+
+ATTRIBUTION REQUIREMENTS
+
+This project incorporates data from multiple sources with varying license terms.
+The most restrictive license (CC BY-SA 3.0) applies to the combined work.
+
+Required Data Source Citations:
+
+1. PHOIBLE Database (CC BY-SA 3.0) - MOST RESTRICTIVE
+   Moran, Steven & McCloy, Daniel (eds.) 2019.
+   PHOIBLE 2.0. Jena: Max Planck Institute for the Science of Human History.
+   https://phoible.org/
+
+2. CMU Pronouncing Dictionary (Public Domain)
+   Carnegie Mellon University Pronouncing Dictionary [cmudict 0.7b]
+   http://www.speech.cs.cmu.edu/cgi-bin/cmudict
+
+3. SUBTLEX-US Word Frequency Data
+   Brysbaert, M., & New, B. (2009). Moving beyond Kučera and Francis:
+   A critical evaluation of current word frequency norms and the introduction
+   of a new and improved word frequency measure for American English.
+   Behavior Research Methods, 41(4), 977-990.
+
+4. Age of Acquisition Norms
+   Kuperman, V., Stadthagen-Gonzalez, H., & Brysbaert, M. (2012).
+   Age-of-acquisition ratings for 30,000 English words.
+   Behavior Research Methods, 44(4), 978-990.
+
+5. Concreteness Ratings
+   Brysbaert, M., Warriner, A. B., & Kuperman, V. (2014).
+   Concreteness ratings for 40 thousand generally known English word lemmas.
+   Behavior Research Methods, 46(3), 904-911.
+
+6. Affective Norms (Valence, Arousal, Dominance)
+   Warriner, A. B., Kuperman, V., & Brysbaert, M. (2013).
+   Norms of valence, arousal, and dominance for 13,915 English lemmas.
+   Behavior Research Methods, 45(4), 1191-1207.
+
+7. Glasgow Norms
+   Scott, G. G., Keitel, A., Becirspahic, M., Yao, B., & Sereno, S. C. (2019).
+   The Glasgow Norms: Ratings of 5,500 words on nine scales.
+   Behavior Research Methods, 51(3), 1258-1270.
+
+8. ipa-dict (CC0 - Public Domain)
+   https://github.com/open-dict-data/ipa-dict
+
+===============================================================================
+
+TERMS AND CONDITIONS
+
+You are free to:
+  * Share - copy and redistribute the material in any medium or format
+  * Adapt - remix, transform, and build upon the material for any purpose,
+    even commercially
+
+Under the following terms:
+  * Attribution - You must give appropriate credit, provide a link to the
+    license, and indicate if changes were made. You may do so in any
+    reasonable manner, but not in any way that suggests the licensor
+    endorses you or your use.
+
+  * ShareAlike - If you remix, transform, or build upon the material, you
+    must distribute your contributions under the same license as the original.
+
+  * No additional restrictions - You may not apply legal terms or technological
+    measures that legally restrict others from doing anything the license permits.
+
+===============================================================================
+
+SOFTWARE CODE LICENSE
+
+The original software code (excluding data) is dual-licensed:
+  * CC BY-SA 3.0 (for compatibility with data sources)
+  * MIT License (for code reuse in other contexts)
+
+When distributing code without the incorporated data sources, you may choose
+to follow the MIT License terms. When distributing the complete system with
+data, CC BY-SA 3.0 applies.
+
+MIT License for Code:
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+===============================================================================
+
+DISCLAIMER
+
+This software and data are provided "AS IS" without warranty of any kind.
+While reasonable efforts have been made to ensure accuracy, users should:
+  * Verify results independently
+  * Cite original data sources appropriately
+  * Not use for clinical diagnosis or treatment without professional oversight
+  * Understand that phonological and psycholinguistic data may contain errors,
+    biases, or limitations inherent to the source datasets
+
+===============================================================================
+
+For questions about licensing, please visit:
+https://github.com/neumanns-workshop/PhonoLex

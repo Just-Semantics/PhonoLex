@@ -134,9 +134,10 @@ const App: React.FC = () => {
             © {new Date().getFullYear()} Just Semantics. Provided as-is without warranty.
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
-            <Link href="/privacy" underline="hover">Privacy Policy</Link>
+            Licensed under CC BY-SA 3.0 •{' '}
+            <Link href="/privacy" underline="hover">Privacy</Link>
             {' • '}
-            <Link href="/terms" underline="hover">Terms of Service</Link>
+            <Link href="/terms" underline="hover">Terms</Link>
             {' • '}
             <Link href="https://github.com/neumanns-workshop/PhonoLex" target="_blank" rel="noopener noreferrer" underline="hover">
               GitHub

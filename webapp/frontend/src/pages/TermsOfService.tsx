@@ -97,13 +97,17 @@ const TermsOfService: React.FC = () => {
             Intellectual Property
           </Typography>
           <Typography variant="body1" paragraph>
-            PhonoLex is open-source software released under the MIT License. Source code is available on{' '}
+            PhonoLex is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License (CC BY-SA 3.0) due to incorporated data sources. Source code is available on{' '}
             <Link href="https://github.com/neumanns-workshop/PhonoLex" target="_blank" rel="noopener noreferrer">
               GitHub
             </Link>.
           </Typography>
           <Typography variant="body1" paragraph>
-            The Service incorporates data from multiple open-source projects and databases, each with their own licensing terms. See the Info section for complete citations.
+            This ShareAlike license is required because we incorporate PHOIBLE phonological data (CC BY-SA 3.0).
+            Any derivative works must also be shared under CC BY-SA 3.0 or a compatible license.
+          </Typography>
+          <Typography variant="body1" paragraph>
+            See the LICENSE file and Info section for complete data source citations and attribution requirements.
           </Typography>
         </Box>
 

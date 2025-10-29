@@ -61,6 +61,11 @@ data/phonological_graph.pkl
 !data/mappings/*.json
 !webapp/frontend/public/*.json
 
+# Exclude embedded git repositories
+data/learning_datasets/ipa-dict/
+data/learning_datasets/sigmorphon2020/
+data/learning_datasets/unimorph-eng/
+
 # Environment files
 .env
 .env.local
