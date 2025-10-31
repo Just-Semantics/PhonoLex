@@ -49,7 +49,7 @@ const ExpandableToolCard: React.FC<ExpandableToolCardProps> = ({
     <Card
       elevation={expanded ? 3 : 1}
       sx={{
-        mb: 2,
+        mb: { xs: 1.5, sm: 2 },
         transition: 'all 0.3s ease',
         '&:hover': {
           elevation: 2,
@@ -59,7 +59,16 @@ const ExpandableToolCard: React.FC<ExpandableToolCardProps> = ({
     >
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: color }}>
+          <Avatar
+            sx={{
+              bgcolor: color,
+              width: { xs: 36, sm: 40 },
+              height: { xs: 36, sm: 40 },
+              '& .MuiSvgIcon-root': {
+                fontSize: { xs: '1.25rem', sm: '1.5rem' },
+              },
+            }}
+          >
             {icon}
           </Avatar>
         }
@@ -71,18 +80,36 @@ const ExpandableToolCard: React.FC<ExpandableToolCardProps> = ({
             sx={{
               transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
               transition: 'transform 0.3s',
+              minWidth: 44,
+              minHeight: 44,
             }}
           >
             <ExpandMoreIcon />
           </IconButton>
         }
         title={
-          <Typography variant="h6" component="div" fontWeight={600}>
+          <Typography
+            variant="h6"
+            component="div"
+            fontWeight={600}
+            sx={{
+              fontSize: { xs: '1rem', sm: '1.25rem' },
+              lineHeight: 1.3,
+            }}
+          >
             {title}
           </Typography>
         }
         subheader={
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              fontSize: { xs: '0.8125rem', sm: '0.875rem' },
+              lineHeight: 1.4,
+              pr: { xs: 1, sm: 0 },
+            }}
+          >
             {description}
           </Typography>
         }
@@ -91,12 +118,22 @@ const ExpandableToolCard: React.FC<ExpandableToolCardProps> = ({
           '&:hover': {
             bgcolor: 'action.hover',
           },
+          py: { xs: 1.5, sm: 2 },
+          px: { xs: 1.5, sm: 2 },
         }}
         onClick={handleExpandClick}
       />
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Box sx={{ pt: 1 }}>
+        <CardContent
+          sx={{
+            px: { xs: 1.5, sm: 2 },
+            py: { xs: 1.5, sm: 2 },
+            '&:last-child': {
+              pb: { xs: 2, sm: 2.5 },
+            },
+          }}
+        >
+          <Box sx={{ pt: { xs: 0, sm: 1 } }}>
             {children}
           </Box>
         </CardContent>

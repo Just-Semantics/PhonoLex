@@ -491,7 +491,7 @@ const SearchTool: React.FC = () => {
                             </Typography>
                           </Box>
                           <Chip
-                            label={`${(result.similarity * 100).toFixed(0)}%`}
+                            label={result.similarity != null ? `${(result.similarity * 100).toFixed(0)}%` : 'N/A'}
                             size="small"
                             color="primary"
                             variant="outlined"

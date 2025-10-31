@@ -57,7 +57,7 @@ const RhymeSetsTool: React.FC = () => {
 
   return (
     <Box>
-      <Stack spacing={2}>
+      <Stack spacing={{ xs: 1.5, sm: 2 }}>
         <TextField
           label="Target Word"
           value={targetWord}
@@ -65,50 +65,64 @@ const RhymeSetsTool: React.FC = () => {
           size="small"
           placeholder="e.g., cat"
           fullWidth
+          inputProps={{
+            sx: { fontSize: { xs: '0.9375rem', sm: '1rem' } },
+          }}
         />
         <FormControl size="small" fullWidth>
-          <InputLabel>Rhyme Type</InputLabel>
+          <InputLabel sx={{ fontSize: { xs: '0.9375rem', sm: '1rem' } }}>Rhyme Type</InputLabel>
           <Select
             value={rhymeMode}
             label="Rhyme Type"
             onChange={(e) => setRhymeMode(e.target.value as RhymeMode)}
+            sx={{ '& .MuiSelect-select': { fontSize: { xs: '0.9375rem', sm: '1rem' } } }}
           >
             <MenuItem value="last_1">
               <Box>
-                <Typography variant="body2">Last Syllable</Typography>
-                <Typography variant="caption" color="text.secondary">
+                <Typography variant="body2" sx={{ fontSize: { xs: '0.875rem', sm: '0.9375rem' } }}>
+                  Last Syllable
+                </Typography>
+                <Typography variant="caption" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.8125rem' } }}>
                   Matches nucleus + coda of final syllable (e.g., cat-bat, hat-mat)
                 </Typography>
               </Box>
             </MenuItem>
             <MenuItem value="last_2">
               <Box>
-                <Typography variant="body2">Last 2 Syllables</Typography>
-                <Typography variant="caption" color="text.secondary">
+                <Typography variant="body2" sx={{ fontSize: { xs: '0.875rem', sm: '0.9375rem' } }}>
+                  Last 2 Syllables
+                </Typography>
+                <Typography variant="caption" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.8125rem' } }}>
                   Matches final 2 syllables (e.g., delicious-suspicious, computer-commuter)
                 </Typography>
               </Box>
             </MenuItem>
             <MenuItem value="last_3">
               <Box>
-                <Typography variant="body2">Last 3 Syllables</Typography>
-                <Typography variant="caption" color="text.secondary">
+                <Typography variant="body2" sx={{ fontSize: { xs: '0.875rem', sm: '0.9375rem' } }}>
+                  Last 3 Syllables
+                </Typography>
+                <Typography variant="caption" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.8125rem' } }}>
                   Matches final 3 syllables (longer, more complex matches)
                 </Typography>
               </Box>
             </MenuItem>
             <MenuItem value="assonance">
               <Box>
-                <Typography variant="body2">Assonance</Typography>
-                <Typography variant="caption" color="text.secondary">
+                <Typography variant="body2" sx={{ fontSize: { xs: '0.875rem', sm: '0.9375rem' } }}>
+                  Assonance
+                </Typography>
+                <Typography variant="caption" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.8125rem' } }}>
                   Matches vowel sounds only (e.g., cat-back, lake-fade)
                 </Typography>
               </Box>
             </MenuItem>
             <MenuItem value="consonance">
               <Box>
-                <Typography variant="body2">Consonance</Typography>
-                <Typography variant="caption" color="text.secondary">
+                <Typography variant="body2" sx={{ fontSize: { xs: '0.875rem', sm: '0.9375rem' } }}>
+                  Consonance
+                </Typography>
+                <Typography variant="caption" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.8125rem' } }}>
                   Matches final consonants only (e.g., milk-walk, short-dirt)
                 </Typography>
               </Box>
@@ -121,12 +135,15 @@ const RhymeSetsTool: React.FC = () => {
             <Checkbox
               checked={useEmbeddings}
               onChange={(e) => setUseEmbeddings(e.target.checked)}
+              sx={{ '& .MuiSvgIcon-root': { fontSize: { xs: 20, sm: 24 } } }}
             />
           }
           label={
             <Box>
-              <Typography variant="body2">Include near-matches (quality &lt; 1.0)</Typography>
-              <Typography variant="caption" color="text.secondary">
+              <Typography variant="body2" sx={{ fontSize: { xs: '0.875rem', sm: '0.9375rem' } }}>
+                Include near-matches (quality &lt; 1.0)
+              </Typography>
+              <Typography variant="caption" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.8125rem' } }}>
                 Checked: approximate matches. Unchecked: perfect matches only (quality = 1.0)
               </Typography>
             </Box>
@@ -135,10 +152,12 @@ const RhymeSetsTool: React.FC = () => {
 
         <Button
           variant="contained"
+          size="large"
           startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <RunIcon />}
           onClick={handleGenerate}
           disabled={loading}
           fullWidth
+          sx={{ minHeight: 48 }}
         >
           {loading ? 'Generating...' : 'Generate Rhyme Set'}
         </Button>

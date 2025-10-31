@@ -503,9 +503,9 @@ class ClientSideDataService {
   async comparePhonemes(ipa1: string, ipa2: string): Promise<{
     phoneme1: any;
     phoneme2: any;
-    feature_distance: number;
-    differing_features: string[];
-    shared_features: string[];
+    similarity_score: number;
+    different_features: Record<string, [string, string]>;
+    shared_features: Record<string, string>;
   }> {
     await this.ensureLoaded();
 
@@ -518,17 +518,25 @@ class ClientSideDataService {
 
     // Get all unique features
     const allFeatures = new Set([...Object.keys(p1.features), ...Object.keys(p2.features)]);
-    const differing: string[] = [];
-    const shared: string[] = [];
+    const different: Record<string, [string, string]> = {};
+    const shared: Record<string, string> = {};
 
     // Compare features
     for (const feature of allFeatures) {
-      if (p1.features[feature] === p2.features[feature]) {
-        shared.push(feature);
+      const val1 = p1.features[feature] || '0';
+      const val2 = p2.features[feature] || '0';
+
+      if (val1 === val2) {
+        shared[feature] = val1;
       } else {
-        differing.push(feature);
+        different[feature] = [val1, val2];
       }
     }
+
+    // Calculate similarity score (feature distance / total features)
+    const totalFeatures = allFeatures.size;
+    const differingCount = Object.keys(different).length;
+    const similarity_score = totalFeatures > 0 ? differingCount / totalFeatures : 0;
 
     return {
       phoneme1: {
@@ -545,8 +553,8 @@ class ClientSideDataService {
         features: p2.features,
         has_trajectory: false,
       },
-      feature_distance: differing.length,
-      differing_features: differing,
+      similarity_score: similarity_score,
+      different_features: different,
       shared_features: shared,
     };
   }
@@ -667,6 +675,9 @@ class ClientSideDataService {
             results.push({
               word1: this.metadataToWord(metadata1),
               word2: this.metadataToWord(metadata2),
+              position: diffPosition,
+              phoneme1: diffPhoneme1,
+              phoneme2: diffPhoneme2,
               metadata: {
                 position: diffPosition,
                 phoneme1: diffPhoneme1,

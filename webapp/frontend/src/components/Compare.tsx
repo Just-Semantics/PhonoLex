@@ -41,8 +41,8 @@ import PhonemePickerDialog from './PhonemePickerDialog';
 
 const Compare: React.FC = () => {
   // Input state
-  const [phoneme1Input, setPhoneme1Input] = useState('t');
-  const [phoneme2Input, setPhoneme2Input] = useState('d');
+  const [phoneme1Input, setPhoneme1Input] = useState('');
+  const [phoneme2Input, setPhoneme2Input] = useState('');
 
   // Data state
   const [phoneme1, setPhoneme1] = useState<Phoneme | null>(null);
@@ -122,8 +122,8 @@ const Compare: React.FC = () => {
 
   // Clear all
   const handleClear = () => {
-    setPhoneme1Input('t');
-    setPhoneme2Input('d');
+    setPhoneme1Input('');
+    setPhoneme2Input('');
     setPhoneme1(null);
     setPhoneme2(null);
     setComparison(null);
@@ -172,7 +172,7 @@ const Compare: React.FC = () => {
             value={phoneme1Input}
             onChange={(e) => setPhoneme1Input(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleCompare()}
-            placeholder="Tap keyboard to select"
+            placeholder="e.g., t, k, s"
             fullWidth
             size="small"
             InputProps={{
@@ -205,7 +205,7 @@ const Compare: React.FC = () => {
             value={phoneme2Input}
             onChange={(e) => setPhoneme2Input(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleCompare()}
-            placeholder="Tap keyboard to select"
+            placeholder="e.g., d, g, z"
             fullWidth
             size="small"
             InputProps={{
@@ -286,7 +286,7 @@ const Compare: React.FC = () => {
                 }}
               >
                 <Typography variant="caption" color="text.secondary" display="block">
-                  Feature Distance
+                  Feature Distance (0-1 scale)
                 </Typography>
                 <Typography variant="h3" color="primary" sx={{ fontSize: { xs: '2rem', sm: '2.5rem' } }}>
                   {comparison.similarity_score.toFixed(2)}

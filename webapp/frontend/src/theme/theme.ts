@@ -160,20 +160,37 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
   components: {
     MuiButton: {
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({
           borderRadius: 6,
           padding: '10px 20px',
           fontWeight: 500,
           letterSpacing: '0.01em',
+          minHeight: 44, // Touch target minimum
           '&:focus-visible': {
             outline: '2px solid currentColor',
             outlineOffset: '2px',
           },
-        },
-        sizeLarge: {
+          [theme.breakpoints.down('sm')]: {
+            padding: '8px 16px',
+            fontSize: '0.9375rem',
+          },
+        }),
+        sizeLarge: ({ theme }) => ({
           padding: '14px 28px',
           fontSize: '1rem',
-        },
+          minHeight: 48,
+          [theme.breakpoints.down('sm')]: {
+            padding: '12px 24px',
+            fontSize: '0.9375rem',
+          },
+        }),
+        sizeSmall: ({ theme }) => ({
+          minHeight: 36,
+          [theme.breakpoints.down('sm')]: {
+            minHeight: 40,
+            fontSize: '0.875rem',
+          },
+        }),
         contained: {
           boxShadow: 'none',
           '&:hover': {
@@ -215,24 +232,6 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
         },
       },
     },
-    MuiTextField: {
-      defaultProps: {
-        variant: 'outlined',
-      },
-      styleOverrides: {
-        root: {
-          '& .MuiOutlinedInput-root': {
-            borderRadius: 6,
-            '& fieldset': {
-              borderColor: 'rgba(44, 44, 44, 0.12)',
-            },
-            '&:hover fieldset': {
-              borderColor: 'rgba(44, 44, 44, 0.24)',
-            },
-          },
-        },
-      },
-    },
     MuiChip: {
       styleOverrides: {
         root: {
@@ -269,6 +268,88 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
       },
     },
     MuiIconButton: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          minWidth: 44, // Touch target minimum
+          minHeight: 44,
+          '&:focus-visible': {
+            outline: '2px solid currentColor',
+            outlineOffset: '2px',
+          },
+          [theme.breakpoints.down('sm')]: {
+            padding: 8,
+          },
+        }),
+      },
+    },
+    MuiTextField: {
+      defaultProps: {
+        variant: 'outlined',
+      },
+      styleOverrides: {
+        root: ({ theme }) => ({
+          '& .MuiOutlinedInput-root': {
+            borderRadius: 6,
+            '& fieldset': {
+              borderColor: 'rgba(44, 44, 44, 0.12)',
+            },
+            '&:hover fieldset': {
+              borderColor: 'rgba(44, 44, 44, 0.24)',
+            },
+          },
+          '& .MuiInputBase-input': {
+            [theme.breakpoints.down('sm')]: {
+              fontSize: '0.9375rem',
+              padding: '12px 14px',
+            },
+          },
+          '& .MuiInputLabel-root': {
+            [theme.breakpoints.down('sm')]: {
+              fontSize: '0.9375rem',
+            },
+          },
+        }),
+      },
+    },
+    MuiToggleButton: {
+      styleOverrides: {
+        root: {
+          minHeight: 44,
+          minWidth: 44,
+          '&:focus-visible': {
+            outline: '2px solid currentColor',
+            outlineOffset: '-2px',
+          },
+        },
+      },
+    },
+    MuiSlider: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          '& .MuiSlider-thumb': {
+            width: 20,
+            height: 20,
+            [theme.breakpoints.down('sm')]: {
+              width: 24, // Larger thumb for easier touch interaction
+              height: 24,
+            },
+          },
+          '& .MuiSlider-track': {
+            height: 4,
+            [theme.breakpoints.down('sm')]: {
+              height: 6, // Thicker track on mobile
+            },
+          },
+          '& .MuiSlider-rail': {
+            height: 4,
+            [theme.breakpoints.down('sm')]: {
+              height: 6,
+            },
+          },
+        }),
+      },
+    },
+    MuiCheckbox: {
       styleOverrides: {
         root: {
           '&:focus-visible': {

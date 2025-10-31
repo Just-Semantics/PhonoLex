@@ -8,7 +8,7 @@
  * - Similarity scores (when applicable)
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import {
   Box,
   Paper,
@@ -32,12 +32,14 @@ import {
   useTheme,
   ToggleButton,
   ToggleButtonGroup,
+  Fade,
 } from '@mui/material';
 import {
   Download as ExportIcon,
   ContentCopy as CopyIcon,
   ViewList as TableViewIcon,
   ViewModule as CardViewIcon,
+  SwipeRounded as ScrollIcon,
 } from '@mui/icons-material';
 import type { Word, MinimalPair, SimilarWord } from '../services/phonolexApi';
 
@@ -55,8 +57,30 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
   const [sortField, setSortField] = useState<SortField>('word');
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
   const [viewMode, setViewMode] = useState<'table' | 'cards'>(isMobile ? 'cards' : 'table');
+  const [showScrollHint, setShowScrollHint] = useState(true);
+  const tableContainerRef = useRef<HTMLDivElement>(null);
 
   console.log('WordResultsDisplay:', { results, length: results.length });
+
+  // Hide scroll hint after user scrolls
+  useEffect(() => {
+    const container = tableContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      setShowScrollHint(false);
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Reset scroll hint when view mode changes
+  useEffect(() => {
+    if (viewMode === 'table') {
+      setShowScrollHint(true);
+    }
+  }, [viewMode]);
 
   // Determine result type
   const isMinimalPairs = results.length > 0 && 'word1' in results[0];
@@ -263,19 +287,30 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
         direction={{ xs: 'column', sm: 'row' }}
         justifyContent="space-between"
         alignItems={{ xs: 'stretch', sm: 'center' }}
-        spacing={2}
-        sx={{ mb: 2 }}
+        spacing={{ xs: 1.5, sm: 2 }}
+        sx={{ mb: { xs: 1.5, sm: 2 } }}
       >
-        <Typography variant="h6">
+        <Typography variant="h6" sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}>
           {results.length} {isMinimalPairs ? 'Minimal Pairs' : 'Words'} Found
         </Typography>
-        <Stack direction="row" spacing={1} justifyContent={{ xs: 'space-between', sm: 'flex-end' }}>
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
+          spacing={{ xs: 1, sm: 1 }}
+          alignItems={{ xs: 'stretch', sm: 'center' }}
+        >
           <ToggleButtonGroup
             value={viewMode}
             exclusive
             onChange={(_, newMode) => newMode && setViewMode(newMode)}
             size="small"
-            sx={{ display: { xs: 'flex', md: 'none' } }}
+            fullWidth
+            sx={{
+              display: { xs: 'flex', md: 'none' },
+              '& .MuiToggleButton-root': {
+                minHeight: 44,
+                flex: 1,
+              },
+            }}
           >
             <ToggleButton value="table">
               <Tooltip title="Table view">
@@ -289,12 +324,16 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
             </ToggleButton>
           </ToggleButtonGroup>
 
-          <Stack direction="row" spacing={1}>
+          <Stack direction="row" spacing={{ xs: 1, sm: 1 }} sx={{ width: { xs: '100%', sm: 'auto' } }}>
             <Tooltip title="Copy words to clipboard">
               <Button
                 size="small"
                 startIcon={<CopyIcon />}
                 onClick={copyWords}
+                sx={{
+                  minHeight: 44,
+                  width: { xs: '100%', sm: 'auto' },
+                }}
               >
                 Copy
               </Button>
@@ -304,6 +343,10 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                 size="small"
                 startIcon={<ExportIcon />}
                 onClick={exportCSV}
+                sx={{
+                  minHeight: 44,
+                  width: { xs: '100%', sm: 'auto' },
+                }}
               >
                 Export
               </Button>
@@ -314,17 +357,32 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
 
       {/* Card View for Mobile */}
       {viewMode === 'cards' ? (
-        <Stack spacing={2}>
+        <Stack spacing={{ xs: 1.5, sm: 2 }}>
           {sortedWords.map((word: any, idx) => (
-            <Card key={idx} variant="outlined">
-              <CardContent>
-                <Stack spacing={2}>
+            <Card
+              key={idx}
+              variant="outlined"
+              sx={{
+                transition: 'all 0.2s ease',
+                '&:hover': {
+                  boxShadow: 2,
+                  borderColor: 'primary.main',
+                },
+              }}
+            >
+              <CardContent sx={{ px: { xs: 1.5, sm: 2 }, py: { xs: 1.5, sm: 2 }, '&:last-child': { pb: { xs: 1.5, sm: 2 } } }}>
+                <Stack spacing={{ xs: 1.5, sm: 2 }}>
                   {/* Header: Word + IPA */}
                   <Box>
-                    <Typography variant="h6" fontWeight={600}>
+                    <Typography variant="h6" fontWeight={600} sx={{ fontSize: { xs: '1.125rem', sm: '1.25rem' }, color: 'primary.main' }}>
                       {word.word}
                     </Typography>
-                    <Typography variant="body2" fontFamily="monospace" color="text.secondary">
+                    <Typography
+                      variant="body2"
+                      fontFamily="monospace"
+                      color="text.secondary"
+                      sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' }, mt: 0.25 }}
+                    >
                       {word.ipa}
                     </Typography>
                   </Box>
@@ -332,7 +390,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                   <Divider />
 
                   {/* Key Metrics */}
-                  <Grid container spacing={1}>
+                  <Grid container spacing={{ xs: 1, sm: 1.5 }}>
                     <Grid item xs={6} sm={3}>
                       <Typography variant="caption" color="text.secondary">
                         Syllables
@@ -403,7 +461,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                               Frequency
                             </Typography>
                             <Typography variant="body2" fontFamily="monospace">
-                              {word.isPair ? formatPair(word._raw.frequency[0], word._raw.frequency[1]) : word.frequency.toFixed(1)}
+                              {word.isPair ? formatPair(word._raw.frequency[0], word._raw.frequency[1]) : (word.frequency != null ? word.frequency.toFixed(1) : '-')}
                             </Typography>
                           </Grid>
                         )}
@@ -413,7 +471,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                               AoA
                             </Typography>
                             <Typography variant="body2" fontFamily="monospace">
-                              {word.isPair ? formatPair(word._raw.aoa[0], word._raw.aoa[1]) : word.aoa.toFixed(1)}
+                              {word.isPair ? formatPair(word._raw.aoa[0], word._raw.aoa[1]) : (word.aoa != null ? word.aoa.toFixed(1) : '-')}
                             </Typography>
                           </Grid>
                         )}
@@ -435,7 +493,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                               Image
                             </Typography>
                             <Typography variant="body2" fontFamily="monospace">
-                              {word.isPair ? formatPair(word._raw.imageability[0], word._raw.imageability[1]) : word.imageability.toFixed(1)}
+                              {word.isPair ? formatPair(word._raw.imageability[0], word._raw.imageability[1]) : (word.imageability != null ? word.imageability.toFixed(1) : '-')}
                             </Typography>
                           </Grid>
                         )}
@@ -445,7 +503,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                               Famil
                             </Typography>
                             <Typography variant="body2" fontFamily="monospace">
-                              {word.isPair ? formatPair(word._raw.familiarity[0], word._raw.familiarity[1]) : word.familiarity.toFixed(1)}
+                              {word.isPair ? formatPair(word._raw.familiarity[0], word._raw.familiarity[1]) : (word.familiarity != null ? word.familiarity.toFixed(1) : '-')}
                             </Typography>
                           </Grid>
                         )}
@@ -455,7 +513,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                               Concr
                             </Typography>
                             <Typography variant="body2" fontFamily="monospace">
-                              {word.isPair ? formatPair(word._raw.concreteness[0], word._raw.concreteness[1]) : word.concreteness.toFixed(1)}
+                              {word.isPair ? formatPair(word._raw.concreteness[0], word._raw.concreteness[1]) : (word.concreteness != null ? word.concreteness.toFixed(1) : '-')}
                             </Typography>
                           </Grid>
                         )}
@@ -468,12 +526,72 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
           ))}
         </Stack>
       ) : (
-        /* Table View */
-        <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
-          <Table size="small">
+        /* Table View with Sticky Header */
+        <Box sx={{ position: 'relative' }}>
+          {/* Scroll Hint Overlay */}
+          <Fade in={showScrollHint && isMobile} timeout={1000}>
+            <Box
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                right: 16,
+                transform: 'translateY(-50%)',
+                zIndex: 10,
+                bgcolor: 'primary.main',
+                color: 'white',
+                px: 2,
+                py: 1,
+                borderRadius: 2,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+                boxShadow: 3,
+                pointerEvents: 'none',
+              }}
+            >
+              <ScrollIcon />
+              <Typography variant="caption" fontWeight={600}>
+                Scroll to see more
+              </Typography>
+            </Box>
+          </Fade>
+
+          <TableContainer
+            ref={tableContainerRef}
+            component={Paper}
+            sx={{
+              overflowX: 'auto',
+              overflowY: 'auto',
+              maxHeight: '70vh', // Limit height to enable vertical scrolling
+              WebkitOverflowScrolling: 'touch', // Smooth scrolling on iOS
+              position: 'relative', // For sticky positioning context
+              '&::-webkit-scrollbar': {
+                height: 8,
+                width: 8,
+              },
+              '&::-webkit-scrollbar-thumb': {
+                backgroundColor: 'rgba(0,0,0,0.2)',
+                borderRadius: 4,
+              },
+              '&::-webkit-scrollbar-track': {
+                backgroundColor: 'rgba(0,0,0,0.05)',
+              },
+            }}
+          >
+          <Table size="small" sx={{ minWidth: { xs: 800, sm: 'auto' } }} stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell>
+              <TableCell
+                sx={{
+                  position: 'sticky',
+                  left: 0,
+                  zIndex: 3, // Above other cells but below sticky header
+                  bgcolor: 'background.paper',
+                  borderRight: 1,
+                  borderColor: 'divider',
+                  boxShadow: '2px 0 4px rgba(0,0,0,0.05)',
+                }}
+              >
                 <TableSortLabel
                   active={sortField === 'word'}
                   direction={sortField === 'word' ? sortDirection : 'asc'}
@@ -482,7 +600,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                   Word
                 </TableSortLabel>
               </TableCell>
-              <TableCell>IPA</TableCell>
+              <TableCell sx={{ whiteSpace: 'nowrap' }}>IPA</TableCell>
               <TableCell align="center">
                 <TableSortLabel
                   active={sortField === 'syllable_count'}
@@ -614,12 +732,22 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
           <TableBody>
             {sortedWords.map((word: any, idx) => (
               <TableRow key={idx} hover>
-                <TableCell>
+                <TableCell
+                  sx={{
+                    position: 'sticky',
+                    left: 0,
+                    zIndex: 1, // Above other body cells
+                    bgcolor: 'background.paper',
+                    borderRight: 1,
+                    borderColor: 'divider',
+                    boxShadow: '2px 0 4px rgba(0,0,0,0.05)',
+                  }}
+                >
                   <Typography variant="body2" fontWeight={500}>
                     {word.word}
                   </Typography>
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ whiteSpace: 'nowrap' }}>
                   <Typography variant="body2" fontFamily="monospace" color="text.secondary">
                     {word.ipa}
                   </Typography>
@@ -714,6 +842,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
           </TableBody>
         </Table>
       </TableContainer>
+        </Box>
       )}
     </Box>
   );

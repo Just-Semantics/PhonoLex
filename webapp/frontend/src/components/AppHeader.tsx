@@ -66,7 +66,7 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
   return (
     <>
       <AppBar position="sticky" elevation={1} sx={{ bgcolor: 'primary.main' }}>
-        <Toolbar>
+        <Toolbar sx={{ minHeight: { xs: 56, sm: 64 }, px: { xs: 1, sm: 2 } }}>
           {/* Logo / Branding */}
           <Typography
             variant="h6"
@@ -76,7 +76,8 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
               fontWeight: 700,
               display: 'flex',
               alignItems: 'center',
-              gap: 1.5,
+              gap: { xs: 0.75, sm: 1.5 },
+              fontSize: { xs: '1rem', sm: '1.25rem' },
             }}
           >
             <Box
@@ -84,20 +85,39 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
               src="/logo.png"
               alt="PhonoLex Logo"
               sx={{
-                height: 32,
-                width: 32,
+                height: { xs: 28, sm: 32 },
+                width: { xs: 28, sm: 32 },
                 filter: 'brightness(0) invert(1)', // Make logo white on dark background
+                flexShrink: 0,
               }}
             />
-            PhonoLex
+            <Box
+              component="span"
+              sx={{
+                display: { xs: 'none', sm: 'inline' },
+              }}
+            >
+              PhonoLex
+            </Box>
+            <Box
+              component="span"
+              sx={{
+                display: { xs: 'inline', sm: 'none' },
+              }}
+            >
+              Phono
+            </Box>
             <Chip
-              label="v2.0.0"
+              label="v2.1.0-beta"
               size="small"
               sx={{
-                height: 20,
-                fontSize: '0.7rem',
+                height: { xs: 18, sm: 20 },
+                fontSize: { xs: '0.65rem', sm: '0.7rem' },
                 bgcolor: 'rgba(255,255,255,0.2)',
                 color: 'white',
+                '& .MuiChip-label': {
+                  px: { xs: 0.5, sm: 1 },
+                },
               }}
             />
           </Typography>
@@ -132,7 +152,12 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
             color="inherit"
             aria-label="menu"
             onClick={handleMobileMenuOpen}
-            sx={{ display: { xs: 'flex', md: 'none' } }}
+            sx={{
+              display: { xs: 'flex', md: 'none' },
+              minWidth: 44,
+              minHeight: 44,
+              p: 1,
+            }}
           >
             <MenuIcon />
           </IconButton>
@@ -357,7 +382,7 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
 
           <Box sx={{ mt: 3, p: 2, bgcolor: 'primary.50', borderRadius: 1 }}>
             <Typography variant="caption" color="text.secondary" align="center" display="block">
-              PhonoLex v2.0.0 • Built with FastAPI + React + PostgreSQL + pgvector
+              PhonoLex v2.1.0-beta • Built with React + TypeScript (Client-Side)
               <br />
               Licensed under CC BY-SA 3.0 • Data resource for phonological research
             </Typography>
@@ -479,7 +504,7 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
 
           <Box sx={{ mt: 4, p: 2, bgcolor: 'primary.50', borderRadius: 1 }}>
             <Typography variant="caption" color="text.secondary" align="center" display="block">
-              PhonoLex v2.0.0 • Licensed under CC BY-SA 3.0
+              PhonoLex v2.1.0-beta • Licensed under CC BY-SA 3.0
               <br />
               ShareAlike license required due to PHOIBLE data
             </Typography>

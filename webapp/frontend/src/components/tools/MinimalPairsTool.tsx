@@ -30,8 +30,8 @@ const MinimalPairsTool: React.FC = () => {
     phoneme1: string;
     phoneme2: string;
   }>({
-    phoneme1: 't',
-    phoneme2: 'd',
+    phoneme1: '',
+    phoneme2: '',
   });
 
   // Granular filters
@@ -164,7 +164,7 @@ const MinimalPairsTool: React.FC = () => {
           value={state.phoneme1}
           onChange={(e) => setState({ ...state, phoneme1: e.target.value })}
           size="small"
-          placeholder="Tap keyboard to select"
+          placeholder="e.g., t, k, s"
           fullWidth
           InputProps={{
             endAdornment: (
@@ -185,7 +185,7 @@ const MinimalPairsTool: React.FC = () => {
           value={state.phoneme2}
           onChange={(e) => setState({ ...state, phoneme2: e.target.value })}
           size="small"
-          placeholder="Tap keyboard to select"
+          placeholder="e.g., d, g, z"
           fullWidth
           InputProps={{
             endAdornment: (

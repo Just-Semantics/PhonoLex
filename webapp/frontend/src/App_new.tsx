@@ -49,7 +49,15 @@ const App: React.FC = () => {
       <AppHeader onNavigate={(section) => console.log('Navigate to:', section)} />
 
       {/* Main Content */}
-      <Container maxWidth="lg" sx={{ mt: { xs: 2, sm: 3 }, mb: 4, px: { xs: 2, sm: 3 } }} role="main">
+      <Container
+        maxWidth="lg"
+        sx={{
+          mt: { xs: 1.5, sm: 2, md: 3 },
+          mb: { xs: 3, sm: 4 },
+          px: { xs: 1.5, sm: 2, md: 3 },
+        }}
+        role="main"
+      >
         {/* Tool Cards - Flat, Progressive Disclosure */}
         <Box sx={{ maxWidth: 900, mx: 'auto' }}>
 

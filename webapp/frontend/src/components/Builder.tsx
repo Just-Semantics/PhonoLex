@@ -47,7 +47,7 @@ import PhonemePickerDialog from './PhonemePickerDialog';
 const Builder: React.FC = () => {
   // Patterns state
   const [patterns, setPatterns] = useState<Pattern[]>([
-    { type: 'STARTS_WITH', phoneme: 'k' },
+    { type: 'STARTS_WITH', phoneme: '' },
   ]);
 
   // Store database ranges separately for slider min/max
@@ -236,7 +236,7 @@ const Builder: React.FC = () => {
 
   // Clear all - reset to database ranges
   const handleClear = () => {
-    setPatterns([{ type: 'STARTS_WITH', phoneme: 'k' }]);
+    setPatterns([{ type: 'STARTS_WITH', phoneme: '' }]);
     setFilters({
       syllables: dbRanges.syllables as [number, number],
       phonemes: dbRanges.phonemes as [number, number],
@@ -259,24 +259,30 @@ const Builder: React.FC = () => {
 
   return (
     <Box>
-      <Stack spacing={2}>
+      <Stack spacing={{ xs: 1.5, sm: 2 }}>
         {/* Pattern Matching */}
         <Accordion defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography variant="h6">Patterns</Typography>
+            <Typography variant="h6" sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}>
+              Patterns
+            </Typography>
           </AccordionSummary>
-          <AccordionDetails>
-            <Stack spacing={2}>
-              <Typography variant="body2" color="text.secondary">
+          <AccordionDetails sx={{ px: { xs: 1.5, sm: 2 }, py: { xs: 1, sm: 2 } }}>
+            <Stack spacing={{ xs: 1.5, sm: 2 }}>
+              <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                 AND logic: all patterns must match. Space-separate phonemes (e.g., "s t" for /st/)
               </Typography>
 
-              <Stack spacing={2}>
+              <Stack spacing={{ xs: 1.5, sm: 2 }}>
                 {patterns.map((pattern, idx) => (
-                  <Paper key={idx} variant="outlined" sx={{ p: 2 }}>
-                    <Stack spacing={1}>
-                      <Stack direction="row" spacing={2} alignItems="center">
-                        <FormControl size="small" sx={{ minWidth: 140 }}>
+                  <Paper key={idx} variant="outlined" sx={{ p: { xs: 1.5, sm: 2 } }}>
+                    <Stack spacing={{ xs: 1, sm: 1 }}>
+                      <Stack
+                        direction={{ xs: 'column', sm: 'row' }}
+                        spacing={{ xs: 1, sm: 2 }}
+                        alignItems={{ xs: 'stretch', sm: 'center' }}
+                      >
+                        <FormControl size="small" sx={{ minWidth: { xs: '100%', sm: 140 } }}>
                           <InputLabel>Type</InputLabel>
                           <Select
                             value={pattern.type}
@@ -291,35 +297,39 @@ const Builder: React.FC = () => {
                           </Select>
                         </FormControl>
 
-                        <TextField
-                          label="Phoneme(s)"
-                          value={pattern.phoneme}
-                          onChange={(e) => updatePattern(idx, 'phoneme', e.target.value)}
-                          size="small"
-                          placeholder="Click keyboard to select"
-                          fullWidth
-                          InputProps={{
-                            endAdornment: (
-                              <IconButton
-                                onClick={() => openPhonemePicker({ type: 'pattern', index: idx })}
-                                edge="end"
-                                color="primary"
-                                size="small"
-                              >
-                                <KeyboardIcon />
-                              </IconButton>
-                            ),
-                          }}
-                        />
+                        <Box sx={{ display: 'flex', gap: 1, flex: 1 }}>
+                          <TextField
+                            label="Phoneme(s)"
+                            value={pattern.phoneme}
+                            onChange={(e) => updatePattern(idx, 'phoneme', e.target.value)}
+                            size="small"
+                            placeholder="e.g., k, t, s"
+                            fullWidth
+                            InputProps={{
+                              endAdornment: (
+                                <IconButton
+                                  onClick={() => openPhonemePicker({ type: 'pattern', index: idx })}
+                                  edge="end"
+                                  color="primary"
+                                  size="small"
+                                  sx={{ minWidth: 40, minHeight: 40 }}
+                                >
+                                  <KeyboardIcon />
+                                </IconButton>
+                              ),
+                            }}
+                          />
 
-                        <IconButton
-                          size="small"
-                          color="error"
-                          onClick={() => removePattern(idx)}
-                          disabled={patterns.length === 1}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
+                          <IconButton
+                            size="small"
+                            color="error"
+                            onClick={() => removePattern(idx)}
+                            disabled={patterns.length === 1}
+                            sx={{ minWidth: 44, minHeight: 44, flexShrink: 0 }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Box>
                       </Stack>
 
                       {/* Medial Only checkbox - only shown for CONTAINS patterns */}
@@ -362,26 +372,28 @@ const Builder: React.FC = () => {
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Box>
-              <Typography variant="h6">Property Filters</Typography>
-              <Typography variant="caption" color="text.secondary">
+              <Typography variant="h6" sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}>
+                Property Filters
+              </Typography>
+              <Typography variant="caption" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.8125rem' } }}>
                 Phonological, lexical, semantic, and affective properties
               </Typography>
             </Box>
           </AccordionSummary>
-          <AccordionDetails>
-            <Stack spacing={1}>
+          <AccordionDetails sx={{ px: { xs: 1.5, sm: 2 }, py: { xs: 1, sm: 2 } }}>
+            <Stack spacing={{ xs: 0.75, sm: 1 }}>
                 {/* Phonological Complexity */}
                 <Accordion defaultExpanded>
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography variant="subtitle2" fontWeight={600}>
+                    <Typography variant="subtitle2" fontWeight={600} sx={{ fontSize: { xs: '0.875rem', sm: '0.9375rem' } }}>
                       Phonological Complexity
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
-                    <Stack spacing={3}>
+                  <AccordionDetails sx={{ px: { xs: 1.5, sm: 2 }, py: { xs: 1.5, sm: 2 } }}>
+                    <Stack spacing={{ xs: 2.5, sm: 3 }}>
                       {/* Syllables */}
                       <Box>
-                        <Typography variant="body2" gutterBottom>
+                        <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           Syllable Count: {filters.syllables[0]} - {filters.syllables[1]}
                         </Typography>
                         <Slider
@@ -392,12 +404,13 @@ const Builder: React.FC = () => {
                           step={1}
                           marks
                           valueLabelDisplay="auto"
+                          sx={{ '& .MuiSlider-markLabel': { fontSize: { xs: '0.625rem', sm: '0.75rem' } } }}
                         />
                       </Box>
 
                       {/* Phonemes */}
                       <Box>
-                        <Typography variant="body2" gutterBottom>
+                        <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           Phoneme Count: {filters.phonemes[0]} - {filters.phonemes[1]}
                         </Typography>
                         <Slider
@@ -408,14 +421,15 @@ const Builder: React.FC = () => {
                           step={1}
                           marks
                           valueLabelDisplay="auto"
+                          sx={{ '& .MuiSlider-markLabel': { fontSize: { xs: '0.625rem', sm: '0.75rem' } } }}
                         />
                       </Box>
 
                       {/* WCM */}
                       <Box>
-                        <Typography variant="body2" gutterBottom>
+                        <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           WCM Score: {filters.wcm[0]} - {filters.wcm[1]}
-                          <Typography variant="caption" color="text.secondary" display="block">
+                          <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
                             Word Complexity Measure (Stoel-Gammon, 2010)
                           </Typography>
                         </Typography>
@@ -426,14 +440,15 @@ const Builder: React.FC = () => {
                           max={dbRanges.wcm[1]}
                           step={1}
                           valueLabelDisplay="auto"
+                          sx={{ '& .MuiSlider-markLabel': { fontSize: { xs: '0.625rem', sm: '0.75rem' } } }}
                         />
                       </Box>
 
                       {/* MSH */}
                       <Box>
-                        <Typography variant="body2" gutterBottom>
+                        <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           MSH Stage: {filters.msh[0]} - {filters.msh[1]}
-                          <Typography variant="caption" color="text.secondary" display="block">
+                          <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
                             Motor Speech Hierarchy - Developmental complexity
                           </Typography>
                         </Typography>
@@ -445,6 +460,7 @@ const Builder: React.FC = () => {
                           step={1}
                           marks
                           valueLabelDisplay="auto"
+                          sx={{ '& .MuiSlider-markLabel': { fontSize: { xs: '0.625rem', sm: '0.75rem' } } }}
                         />
                       </Box>
                     </Stack>
@@ -454,17 +470,17 @@ const Builder: React.FC = () => {
                 {/* Lexical Properties */}
                 <Accordion>
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography variant="subtitle2" fontWeight={600}>
+                    <Typography variant="subtitle2" fontWeight={600} sx={{ fontSize: { xs: '0.875rem', sm: '0.9375rem' } }}>
                       Lexical Properties
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
-                    <Stack spacing={3}>
+                  <AccordionDetails sx={{ px: { xs: 1.5, sm: 2 }, py: { xs: 1.5, sm: 2 } }}>
+                    <Stack spacing={{ xs: 2.5, sm: 3 }}>
                       {/* Frequency */}
                       <Box>
-                        <Typography variant="body2" gutterBottom>
+                        <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           Frequency: {filters.frequency[0]} - {filters.frequency[1]} per million
-                          <Typography variant="caption" color="text.secondary" display="block">
+                          <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
                             SUBTLEX-US corpus
                           </Typography>
                         </Typography>
@@ -475,14 +491,15 @@ const Builder: React.FC = () => {
                           max={dbRanges.frequency[1]}
                           step={10}
                           valueLabelDisplay="auto"
+                          sx={{ '& .MuiSlider-markLabel': { fontSize: { xs: '0.625rem', sm: '0.75rem' } } }}
                         />
                       </Box>
 
                       {/* Age of Acquisition */}
                       <Box>
-                        <Typography variant="body2" gutterBottom>
+                        <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           Age of Acquisition: {filters.aoa[0]} - {filters.aoa[1]} years
-                          <Typography variant="caption" color="text.secondary" display="block">
+                          <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
                             Kuperman et al. (2012) - Age typically learned
                           </Typography>
                         </Typography>
@@ -493,6 +510,7 @@ const Builder: React.FC = () => {
                           max={dbRanges.aoa[1]}
                           step={0.5}
                           valueLabelDisplay="auto"
+                          sx={{ '& .MuiSlider-markLabel': { fontSize: { xs: '0.625rem', sm: '0.75rem' } } }}
                         />
                       </Box>
                     </Stack>
@@ -502,17 +520,17 @@ const Builder: React.FC = () => {
                 {/* Semantic Properties */}
                 <Accordion>
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography variant="subtitle2" fontWeight={600}>
+                    <Typography variant="subtitle2" fontWeight={600} sx={{ fontSize: { xs: '0.875rem', sm: '0.9375rem' } }}>
                       Semantic Properties
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
-                    <Stack spacing={3}>
+                  <AccordionDetails sx={{ px: { xs: 1.5, sm: 2 }, py: { xs: 1.5, sm: 2 } }}>
+                    <Stack spacing={{ xs: 2.5, sm: 3 }}>
                       {/* Imageability */}
                       <Box>
-                        <Typography variant="body2" gutterBottom>
+                        <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           Imageability: {filters.imageability[0]} - {filters.imageability[1]}
-                          <Typography variant="caption" color="text.secondary" display="block">
+                          <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
                             How easily a word evokes a mental image
                           </Typography>
                         </Typography>
@@ -523,14 +541,15 @@ const Builder: React.FC = () => {
                           max={dbRanges.imageability[1]}
                           step={0.5}
                           valueLabelDisplay="auto"
+                          sx={{ '& .MuiSlider-markLabel': { fontSize: { xs: '0.625rem', sm: '0.75rem' } } }}
                         />
                       </Box>
 
                       {/* Familiarity */}
                       <Box>
-                        <Typography variant="body2" gutterBottom>
+                        <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           Familiarity: {filters.familiarity[0]} - {filters.familiarity[1]}
-                          <Typography variant="caption" color="text.secondary" display="block">
+                          <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
                             How familiar the word is
                           </Typography>
                         </Typography>
@@ -541,14 +560,15 @@ const Builder: React.FC = () => {
                           max={dbRanges.familiarity[1]}
                           step={0.5}
                           valueLabelDisplay="auto"
+                          sx={{ '& .MuiSlider-markLabel': { fontSize: { xs: '0.625rem', sm: '0.75rem' } } }}
                         />
                       </Box>
 
                       {/* Concreteness */}
                       <Box>
-                        <Typography variant="body2" gutterBottom>
+                        <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           Concreteness: {filters.concreteness[0]} - {filters.concreteness[1]}
-                          <Typography variant="caption" color="text.secondary" display="block">
+                          <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
                             How concrete vs. abstract (higher = more concrete)
                           </Typography>
                         </Typography>
@@ -559,6 +579,7 @@ const Builder: React.FC = () => {
                           max={dbRanges.concreteness[1]}
                           step={0.5}
                           valueLabelDisplay="auto"
+                          sx={{ '& .MuiSlider-markLabel': { fontSize: { xs: '0.625rem', sm: '0.75rem' } } }}
                         />
                       </Box>
                     </Stack>
@@ -568,17 +589,17 @@ const Builder: React.FC = () => {
                 {/* Affective Properties */}
                 <Accordion>
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography variant="subtitle2" fontWeight={600}>
+                    <Typography variant="subtitle2" fontWeight={600} sx={{ fontSize: { xs: '0.875rem', sm: '0.9375rem' } }}>
                       Affective Properties
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
-                    <Stack spacing={3}>
+                  <AccordionDetails sx={{ px: { xs: 1.5, sm: 2 }, py: { xs: 1.5, sm: 2 } }}>
+                    <Stack spacing={{ xs: 2.5, sm: 3 }}>
                       {/* Valence */}
                       <Box>
-                        <Typography variant="body2" gutterBottom>
+                        <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           Valence: {filters.valence[0]} - {filters.valence[1]}
-                          <Typography variant="caption" color="text.secondary" display="block">
+                          <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
                             Warriner et al. (2013) - Positive vs. negative emotion
                           </Typography>
                         </Typography>
@@ -589,14 +610,15 @@ const Builder: React.FC = () => {
                           max={dbRanges.valence[1]}
                           step={0.5}
                           valueLabelDisplay="auto"
+                          sx={{ '& .MuiSlider-markLabel': { fontSize: { xs: '0.625rem', sm: '0.75rem' } } }}
                         />
                       </Box>
 
                       {/* Arousal */}
                       <Box>
-                        <Typography variant="body2" gutterBottom>
+                        <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           Arousal: {filters.arousal[0]} - {filters.arousal[1]}
-                          <Typography variant="caption" color="text.secondary" display="block">
+                          <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
                             Emotional intensity (calm vs. excited)
                           </Typography>
                         </Typography>
@@ -607,14 +629,15 @@ const Builder: React.FC = () => {
                           max={dbRanges.arousal[1]}
                           step={0.5}
                           valueLabelDisplay="auto"
+                          sx={{ '& .MuiSlider-markLabel': { fontSize: { xs: '0.625rem', sm: '0.75rem' } } }}
                         />
                       </Box>
 
                       {/* Dominance */}
                       <Box>
-                        <Typography variant="body2" gutterBottom>
+                        <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           Dominance: {filters.dominance[0]} - {filters.dominance[1]}
-                          <Typography variant="caption" color="text.secondary" display="block">
+                          <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
                             Perceived control (weak vs. powerful)
                           </Typography>
                         </Typography>
@@ -625,6 +648,7 @@ const Builder: React.FC = () => {
                           max={dbRanges.dominance[1]}
                           step={0.5}
                           valueLabelDisplay="auto"
+                          sx={{ '& .MuiSlider-markLabel': { fontSize: { xs: '0.625rem', sm: '0.75rem' } } }}
                         />
                       </Box>
                     </Stack>
@@ -638,22 +662,24 @@ const Builder: React.FC = () => {
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Box>
-              <Typography variant="h6">Exclusions</Typography>
-              <Typography variant="caption" color="text.secondary">
+              <Typography variant="h6" sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}>
+                Exclusions
+              </Typography>
+              <Typography variant="caption" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.8125rem' } }}>
                 Exclude words containing specific phonemes
               </Typography>
             </Box>
           </AccordionSummary>
-          <AccordionDetails>
-            <Stack spacing={2}>
-              <Stack direction="row" spacing={2}>
+          <AccordionDetails sx={{ px: { xs: 1.5, sm: 2 }, py: { xs: 1, sm: 2 } }}>
+            <Stack spacing={{ xs: 1.5, sm: 2 }}>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2 }}>
                 <TextField
                   label="Phoneme to exclude"
                   value={excludePhonemeInput}
                   onChange={(e) => setExcludePhonemeInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && addExclusion()}
                   size="small"
-                  placeholder="Click keyboard to select"
+                  placeholder="e.g., r, l, θ"
                   fullWidth
                   InputProps={{
                     endAdornment: (
@@ -662,6 +688,7 @@ const Builder: React.FC = () => {
                         edge="end"
                         color="primary"
                         size="small"
+                        sx={{ minWidth: 40, minHeight: 40 }}
                       >
                         <KeyboardIcon />
                       </IconButton>
@@ -672,6 +699,11 @@ const Builder: React.FC = () => {
                   variant="outlined"
                   startIcon={<AddIcon />}
                   onClick={addExclusion}
+                  sx={{
+                    minHeight: 44,
+                    minWidth: { sm: 100 },
+                    width: { xs: '100%', sm: 'auto' },
+                  }}
                 >
                   Add
                 </Button>
@@ -696,7 +728,11 @@ const Builder: React.FC = () => {
       </Stack>
 
       {/* Actions */}
-      <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        spacing={{ xs: 1.5, sm: 2 }}
+        sx={{ mt: { xs: 2, sm: 3 } }}
+      >
         <Button
           variant="contained"
           size="large"
@@ -704,13 +740,20 @@ const Builder: React.FC = () => {
           onClick={handleBuild}
           disabled={loading || patterns.every((p) => !p.phoneme.trim())}
           fullWidth
+          sx={{ minHeight: 48 }}
         >
           Build Word List
         </Button>
         <Button
           variant="outlined"
+          size="large"
           startIcon={<ClearIcon />}
           onClick={handleClear}
+          sx={{
+            minHeight: 48,
+            minWidth: { sm: 120 },
+            width: { xs: '100%', sm: 'auto' },
+          }}
         >
           Clear
         </Button>
