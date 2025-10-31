@@ -14,10 +14,13 @@ The project uses a **modern Python package structure** with a **fully client-sid
 
 ```
 PhonoLex/
-├── pyproject.toml           # Modern Python packaging config
 ├── README.md                # Main documentation
 ├── CLAUDE.md                # This file
-├── requirements.txt         # Root dev dependencies
+│
+├── python/                  # Python dependencies (local dev only)
+│   ├── pyproject.toml       # Modern Python packaging config
+│   ├── requirements.txt     # Legacy pip requirements
+│   └── README.md            # Python setup guide
 │
 ├── src/phonolex/            # Core library (phoneme embeddings, models, utils)
 │   ├── __init__.py
@@ -69,15 +72,23 @@ PhonoLex/
 
 ## Development Environment Setup
 
-### Python Environment
+### Python Environment (Only for Embedding Generation)
+
+**Note**: The webapp is 100% client-side JavaScript. You only need Python if you're building embeddings from scratch.
 
 ```bash
 # Create virtual environment
 python3 -m venv venv
 source venv/bin/activate  # or `venv\Scripts\activate` on Windows
 
-# Install dependencies
-pip install -r requirements.txt
+# Install dependencies for embedding generation
+pip install -e ./python[build]
+
+# Or for development (includes testing, linting)
+pip install -e ./python[dev]
+
+# Or for everything
+pip install -e ./python[all]
 ```
 
 ### Web Application Setup

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "phonolex"
 version = "2.0.0"
-description = "Phonological analysis toolkit with hierarchical embeddings and database-centric web application"
+description = "Phonological analysis toolkit with hierarchical embeddings"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
@@ -33,26 +33,18 @@ classifiers = [
 
 dependencies = [
     "numpy>=1.24.0",
-    "torch>=2.0.0",
     "pandas>=2.0.0",
-    "networkx>=3.0",
-    "scikit-learn>=1.3.0",
 ]
 
 [project.optional-dependencies]
-webapp = [
-    "fastapi>=0.104.0",
-    "uvicorn[standard]>=0.24.0",
-    "sqlalchemy>=2.0.0",
-    "psycopg2-binary>=2.9.9",
-    "pgvector>=0.4.0",
-    "pydantic>=2.0.0",
-    "python-dotenv>=1.0.0",
+build = [
+    "torch>=2.0.0",
+    "scipy>=1.10.0",
+    "tqdm>=4.65.0",
 ]
 dev = [
     "pytest>=7.4.0",
     "pytest-cov>=4.1.0",
-    "pytest-asyncio>=0.21.0",
     "black>=23.9.0",
     "ruff>=0.0.292",
     "mypy>=1.5.0",
@@ -60,7 +52,7 @@ dev = [
     "jupyter>=1.0.0",
 ]
 all = [
-    "phonolex[webapp,dev]"
+    "phonolex[build,dev]"
 ]
 
 [project.urls]
@@ -69,15 +61,13 @@ Documentation = "https://github.com/yourusername/phonolex/tree/main/docs"
 Repository = "https://github.com/yourusername/phonolex"
 Issues = "https://github.com/yourusername/phonolex/issues"
 
-[project.scripts]
-phonolex-api = "webapp.backend.main:main"
+# No CLI scripts - webapp is client-side only
 
 [tool.setuptools]
-packages = ["phonolex", "webapp"]
+packages = ["phonolex"]
 
 [tool.setuptools.package-dir]
-phonolex = "src/phonolex"
-webapp = "webapp"
+phonolex = "../src/phonolex"
 
 [tool.pytest.ini_options]
 minversion = "7.0"
@@ -87,19 +77,10 @@ addopts = [
     "--strict-config",
     "--showlocals",
 ]
-testpaths = ["webapp/backend/tests"]
+testpaths = ["../tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-markers = [
-    "unit: Fast unit tests (no DB required)",
-    "integration: Integration tests (require DB)",
-    "service: Service layer tests",
-    "api: API endpoint tests",
-    "performance: Performance benchmark tests",
-    "slow: Tests taking > 1 second",
-    "critical: Critical path tests",
-]
 
 [tool.black]
 line-length = 100

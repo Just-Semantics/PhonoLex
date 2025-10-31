@@ -1,7 +1,7 @@
 # Netlify Configuration for PhonoLex v2.1 (Client-Side)
 
 [build]
-  # Build command
+  # Build command - frontend only, no Python dependencies needed
   command = "cd webapp/frontend && npm ci && npm run build"
 
   # Directory to deploy

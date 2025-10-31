@@ -27,13 +27,32 @@ PhonoLex provides:
 
 ## Quick Start
 
-### Installation
+### Installation (For Embedding Generation)
+
+**Note**: The web application is fully client-side and doesn't require Python. Only install Python dependencies if you're building embeddings from scratch.
 
 ```bash
 git clone https://github.com/yourusername/PhonoLex.git
 cd PhonoLex
-pip install -r requirements.txt
+
+# Install for embedding generation
+pip install -e ./python[build]
+
+# Or for full development
+pip install -e ./python[all]
 ```
+
+### Web Application (No Installation Required)
+
+The interactive web app runs entirely in your browser:
+
+```bash
+cd webapp/frontend
+npm install
+npm run dev
+```
+
+Visit http://localhost:3000 to explore phonological relationships, find minimal pairs, and analyze word similarity - all client-side!
 
 ### Demo: Find Similar Words
 
