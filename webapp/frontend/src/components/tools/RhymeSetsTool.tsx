@@ -22,6 +22,8 @@ import {
 } from '@mui/material';
 import {
   PlayArrow as RunIcon,
+  Download as ExportIcon,
+  ContentCopy as CopyIcon,
 } from '@mui/icons-material';
 import api from '../../services/phonolexApi';
 import { RhymeResult } from '../../types/phonology';
@@ -53,6 +55,30 @@ const RhymeSetsTool: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Export rhymes to CSV
+  const exportCSV = () => {
+    if (!results || results.length === 0) return;
+
+    const words = results.map(r => r.word?.word || '').filter(w => w);
+    const csv = ['Word', ...words].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `rhymes_${targetWord}_${Date.now()}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Copy rhymes to clipboard (line-delimited)
+  const copyWords = () => {
+    if (!results || results.length === 0) return;
+
+    const words = results.map(r => r.word?.word || '').filter(w => w);
+    const text = words.join('\n');
+    navigator.clipboard.writeText(text);
   };
 
   return (
@@ -171,9 +197,29 @@ const RhymeSetsTool: React.FC = () => {
 
       {results && results.length > 0 && (
         <Box sx={{ mt: 3 }}>
-          <Alert severity="success">
-            Found {results.length} rhymes for "{targetWord}"
-          </Alert>
+          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+            <Alert severity="success" sx={{ flex: 1, mr: 2 }}>
+              Found {results.length} rhymes for "{targetWord}"
+            </Alert>
+            <Stack direction="row" spacing={1}>
+              <Button
+                size="small"
+                startIcon={<CopyIcon />}
+                onClick={copyWords}
+                variant="outlined"
+              >
+                Copy
+              </Button>
+              <Button
+                size="small"
+                startIcon={<ExportIcon />}
+                onClick={exportCSV}
+                variant="outlined"
+              >
+                Export
+              </Button>
+            </Stack>
+          </Stack>
           <Box sx={{ mt: 2, p: 2, bgcolor: 'grey.50', borderRadius: 1 }}>
             {results.map((r, i) => (
               <Box key={i} sx={{ display: 'inline-block', mr: 1, mb: 1 }}>
