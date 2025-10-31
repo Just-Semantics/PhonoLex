@@ -24,6 +24,7 @@ import api from '../../services/phonolexApi';
 import type { MinimalPair } from '../../services/phonolexApi';
 import WordResultsDisplay from '../WordResultsDisplay';
 import PhonemePickerDialog from '../PhonemePickerDialog';
+import { validatePhonemeInput } from '../../utils/ipaValidation';
 
 const MinimalPairsTool: React.FC = () => {
   const [state, setState] = useState<{
@@ -57,6 +58,8 @@ const MinimalPairsTool: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [phonemePickerOpen, setPhonemePickerOpen] = useState(false);
   const [activePhonemeField, setActivePhonemeField] = useState<'phoneme1' | 'phoneme2'>('phoneme1');
+  const [ipaWarning1, setIpaWarning1] = useState<string | null>(null);
+  const [ipaWarning2, setIpaWarning2] = useState<string | null>(null);
 
   // Fetch property ranges from database on mount
   useEffect(() => {
@@ -159,48 +162,93 @@ const MinimalPairsTool: React.FC = () => {
   return (
     <Box sx={{ p: { xs: 0, sm: 0 } }}>
       <Stack spacing={{ xs: 2, sm: 2 }}>
-        <TextField
-          label="Phoneme 1 (IPA)"
-          value={state.phoneme1}
-          onChange={(e) => setState({ ...state, phoneme1: e.target.value })}
-          size="small"
-          placeholder="e.g., t, k, s"
-          fullWidth
-          InputProps={{
-            endAdornment: (
-              <IconButton
-                onClick={() => openPhonemePicker('phoneme1')}
-                edge="end"
-                color="primary"
-                size="small"
-                aria-label="Open phoneme picker"
-              >
-                <KeyboardIcon />
-              </IconButton>
-            )
-          }}
-        />
-        <TextField
-          label="Phoneme 2 (IPA)"
-          value={state.phoneme2}
-          onChange={(e) => setState({ ...state, phoneme2: e.target.value })}
-          size="small"
-          placeholder="e.g., d, g, z"
-          fullWidth
-          InputProps={{
-            endAdornment: (
-              <IconButton
-                onClick={() => openPhonemePicker('phoneme2')}
-                edge="end"
-                color="primary"
-                size="small"
-                aria-label="Open phoneme picker"
-              >
-                <KeyboardIcon />
-              </IconButton>
-            )
-          }}
-        />
+        <Box>
+          <TextField
+            label="Phoneme 1 (IPA)"
+            value={state.phoneme1}
+            onChange={(e) => {
+              const newValue = e.target.value;
+              setState({ ...state, phoneme1: newValue });
+
+              // Validate IPA input
+              if (newValue.trim()) {
+                const validation = validatePhonemeInput(newValue);
+                if (!validation.isValid && validation.suggestion) {
+                  setIpaWarning1(validation.suggestion);
+                } else {
+                  setIpaWarning1(null);
+                }
+              } else {
+                setIpaWarning1(null);
+              }
+            }}
+            size="small"
+            placeholder="e.g., t, k, s"
+            fullWidth
+            InputProps={{
+              endAdornment: (
+                <IconButton
+                  onClick={() => openPhonemePicker('phoneme1')}
+                  edge="end"
+                  color="primary"
+                  size="small"
+                  aria-label="Open phoneme picker"
+                >
+                  <KeyboardIcon />
+                </IconButton>
+              )
+            }}
+          />
+          {ipaWarning1 && (
+            <Alert severity="warning" sx={{ mt: 1 }}>
+              {ipaWarning1}
+            </Alert>
+          )}
+        </Box>
+
+        <Box>
+          <TextField
+            label="Phoneme 2 (IPA)"
+            value={state.phoneme2}
+            onChange={(e) => {
+              const newValue = e.target.value;
+              setState({ ...state, phoneme2: newValue });
+
+              // Validate IPA input
+              if (newValue.trim()) {
+                const validation = validatePhonemeInput(newValue);
+                if (!validation.isValid && validation.suggestion) {
+                  setIpaWarning2(validation.suggestion);
+                } else {
+                  setIpaWarning2(null);
+                }
+              } else {
+                setIpaWarning2(null);
+              }
+            }}
+            size="small"
+            placeholder="e.g., d, g, z"
+            fullWidth
+            InputProps={{
+              endAdornment: (
+                <IconButton
+                  onClick={() => openPhonemePicker('phoneme2')}
+                  edge="end"
+                  color="primary"
+                  size="small"
+                  aria-label="Open phoneme picker"
+                >
+                  <KeyboardIcon />
+                </IconButton>
+              )
+            }}
+          />
+          {ipaWarning2 && (
+            <Alert severity="warning" sx={{ mt: 1 }}>
+              {ipaWarning2}
+            </Alert>
+          )}
+        </Box>
 
         {/* Property Filters */}
         <Box>

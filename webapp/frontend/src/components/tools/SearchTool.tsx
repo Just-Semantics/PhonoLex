@@ -42,6 +42,7 @@ import {
 import api from '../../services/phonolexApi';
 import type { Word } from '../../services/phonolexApi';
 import PhonemePickerDialog from '../PhonemePickerDialog';
+import { validatePhonemeInput } from '../../utils/ipaValidation';
 
 type SearchMode = 'word' | 'phoneme' | 'phoneme-features';
 
@@ -80,6 +81,7 @@ const SearchTool: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [phonemePickerOpen, setPhonemePickerOpen] = useState(false);
+  const [ipaWarning, setIpaWarning] = useState<string | null>(null);
 
   // Load available features from phoneme data on mount
   React.useEffect(() => {
@@ -222,7 +224,22 @@ const SearchTool: React.FC = () => {
             <TextField
               label={mode === 'word' ? 'Enter a word' : 'Select or type phoneme (IPA)'}
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => {
+                const newValue = e.target.value;
+                setQuery(newValue);
+
+                // Validate IPA input in phoneme mode
+                if (mode === 'phoneme' && newValue.trim()) {
+                  const validation = validatePhonemeInput(newValue);
+                  if (!validation.isValid && validation.suggestion) {
+                    setIpaWarning(validation.suggestion);
+                  } else {
+                    setIpaWarning(null);
+                  }
+                } else {
+                  setIpaWarning(null);
+                }
+              }}
               onKeyPress={handleKeyPress}
               size="medium"
               placeholder={mode === 'word' ? 'e.g., cat, computer, beautiful' : 'Click the keyboard icon to select'}
@@ -240,6 +257,13 @@ const SearchTool: React.FC = () => {
                 )
               } : undefined}
             />
+
+            {/* IPA Warning */}
+            {mode === 'phoneme' && ipaWarning && (
+              <Alert severity="warning" sx={{ mt: 1 }}>
+                {ipaWarning}
+              </Alert>
+            )}
           </Box>
         )}
 
