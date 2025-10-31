@@ -285,9 +285,9 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
     URL.revokeObjectURL(url);
   };
 
-  // Copy words to clipboard
+  // Copy words to clipboard (line-delimited)
   const copyWords = () => {
-    const text = sortedWords.map((w: any) => w.word).join(', ');
+    const text = sortedWords.map((w: any) => w.word).join('\n');
     navigator.clipboard.writeText(text);
   };
 
