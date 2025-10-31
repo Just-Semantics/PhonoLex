@@ -89,4 +89,7 @@ logs/
 # Temporary files
 *.tmp
 *.temp
-.cache/ 
+.cache/
+
+# Archive directory (deprecated code)
+archive/
