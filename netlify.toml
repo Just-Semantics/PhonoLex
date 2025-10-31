@@ -37,12 +37,11 @@
   for = "/data/*"
   [headers.values]
     Cache-Control = "public, max-age=3600"
-    # Enable gzip/brotli compression
-    Content-Encoding = "gzip"
 
-# Enable gzip compression for JSON files
+# Serve .gz files with correct content type and encoding
 [[headers]]
-  for = "/*.json"
+  for = "/data/*.json.gz"
   [headers.values]
     Content-Type = "application/json; charset=utf-8"
     Content-Encoding = "gzip"
+    Cache-Control = "public, max-age=3600"

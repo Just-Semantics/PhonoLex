@@ -155,7 +155,9 @@ def load_phoneme_features():
 
 
 def export_data(embeddings_checkpoint, word_metadata, minimal_pairs, phoneme_features, output_dir):
-    """Export all data to files"""
+    """Export all data to files and compress them"""
+    import gzip
+
     print("\n[5/5] Exporting data...")
 
     output_dir = Path(output_dir)
@@ -225,9 +227,27 @@ def export_data(embeddings_checkpoint, word_metadata, minimal_pairs, phoneme_fea
         json.dump(manifest, f, indent=2)
     print(f"  ✓ manifest.json")
 
-    # Calculate total size
+    # Calculate total size before compression
     total_size = sum(p.stat().st_size for p in output_dir.glob("*.json")) / 1024 / 1024
-    print(f"\n  Total data package size: {total_size:.1f} MB")
+    print(f"\n  Total uncompressed size: {total_size:.1f} MB")
+
+    # Compress all JSON files
+    print("\n  Compressing files...")
+    for json_file in output_dir.glob("*.json"):
+        gz_file = Path(str(json_file) + '.gz')
+        with open(json_file, 'rb') as f_in:
+            with gzip.open(gz_file, 'wb', compresslevel=9) as f_out:
+                f_out.writelines(f_in)
+
+        original_size = json_file.stat().st_size / 1024 / 1024
+        compressed_size = gz_file.stat().st_size / 1024 / 1024
+        ratio = (1 - compressed_size / original_size) * 100
+        print(f"    {json_file.name} → {gz_file.name} ({compressed_size:.1f} MB, {ratio:.0f}% reduction)")
+
+    # Calculate compressed total
+    total_compressed = sum(p.stat().st_size for p in output_dir.glob("*.json.gz")) / 1024 / 1024
+    total_ratio = (1 - total_compressed / total_size) * 100
+    print(f"\n  Total compressed size: {total_compressed:.1f} MB ({total_ratio:.0f}% reduction)")
 
 
 def main():

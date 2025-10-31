@@ -1,0 +1,27 @@
+# Dependencies
+node_modules
+
+# Production build
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Data files - uncompressed versions (too large for git)
+public/data/*.json
+
+# Keep compressed versions (.gz) for deployment
+!public/data/*.json.gz
+
+# Keep directory structure
+!public/data/.gitkeep

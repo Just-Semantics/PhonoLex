@@ -108,12 +108,12 @@ class ClientSideDataService {
     const startTime = performance.now();
 
     try {
-      // Load all data in parallel
+      // Load all data in parallel (gzipped files)
       const [metadataRes, embeddingsRes, arpaRes, phonemesRes] = await Promise.all([
-        fetch('/data/word_metadata.json'),
-        fetch('/data/embeddings_quantized.json'),
-        fetch('/data/arpa_to_ipa.json'),
-        fetch('/data/phonemes.json'),
+        fetch('/data/word_metadata.json.gz'),
+        fetch('/data/embeddings_quantized.json.gz'),
+        fetch('/data/arpa_to_ipa.json.gz'),
+        fetch('/data/phonemes.json.gz'),
       ]);
 
       if (!metadataRes.ok || !embeddingsRes.ok || !arpaRes.ok || !phonemesRes.ok) {
