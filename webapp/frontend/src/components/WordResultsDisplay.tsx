@@ -40,6 +40,8 @@ import {
   ViewList as TableViewIcon,
   ViewModule as CardViewIcon,
   SwipeRounded as ScrollIcon,
+  ExpandMore as ExpandMoreIcon,
+  ExpandLess as ExpandLessIcon,
 } from '@mui/icons-material';
 import type { Word, MinimalPair, SimilarWord } from '../services/phonolexApi';
 
@@ -58,7 +60,12 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
   const [viewMode, setViewMode] = useState<'table' | 'cards'>(isMobile ? 'cards' : 'table');
   const [showScrollHint, setShowScrollHint] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
   const tableContainerRef = useRef<HTMLDivElement>(null);
+
+  // Threshold for showing collapse/expand - show if more than 50 results
+  const COLLAPSE_THRESHOLD = 50;
+  const COLLAPSED_DISPLAY_COUNT = 25;
 
   console.log('WordResultsDisplay:', { results, length: results.length });
 
@@ -221,6 +228,17 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
     return sorted;
   }, [displayWords, sortField, sortDirection]);
 
+  // Display words (with collapse functionality for long lists)
+  const displayedWords = useMemo(() => {
+    const shouldCollapse = sortedWords.length > COLLAPSE_THRESHOLD;
+    if (shouldCollapse && !isExpanded) {
+      return sortedWords.slice(0, COLLAPSED_DISPLAY_COUNT);
+    }
+    return sortedWords;
+  }, [sortedWords, isExpanded, COLLAPSE_THRESHOLD, COLLAPSED_DISPLAY_COUNT]);
+
+  const showCollapseControls = sortedWords.length > COLLAPSE_THRESHOLD;
+
   // Handle sort
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -290,9 +308,19 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
         spacing={{ xs: 1.5, sm: 2 }}
         sx={{ mb: { xs: 1.5, sm: 2 } }}
       >
-        <Typography variant="h6" sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}>
-          {results.length} {isMinimalPairs ? 'Minimal Pairs' : 'Words'} Found
-        </Typography>
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <Typography variant="h6" sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}>
+            {results.length} {isMinimalPairs ? 'Minimal Pairs' : 'Words'} Found
+          </Typography>
+          {showCollapseControls && (
+            <Chip
+              label={isExpanded ? `Showing all ${results.length}` : `Showing ${COLLAPSED_DISPLAY_COUNT} of ${results.length}`}
+              size="small"
+              color={isExpanded ? 'primary' : 'default'}
+              sx={{ fontSize: '0.75rem' }}
+            />
+          )}
+        </Stack>
         <Stack
           direction={{ xs: 'column', sm: 'row' }}
           spacing={{ xs: 1, sm: 1 }}
@@ -358,7 +386,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
       {/* Card View for Mobile */}
       {viewMode === 'cards' ? (
         <Stack spacing={{ xs: 1.5, sm: 2 }}>
-          {sortedWords.map((word: any, idx) => (
+          {displayedWords.map((word: any, idx) => (
             <Card
               key={idx}
               variant="outlined"
@@ -524,6 +552,22 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
               </CardContent>
             </Card>
           ))}
+
+          {/* Expand/Collapse Button for Cards View */}
+          {showCollapseControls && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+              <Button
+                variant="outlined"
+                onClick={() => setIsExpanded(!isExpanded)}
+                startIcon={isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                size="small"
+              >
+                {isExpanded
+                  ? `Collapse (showing ${COLLAPSED_DISPLAY_COUNT})`
+                  : `Show All ${sortedWords.length} Results`}
+              </Button>
+            </Box>
+          )}
         </Stack>
       ) : (
         /* Table View with Sticky Header */
@@ -730,7 +774,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortedWords.map((word: any, idx) => (
+            {displayedWords.map((word: any, idx) => (
               <TableRow key={idx} hover>
                 <TableCell
                   sx={{
@@ -842,6 +886,22 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Expand/Collapse Button */}
+      {showCollapseControls && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+          <Button
+            variant="outlined"
+            onClick={() => setIsExpanded(!isExpanded)}
+            startIcon={isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            size="small"
+          >
+            {isExpanded
+              ? `Collapse (showing ${COLLAPSED_DISPLAY_COUNT})`
+              : `Show All ${sortedWords.length} Results`}
+          </Button>
+        </Box>
+      )}
         </Box>
       )}
     </Box>
