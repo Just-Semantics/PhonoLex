@@ -88,8 +88,7 @@ const Search: React.FC = () => {
     try {
       const results = await api.findSimilarWords(
         similarityQuery.trim(),
-        similarityThreshold,
-        100
+        { threshold: similarityThreshold, limit: 100 }
       );
       setSimilarityResults(results);
     } catch (err) {
@@ -110,7 +109,8 @@ const Search: React.FC = () => {
       if (phonemeFeatures.consonantal) features.consonantal = phonemeFeatures.consonantal;
       if (phonemeFeatures.voice) features.voice = phonemeFeatures.voice;
 
-      const results = await api.searchPhonemes(features);
+      // TODO: Implement phoneme search
+      const results = await api.searchPhonemes();
       setPhonemeResults(results);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Search failed');

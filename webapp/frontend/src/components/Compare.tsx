@@ -11,7 +11,6 @@
 import React, { useState } from 'react';
 import {
   Box,
-  Grid,
   Card,
   CardContent,
   Typography,
@@ -134,11 +133,11 @@ const Compare: React.FC = () => {
   // Handle phoneme picker
   const handlePhonemeSelect = (phoneme: string) => {
     if (activePhonemeField === 'phoneme1') {
-      setPhoneme1Input(phoneme);
+      setPhoneme1Input((prev) => prev + phoneme);
     } else {
-      setPhoneme2Input(phoneme);
+      setPhoneme2Input((prev) => prev + phoneme);
     }
-    setPhonemePickerOpen(false);
+    // Don't close - allow multiple selections
   };
 
   const openPhonemePicker = (field: 'phoneme1' | 'phoneme2') => {
@@ -290,10 +289,10 @@ const Compare: React.FC = () => {
                   Feature Distance
                 </Typography>
                 <Typography variant="h3" color="primary" sx={{ fontSize: { xs: '2rem', sm: '2.5rem' } }}>
-                  {comparison.feature_distance.toFixed(2)}
+                  {comparison.similarity_score.toFixed(2)}
                 </Typography>
                 <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 1 }}>
-                  {comparison.differing_features.length} differences
+                  {Object.keys(comparison.different_features).length} differences
                 </Typography>
               </Box>
 
@@ -313,27 +312,38 @@ const Compare: React.FC = () => {
               </Box>
             </Stack>
 
-            {comparison.differing_features.length > 0 && (
+            {Object.keys(comparison.different_features).length > 0 && (
               <Box sx={{ mt: 3 }}>
                 <Typography variant="subtitle2" gutterBottom>
                   Differing Features:
                 </Typography>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                  {comparison.differing_features.map((feature) => (
-                    <Chip key={feature} label={feature} size="small" color="warning" />
+                  {Object.entries(comparison.different_features).map(([feature, [val1, val2]]) => (
+                    <Chip
+                      key={feature}
+                      label={`${feature}: ${val1} ≠ ${val2}`}
+                      size="small"
+                      color="warning"
+                    />
                   ))}
                 </Box>
               </Box>
             )}
 
-            {comparison.shared_features.length > 0 && (
+            {Object.keys(comparison.shared_features).length > 0 && (
               <Box sx={{ mt: 2 }}>
                 <Typography variant="subtitle2" gutterBottom>
                   Shared Features:
                 </Typography>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                  {comparison.shared_features.map((feature) => (
-                    <Chip key={feature} label={feature} size="small" color="success" variant="outlined" />
+                  {Object.entries(comparison.shared_features).map(([feature, value]) => (
+                    <Chip
+                      key={feature}
+                      label={`${feature}: ${value}`}
+                      size="small"
+                      color="success"
+                      variant="outlined"
+                    />
                   ))}
                 </Box>
               </Box>

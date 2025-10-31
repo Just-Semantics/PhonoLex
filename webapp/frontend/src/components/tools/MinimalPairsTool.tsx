@@ -63,11 +63,19 @@ const MinimalPairsTool: React.FC = () => {
     const fetchRanges = async () => {
       try {
         const ranges = await api.getPropertyRanges();
-        setDbRanges(ranges);
+
+        // Map API property names (syllable_count, wcm_score) to component names (syllables, wcm)
+        const mappedRanges = {
+          syllables: (ranges as any).syllable_count || ranges.syllables || [1, 5],
+          wcm: (ranges as any).wcm_score || ranges.wcm || [0, 15],
+          frequency: ranges.frequency || [0, 10],
+        };
+
+        setDbRanges(mappedRanges);
         setFilters({
-          syllables: ranges.syllables as [number, number],
-          wcm: ranges.wcm as [number, number],
-          frequency: ranges.frequency as [number, number],
+          syllables: mappedRanges.syllables as [number, number],
+          wcm: mappedRanges.wcm as [number, number],
+          frequency: mappedRanges.frequency as [number, number],
         });
       } catch (error) {
         console.error('Failed to fetch property ranges:', error);
@@ -80,17 +88,46 @@ const MinimalPairsTool: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await api.getMinimalPairs({
+      let data = await api.getMinimalPairs({
         phoneme1: state.phoneme1,
         phoneme2: state.phoneme2,
-        min_syllables: filters.syllables[0],
-        max_syllables: filters.syllables[1],
-        min_wcm: filters.wcm[0],
-        max_wcm: filters.wcm[1],
-        min_frequency: filters.frequency[0],
-        max_frequency: filters.frequency[1],
-        limit: 50,
+        limit: 200,  // Get more results for client-side filtering
       });
+
+      // Apply client-side filters based on AVERAGE of both words
+      // If one value is null, use the non-null value (same as WordResultsDisplay sorting logic)
+      data = data.filter(pair => {
+        const w1 = pair.word1;
+        const w2 = pair.word2;
+
+        // Helper to average two values (use non-null if one is null, same as WordResultsDisplay)
+        const avg = (a: number | null, b: number | null): number | null => {
+          if (a !== null && b !== null) return (a + b) / 2;
+          if (a !== null) return a;
+          if (b !== null) return b;
+          return null;
+        };
+
+        // Syllables - average of both
+        const avgSyllables = avg(w1.syllable_count, w2.syllable_count);
+        if (avgSyllables === null || avgSyllables < filters.syllables[0] || avgSyllables > filters.syllables[1]) {
+          return false;
+        }
+
+        // WCM - average of both
+        const avgWcm = avg(w1.wcm_score, w2.wcm_score);
+        if (avgWcm !== null && (avgWcm < filters.wcm[0] || avgWcm > filters.wcm[1])) {
+          return false;
+        }
+
+        // Frequency - average of both
+        const avgFreq = avg(w1.log_frequency, w2.log_frequency);
+        if (avgFreq !== null && (avgFreq < filters.frequency[0] || avgFreq > filters.frequency[1])) {
+          return false;
+        }
+
+        return true;
+      }).slice(0, 50);
       setResults(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -111,7 +148,7 @@ const MinimalPairsTool: React.FC = () => {
   };
 
   const handlePhonemeSelect = (phoneme: string) => {
-    setState({ ...state, [activePhonemeField]: phoneme });
+    setState({ ...state, [activePhonemeField]: state[activePhonemeField] + phoneme });
   };
 
   const openPhonemePicker = (field: 'phoneme1' | 'phoneme2') => {

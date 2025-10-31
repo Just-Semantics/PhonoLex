@@ -108,8 +108,13 @@ class EnglishPhonologyLoader:
         return ipa_with_stress
 
     def _load_cmu_dict(self):
-        """Load CMU pronouncing dictionary"""
-        print("\nLoading CMU Dict...")
+        """
+        Load CMU pronouncing dictionary.
+
+        Uses only primary pronunciations (no variant markers).
+        Dialect: General American English (CMU primary dialect).
+        """
+        print("\nLoading CMU Dict (General American English)...")
 
         cmu_path = self.data_dir / "cmu" / "cmudict-0.7b"
 
@@ -122,9 +127,11 @@ class EnglishPhonologyLoader:
                 parts = line.split()
                 word = parts[0].lower()
 
-                # Remove variant markers (word(2), etc.)
+                # Skip variant pronunciations - use only primary (no parentheses)
+                # This ensures consistent, standard pronunciations
+                # Example: GOOD  G UH1 D (primary) vs GOOD(1)  G IH0 D (variant - skip)
                 if '(' in word:
-                    word = word.split('(')[0]
+                    continue
 
                 # Convert ARPAbet to IPA (both with and without stress)
                 arpa_phones = parts[1:]
@@ -135,7 +142,7 @@ class EnglishPhonologyLoader:
                     self.lexicon[word] = ipa_phones
                     self.lexicon_with_stress[word] = ipa_phones_with_stress
 
-        print(f"  ✓ Loaded {len(self.lexicon):,} words")
+        print(f"  ✓ Loaded {len(self.lexicon):,} words (primary pronunciations only)")
 
     def _load_sigmorphon(self):
         """Load SIGMORPHON English morphology"""

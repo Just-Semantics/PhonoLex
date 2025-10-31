@@ -1,0 +1,48 @@
+# Netlify Configuration for PhonoLex v2.1 (Client-Side)
+
+[build]
+  # Build command
+  command = "cd webapp/frontend && npm ci && npm run build"
+
+  # Directory to deploy
+  publish = "webapp/frontend/dist"
+
+  # Node version
+  [build.environment]
+    NODE_VERSION = "18"
+
+# Redirect all routes to index.html for client-side routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers for better performance and security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Cache static assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache data files (but with shorter cache time since they may update)
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+    # Enable gzip/brotli compression
+    Content-Encoding = "gzip"
+
+# Enable gzip compression for JSON files
+[[headers]]
+  for = "/*.json"
+  [headers.values]
+    Content-Type = "application/json; charset=utf-8"
+    Content-Encoding = "gzip"

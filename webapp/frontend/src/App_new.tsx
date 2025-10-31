@@ -25,7 +25,6 @@ import {
   Compare as CompareIcon,
   SwapHoriz as MinimalPairIcon,
   MusicNote as RhymeIcon,
-  FindInPage as SimilarityIcon,
   TuneOutlined as FilterIcon,
 } from '@mui/icons-material';
 import { theme } from './theme/theme';

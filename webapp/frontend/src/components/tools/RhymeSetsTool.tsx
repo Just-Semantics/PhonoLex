@@ -24,6 +24,7 @@ import {
   PlayArrow as RunIcon,
 } from '@mui/icons-material';
 import api from '../../services/phonolexApi';
+import { RhymeResult } from '../../types/phonology';
 
 type RhymeMode = 'last_1' | 'last_2' | 'last_3' | 'assonance' | 'consonance';
 
@@ -31,7 +32,7 @@ const RhymeSetsTool: React.FC = () => {
   const [targetWord, setTargetWord] = useState('cat');
   const [rhymeMode, setRhymeMode] = useState<RhymeMode>('last_1');
   const [useEmbeddings, setUseEmbeddings] = useState(false);
-  const [results, setResults] = useState<Array<{ word: string; similarity: number }> | null>(null);
+  const [results, setResults] = useState<RhymeResult[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -167,7 +168,7 @@ const RhymeSetsTool: React.FC = () => {
                   display: 'inline-block',
                   fontSize: '0.95rem'
                 }}>
-                  {r.word}
+                  {r.word?.word || ''}
                 </Box>
               </Box>
             ))}

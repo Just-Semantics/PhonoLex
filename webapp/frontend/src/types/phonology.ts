@@ -49,6 +49,7 @@ export interface Syllable {
 
 export interface PhonemePosition {
   ipa: string;
+  arpa?: string;  // ARPAbet (client-side only)
   position: number;
 }
 
@@ -59,6 +60,7 @@ export interface Word {
   word_id: number;
   word: string;
   ipa: string;
+  arpa?: string;  // ARPAbet pronunciation (client-side only)
 
   // Phonological structure
   phonemes: PhonemePosition[];  // Array of {ipa, position}
@@ -119,6 +121,31 @@ export interface WordFilterRequest {
   max_phonemes?: number;
   word_length?: 'short' | 'medium' | 'long';
   complexity?: 'low' | 'medium' | 'high';
+
+  // Psycholinguistic properties
+  min_frequency?: number;
+  max_frequency?: number;
+  min_aoa?: number;
+  max_aoa?: number;
+  min_imageability?: number;
+  max_imageability?: number;
+  min_familiarity?: number;
+  max_familiarity?: number;
+  min_concreteness?: number;
+  max_concreteness?: number;
+  min_valence?: number;
+  max_valence?: number;
+  min_arousal?: number;
+  max_arousal?: number;
+  min_dominance?: number;
+  max_dominance?: number;
+
+  // Clinical measures
+  min_wcm?: number;
+  max_wcm?: number;
+  min_msh?: number;
+  max_msh?: number;
+
   limit?: number;
   offset?: number;
 }
@@ -127,10 +154,12 @@ export interface PatternSearchRequest {
   starts_with?: string;
   ends_with?: string;
   contains?: string;
+  contains_medial_only?: boolean;  // For CONTAINS: exclude word edges
   word_length?: 'short' | 'medium' | 'long';
   complexity?: 'low' | 'medium' | 'high';
   min_syllables?: number;
   max_syllables?: number;
+  filters?: Record<string, any>;  // Additional filters
   limit?: number;
 }
 
@@ -190,18 +219,30 @@ export interface NeighborResult {
 export interface MinimalPairResult {
   word1: Word;
   word2: Word;
-  position: number;
-  phoneme1: string;
-  phoneme2: string;
+  position?: number;
+  phoneme1?: string;
+  phoneme2?: string;
   feature_diff?: number;
+  metadata?: {
+    position: number;
+    phoneme1: string;
+    phoneme2: string;
+  };
 }
 
 export interface RhymeResult {
-  rhyme: Word;
-  rhyme_type: string;
-  nucleus: string;
-  coda: string[];
-  quality: number;
+  rhyme?: Word;
+  word?: Word;  // Alternative field name for client-side
+  rhyme_type?: string;
+  nucleus?: string;
+  coda?: string[];
+  quality?: number;
+  metadata?: {
+    rhyme_type: string;
+    nucleus: string;
+    coda: string[];
+    quality: number;
+  };
 }
 
 // ============================================================================

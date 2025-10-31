@@ -15,7 +15,6 @@ import {
   Button,
   Tabs,
   Tab,
-  Grid,
   IconButton,
   CircularProgress,
 } from '@mui/material';
@@ -30,7 +29,8 @@ interface PhonemePickerDialogProps {
 
 interface Phoneme {
   ipa: string;
-  segment_class: string;
+  type?: string;
+  segment_class?: string;
   features: Record<string, string>;
 }
 
@@ -54,9 +54,10 @@ const PhonemePickerDialog: React.FC<PhonemePickerDialogProps> = ({
         const vows: string[] = [];
 
         data.phonemes.forEach((p: Phoneme) => {
-          if (p.segment_class === 'consonant') {
+          const phonemeType = p.type || p.segment_class;
+          if (phonemeType === 'consonant') {
             cons.push(p.ipa);
-          } else if (p.segment_class === 'vowel') {
+          } else if (phonemeType === 'vowel') {
             vows.push(p.ipa);
           }
         });
@@ -78,13 +79,19 @@ const PhonemePickerDialog: React.FC<PhonemePickerDialogProps> = ({
 
   const handleSelect = (phoneme: string) => {
     onSelect(phoneme);
-    onClose();
+    // Don't close - allow multiple selections
   };
 
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={(_event, reason) => {
+        // Only close on explicit button click, not backdrop or escape
+        if (reason === 'backdropClick' || reason === 'escapeKeyDown') {
+          return;
+        }
+        onClose();
+      }}
       maxWidth="md"
       fullWidth
       fullScreen={false}
@@ -96,10 +103,15 @@ const PhonemePickerDialog: React.FC<PhonemePickerDialogProps> = ({
     >
       <DialogTitle>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="h6">Select a Phoneme</Typography>
-          <IconButton onClick={onClose} size="small" aria-label="close">
-            <CloseIcon />
-          </IconButton>
+          <Typography variant="h6">IPA Keyboard - Click phonemes to add</Typography>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button variant="contained" onClick={onClose} size="small">
+              Done
+            </Button>
+            <IconButton onClick={onClose} size="small" aria-label="close">
+              <CloseIcon />
+            </IconButton>
+          </Box>
         </Box>
       </DialogTitle>
       <DialogContent sx={{ px: { xs: 2, sm: 3 } }}>

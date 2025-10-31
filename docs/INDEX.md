@@ -8,15 +8,21 @@ Welcome to the PhonoLex documentation. This index will guide you to the right do
 
 ### 🚀 Getting Started
 - **[Main README](../README.md)** - Project overview, quick start, installation
-- **[ARCHITECTURE_V2.md](ARCHITECTURE_V2.md)** - ⭐ **Single source of truth** for v2.0 architecture
+- **[CLAUDE.md](../CLAUDE.md)** - ⭐ **Single source of truth** for v2.1 client-side architecture
 
 ### 📊 Data & Models
-- **[EMBEDDINGS.md](EMBEDDINGS.md)** - Four embedding granularities explained
-- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Deployment guide for v2.0 (Netlify + Neon)
+- **[EMBEDDINGS_ARCHITECTURE.md](EMBEDDINGS_ARCHITECTURE.md)** - Four-layer embedding architecture
+- **[CLIENT_SIDE_DATA_PACKAGE.md](CLIENT_SIDE_DATA_PACKAGE.md)** - Client-side data format and structure
+- **[VOCABULARY_FILTERING.md](VOCABULARY_FILTERING.md)** - Word filtering strategy
 - **[development/LEARNING_DATASETS.md](development/LEARNING_DATASETS.md)** - Dataset reference
 
-### 💻 Web Application
-- **[webapp/README.md](../webapp/README.md)** - Web app documentation (v1.0 → v2.0)
+### 💻 Web Application (v2.1 - Client-Side)
+- **[MIGRATION_TO_CLIENT_SIDE.md](MIGRATION_TO_CLIENT_SIDE.md)** - Migration guide from backend to client-side
+- **[../netlify.toml](../netlify.toml)** - Netlify deployment configuration
+
+### 📚 Historical Reference
+- **[ARCHITECTURE_V2.md](ARCHITECTURE_V2.md)** - Archived v2.0 backend architecture (PostgreSQL + pgvector)
+- **[../archive/webapp_v2_backend/](../archive/webapp_v2_backend/)** - Archived v2.0 FastAPI backend code
 
 ### 📦 Archive
 - **[../archive/docs/](../archive/docs/)** - Historical documentation

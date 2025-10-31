@@ -215,18 +215,24 @@ PhonoLex/
 │   ├── mappings/                              # ARPAbet ↔ IPA conversion
 │   └── phonological_graph.pkl                 # 26K words, 56K typed edges
 │
-├── webapp/                        # Web application (v2.0)
-│   ├── backend/                               # FastAPI server
-│   └── frontend/                              # React UI
+├── webapp/                        # Web application (v2.1 - Client-Side)
+│   └── frontend/                              # React UI (static site)
+│       ├── src/services/
+│       │   ├── clientSideData.ts              # Main data service
+│       │   └── clientSideApiAdapter.ts        # API compatibility layer
+│       └── public/data/                       # Static JSON data (~88MB)
 │
 ├── docs/                          # Documentation
 │   ├── EMBEDDINGS_ARCHITECTURE.md             # ⭐ Complete 4-layer architecture
-│   ├── ARCHITECTURE_V2.md                     # Database-centric v2.0
+│   ├── CLIENT_SIDE_DATA_PACKAGE.md            # Client-side data format
+│   ├── MIGRATION_TO_CLIENT_SIDE.md            # Migration guide
+│   ├── ARCHITECTURE_V2.md                     # Archived v2.0 backend design
 │   └── development/
 │       └── LEARNING_DATASETS.md               # Dataset reference
 │
-└── archive/                       # Historical experiments
-    ├── docs/                                  # Old documentation
+└── archive/                       # Historical code
+    ├── webapp_v1/                             # Flask backend (deprecated)
+    ├── webapp_v2_backend/                     # FastAPI backend (archived Oct 2025)
     └── training_scripts_old/                  # Experimental scripts
 ```
 

@@ -413,7 +413,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                               AoA
                             </Typography>
                             <Typography variant="body2" fontFamily="monospace">
-                              {word.isPair ? formatPair(word._raw.aoa[0], word._raw.aoa[1]) : word.aoa.toFixed(1)} yrs
+                              {word.isPair ? formatPair(word._raw.aoa[0], word._raw.aoa[1]) : word.aoa.toFixed(1)}
                             </Typography>
                           </Grid>
                         )}
@@ -522,7 +522,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                 </Tooltip>
               </TableCell>
               <TableCell align="center">
-                <Tooltip title="Age of Acquisition (years)">
+                <Tooltip title="Age of Acquisition (1-7 rating: 1=earliest, 7=latest)">
                   <TableSortLabel
                     active={sortField === 'aoa'}
                     direction={sortField === 'aoa' ? sortDirection : 'asc'}

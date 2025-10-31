@@ -31,7 +31,6 @@ import {
   Info as InfoIcon,
   Settings as SettingsIcon,
   Description as DocsIcon,
-  School as ScholarIcon,
   GitHub as GitHubIcon,
   Close as CloseIcon,
   ChevronRight as ChevronRightIcon,

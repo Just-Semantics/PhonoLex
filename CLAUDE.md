@@ -8,9 +8,9 @@ PhonoLex is a phonological analysis toolkit that combines universal phonological
 
 **Key Innovation**: Position-aware syllable embeddings that properly discriminate anagrams (cat ≠ act) using onset-nucleus-coda structure, learned from next-phoneme prediction without contrastive learning.
 
-## Project Structure (v2.0)
+## Project Structure (v2.1 - Client-Side)
 
-The project uses a **modern Python package structure** with proper organization:
+The project uses a **modern Python package structure** with a **fully client-side web application**:
 
 ```
 PhonoLex/
@@ -25,46 +25,47 @@ PhonoLex/
 │   ├── models/              # PhonoLexBERT and other models
 │   └── utils/               # Syllabification, utilities
 │
-├── webapp/                  # Full-stack web application (v2.0)
+├── webapp/                  # Client-side web application (v2.1)
 │   ├── __init__.py
-│   ├── backend/             # FastAPI backend (PostgreSQL + pgvector)
-│   │   ├── __init__.py
-│   │   ├── main.py          # Entry point (run with: python main.py)
-│   │   ├── database.py      # DatabaseService class
-│   │   ├── models.py        # SQLAlchemy ORM models
-│   │   ├── routers/         # API route modules
-│   │   ├── migrations/      # Database population scripts
-│   │   └── tests/           # Backend test suite
-│   └── frontend/            # React + TypeScript + MUI
+│   └── frontend/            # React + TypeScript + MUI (static site)
 │       ├── src/
-│       └── ...
+│       │   ├── services/
+│       │   │   ├── clientSideData.ts      # Main data service
+│       │   │   ├── clientSideApiAdapter.ts # API compatibility layer
+│       │   │   └── phonolexApi.ts         # Exports client-side adapter
+│       │   └── components/
+│       └── public/
+│           └── data/        # Static JSON data files (~88MB, gzips to ~45MB)
 │
 ├── scripts/                 # Build/training scripts
 │   ├── compute_layer1_phoible_features.py
 │   ├── compute_layer2_normalized_vectors.py
 │   ├── train_layer3_contextual_embeddings.py
-│   └── build_layer4_syllable_embeddings.py
+│   ├── build_filtered_layer4_embeddings.py  # Recommended (filtered vocab)
+│   └── export_clientside_data.py            # Export data to webapp/frontend/public/data/
 │
 ├── docs/                    # All documentation
 │   ├── EMBEDDINGS_ARCHITECTURE.md
-│   ├── ARCHITECTURE_V2.md   # Web app v2.0 architecture
-│   ├── development/         # Planning docs
-│   └── webapp/              # Web app docs
-│       ├── backend/
-│       └── frontend/
+│   ├── CLIENT_SIDE_DATA_PACKAGE.md  # Client-side data format
+│   ├── MIGRATION_TO_CLIENT_SIDE.md  # Migration guide from v2.0
+│   ├── VOCABULARY_FILTERING.md      # Filtering strategy
+│   └── ARCHITECTURE_V2.md   # v2.0 architecture (archived backend design)
 │
 ├── data/                    # Source data (CMU, Phoible, mappings)
 ├── embeddings/              # Pre-computed embeddings
 ├── models/                  # Trained models
 ├── research/                # Research notebooks
-└── archive/                 # Old code (deprecated v1 backend, etc.)
+└── archive/                 # Old code (v1 backend, v2.0 backend)
+    ├── webapp_v1/           # Flask backend (deprecated)
+    └── webapp_v2_backend/   # FastAPI + PostgreSQL (archived Oct 2025)
 ```
 
 **Key Points**:
-- `webapp/` is now a proper Python package with `__init__.py` files throughout
-- Backend is at `webapp/backend/` (v2.0 is canonical, v1 archived)
-- Documentation organized in `docs/` with subdirectories
-- Use `pyproject.toml` for modern Python packaging
+- **No backend required** - Fully static site deployment
+- **Client-side computation** - All features run in browser
+- Data pre-exported to JSON files in `webapp/frontend/public/data/`
+- Backend code archived in `archive/webapp_v2_backend/`
+- See [docs/MIGRATION_TO_CLIENT_SIDE.md](docs/MIGRATION_TO_CLIENT_SIDE.md) for migration details
 
 ## Development Environment Setup
 
@@ -81,17 +82,7 @@ pip install -r requirements.txt
 
 ### Web Application Setup
 
-The project has two separate web application setups:
-
-**Backend (FastAPI)**:
-```bash
-cd webapp/backend
-pip install -r requirements.txt
-
-# Run development server
-uvicorn main:app --reload --port 8000
-# Or: python main.py
-```
+The web application is **fully client-side** (no backend required):
 
 **Frontend (React + TypeScript)**:
 ```bash
@@ -101,8 +92,11 @@ npm install
 # Run development server (default port 3000)
 npm run dev
 
-# Build for production
+# Build for production (static files)
 npm run build
+
+# Preview production build
+npm run preview
 
 # Type checking
 npm run type-check
@@ -111,6 +105,13 @@ npm run type-check
 npm run lint
 npm run lint:fix
 ```
+
+**Deployment**: The built static files (`dist/`) can be deployed to any static hosting:
+- Netlify (recommended)
+- Cloudflare Pages
+- GitHub Pages
+- Vercel
+- Any CDN or web server
 
 ## Core Commands
 
@@ -134,63 +135,50 @@ python scripts/train_layer3_contextual_embeddings.py
 
 # Layer 4: Build syllable embeddings (384-dim)
 # ~5 minutes on CPU
+# RECOMMENDED: Use filtered version (49% size reduction)
+python scripts/build_filtered_layer4_embeddings.py
+# Output: embeddings/layer4/syllable_embeddings_filtered.pt (~0.5GB vs 1.0GB)
+
+# Optional: Quantize to int8 for deployment (75% additional reduction)
+python scripts/quantize_embeddings.py
+# Output: embeddings/layer4/syllable_embeddings_filtered_quantized.pt (~60MB compressed!)
+
+# Alternative: Build with all words (deprecated)
 python scripts/build_layer4_syllable_embeddings.py
-# Output: embeddings/layer4/syllable_embeddings.pt
+# Output: embeddings/layer4/syllable_embeddings.pt (1.0GB)
 ```
+
+**Vocabulary Filtering (v2.1+)**: By default, only words with **frequency + at least one additional psycholinguistic norm** (concreteness, AoA, imageability, familiarity, or VAD) are included. This reduces vocabulary from 48K → 24K words (49% reduction) while improving data quality for research and clinical applications.
 
 See [docs/EMBEDDINGS_ARCHITECTURE.md](docs/EMBEDDINGS_ARCHITECTURE.md) for complete documentation.
 
-### Testing
+### Exporting Client-Side Data
 
-**Backend Tests** (pytest):
+After building embeddings, export data for the web app:
+
 ```bash
-cd webapp/backend
+# Export all data to webapp/frontend/public/data/
+python scripts/export_clientside_data.py
 
-# Run all tests
-venv_test/bin/pytest tests/ -v
-
-# Run with coverage
-venv_test/bin/pytest tests/ --cov
-
-# Run specific test categories (using markers from pytest.ini)
-venv_test/bin/pytest tests/ -m unit        # Fast unit tests only
-venv_test/bin/pytest tests/ -m integration # Integration tests (need DB)
-venv_test/bin/pytest tests/ -m api         # API endpoint tests
-
-# Run single test file
-venv_test/bin/pytest tests/test_specific.py -v
-
-# Run single test function
-venv_test/bin/pytest tests/test_specific.py::test_function_name -v
-
-# Verbose output with short traceback
-venv_test/bin/pytest tests/ -v --tb=short
-
-# Stop on first failure
-venv_test/bin/pytest tests/ -x
+# This creates:
+# - words.json (~88 MB, gzips to ~45 MB)
+# - phonemes.json (if needed)
+# - Other supporting data files
 ```
-
-Test markers (defined in `webapp/backend/pytest.ini`):
-- `unit`: Fast unit tests (no DB required)
-- `integration`: Integration tests (require DB)
-- `service`: Service layer tests
-- `api`: API endpoint tests
-- `performance`: Performance benchmark tests
-- `slow`: Tests taking > 1 second
-- `critical`: Critical path tests
 
 ### Running the Web Application
 
 ```bash
-# Terminal 1: Backend
-cd webapp/backend
-python main.py
-# Runs on http://localhost:8000
-
-# Terminal 2: Frontend
+# Single terminal (no backend needed!)
 cd webapp/frontend
 npm run dev
-# Runs on http://localhost:3000
+# Runs on http://localhost:3000 (or 5173 depending on Vite version)
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
 ```
 
 ### Demo Scripts
@@ -257,20 +245,30 @@ Word Similarity
    - Building script: `scripts/build_layer4_syllable_embeddings.py`
    - Use: Word similarity, rhyme detection, anagram discrimination
 
-### Database Architecture (v2.0 - Future)
+### Web Application Architecture (v2.1 - Client-Side)
 
-The planned v2.0 architecture uses PostgreSQL + pgvector for production deployment. See `docs/ARCHITECTURE_V2.md` for complete details.
+The current production architecture is **fully client-side**:
 
 **Stack**:
-- **Database**: PostgreSQL 15+ with pgvector extension
-- **Backend**: FastAPI (Python 3.10+)
 - **Frontend**: React 18 + TypeScript + MUI
-- **Deployment**: Netlify + Neon (recommended) or Cloudflare + Supabase
+- **Data Storage**: Static JSON files (~88 MB, gzips to ~45 MB)
+- **Computation**: In-browser JavaScript (no backend)
+- **Deployment**: Any static host (Netlify, Cloudflare Pages, etc.)
 
-**Key Tables**:
-- `words`: 26K words with syllable structure, psycholinguistic properties, embeddings
-- `phonemes`: 103 phonemes with Phoible features and multiple embedding granularities
-- `word_edges`: 56K typed edges (MINIMAL_PAIR, RHYME, NEIGHBOR, etc.)
+**Data Files** (in `webapp/frontend/public/data/`):
+- `words.json`: 24K words with syllable structure, psycholinguistic properties, embeddings
+- `phonemes.json`: Phoneme features and representations (if needed)
+
+**Benefits**:
+- Zero server costs
+- No database maintenance
+- Faster queries (no network latency)
+- Offline-capable (PWA-ready)
+- Simple deployment
+
+See [docs/CLIENT_SIDE_DATA_PACKAGE.md](docs/CLIENT_SIDE_DATA_PACKAGE.md) for data format details.
+
+**Historical Note**: The v2.0 backend (FastAPI + PostgreSQL + pgvector) was archived in October 2025. See `archive/webapp_v2_backend/` and [docs/ARCHITECTURE_V2.md](docs/ARCHITECTURE_V2.md) for the legacy architecture.
 
 ## Project Structure
 
@@ -312,22 +310,25 @@ Layer generation scripts:
 
 ### Web Application (`webapp/`)
 
-**Backend (`webapp/backend/`)**:
-- `main.py`: FastAPI application entry point
-- `services/`: Business logic (currently empty, being migrated)
-- `api/`: API routes (currently empty, being migrated)
-- `tests/`: Pytest test suite
-- `pytest.ini`: Test configuration with markers
-
 **Frontend (`webapp/frontend/`)**:
 - React + TypeScript + MUI
 - State management: Zustand
 - Build tool: Vite
+- Data: Static JSON files in `public/data/`
+- Services:
+  - `clientSideData.ts`: Main data service (loads and queries JSON)
+  - `clientSideApiAdapter.ts`: API compatibility wrapper
+  - `phonolexApi.ts`: Exports client-side adapter
+
+**Note**: Backend was archived in October 2025. See `archive/webapp_v2_backend/` for historical FastAPI code.
 
 ### Documentation (`docs/`)
 
 - `EMBEDDINGS_ARCHITECTURE.md`: Complete 4-layer embedding architecture documentation
-- `ARCHITECTURE_V2.md`: Complete v2.0 database-centric architecture
+- `CLIENT_SIDE_DATA_PACKAGE.md`: Client-side data format and structure
+- `MIGRATION_TO_CLIENT_SIDE.md`: Migration guide from v2.0 backend to v2.1 client-side
+- `VOCABULARY_FILTERING.md`: Word filtering strategy and psycholinguistic norms
+- `ARCHITECTURE_V2.md`: Archived v2.0 database-centric architecture (historical)
 - `development/LEARNING_DATASETS.md`: Dataset reference
 
 ### Source Code (`src/phonolex/`)
@@ -377,33 +378,35 @@ syllables = syllabify(['æ', 'k', 't'])  # Returns: [Syllable(onset=[], nucleus=
 
 ### Data Formats
 
-**ARPAbet to IPA mapping**: Use `data/mappings/arpabet_to_ipa.json`
+**ARPAbet to IPA mapping**: Use `data/mappings/arpa_to_ipa.json`
 - CMU dict uses ARPAbet (e.g., "K AE1 T")
 - Models use IPA (e.g., "k æ t")
 - Stress markers: 0 (unstressed), 1 (primary), 2 (secondary)
+- **Dialect**: General American English (CMU primary pronunciations only)
+- **Variants**: The loader skips variant pronunciations (entries with parentheses like "GOOD(1)")
+  to ensure consistent, standard pronunciations based on the primary CMU dialect
 
 **Phoible features**: 38 ternary features (Hayes 2009 + Moisik & Esling 2011)
 - Values: '+' (present), '-' (absent), '0' (not applicable)
 - Stored in JSON: `data/phoible/phoible_features.json`
 
-### Web API Patterns
+### Client-Side Data Service
 
-The FastAPI backend follows these patterns:
+The client-side data service (`webapp/frontend/src/services/clientSideData.ts`) provides:
 
-1. **Service Layer**: Business logic separate from routes (being migrated to `services/`)
-2. **Pydantic Schemas**: Request/response models in route files or dedicated schemas
-3. **CORS**: Configured for `localhost:3000` (Vite) and `localhost:5173` (older Vite)
-4. **Startup Events**: Load data once on startup (see `@app.on_event("startup")`)
+1. **Data Loading**: Lazy-load JSON files on first use
+2. **In-Memory Search**: Fast filtering and pattern matching
+3. **Vector Similarity**: Cosine similarity computed in-browser
+4. **API Compatibility**: Adapter layer for backward compatibility
 
-### Database (Future v2.0)
-
-When implementing database features:
-
-- Use **PostgreSQL with pgvector** for vector similarity
-- Store **typed edges** in `word_edges` table (not separate graph DB)
-- Use **GIN indexes** on JSONB columns for pattern matching
-- Use **HNSW indexes** on vector columns for similarity search
-- Push computation to database (not client) - leverage SQL indexes
+**Key Functions**:
+- `loadData()`: Load all data files once
+- `getWord(word)`: Get word details
+- `filterWords(filters)`: Filter by properties
+- `patternSearch(patterns)`: Find words by phoneme patterns
+- `findSimilarWords(word, threshold, limit)`: Vector similarity search
+- `findMinimalPairs(phoneme1, phoneme2, limit)`: Generate minimal pairs
+- `findRhymes(word, mode, limit)`: Generate rhyme sets
 
 ## Common Tasks
 
@@ -464,13 +467,17 @@ When starting work on different aspects:
 - **Layer 1 extraction**: [scripts/compute_layer1_phoible_features.py](scripts/compute_layer1_phoible_features.py)
 - **Layer 2 computation**: [scripts/compute_layer2_normalized_vectors.py](scripts/compute_layer2_normalized_vectors.py)
 - **Layer 3 training**: [scripts/train_layer3_contextual_embeddings.py](scripts/train_layer3_contextual_embeddings.py)
-- **Layer 4 building**: [scripts/build_layer4_syllable_embeddings.py](scripts/build_layer4_syllable_embeddings.py)
+- **Layer 4 building**: [scripts/build_filtered_layer4_embeddings.py](scripts/build_filtered_layer4_embeddings.py)
+- **Client-side export**: [scripts/export_clientside_data.py](scripts/export_clientside_data.py)
 - **Model class**: [src/phonolex/models/phonolex_bert.py](src/phonolex/models/phonolex_bert.py)
 - **Syllable parsing**: [src/phonolex/utils/syllabification.py](src/phonolex/utils/syllabification.py)
 - **Data loading**: [src/phonolex/embeddings/english_data_loader.py](src/phonolex/embeddings/english_data_loader.py)
 - **Phoneme features**: [data/mappings/phoneme_vectorizer.py](data/mappings/phoneme_vectorizer.py)
-- **API structure**: [webapp/backend/main.py](webapp/backend/main.py)
-- **Database design**: [docs/ARCHITECTURE_V2.md](docs/ARCHITECTURE_V2.md)
+- **Client-side data service**: [webapp/frontend/src/services/clientSideData.ts](webapp/frontend/src/services/clientSideData.ts)
+- **API adapter**: [webapp/frontend/src/services/clientSideApiAdapter.ts](webapp/frontend/src/services/clientSideApiAdapter.ts)
+- **Data format**: [docs/CLIENT_SIDE_DATA_PACKAGE.md](docs/CLIENT_SIDE_DATA_PACKAGE.md)
+- **Migration guide**: [docs/MIGRATION_TO_CLIENT_SIDE.md](docs/MIGRATION_TO_CLIENT_SIDE.md)
+- **Archived backend**: [archive/webapp_v2_backend/](archive/webapp_v2_backend/)
 - **Graph construction**: [src/phonolex/build_phonological_graph.py](src/phonolex/build_phonological_graph.py)
 
 ## Performance Characteristics
@@ -495,10 +502,12 @@ When starting work on different aspects:
 
 - **Layer 1**: 94 English phonemes (extracted from Phoible)
 - **Layer 2**: 94 phonemes with continuous vectors
-- **Layer 3**: Trained on 147K words (CMU 125K + ipa-dict 22K)
-- **Layer 4**: 125K words with syllable embeddings
+- **Layer 3**: Trained on 147K words (CMU 125K + ipa-dict 22K, primary pronunciations only)
+- **Layer 4**: 24K words with syllable embeddings (filtered, v2.1+) or 125K (unfiltered, deprecated)
+- **Client-side data (v2.1)**: 24K words with full psycholinguistic norms (~88 MB JSON, gzips to ~45 MB)
+- **Dialect**: General American English (CMU primary pronunciations only, variant pronunciations excluded)
 - **Universal**: 105,484 phonemes across 2,716 languages (Phoible)
-- **Graph**: 26K words, 56K typed edges
+- **Graph**: Pre-computed graph archived (see `archive/webapp_v2_backend/` for historical graph data)
 
 ### Expected Similarity Scores (Layer 4)
 
@@ -509,12 +518,15 @@ When starting work on different aspects:
 
 ## Testing Philosophy
 
-- **Unit tests** should be fast (<10ms) and require no external resources
-- **Integration tests** may use database or file I/O
-- **Mark slow tests** with `@pytest.mark.slow` for optional exclusion
-- **Critical path tests** should be marked with `@pytest.mark.critical`
-- Use **fixtures** for shared test data (define in `conftest.py`)
-- Mock external services in unit tests
+**Note**: Backend tests were archived with the v2.0 backend. Frontend testing can be added using:
+- **Vitest** for unit tests
+- **React Testing Library** for component tests
+- **Playwright** or **Cypress** for E2E tests
+
+General testing principles:
+- Keep tests fast and isolated
+- Mock external dependencies
+- Test user-facing behavior, not implementation details
 
 ## Code Style
 
@@ -551,10 +563,13 @@ git push origin feature/your-feature
 
 ## Future Roadmap
 
-See `docs/ARCHITECTURE_V2.md` for v2.0 database-centric architecture plans.
+**Current Version**: v2.1 (Client-Side) - Fully static, no backend
 
-Short-term priorities:
-- Database migration (PostgreSQL + pgvector)
-- Web app v2.0 with database backend
-- Multi-language support
+Potential future enhancements:
+- Multi-language support (extend beyond English)
+- Progressive Web App (PWA) features for offline use
+- Web Workers for computationally intensive operations
 - Improved syllabification for edge cases
+- Additional phonological tools (stress patterns, tone analysis)
+
+**Archived**: v2.0 database backend plans archived in October 2025. See `archive/webapp_v2_backend/README.md` for historical context.

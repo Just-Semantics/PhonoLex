@@ -20,7 +20,6 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Chip,
 } from '@mui/material';
 import {
   PlayArrow as RunIcon,
@@ -132,16 +131,6 @@ const NormFilteredListsTool: React.FC = () => {
 
   const handleFilterChange = (name: keyof NormFilters, value: [number, number]) => {
     setFilters({ ...filters, [name]: value });
-  };
-
-  const getActiveFilterCount = () => {
-    // Count how many filters are not at their default ranges
-    let count = 0;
-    if (filters.syllables[0] !== 1 || filters.syllables[1] !== 5) count++;
-    if (filters.wcm[0] !== 0 || filters.wcm[1] !== 15) count++;
-    if (filters.frequency[0] !== 0 || filters.frequency[1] !== 1000) count++;
-    if (filters.aoa[0] !== 2 || filters.aoa[1] !== 10) count++;
-    return count;
   };
 
   return (

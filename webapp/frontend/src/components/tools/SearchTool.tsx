@@ -37,7 +37,6 @@ import {
   FilterList as FilterIcon,
   Add as AddIcon,
   Remove as RemoveIcon,
-  CompareArrows as SimilarityIcon,
   Keyboard as KeyboardIcon,
 } from '@mui/icons-material';
 import api from '../../services/phonolexApi';
@@ -77,7 +76,7 @@ const SearchTool: React.FC = () => {
   const [featureFilters, setFeatureFilters] = useState<Array<{ feature: string; value: string }>>([
     { feature: '', value: '' }
   ]);
-  const [similarityThreshold, setSimilarityThreshold] = useState(0.85);
+  const [similarityThreshold] = useState(0.85);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [phonemePickerOpen, setPhonemePickerOpen] = useState(false);
@@ -121,7 +120,7 @@ const SearchTool: React.FC = () => {
 
         // Also fetch similar words
         try {
-          const similarData = await api.findSimilarWords(query.trim().toLowerCase(), similarityThreshold, 20);
+          const similarData = await api.findSimilarWords(query.trim().toLowerCase(), { threshold: similarityThreshold, limit: 20 });
           setSimilarityResults(similarData.map(r => ({
             word: r.word.word,
             ipa: r.word.ipa,
@@ -509,7 +508,7 @@ const SearchTool: React.FC = () => {
       )}
 
       {/* Phoneme Result */}
-      {phonemeResult && (
+      {phonemeResult && phonemeResult.phoneme && (
         <Card sx={{ mt: 3 }} elevation={2}>
           <CardContent>
             <Typography variant="h5" gutterBottom fontWeight={600} fontFamily="monospace">
@@ -578,7 +577,7 @@ const SearchTool: React.FC = () => {
       <PhonemePickerDialog
         open={phonemePickerOpen}
         onClose={() => setPhonemePickerOpen(false)}
-        onSelect={(phoneme) => setQuery(phoneme)}
+        onSelect={(phoneme) => setQuery((prev) => prev + phoneme)}
       />
     </Box>
   );
