@@ -58,7 +58,7 @@ def load_word_metadata(filtered_words):
 
     for word in tqdm(filtered_words, desc="  Processing words"):
         # Get CMU pronunciation
-        ipa_phones = loader.get_word_pronunciation(word)
+        ipa_phones = loader.lexicon.get(word)
         if not ipa_phones:
             continue
 

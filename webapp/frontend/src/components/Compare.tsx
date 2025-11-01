@@ -38,6 +38,7 @@ import {
 import api from '../services/phonolexApi';
 import type { Phoneme, PhonemeComparison } from '../services/phonolexApi';
 import PhonemePickerDialog from './PhonemePickerDialog';
+import { validatePhonemeInput } from '../utils/ipaValidation';
 
 const Compare: React.FC = () => {
   // Input state
@@ -56,6 +57,10 @@ const Compare: React.FC = () => {
   // Phoneme picker state
   const [phonemePickerOpen, setPhonemePickerOpen] = useState(false);
   const [activePhonemeField, setActivePhonemeField] = useState<'phoneme1' | 'phoneme2'>('phoneme1');
+
+  // IPA validation warnings
+  const [ipaWarning1, setIpaWarning1] = useState<string | null>(null);
+  const [ipaWarning2, setIpaWarning2] = useState<string | null>(null);
 
   // Compare phonemes
   const handleCompare = async () => {
@@ -170,7 +175,22 @@ const Compare: React.FC = () => {
           <TextField
             label="Phoneme 1 (IPA)"
             value={phoneme1Input}
-            onChange={(e) => setPhoneme1Input(e.target.value)}
+            onChange={(e) => {
+              const newValue = e.target.value;
+              setPhoneme1Input(newValue);
+
+              // Validate IPA input
+              if (newValue.trim()) {
+                const validation = validatePhonemeInput(newValue);
+                if (!validation.isValid && validation.suggestion) {
+                  setIpaWarning1(validation.suggestion);
+                } else {
+                  setIpaWarning1(null);
+                }
+              } else {
+                setIpaWarning1(null);
+              }
+            }}
             onKeyPress={(e) => e.key === 'Enter' && handleCompare()}
             placeholder="e.g., t, k, s"
             fullWidth
@@ -189,6 +209,11 @@ const Compare: React.FC = () => {
               )
             }}
           />
+          {ipaWarning1 && (
+            <Alert severity="warning" sx={{ mt: 1 }}>
+              {ipaWarning1}
+            </Alert>
+          )}
 
           <Button
             variant="outlined"
@@ -203,7 +228,22 @@ const Compare: React.FC = () => {
           <TextField
             label="Phoneme 2 (IPA)"
             value={phoneme2Input}
-            onChange={(e) => setPhoneme2Input(e.target.value)}
+            onChange={(e) => {
+              const newValue = e.target.value;
+              setPhoneme2Input(newValue);
+
+              // Validate IPA input
+              if (newValue.trim()) {
+                const validation = validatePhonemeInput(newValue);
+                if (!validation.isValid && validation.suggestion) {
+                  setIpaWarning2(validation.suggestion);
+                } else {
+                  setIpaWarning2(null);
+                }
+              } else {
+                setIpaWarning2(null);
+              }
+            }}
             onKeyPress={(e) => e.key === 'Enter' && handleCompare()}
             placeholder="e.g., d, g, z"
             fullWidth
@@ -222,6 +262,11 @@ const Compare: React.FC = () => {
               )
             }}
           />
+          {ipaWarning2 && (
+            <Alert severity="warning" sx={{ mt: 1 }}>
+              {ipaWarning2}
+            </Alert>
+          )}
 
           <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
             <Button

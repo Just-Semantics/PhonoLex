@@ -267,7 +267,8 @@ class ClientSideAPIAdapter {
     if (exclusions.exclude_phonemes && exclusions.exclude_phonemes.length > 0) {
       results = results.filter(word => {
         const phonemes = word.phonemes.map(p => p.ipa);
-        return !exclusions.exclude_phonemes.some((excluded: string) => phonemes.includes(excluded));
+        const hasExcluded = exclusions.exclude_phonemes.some((excluded: string) => phonemes.includes(excluded));
+        return !hasExcluded;
       });
     }
 

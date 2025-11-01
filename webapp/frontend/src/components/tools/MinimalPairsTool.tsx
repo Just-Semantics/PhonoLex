@@ -4,7 +4,7 @@
  * Generate word pairs differing by a single phoneme for discrimination therapy
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   TextField,
@@ -13,8 +13,10 @@ import {
   Alert,
   CircularProgress,
   IconButton,
-  Typography,
-  Slider,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import {
   PlayArrow as RunIcon,
@@ -35,24 +37,7 @@ const MinimalPairsTool: React.FC = () => {
     phoneme2: '',
   });
 
-  // Granular filters
-  const [filters, setFilters] = useState<{
-    syllables: [number, number];
-    wcm: [number, number];
-    frequency: [number, number];
-  }>({
-    syllables: [1, 5],
-    wcm: [0, 15],
-    frequency: [0, 10],
-  });
-
-  // Database property ranges
-  const [dbRanges, setDbRanges] = useState<Record<string, [number, number]>>({
-    syllables: [1, 5],
-    wcm: [0, 15],
-    frequency: [0, 10],
-  });
-
+  const [position, setPosition] = useState<'any' | 'initial' | 'medial' | 'final'>('any');
   const [results, setResults] = useState<MinimalPair[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -61,32 +46,6 @@ const MinimalPairsTool: React.FC = () => {
   const [ipaWarning1, setIpaWarning1] = useState<string | null>(null);
   const [ipaWarning2, setIpaWarning2] = useState<string | null>(null);
 
-  // Fetch property ranges from database on mount
-  useEffect(() => {
-    const fetchRanges = async () => {
-      try {
-        const ranges = await api.getPropertyRanges();
-
-        // Map API property names (syllable_count, wcm_score) to component names (syllables, wcm)
-        const mappedRanges = {
-          syllables: (ranges as any).syllable_count || ranges.syllables || [1, 5],
-          wcm: (ranges as any).wcm_score || ranges.wcm || [0, 15],
-          frequency: ranges.frequency || [0, 10],
-        };
-
-        setDbRanges(mappedRanges);
-        setFilters({
-          syllables: mappedRanges.syllables as [number, number],
-          wcm: mappedRanges.wcm as [number, number],
-          frequency: mappedRanges.frequency as [number, number],
-        });
-      } catch (error) {
-        console.error('Failed to fetch property ranges:', error);
-      }
-    };
-    fetchRanges();
-  }, []);
-
   const handleGenerate = async () => {
     setLoading(true);
     setError(null);
@@ -94,44 +53,29 @@ const MinimalPairsTool: React.FC = () => {
       let data = await api.getMinimalPairs({
         phoneme1: state.phoneme1,
         phoneme2: state.phoneme2,
-        limit: 200,  // Get more results for client-side filtering
+        limit: 200,  // Get more for filtering
       });
 
-      // Apply client-side filters based on AVERAGE of both words
-      // If one value is null, use the non-null value (same as WordResultsDisplay sorting logic)
-      data = data.filter(pair => {
-        const w1 = pair.word1;
-        const w2 = pair.word2;
+      // Filter by position if specified
+      if (position !== 'any') {
+        data = data.filter(pair => {
+          const pos = pair.position ?? pair.metadata?.position;
+          if (pos === undefined) return true;  // Include if position unknown
 
-        // Helper to average two values (use non-null if one is null, same as WordResultsDisplay)
-        const avg = (a: number | null, b: number | null): number | null => {
-          if (a !== null && b !== null) return (a + b) / 2;
-          if (a !== null) return a;
-          if (b !== null) return b;
-          return null;
-        };
+          const wordLength = pair.word1.phoneme_count;
 
-        // Syllables - average of both
-        const avgSyllables = avg(w1.syllable_count, w2.syllable_count);
-        if (avgSyllables === null || avgSyllables < filters.syllables[0] || avgSyllables > filters.syllables[1]) {
-          return false;
-        }
+          if (position === 'initial') {
+            return pos === 0;
+          } else if (position === 'final') {
+            return pos === wordLength - 1;
+          } else if (position === 'medial') {
+            return pos > 0 && pos < wordLength - 1;
+          }
+          return true;
+        });
+      }
 
-        // WCM - average of both
-        const avgWcm = avg(w1.wcm_score, w2.wcm_score);
-        if (avgWcm !== null && (avgWcm < filters.wcm[0] || avgWcm > filters.wcm[1])) {
-          return false;
-        }
-
-        // Frequency - average of both
-        const avgFreq = avg(w1.log_frequency, w2.log_frequency);
-        if (avgFreq !== null && (avgFreq < filters.frequency[0] || avgFreq > filters.frequency[1])) {
-          return false;
-        }
-
-        return true;
-      }).slice(0, 50);
-      setResults(data);
+      setResults(data.slice(0, 50));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
       setResults(null);
@@ -141,11 +85,8 @@ const MinimalPairsTool: React.FC = () => {
   };
 
   const handleClear = () => {
-    setFilters({
-      syllables: dbRanges.syllables as [number, number],
-      wcm: dbRanges.wcm as [number, number],
-      frequency: dbRanges.frequency as [number, number],
-    });
+    setState({ phoneme1: '', phoneme2: '' });
+    setPosition('any');
     setResults(null);
     setError(null);
   };
@@ -250,57 +191,20 @@ const MinimalPairsTool: React.FC = () => {
           )}
         </Box>
 
-        {/* Property Filters */}
-        <Box>
-          <Typography variant="subtitle2" gutterBottom>
-            Property Filters
-          </Typography>
-
-          {/* Syllables */}
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="caption" color="text.secondary">
-              Syllables: {filters.syllables[0]} - {filters.syllables[1]}
-            </Typography>
-            <Slider
-              value={filters.syllables}
-              onChange={(_, newValue) => setFilters({ ...filters, syllables: newValue as [number, number] })}
-              min={dbRanges.syllables[0]}
-              max={dbRanges.syllables[1]}
-              valueLabelDisplay="auto"
-              size="small"
-            />
-          </Box>
-
-          {/* WCM Score */}
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="caption" color="text.secondary">
-              WCM Score: {filters.wcm[0]} - {filters.wcm[1]}
-            </Typography>
-            <Slider
-              value={filters.wcm}
-              onChange={(_, newValue) => setFilters({ ...filters, wcm: newValue as [number, number] })}
-              min={dbRanges.wcm[0]}
-              max={dbRanges.wcm[1]}
-              valueLabelDisplay="auto"
-              size="small"
-            />
-          </Box>
-
-          {/* Frequency */}
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="caption" color="text.secondary">
-              Frequency: {filters.frequency[0]} - {filters.frequency[1]}
-            </Typography>
-            <Slider
-              value={filters.frequency}
-              onChange={(_, newValue) => setFilters({ ...filters, frequency: newValue as [number, number] })}
-              min={dbRanges.frequency[0]}
-              max={dbRanges.frequency[1]}
-              valueLabelDisplay="auto"
-              size="small"
-            />
-          </Box>
-        </Box>
+        {/* Position Filter */}
+        <FormControl fullWidth size="small">
+          <InputLabel>Position in Word</InputLabel>
+          <Select
+            value={position}
+            label="Position in Word"
+            onChange={(e) => setPosition(e.target.value as 'any' | 'initial' | 'medial' | 'final')}
+          >
+            <MenuItem value="any">Any Position</MenuItem>
+            <MenuItem value="initial">Word-Initial</MenuItem>
+            <MenuItem value="medial">Word-Medial</MenuItem>
+            <MenuItem value="final">Word-Final</MenuItem>
+          </Select>
+        </FormControl>
 
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <Button

@@ -25,7 +25,6 @@ import {
   Compare as CompareIcon,
   SwapHoriz as MinimalPairIcon,
   MusicNote as RhymeIcon,
-  TuneOutlined as FilterIcon,
 } from '@mui/icons-material';
 import { theme } from './theme/theme';
 
@@ -34,7 +33,6 @@ import AppHeader from './components/AppHeader';
 import ExpandableToolCard from './components/ExpandableToolCard';
 import MinimalPairsTool from './components/tools/MinimalPairsTool';
 import RhymeSetsTool from './components/tools/RhymeSetsTool';
-import NormFilteredListsTool from './components/tools/NormFilteredListsTool';
 import SearchTool from './components/tools/SearchTool';
 import Builder from './components/Builder';
 import Compare from './components/Compare';
@@ -80,16 +78,6 @@ const App: React.FC = () => {
             color="secondary.main"
           >
             <MinimalPairsTool />
-          </ExpandableToolCard>
-
-          {/* Norm-Filtered Lists */}
-          <ExpandableToolCard
-            icon={<FilterIcon />}
-            title="Norm-Filtered Lists"
-            description="Filter by psycholinguistic norms: frequency, AoA, imageability, valence"
-            color="success.main"
-          >
-            <NormFilteredListsTool />
           </ExpandableToolCard>
 
           {/* Rhyme Sets */}

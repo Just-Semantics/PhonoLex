@@ -43,6 +43,7 @@ import api from '../services/phonolexApi';
 import type { BuilderRequest, Pattern, PatternType, Word } from '../services/phonolexApi';
 import WordResultsDisplay from './WordResultsDisplay';
 import PhonemePickerDialog from './PhonemePickerDialog';
+import { validatePhonemeInput } from '../utils/ipaValidation';
 
 const Builder: React.FC = () => {
   // Patterns state
@@ -66,7 +67,7 @@ const Builder: React.FC = () => {
     dominance: [1, 9],
   });
 
-  // Property filters state (using ranges like NormFilteredListsTool)
+  // Property filters state
   // Initial values are fallbacks - will be replaced with database values
   const [filters, setFilters] = useState({
     // Phonological Complexity
@@ -137,15 +138,21 @@ const Builder: React.FC = () => {
     { type: 'pattern'; index: number } | { type: 'exclusion' } | null
   >(null);
 
+  // IPA validation warnings (one per pattern + one for exclusion)
+  const [patternWarnings, setPatternWarnings] = useState<Map<number, string>>(new Map());
+  const [exclusionWarning, setExclusionWarning] = useState<string | null>(null);
+
   // Handle phoneme selection
   const handlePhonemeSelect = (phoneme: string) => {
     if (phonemePickerTarget?.type === 'pattern') {
-      updatePattern(phonemePickerTarget.index, 'phoneme', phoneme);
+      // Append to existing phoneme value
+      const currentPattern = patterns[phonemePickerTarget.index];
+      updatePattern(phonemePickerTarget.index, 'phoneme', currentPattern.phoneme + phoneme);
     } else if (phonemePickerTarget?.type === 'exclusion') {
-      setExcludePhonemeInput(phoneme);
+      // Append to exclusion input
+      setExcludePhonemeInput((prev) => prev + phoneme);
     }
-    setPhonemePickerOpen(false);
-    setPhonemePickerTarget(null);
+    // Don't close - allow multiple selections
   };
 
   // Open phoneme picker
@@ -169,6 +176,28 @@ const Builder: React.FC = () => {
     const updated = [...patterns];
     updated[index] = { ...updated[index], [field]: value };
     setPatterns(updated);
+
+    // Validate IPA input if updating phoneme field
+    if (field === 'phoneme' && typeof value === 'string') {
+      if (value.trim()) {
+        const validation = validatePhonemeInput(value);
+        if (!validation.isValid && validation.suggestion) {
+          setPatternWarnings(prev => new Map(prev).set(index, validation.suggestion!));
+        } else {
+          setPatternWarnings(prev => {
+            const next = new Map(prev);
+            next.delete(index);
+            return next;
+          });
+        }
+      } else {
+        setPatternWarnings(prev => {
+          const next = new Map(prev);
+          next.delete(index);
+          return next;
+        });
+      }
+    }
   };
 
   // Add exclusion
@@ -189,37 +218,72 @@ const Builder: React.FC = () => {
     setLoading(true);
     setError(null);
 
+    // Auto-add any typed exclusion
+    const finalExclusions = [...excludePhonemes];
+    if (excludePhonemeInput.trim() && !finalExclusions.includes(excludePhonemeInput.trim())) {
+      finalExclusions.push(excludePhonemeInput.trim());
+    }
+
     try {
+      // Only include filter values if they differ from the full DB range
+      // This allows words with null values to be included when filters are at defaults
+      const filtersObj: any = {};
+
+      if (dbRanges) {
+        // Syllables and phonemes (required properties - always filter)
+        filtersObj.min_syllables = filters.syllables[0];
+        filtersObj.max_syllables = filters.syllables[1];
+        filtersObj.min_phonemes = filters.phonemes[0];
+        filtersObj.max_phonemes = filters.phonemes[1];
+
+        // Optional properties - only filter if not at full range
+        if (filters.wcm[0] !== dbRanges.wcm[0] || filters.wcm[1] !== dbRanges.wcm[1]) {
+          filtersObj.min_wcm = filters.wcm[0];
+          filtersObj.max_wcm = filters.wcm[1];
+        }
+        if (filters.msh[0] !== dbRanges.msh[0] || filters.msh[1] !== dbRanges.msh[1]) {
+          filtersObj.min_msh = filters.msh[0];
+          filtersObj.max_msh = filters.msh[1];
+        }
+        if (filters.frequency[0] !== dbRanges.frequency[0] || filters.frequency[1] !== dbRanges.frequency[1]) {
+          filtersObj.min_frequency = filters.frequency[0];
+          filtersObj.max_frequency = filters.frequency[1];
+        }
+        if (filters.aoa[0] !== dbRanges.aoa[0] || filters.aoa[1] !== dbRanges.aoa[1]) {
+          filtersObj.min_aoa = filters.aoa[0];
+          filtersObj.max_aoa = filters.aoa[1];
+        }
+        if (filters.imageability[0] !== dbRanges.imageability[0] || filters.imageability[1] !== dbRanges.imageability[1]) {
+          filtersObj.min_imageability = filters.imageability[0];
+          filtersObj.max_imageability = filters.imageability[1];
+        }
+        if (filters.familiarity[0] !== dbRanges.familiarity[0] || filters.familiarity[1] !== dbRanges.familiarity[1]) {
+          filtersObj.min_familiarity = filters.familiarity[0];
+          filtersObj.max_familiarity = filters.familiarity[1];
+        }
+        if (filters.concreteness[0] !== dbRanges.concreteness[0] || filters.concreteness[1] !== dbRanges.concreteness[1]) {
+          filtersObj.min_concreteness = filters.concreteness[0];
+          filtersObj.max_concreteness = filters.concreteness[1];
+        }
+        if (filters.valence[0] !== dbRanges.valence[0] || filters.valence[1] !== dbRanges.valence[1]) {
+          filtersObj.min_valence = filters.valence[0];
+          filtersObj.max_valence = filters.valence[1];
+        }
+        if (filters.arousal[0] !== dbRanges.arousal[0] || filters.arousal[1] !== dbRanges.arousal[1]) {
+          filtersObj.min_arousal = filters.arousal[0];
+          filtersObj.max_arousal = filters.arousal[1];
+        }
+        if (filters.dominance[0] !== dbRanges.dominance[0] || filters.dominance[1] !== dbRanges.dominance[1]) {
+          filtersObj.min_dominance = filters.dominance[0];
+          filtersObj.max_dominance = filters.dominance[1];
+        }
+      }
+
       const request: BuilderRequest = {
         patterns: patterns.filter((p) => p.phoneme.trim() !== ''),
-        filters: {
-          min_syllables: filters.syllables[0],
-          max_syllables: filters.syllables[1],
-          min_phonemes: filters.phonemes[0],
-          max_phonemes: filters.phonemes[1],
-          min_wcm: filters.wcm[0],
-          max_wcm: filters.wcm[1],
-          min_msh: filters.msh[0],
-          max_msh: filters.msh[1],
-          min_frequency: filters.frequency[0],
-          max_frequency: filters.frequency[1],
-          min_aoa: filters.aoa[0],
-          max_aoa: filters.aoa[1],
-          min_imageability: filters.imageability[0],
-          max_imageability: filters.imageability[1],
-          min_familiarity: filters.familiarity[0],
-          max_familiarity: filters.familiarity[1],
-          min_concreteness: filters.concreteness[0],
-          max_concreteness: filters.concreteness[1],
-          min_valence: filters.valence[0],
-          max_valence: filters.valence[1],
-          min_arousal: filters.arousal[0],
-          max_arousal: filters.arousal[1],
-          min_dominance: filters.dominance[0],
-          max_dominance: filters.dominance[1],
-        },
+        filters: filtersObj,
         exclusions: {
-          exclude_phonemes: excludePhonemes.length > 0 ? excludePhonemes : undefined,
+          exclude_phonemes: finalExclusions.length > 0 ? finalExclusions : undefined,
         },
         limit: 200,
       };
@@ -297,38 +361,45 @@ const Builder: React.FC = () => {
                           </Select>
                         </FormControl>
 
-                        <Box sx={{ display: 'flex', gap: 1, flex: 1 }}>
-                          <TextField
-                            label="Phoneme(s)"
-                            value={pattern.phoneme}
-                            onChange={(e) => updatePattern(idx, 'phoneme', e.target.value)}
-                            size="small"
-                            placeholder="e.g., k, t, s"
-                            fullWidth
-                            InputProps={{
-                              endAdornment: (
-                                <IconButton
-                                  onClick={() => openPhonemePicker({ type: 'pattern', index: idx })}
-                                  edge="end"
-                                  color="primary"
-                                  size="small"
-                                  sx={{ minWidth: 40, minHeight: 40 }}
-                                >
-                                  <KeyboardIcon />
-                                </IconButton>
-                              ),
-                            }}
-                          />
+                        <Box sx={{ display: 'flex', gap: 1, flex: 1, flexDirection: 'column' }}>
+                          <Box sx={{ display: 'flex', gap: 1 }}>
+                            <TextField
+                              label="Phoneme(s)"
+                              value={pattern.phoneme}
+                              onChange={(e) => updatePattern(idx, 'phoneme', e.target.value)}
+                              size="small"
+                              placeholder="e.g., k, t, s"
+                              fullWidth
+                              InputProps={{
+                                endAdornment: (
+                                  <IconButton
+                                    onClick={() => openPhonemePicker({ type: 'pattern', index: idx })}
+                                    edge="end"
+                                    color="primary"
+                                    size="small"
+                                    sx={{ minWidth: 40, minHeight: 40 }}
+                                  >
+                                    <KeyboardIcon />
+                                  </IconButton>
+                                ),
+                              }}
+                            />
 
-                          <IconButton
-                            size="small"
-                            color="error"
-                            onClick={() => removePattern(idx)}
-                            disabled={patterns.length === 1}
-                            sx={{ minWidth: 44, minHeight: 44, flexShrink: 0 }}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
+                            <IconButton
+                              size="small"
+                              color="error"
+                              onClick={() => removePattern(idx)}
+                              disabled={patterns.length === 1}
+                              sx={{ minWidth: 44, minHeight: 44, flexShrink: 0 }}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </Box>
+                          {patternWarnings.has(idx) && (
+                            <Alert severity="warning" sx={{ mt: 0.5 }}>
+                              {patternWarnings.get(idx)}
+                            </Alert>
+                          )}
                         </Box>
                       </Stack>
 
@@ -672,41 +743,63 @@ const Builder: React.FC = () => {
           </AccordionSummary>
           <AccordionDetails sx={{ px: { xs: 1.5, sm: 2 }, py: { xs: 1, sm: 2 } }}>
             <Stack spacing={{ xs: 1.5, sm: 2 }}>
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2 }}>
-                <TextField
-                  label="Phoneme to exclude"
-                  value={excludePhonemeInput}
-                  onChange={(e) => setExcludePhonemeInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && addExclusion()}
-                  size="small"
-                  placeholder="e.g., r, l, θ"
-                  fullWidth
-                  InputProps={{
-                    endAdornment: (
-                      <IconButton
-                        onClick={() => openPhonemePicker({ type: 'exclusion' })}
-                        edge="end"
-                        color="primary"
-                        size="small"
-                        sx={{ minWidth: 40, minHeight: 40 }}
-                      >
-                        <KeyboardIcon />
-                      </IconButton>
-                    ),
-                  }}
-                />
-                <Button
-                  variant="outlined"
-                  startIcon={<AddIcon />}
-                  onClick={addExclusion}
-                  sx={{
-                    minHeight: 44,
-                    minWidth: { sm: 100 },
-                    width: { xs: '100%', sm: 'auto' },
-                  }}
-                >
-                  Add
-                </Button>
+              <Stack spacing={{ xs: 1, sm: 0 }}>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2 }}>
+                  <TextField
+                    label="Phoneme to exclude"
+                    value={excludePhonemeInput}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      setExcludePhonemeInput(newValue);
+
+                      // Validate IPA input
+                      if (newValue.trim()) {
+                        const validation = validatePhonemeInput(newValue);
+                        if (!validation.isValid && validation.suggestion) {
+                          setExclusionWarning(validation.suggestion);
+                        } else {
+                          setExclusionWarning(null);
+                        }
+                      } else {
+                        setExclusionWarning(null);
+                      }
+                    }}
+                    onKeyPress={(e) => e.key === 'Enter' && addExclusion()}
+                    size="small"
+                    placeholder="e.g., r, l, θ"
+                    fullWidth
+                    InputProps={{
+                      endAdornment: (
+                        <IconButton
+                          onClick={() => openPhonemePicker({ type: 'exclusion' })}
+                          edge="end"
+                          color="primary"
+                          size="small"
+                          sx={{ minWidth: 40, minHeight: 40 }}
+                        >
+                          <KeyboardIcon />
+                        </IconButton>
+                      ),
+                    }}
+                  />
+                  <Button
+                    variant="outlined"
+                    startIcon={<AddIcon />}
+                    onClick={addExclusion}
+                    sx={{
+                      minHeight: 44,
+                      minWidth: { sm: 100 },
+                      width: { xs: '100%', sm: 'auto' },
+                    }}
+                  >
+                    Add
+                  </Button>
+                </Stack>
+                {exclusionWarning && (
+                  <Alert severity="warning" sx={{ mt: 1 }}>
+                    {exclusionWarning}
+                  </Alert>
+                )}
               </Stack>
 
               {excludePhonemes.length > 0 && (

@@ -5,6 +5,29 @@ All notable changes to PhonoLex will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2025-11-01
+
+### Added
+- Position filtering for Minimal Pairs (word-initial, medial, final) - clinically relevant for SLPs
+- Auto-include typed exclusions in Custom Word List Builder (no "Add" button required)
+- Comprehensive testing infrastructure:
+  - **Vitest** unit tests for phoneme tokenization, exclusion filtering, Unicode handling (17 tests)
+  - **Playwright** E2E tests for Builder exclusions and Minimal Pairs position filtering
+  - Test coverage reporting and UI test runners
+  - CI integration with automated test runs on push/PR
+
+### Changed
+- Simplified Minimal Pairs tool: removed property filters (syllables, WCM, frequency)
+- Unified UI paradigm: all input fields now "type and go" without explicit add/submit buttons
+- Updated CI workflow to run unit tests and E2E tests before build
+
+### Removed
+- Norm-Filtered Lists tool (functionality fully covered by Custom Word List Builder)
+
+### Fixed
+- Exclusion filtering bug where typed exclusions weren't applied without clicking Add button
+- Unicode phoneme handling in exclusion filters (dʒ, ð, θ, etc.)
+
 ## [2.1.0-beta] - 2025-10-31
 
 ### Added

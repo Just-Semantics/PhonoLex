@@ -19,7 +19,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.phonolex.embeddings.english_data_loader import EnglishPhonologyLoader
 from src.phonolex.utils.syllabification import syllabify
-from webapp.backend.migrations.word_filter import WordFilter
+from src.phonolex.word_filter import WordFilter
 
 
 def load_layer3_model(model_path="models/layer3/model.pt"):

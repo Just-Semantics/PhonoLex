@@ -265,43 +265,14 @@ class ClientSideDataService {
 
   /**
    * Tokenize a phoneme string into individual phonemes
-   * Supports both space-separated ("k æ t") and concatenated ("kæt") input
-   * Uses greedy longest-match for multi-character phonemes
+   * REQUIRES space-separated input (e.g., "k æ t" or "dʒ ʌ dʒ")
    */
   private tokenizePhonemes(input: string): string[] {
     const trimmed = input.trim();
+    if (!trimmed) return [];
 
-    // If input contains spaces, use space-separated tokens
-    if (/\s/.test(trimmed)) {
-      return trimmed.split(/\s+/).filter(p => p.length > 0);
-    }
-
-    // Otherwise, greedily match against known phonemes
-    const phonemes: string[] = [];
-    let i = 0;
-
-    while (i < trimmed.length) {
-      let matched = false;
-
-      // Try to match longest phoneme first (up to 3 characters)
-      for (let len = Math.min(3, trimmed.length - i); len >= 1; len--) {
-        const candidate = trimmed.substring(i, i + len);
-        if (this.phonemes.has(candidate)) {
-          phonemes.push(candidate);
-          i += len;
-          matched = true;
-          break;
-        }
-      }
-
-      // If no match, treat as single character (might be invalid, but let it through)
-      if (!matched) {
-        phonemes.push(trimmed[i]);
-        i++;
-      }
-    }
-
-    return phonemes;
+    // Space-separated tokens only - no greedy matching
+    return trimmed.split(/\s+/).filter(p => p.length > 0);
   }
 
   /**
@@ -319,6 +290,7 @@ class ClientSideDataService {
       if (request.starts_with) {
         const targetPhonemes = this.tokenizePhonemes(request.starts_with);
         const startPhonemes = metadata.phonemes.slice(0, targetPhonemes.length);
+
         if (JSON.stringify(startPhonemes) !== JSON.stringify(targetPhonemes)) {
           matches = false;
         }
@@ -627,6 +599,8 @@ class ClientSideDataService {
     limit: number = 50
   ): Promise<MinimalPairResult[]> {
     await this.ensureLoaded();
+    console.log('[findMinimalPairs] phoneme1:', phoneme1, 'hex:', phoneme1.split('').map(c => '0x' + c.charCodeAt(0).toString(16)).join(' '));
+    console.log('[findMinimalPairs] phoneme2:', phoneme2, 'hex:', phoneme2.split('').map(c => '0x' + c.charCodeAt(0).toString(16)).join(' '));
 
     const results: MinimalPairResult[] = [];
 
@@ -667,6 +641,17 @@ class ClientSideDataService {
           }
 
           // Check if minimal pair with requested contrast
+          if (diffCount === 1) {
+            // Log potential matches for debugging
+            if ((diffPhoneme1 === phoneme1 || diffPhoneme1 === phoneme2 || diffPhoneme2 === phoneme1 || diffPhoneme2 === phoneme2)) {
+              console.log('[findMinimalPairs] Potential match:', word1, 'vs', word2, 'diff:', diffPhoneme1, '<->', diffPhoneme2);
+              console.log('  diffPhoneme1 hex:', diffPhoneme1.split('').map(c => '0x' + c.charCodeAt(0).toString(16)).join(' '));
+              console.log('  diffPhoneme2 hex:', diffPhoneme2.split('').map(c => '0x' + c.charCodeAt(0).toString(16)).join(' '));
+              console.log('  Match1:', diffPhoneme1 === phoneme1, diffPhoneme2 === phoneme2);
+              console.log('  Match2:', diffPhoneme1 === phoneme2, diffPhoneme2 === phoneme1);
+            }
+          }
+
           if (
             diffCount === 1 &&
             ((diffPhoneme1 === phoneme1 && diffPhoneme2 === phoneme2) ||
@@ -693,6 +678,7 @@ class ClientSideDataService {
       }
     }
 
+    console.log('[findMinimalPairs] Found', results.length, 'minimal pairs');
     return results;
   }
 

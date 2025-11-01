@@ -4,7 +4,6 @@
   "filter_criterion": "frequency + at least one psycholinguistic norm",
   "files": {
     "word_metadata.json": "Word properties, IPA, syllables, psycholinguistic norms",
-    "embeddings_quantized.json": "Int8 quantized syllable embeddings for similarity",
-    "phonemes.json": "Phoneme inventory with Phoible features (94 phonemes)"
+    "embeddings_quantized.json": "Int8 quantized syllable embeddings for similarity"
   }
 }

@@ -189,15 +189,16 @@ The web application runs entirely client-side without backend or database depend
 
 ### Features
 
-**Search**:
-- Phonological property filters (phoneme count, syllable count, complexity)
-- Psycholinguistic norm filters (frequency, AoA, concreteness, VAD)
-- Pattern matching with wildcards
-- Vector similarity search
+**Custom Word List Builder**:
+- Pattern matching (starts with, ends with, contains)
+- Phoneme exclusion (blacklist)
+- 11 psycholinguistic property filters (frequency, AoA, concreteness, VAD, etc.)
+- Phonological complexity filters (syllables, phonemes, WCM, MSH)
+- Export vocabularies for research and clinical applications
 
 **Minimal Pairs Generator**:
 - Phoneme contrast specification (e.g., /t/ vs /d/)
-- Word length and complexity filters
+- Position filtering (word-initial, medial, final)
 - Export for SLP/clinical applications
 
 **Rhyme Detection**:
@@ -206,11 +207,11 @@ The web application runs entirely client-side without backend or database depend
 - Syllable-based rhymes
 - Configurable matching strictness
 
-**Norm-Filtered Lists**:
-- Export vocabularies with psycholinguistic properties
-- Developmental appropriateness filtering (AoA)
-- Concreteness/abstractness filtering
-- Emotional valence filtering
+**Search**:
+- Phonological property filters
+- Psycholinguistic norm filters
+- Pattern matching with wildcards
+- Vector similarity search
 
 **Word Comparison**:
 - Phonological similarity computation

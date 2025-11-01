@@ -104,6 +104,17 @@ export interface IPAValidationResult {
 }
 
 export function validatePhonemeInput(input: string): IPAValidationResult {
+  const trimmed = input.trim();
+
+  // Require space-separated phonemes (multi-character phonemes like dʒ, tʃ exist)
+  // Single phonemes are OK without spaces
+  if (trimmed && !/\s/.test(trimmed) && trimmed.length > 2) {
+    return {
+      isValid: false,
+      suggestion: 'Please separate phonemes with spaces (e.g., "dʒ ʌ dʒ" not "dʒʌdʒ"). Use the IPA keyboard.'
+    };
+  }
+
   const isValid = isValidIPA(input);
 
   if (!isValid) {
