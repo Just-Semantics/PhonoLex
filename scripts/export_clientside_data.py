@@ -244,6 +244,11 @@ def export_data(embeddings_checkpoint, word_metadata, minimal_pairs, phoneme_fea
         ratio = (1 - compressed_size / original_size) * 100
         print(f"    {json_file.name} → {gz_file.name} ({compressed_size:.1f} MB, {ratio:.0f}% reduction)")
 
+        # Delete large uncompressed files (>50MB GitHub limit) - only keep .gz
+        if original_size > 50 and json_file.name == 'embeddings_quantized.json':
+            json_file.unlink()
+            print(f"    Deleted uncompressed {json_file.name} (exceeds 50MB GitHub limit)")
+
     # Calculate compressed total
     total_compressed = sum(p.stat().st_size for p in output_dir.glob("*.json.gz")) / 1024 / 1024
     total_ratio = (1 - total_compressed / total_size) * 100

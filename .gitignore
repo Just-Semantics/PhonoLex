@@ -61,6 +61,9 @@ data/phonological_graph.pkl
 !data/mappings/*.json
 !webapp/frontend/public/*.json
 
+# Exclude large uncompressed data files (keep only .gz versions)
+webapp/frontend/public/data/embeddings_quantized.json
+
 # Exclude embedded git repositories
 data/learning_datasets/ipa-dict/
 data/learning_datasets/sigmorphon2020/
