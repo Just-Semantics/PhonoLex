@@ -367,10 +367,6 @@ const SearchTool: React.FC = () => {
                   <Typography variant="caption" color="text.secondary">WCM Score</Typography>
                   <Typography variant="body1">{wordResult.wcm_score || 'N/A'}</Typography>
                 </Grid>
-                <Grid item xs={6} sm={3}>
-                  <Typography variant="caption" color="text.secondary">Complexity</Typography>
-                  <Chip label="N/A" size="small" />
-                </Grid>
               </Grid>
             </Box>
 
@@ -393,10 +389,6 @@ const SearchTool: React.FC = () => {
                   <Typography variant="body1">
                     {wordResult.aoa ? `${wordResult.aoa.toFixed(1)} years` : '-'}
                   </Typography>
-                </Grid>
-                <Grid item xs={6} sm={4}>
-                  <Typography variant="caption" color="text.secondary">Word Length</Typography>
-                  <Chip label={wordResult.word_length || 'N/A'} size="small" />
                 </Grid>
               </Grid>
             </Box>

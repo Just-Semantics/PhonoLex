@@ -68,9 +68,6 @@ export interface Word {
   phoneme_count: number;
   syllable_count: number;
 
-  // Categorical properties
-  word_length: 'short' | 'medium' | 'long' | null;
-
   // Psycholinguistic properties
   frequency: number | null;
   log_frequency: number | null;
@@ -118,7 +115,6 @@ export interface WordFilterRequest {
   max_syllables?: number;
   min_phonemes?: number;
   max_phonemes?: number;
-  word_length?: 'short' | 'medium' | 'long';
 
   // Psycholinguistic properties
   min_frequency?: number;
@@ -153,7 +149,6 @@ export interface PatternSearchRequest {
   ends_with?: string;
   contains?: string;
   contains_medial_only?: boolean;  // For CONTAINS: exclude word edges
-  word_length?: 'short' | 'medium' | 'long';
   min_syllables?: number;
   max_syllables?: number;
   filters?: WordFilterRequest;  // Additional filters
@@ -257,7 +252,6 @@ export interface SimilaritySearchRequest {
   limit?: number;
   filters?: {
     max_wcm?: number;
-    word_length?: 'short' | 'medium' | 'long';
   };
 }
 

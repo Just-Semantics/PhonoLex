@@ -48,6 +48,54 @@ import type { Word, MinimalPair, SimilarWord } from '../services/phonolexApi';
 type SortField = 'word' | 'wcm' | 'msh' | 'syllable_count' | 'similarity' | 'frequency' | 'aoa' | 'imageability' | 'familiarity' | 'concreteness' | 'valence' | 'arousal' | 'dominance';
 type SortDirection = 'asc' | 'desc';
 
+// Display word types with discriminated union
+type DisplayWordBase = {
+  word: string;
+  ipa: string;
+  wcm_score: number | null;
+  msh_stage: number | null;
+  syllable_count: number | null;
+  frequency: number | null;
+  aoa: number | null;
+  imageability: number | null;
+  familiarity: number | null;
+  concreteness: number | null;
+  valence: number | null;
+  arousal: number | null;
+  dominance: number | null;
+};
+
+type DisplayWordPair = DisplayWordBase & {
+  isPair: true;
+  _raw: {
+    wcm_score: [number | null, number | null];
+    msh_stage: [number | null, number | null];
+    syllable_count: [number | null, number | null];
+    frequency: [number | null, number | null];
+    aoa: [number | null, number | null];
+    imageability: [number | null, number | null];
+    familiarity: [number | null, number | null];
+    concreteness: [number | null, number | null];
+    valence: [number | null, number | null];
+    arousal: [number | null, number | null];
+    dominance: [number | null, number | null];
+  };
+  phoneme1?: string;
+  phoneme2?: string;
+  position?: number;
+};
+
+type DisplayWordSimilar = DisplayWordBase & {
+  isPair: false;
+  similarity: number;
+};
+
+type DisplayWordRegular = DisplayWordBase & {
+  isPair: false;
+};
+
+type DisplayWord = DisplayWordPair | DisplayWordSimilar | DisplayWordRegular;
+
 interface Props {
   results: Word[] | MinimalPair[] | SimilarWord[];
   showSimilarity?: boolean;
@@ -113,7 +161,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
   };
 
   // Extract words for display
-  const displayWords = useMemo(() => {
+  const displayWords = useMemo((): DisplayWord[] => {
     if (isMinimalPairs) {
       // Show pairs as single row: word1 / word2
       const pairs = results as MinimalPair[];
@@ -121,6 +169,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
         word: `${pair.word1.word} / ${pair.word2.word}`,
         ipa: `${pair.word1.ipa?.replace(/\n/g, ' ')} / ${pair.word2.ipa?.replace(/\n/g, ' ')}`,
         wcm_score: avg(pair.word1.wcm_score, pair.word2.wcm_score),
+        msh_stage: avg(pair.word1.msh_stage, pair.word2.msh_stage),
         syllable_count: avg(pair.word1.syllable_count, pair.word2.syllable_count),
         frequency: avg(pair.word1.frequency, pair.word2.frequency),
         aoa: avg(pair.word1.aoa, pair.word2.aoa),
@@ -133,6 +182,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
         // Store raw values for display
         _raw: {
           wcm_score: [pair.word1.wcm_score, pair.word2.wcm_score],
+          msh_stage: [pair.word1.msh_stage, pair.word2.msh_stage],
           syllable_count: [pair.word1.syllable_count, pair.word2.syllable_count],
           frequency: [pair.word1.frequency, pair.word2.frequency],
           aoa: [pair.word1.aoa, pair.word2.aoa],
@@ -158,8 +208,8 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
   // Sort words
   const sortedWords = useMemo(() => {
     const sorted = [...displayWords];
-    sorted.sort((a: any, b: any) => {
-      let aVal: any, bVal: any;
+    sorted.sort((a, b) => {
+      let aVal: string | number | null, bVal: string | number | null;
 
       switch (sortField) {
         case 'word':
@@ -171,8 +221,8 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
           bVal = b.wcm_score || 0;
           break;
         case 'msh':
-          aVal = a.complexity || '';
-          bVal = b.complexity || '';
+          aVal = a.msh_stage || 0;
+          bVal = b.msh_stage || 0;
           break;
         case 'syllable_count':
           aVal = a.syllable_count || 0;
@@ -211,8 +261,8 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
           bVal = b.dominance || 0;
           break;
         case 'similarity':
-          aVal = a.similarity || 0;
-          bVal = b.similarity || 0;
+          aVal = (a as DisplayWordSimilar).similarity || 0;
+          bVal = (b as DisplayWordSimilar).similarity || 0;
           break;
         default:
           return 0;
@@ -251,18 +301,17 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
   // Export to CSV
   const exportCSV = () => {
     const headers = [
-      'Word', 'IPA', 'Syllables', 'WCM', 'Complexity', 'Frequency',
+      'Word', 'IPA', 'Syllables', 'WCM', 'Frequency',
       'AoA', 'Imageability', 'Familiarity', 'Concreteness',
       'Valence', 'Arousal', 'Dominance'
     ];
     if (showSimilarity || isSimilarWords) headers.push('Similarity');
 
-    const rows = sortedWords.map((w: any) => [
+    const rows = sortedWords.map((w) => [
       w.word || '',
       w.ipa || '',
       w.syllable_count || '',
       w.wcm_score?.toFixed(2) || '',
-      w.complexity || '',
       w.frequency?.toFixed(1) || '',
       w.aoa?.toFixed(1) || '',
       w.imageability?.toFixed(1) || '',
@@ -271,7 +320,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
       w.valence?.toFixed(1) || '',
       w.arousal?.toFixed(1) || '',
       w.dominance?.toFixed(1) || '',
-      ...(showSimilarity || isSimilarWords ? [w.similarity?.toFixed(3) || ''] : []),
+      ...(showSimilarity || isSimilarWords ? [(w as DisplayWordSimilar).similarity?.toFixed(3) || ''] : []),
     ]);
 
     const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
@@ -286,7 +335,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
 
   // Copy words to clipboard (line-delimited)
   const copyWords = () => {
-    const text = sortedWords.map((w: any) => w.word).join('\n');
+    const text = sortedWords.map((w) => w.word).join('\n');
     navigator.clipboard.writeText(text);
   };
 
@@ -385,7 +434,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
       {/* Card View for Mobile */}
       {viewMode === 'cards' ? (
         <Stack spacing={{ xs: 1.5, sm: 2 }}>
-          {displayedWords.map((word: any, idx) => (
+          {displayedWords.map((word, idx) => (
             <Card
               key={idx}
               variant="outlined"
@@ -453,14 +502,6 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                         )}
                       </Box>
                     </Grid>
-                    <Grid item xs={6} sm={3}>
-                      <Typography variant="caption" color="text.secondary">
-                        Complexity
-                      </Typography>
-                      <Box>
-                        <Chip label={word.complexity || 'N/A'} size="small" variant="outlined" />
-                      </Box>
-                    </Grid>
                     {(showSimilarity || isSimilarWords) && (
                       <Grid item xs={6} sm={3}>
                         <Typography variant="caption" color="text.secondary">
@@ -468,7 +509,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                         </Typography>
                         <Box>
                           <Chip
-                            label={word.similarity?.toFixed(3) || 'N/A'}
+                            label={(word as DisplayWordSimilar).similarity?.toFixed(3) || 'N/A'}
                             size="small"
                             color="primary"
                           />
@@ -773,7 +814,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
             </TableRow>
           </TableHead>
           <TableBody>
-            {displayedWords.map((word: any, idx) => (
+            {displayedWords.map((word, idx) => (
               <TableRow key={idx} hover>
                 <TableCell
                   sx={{
@@ -825,13 +866,6 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                   )}
                 </TableCell>
                 <TableCell align="center">
-                  <Chip
-                    label={word.complexity || 'N/A'}
-                    size="small"
-                    variant="outlined"
-                  />
-                </TableCell>
-                <TableCell align="center">
                   <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'monospace' }}>
                     {word.isPair ? formatPair(word._raw.frequency[0], word._raw.frequency[1]) : (word.frequency ? word.frequency.toFixed(1) : '-')}
                   </Typography>
@@ -874,7 +908,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                 {(showSimilarity || isSimilarWords) && (
                   <TableCell align="center">
                     <Chip
-                      label={word.similarity?.toFixed(3) || 'N/A'}
+                      label={(word as DisplayWordSimilar).similarity?.toFixed(3) || 'N/A'}
                       size="small"
                       color="primary"
                     />

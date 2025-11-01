@@ -413,12 +413,6 @@ const Search: React.FC = () => {
             </Grid>
             <Grid item xs={6} sm={3}>
               <Typography variant="caption" color="text.secondary">
-                Complexity
-              </Typography>
-              <Typography variant="h6">N/A</Typography>
-            </Grid>
-            <Grid item xs={6} sm={3}>
-              <Typography variant="caption" color="text.secondary">
                 AoA
               </Typography>
               <Typography variant="h6">{wordResult.aoa?.toFixed(1) || 'N/A'}</Typography>

@@ -39,8 +39,6 @@ interface WordMetadata {
   }>;
   phoneme_count: number;
   syllable_count: number;
-  word_length?: 'short' | 'medium' | 'long' | null;
-  complexity?: 'low' | 'medium' | 'high' | null;
   wcm_score: number | null;
   msh_stage: number | null;
   frequency: number | null;
@@ -204,11 +202,6 @@ class ClientSideDataService {
       // Phoneme count
       if (request.min_phonemes !== undefined && metadata.phoneme_count < request.min_phonemes) matches = false;
       if (request.max_phonemes !== undefined && metadata.phoneme_count > request.max_phonemes) matches = false;
-
-      // Word length category
-      if (request.word_length && metadata.word_length !== request.word_length) matches = false;
-
-      // Complexity category
 
       // WCM
       if (request.min_wcm !== undefined && (metadata.wcm_score === null || metadata.wcm_score < request.min_wcm)) matches = false;
@@ -1139,7 +1132,6 @@ class ClientSideDataService {
       syllable_count: metadata.syllable_count,
       wcm_score: metadata.wcm_score,
       msh_stage: metadata.msh_stage,
-      word_length: this.categorizeWordLength(metadata.phoneme_count),
       frequency: metadata.frequency,
       log_frequency: metadata.log_frequency,
       aoa: metadata.aoa,
@@ -1151,19 +1143,6 @@ class ClientSideDataService {
       dominance: metadata.dominance,
     };
   }
-
-  /**
-   * Categorize word length
-   */
-  private categorizeWordLength(phonemeCount: number): 'short' | 'medium' | 'long' {
-    if (phonemeCount <= 4) return 'short';
-    if (phonemeCount <= 7) return 'medium';
-    return 'long';
-  }
-
-  /**
-   * Categorize complexity
-   */
 
   /**
    * Get dequantized embeddings for a word
