@@ -6,6 +6,7 @@
  */
 
 import { clientSideData } from './clientSideData';
+import { applyExclusions } from '../utils/phonemeUtils';
 import type {
   Word,
   WordFilterRequest,
@@ -108,7 +109,7 @@ class ClientSideAPIAdapter {
   /**
    * Get neighbors (not implemented - returns empty for now)
    */
-  async getNeighbors(): Promise<any[]> {
+  async getNeighbors(): Promise<never[]> {
     await this.ensureLoaded();
     console.warn('getNeighbors not implemented in client-side mode');
     return [];
@@ -139,6 +140,7 @@ class ClientSideAPIAdapter {
     word?: string;
     target_word?: string;
     rhyme_mode?: 'last_1' | 'last_2' | 'last_3' | 'assonance' | 'consonance';
+    perfect_only?: boolean;
     use_embeddings?: boolean;
     word_length?: string;
     complexity?: string;
@@ -149,11 +151,13 @@ class ClientSideAPIAdapter {
     if (!word) {
       return [];
     }
+    // perfect_only maps to use_embeddings (if perfect_only is true, don't use embeddings)
+    const useEmbeddings = params.perfect_only === true ? false : (params.use_embeddings !== undefined ? params.use_embeddings : true);
     return clientSideData.findRhymes(
       word,
       params.rhyme_mode || 'last_1',
       params.limit || 50,
-      params.use_embeddings !== undefined ? params.use_embeddings : true
+      useEmbeddings
     );
   }
 
@@ -167,7 +171,7 @@ class ClientSideAPIAdapter {
   /**
    * List all phonemes
    */
-  async listPhonemes(): Promise<any> {
+  async listPhonemes(): Promise<{ phonemes: Array<{ ipa: string; type: string; features: Record<string, string> }> }> {
     await this.ensureLoaded();
     return clientSideData.listPhonemes();
   }
@@ -175,7 +179,11 @@ class ClientSideAPIAdapter {
   /**
    * Get phoneme details
    */
-  async getPhoneme(ipa: string): Promise<any> {
+  async getPhoneme(ipa: string): Promise<{
+    phoneme: string;
+    type: 'vowel' | 'consonant';
+    features: Record<string, string>;
+  } | null> {
     await this.ensureLoaded();
     return clientSideData.getPhoneme(ipa);
   }
@@ -183,7 +191,11 @@ class ClientSideAPIAdapter {
   /**
    * Search phonemes by features
    */
-  async searchPhonemesByFeatures(features: Record<string, string>): Promise<any> {
+  async searchPhonemesByFeatures(features: Record<string, string>): Promise<{
+    features: Record<string, string>;
+    matching_phonemes: string[];
+    count: number;
+  }> {
     await this.ensureLoaded();
     return clientSideData.searchPhonemesByFeatures(features);
   }
@@ -191,21 +203,41 @@ class ClientSideAPIAdapter {
   /**
    * Generate minimal pairs (alias for getMinimalPairs)
    */
-  async generateMinimalPairs(params: any): Promise<MinimalPairResult[]> {
+  async generateMinimalPairs(params: {
+    phoneme1: string;
+    phoneme2: string;
+    word_length?: string;
+    complexity?: string;
+    limit?: number;
+  }): Promise<MinimalPairResult[]> {
     return this.getMinimalPairs(params);
   }
 
   /**
    * Generate rhyme set (alias for getRhymes)
    */
-  async generateRhymeSet(params: any): Promise<RhymeResult[]> {
+  async generateRhymeSet(params: {
+    word?: string;
+    target_word?: string;
+    rhyme_mode?: 'last_1' | 'last_2' | 'last_3' | 'assonance' | 'consonance';
+    use_embeddings?: boolean;
+    word_length?: string;
+    complexity?: string;
+    limit?: number;
+  }): Promise<RhymeResult[]> {
     return this.getRhymes(params);
   }
 
   /**
    * Generate complexity list
    */
-  async generateComplexityList(params: any): Promise<Word[]> {
+  async generateComplexityList(params: {
+    min_wcm?: number;
+    max_wcm?: number;
+    min_msh?: number;
+    max_msh?: number;
+    limit?: number;
+  }): Promise<Word[]> {
     await this.ensureLoaded();
     return this.filterWords({
       ...params,
@@ -216,7 +248,11 @@ class ClientSideAPIAdapter {
   /**
    * Find phoneme position
    */
-  async findPhonemePosition(params: any): Promise<Word[]> {
+  async findPhonemePosition(params: {
+    phoneme: string;
+    position: 'initial' | 'medial' | 'final' | 'any';
+    limit?: number;
+  }): Promise<Word[]> {
     await this.ensureLoaded();
     return this.patternSearch(params);
   }
@@ -224,7 +260,18 @@ class ClientSideAPIAdapter {
   /**
    * Build word list
    */
-  async buildWordList(request: any): Promise<Word[]> {
+  async buildWordList(request: {
+    patterns?: Array<{
+      type: 'STARTS_WITH' | 'ENDS_WITH' | 'CONTAINS' | 'CONTAINS_MEDIAL';
+      phoneme: string;
+      medial_only?: boolean;
+    }>;
+    filters?: WordFilterRequest;
+    exclusions?: {
+      exclude_phonemes?: string[];
+    };
+    limit?: number;
+  }): Promise<Word[]> {
     await this.ensureLoaded();
     // Convert builder request to pattern search
     const patterns = request.patterns || [];
@@ -264,13 +311,7 @@ class ClientSideAPIAdapter {
     }
 
     // Apply exclusions (phonemes to exclude)
-    if (exclusions.exclude_phonemes && exclusions.exclude_phonemes.length > 0) {
-      results = results.filter(word => {
-        const phonemes = word.phonemes.map(p => p.ipa);
-        const hasExcluded = exclusions.exclude_phonemes.some((excluded: string) => phonemes.includes(excluded));
-        return !hasExcluded;
-      });
-    }
+    results = applyExclusions(results, exclusions.exclude_phonemes);
 
     // Limit final results
     return results.slice(0, request.limit || 200);
@@ -279,7 +320,25 @@ class ClientSideAPIAdapter {
   /**
    * Compare phonemes
    */
-  async comparePhonemes(phoneme1: string, phoneme2: string): Promise<any> {
+  async comparePhonemes(phoneme1: string, phoneme2: string): Promise<{
+    phoneme1: {
+      phoneme_id: number;
+      ipa: string;
+      segment_class: 'vowel' | 'consonant';
+      features: Record<string, string>;
+      has_trajectory: boolean;
+    };
+    phoneme2: {
+      phoneme_id: number;
+      ipa: string;
+      segment_class: 'vowel' | 'consonant';
+      features: Record<string, string>;
+      has_trajectory: boolean;
+    };
+    similarity_score: number;
+    different_features: Record<string, [string, string]>;
+    shared_features: Record<string, string>;
+  }> {
     await this.ensureLoaded();
     return clientSideData.comparePhonemes(phoneme1, phoneme2);
   }

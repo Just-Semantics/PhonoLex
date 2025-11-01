@@ -1,0 +1,70 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - img "PhonoLex Logo" [ref=e6]
+        - generic [ref=e7]: PhonoLex
+        - generic [ref=e9]: v2.1.0-beta
+      - generic [ref=e10]:
+        - button "Info" [ref=e11] [cursor=pointer]:
+          - img [ref=e13]
+          - text: Info
+        - button "Settings" [ref=e15] [cursor=pointer]:
+          - img [ref=e17]
+          - text: Settings
+        - button "Contact" [ref=e19] [cursor=pointer]:
+          - img [ref=e21]
+          - text: Contact
+  - main [ref=e23]:
+    - generic [ref=e24]:
+      - generic [ref=e26] [cursor=pointer]:
+        - img [ref=e29]
+        - generic [ref=e31]:
+          - generic [ref=e32]: Custom Word List Builder
+          - paragraph [ref=e33]: Pattern matching with phonological, lexical, semantic, and affective property filters
+        - button "show more" [ref=e35]:
+          - img [ref=e36]
+      - generic [ref=e39] [cursor=pointer]:
+        - img [ref=e42]
+        - generic [ref=e44]:
+          - generic [ref=e45]: Minimal Pairs
+          - paragraph [ref=e46]: Word pairs differing by single phoneme for contrastive analysis
+        - button "show more" [ref=e48]:
+          - img [ref=e49]
+      - generic [ref=e52] [cursor=pointer]:
+        - img [ref=e55]
+        - generic [ref=e57]:
+          - generic [ref=e58]: Rhyme Sets
+          - paragraph [ref=e59]: Generate rhyming word sets with configurable match criteria
+        - button "show more" [ref=e61]:
+          - img [ref=e62]
+      - generic [ref=e65] [cursor=pointer]:
+        - img [ref=e68]
+        - generic [ref=e70]:
+          - generic [ref=e71]: Phoneme Comparison
+          - paragraph [ref=e72]: Compare distinctive features and compute phonological distance
+        - button "show more" [ref=e74]:
+          - img [ref=e75]
+      - generic [ref=e78] [cursor=pointer]:
+        - img [ref=e81]
+        - generic [ref=e83]:
+          - generic [ref=e84]: Search
+          - paragraph [ref=e85]: Lookup words, phonemes, or compute phonological similarity
+        - button "show more" [ref=e87]:
+          - img [ref=e88]
+    - contentinfo [ref=e90]:
+      - paragraph [ref=e91]: © 2025 Just Semantics. Provided as-is without warranty.
+      - paragraph [ref=e92]:
+        - text: Licensed under CC BY-SA 3.0 •
+        - link "Privacy" [ref=e93] [cursor=pointer]:
+          - /url: /privacy
+        - text: •
+        - link "Terms" [ref=e94] [cursor=pointer]:
+          - /url: /terms
+        - text: •
+        - link "GitHub" [ref=e95] [cursor=pointer]:
+          - /url: https://github.com/Just-Semantics/PhonoLex
+```

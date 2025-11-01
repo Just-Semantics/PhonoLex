@@ -172,7 +172,7 @@ const Builder: React.FC = () => {
   };
 
   // Update pattern
-  const updatePattern = (index: number, field: keyof Pattern, value: any) => {
+  const updatePattern = (index: number, field: keyof Pattern, value: string | boolean) => {
     const updated = [...patterns];
     updated[index] = { ...updated[index], [field]: value };
     setPatterns(updated);
@@ -227,7 +227,7 @@ const Builder: React.FC = () => {
     try {
       // Only include filter values if they differ from the full DB range
       // This allows words with null values to be included when filters are at defaults
-      const filtersObj: any = {};
+      const filtersObj: Record<string, number> = {};
 
       if (dbRanges) {
         // Syllables and phonemes (required properties - always filter)

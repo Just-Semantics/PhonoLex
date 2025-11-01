@@ -1,0 +1,157 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - img "PhonoLex Logo" [ref=e6]
+        - generic [ref=e7]: PhonoLex
+        - generic [ref=e9]: v2.1.0-beta
+      - generic [ref=e10]:
+        - button "Info" [ref=e11] [cursor=pointer]:
+          - img [ref=e13]
+          - text: Info
+        - button "Settings" [ref=e15] [cursor=pointer]:
+          - img [ref=e17]
+          - text: Settings
+        - button "Contact" [ref=e19] [cursor=pointer]:
+          - img [ref=e21]
+          - text: Contact
+  - main [ref=e23]:
+    - generic [ref=e24]:
+      - generic [ref=e25]:
+        - generic [ref=e26] [cursor=pointer]:
+          - img [ref=e29]
+          - generic [ref=e31]:
+            - generic [ref=e32]: Custom Word List Builder
+            - paragraph [ref=e33]: Pattern matching with phonological, lexical, semantic, and affective property filters
+          - button "show more" [expanded] [ref=e35]:
+            - img [ref=e36]
+        - generic [ref=e43]:
+          - generic [ref=e44]:
+            - generic [ref=e45]:
+              - button "Patterns" [expanded] [ref=e46] [cursor=pointer]:
+                - heading "Patterns" [level=6] [ref=e48]
+                - img [ref=e50]
+              - region [ref=e55]:
+                - generic [ref=e57]:
+                  - paragraph [ref=e58]: "AND logic: all patterns must match. Space-separate phonemes (e.g., \"s t\" for /st/)"
+                  - generic [ref=e62]:
+                    - generic [ref=e63]:
+                      - generic [ref=e64]: Type
+                      - generic [ref=e65]:
+                        - combobox [ref=e66] [cursor=pointer]: Starts With
+                        - textbox: STARTS_WITH
+                        - img
+                        - group:
+                          - generic: Type
+                    - generic [ref=e68]:
+                      - generic [ref=e69]:
+                        - generic: Phoneme(s)
+                        - generic [ref=e70]:
+                          - textbox "Phoneme(s)" [ref=e71]:
+                            - /placeholder: e.g., k, t, s
+                          - button [ref=e72] [cursor=pointer]:
+                            - img [ref=e73]
+                          - group:
+                            - generic: Phoneme(s)
+                      - button [disabled]:
+                        - img
+                  - button "Add Pattern" [ref=e75] [cursor=pointer]:
+                    - img [ref=e77]
+                    - text: Add Pattern
+            - button "Property Filters Phonological, lexical, semantic, and affective properties" [ref=e80] [cursor=pointer]:
+              - generic [ref=e82]:
+                - heading "Property Filters" [level=6] [ref=e83]
+                - text: Phonological, lexical, semantic, and affective properties
+              - img [ref=e85]
+            - generic [ref=e87]:
+              - button "Exclusions Exclude words containing specific phonemes" [ref=e88] [cursor=pointer]:
+                - generic [ref=e90]:
+                  - heading "Exclusions" [level=6] [ref=e91]
+                  - text: Exclude words containing specific phonemes
+                - img [ref=e93]
+              - generic: Phoneme to exclude
+          - generic [ref=e95]:
+            - button "Build Word List" [disabled]:
+              - generic:
+                - img
+              - text: Build Word List
+            - button "Clear" [ref=e96] [cursor=pointer]:
+              - img [ref=e98]
+              - text: Clear
+      - generic [ref=e100]:
+        - generic [ref=e101] [cursor=pointer]:
+          - img [ref=e104]
+          - generic [ref=e106]:
+            - generic [ref=e107]: Minimal Pairs
+            - paragraph [ref=e108]: Word pairs differing by single phoneme for contrastive analysis
+          - button "show more" [expanded] [ref=e110]:
+            - img [ref=e111]
+        - generic [ref=e119]:
+          - generic [ref=e121]:
+            - generic: Phoneme 1 (IPA)
+            - generic [ref=e122]:
+              - textbox "Phoneme 1 (IPA)" [ref=e123]:
+                - /placeholder: e.g., t, k, s
+              - button "Open phoneme picker" [ref=e124] [cursor=pointer]:
+                - img [ref=e125]
+              - group:
+                - generic: Phoneme 1 (IPA)
+          - generic [ref=e128]:
+            - generic: Phoneme 2 (IPA)
+            - generic [ref=e129]:
+              - textbox "Phoneme 2 (IPA)" [ref=e130]:
+                - /placeholder: e.g., d, g, z
+              - button "Open phoneme picker" [ref=e131] [cursor=pointer]:
+                - img [ref=e132]
+              - group:
+                - generic: Phoneme 2 (IPA)
+          - generic [ref=e134]:
+            - generic [ref=e135]: Position in Word
+            - generic [ref=e136]:
+              - combobox [ref=e137] [cursor=pointer]: Any Position
+              - textbox: any
+              - img
+              - group:
+                - generic: Position in Word
+          - generic [ref=e138]:
+            - button "Clear Filters" [ref=e139] [cursor=pointer]: Clear Filters
+            - button "Generate" [ref=e140] [cursor=pointer]:
+              - img [ref=e142]
+              - text: Generate
+      - generic [ref=e145] [cursor=pointer]:
+        - img [ref=e148]
+        - generic [ref=e150]:
+          - generic [ref=e151]: Rhyme Sets
+          - paragraph [ref=e152]: Generate rhyming word sets with configurable match criteria
+        - button "show more" [ref=e154]:
+          - img [ref=e155]
+      - generic [ref=e158] [cursor=pointer]:
+        - img [ref=e161]
+        - generic [ref=e163]:
+          - generic [ref=e164]: Phoneme Comparison
+          - paragraph [ref=e165]: Compare distinctive features and compute phonological distance
+        - button "show more" [ref=e167]:
+          - img [ref=e168]
+      - generic [ref=e171] [cursor=pointer]:
+        - img [ref=e174]
+        - generic [ref=e176]:
+          - generic [ref=e177]: Search
+          - paragraph [ref=e178]: Lookup words, phonemes, or compute phonological similarity
+        - button "show more" [ref=e180]:
+          - img [ref=e181]
+    - contentinfo [ref=e183]:
+      - paragraph [ref=e184]: © 2025 Just Semantics. Provided as-is without warranty.
+      - paragraph [ref=e185]:
+        - text: Licensed under CC BY-SA 3.0 •
+        - link "Privacy" [ref=e186] [cursor=pointer]:
+          - /url: /privacy
+        - text: •
+        - link "Terms" [ref=e187] [cursor=pointer]:
+          - /url: /terms
+        - text: •
+        - link "GitHub" [ref=e188] [cursor=pointer]:
+          - /url: https://github.com/Just-Semantics/PhonoLex
+```

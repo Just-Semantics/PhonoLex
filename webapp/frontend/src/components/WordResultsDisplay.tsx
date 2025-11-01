@@ -122,7 +122,6 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
         ipa: `${pair.word1.ipa?.replace(/\n/g, ' ')} / ${pair.word2.ipa?.replace(/\n/g, ' ')}`,
         wcm_score: avg(pair.word1.wcm_score, pair.word2.wcm_score),
         syllable_count: avg(pair.word1.syllable_count, pair.word2.syllable_count),
-        complexity: pair.word1.complexity || pair.word2.complexity,
         frequency: avg(pair.word1.frequency, pair.word2.frequency),
         aoa: avg(pair.word1.aoa, pair.word2.aoa),
         imageability: avg(pair.word1.imageability, pair.word2.imageability),

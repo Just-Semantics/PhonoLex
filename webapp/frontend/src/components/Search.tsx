@@ -415,7 +415,7 @@ const Search: React.FC = () => {
               <Typography variant="caption" color="text.secondary">
                 Complexity
               </Typography>
-              <Typography variant="h6">{wordResult.complexity || 'N/A'}</Typography>
+              <Typography variant="h6">N/A</Typography>
             </Grid>
             <Grid item xs={6} sm={3}>
               <Typography variant="caption" color="text.secondary">

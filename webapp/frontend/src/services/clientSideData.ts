@@ -19,6 +19,7 @@ import type {
   RhymeResult,
   StatsResponse,
 } from '../types/phonology';
+import { tokenizePhonemes as tokenize, containsSequence } from '../utils/phonemeUtils';
 
 // ============================================================================
 // Types
@@ -208,7 +209,6 @@ class ClientSideDataService {
       if (request.word_length && metadata.word_length !== request.word_length) matches = false;
 
       // Complexity category
-      if (request.complexity && metadata.complexity !== request.complexity) matches = false;
 
       // WCM
       if (request.min_wcm !== undefined && (metadata.wcm_score === null || metadata.wcm_score < request.min_wcm)) matches = false;
@@ -268,11 +268,7 @@ class ClientSideDataService {
    * REQUIRES space-separated input (e.g., "k æ t" or "dʒ ʌ dʒ")
    */
   private tokenizePhonemes(input: string): string[] {
-    const trimmed = input.trim();
-    if (!trimmed) return [];
-
-    // Space-separated tokens only - no greedy matching
-    return trimmed.split(/\s+/).filter(p => p.length > 0);
+    return tokenize(input);
   }
 
   /**
@@ -308,16 +304,6 @@ class ClientSideDataService {
       // Check contains (support both space-separated and concatenated)
       if (request.contains) {
         const targetPhonemes = this.tokenizePhonemes(request.contains);
-
-        // Helper to check if sequence exists in array
-        const containsSequence = (haystack: string[], needle: string[]): boolean => {
-          for (let i = 0; i <= haystack.length - needle.length; i++) {
-            if (JSON.stringify(haystack.slice(i, i + needle.length)) === JSON.stringify(needle)) {
-              return true;
-            }
-          }
-          return false;
-        };
 
         if (request.contains_medial_only) {
           // Exclude first and last positions
@@ -473,8 +459,20 @@ class ClientSideDataService {
    * Compare two phonemes and compute feature differences
    */
   async comparePhonemes(ipa1: string, ipa2: string): Promise<{
-    phoneme1: any;
-    phoneme2: any;
+    phoneme1: {
+      phoneme_id: number;
+      ipa: string;
+      segment_class: 'vowel' | 'consonant';
+      features: Record<string, string>;
+      has_trajectory: boolean;
+    };
+    phoneme2: {
+      phoneme_id: number;
+      ipa: string;
+      segment_class: 'vowel' | 'consonant';
+      features: Record<string, string>;
+      has_trajectory: boolean;
+    };
     similarity_score: number;
     different_features: Record<string, [string, string]>;
     shared_features: Record<string, string>;
@@ -1142,7 +1140,6 @@ class ClientSideDataService {
       wcm_score: metadata.wcm_score,
       msh_stage: metadata.msh_stage,
       word_length: this.categorizeWordLength(metadata.phoneme_count),
-      complexity: this.categorizeComplexity(metadata.wcm_score),
       frequency: metadata.frequency,
       log_frequency: metadata.log_frequency,
       aoa: metadata.aoa,
@@ -1167,12 +1164,6 @@ class ClientSideDataService {
   /**
    * Categorize complexity
    */
-  private categorizeComplexity(wcm: number | null): 'low' | 'medium' | 'high' {
-    if (wcm === null) return 'medium';
-    if (wcm <= 2) return 'low';
-    if (wcm <= 5) return 'medium';
-    return 'high';
-  }
 
   /**
    * Get dequantized embeddings for a word

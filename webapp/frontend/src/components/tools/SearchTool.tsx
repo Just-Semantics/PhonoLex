@@ -369,7 +369,7 @@ const SearchTool: React.FC = () => {
                 </Grid>
                 <Grid item xs={6} sm={3}>
                   <Typography variant="caption" color="text.secondary">Complexity</Typography>
-                  <Chip label={wordResult.complexity || 'N/A'} size="small" />
+                  <Chip label="N/A" size="small" />
                 </Grid>
               </Grid>
             </Box>

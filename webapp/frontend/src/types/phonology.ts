@@ -70,7 +70,6 @@ export interface Word {
 
   // Categorical properties
   word_length: 'short' | 'medium' | 'long' | null;
-  complexity: 'low' | 'medium' | 'high' | null;
 
   // Psycholinguistic properties
   frequency: number | null;
@@ -120,7 +119,6 @@ export interface WordFilterRequest {
   min_phonemes?: number;
   max_phonemes?: number;
   word_length?: 'short' | 'medium' | 'long';
-  complexity?: 'low' | 'medium' | 'high';
 
   // Psycholinguistic properties
   min_frequency?: number;
@@ -156,10 +154,9 @@ export interface PatternSearchRequest {
   contains?: string;
   contains_medial_only?: boolean;  // For CONTAINS: exclude word edges
   word_length?: 'short' | 'medium' | 'long';
-  complexity?: 'low' | 'medium' | 'high';
   min_syllables?: number;
   max_syllables?: number;
-  filters?: Record<string, any>;  // Additional filters
+  filters?: WordFilterRequest;  // Additional filters
   limit?: number;
 }
 
@@ -201,7 +198,7 @@ export interface NeighborMetadata {
   phoneme_diff: string[];
 }
 
-export type EdgeMetadata = MinimalPairMetadata | RhymeMetadata | NeighborMetadata | Record<string, any>;
+export type EdgeMetadata = MinimalPairMetadata | RhymeMetadata | NeighborMetadata | Record<string, unknown>;
 
 export interface WordEdge {
   word1: string;
@@ -260,7 +257,6 @@ export interface SimilaritySearchRequest {
   limit?: number;
   filters?: {
     max_wcm?: number;
-    complexity?: 'low' | 'medium' | 'high';
     word_length?: 'short' | 'medium' | 'long';
   };
 }

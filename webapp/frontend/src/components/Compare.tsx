@@ -79,6 +79,12 @@ const Compare: React.FC = () => {
         api.getPhoneme(phoneme2Input.trim()),
       ]);
 
+      if (!p1Raw || !p2Raw) {
+        setError('One or both phonemes not found');
+        setLoading(false);
+        return;
+      }
+
       // Convert to PhonemeDetail format
       const p1: Phoneme = {
         phoneme_id: 0,
@@ -101,7 +107,7 @@ const Compare: React.FC = () => {
 
       // Get comparison
       const comp = await api.comparePhonemes(phoneme1Input.trim(), phoneme2Input.trim());
-      setComparison(comp);
+      setComparison(comp as unknown as PhonemeComparison);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Comparison failed');
       setPhoneme1(null);
