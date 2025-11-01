@@ -91,22 +91,7 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
                 flexShrink: 0,
               }}
             />
-            <Box
-              component="span"
-              sx={{
-                display: { xs: 'none', sm: 'inline' },
-              }}
-            >
-              PhonoLex
-            </Box>
-            <Box
-              component="span"
-              sx={{
-                display: { xs: 'inline', sm: 'none' },
-              }}
-            >
-              Phono
-            </Box>
+            PhonoLex
             <Chip
               label="v2.1.0-beta"
               size="small"
