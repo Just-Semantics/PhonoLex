@@ -168,12 +168,16 @@ See [docs/EMBEDDINGS_ARCHITECTURE.md](docs/EMBEDDINGS_ARCHITECTURE.md) for compl
 After building embeddings, export data for the web app:
 
 ```bash
-# Export all data to webapp/frontend/public/data/
-python scripts/export_clientside_data.py
+# Export phoneme features (required for phoneme comparison)
+python scripts/export_phoneme_data.py
+# Output: webapp/frontend/public/data/phonemes.json (~37 KB)
 
+# Export all word data to webapp/frontend/public/data/
+python scripts/export_clientside_data.py
 # This creates:
-# - words.json (~88 MB, gzips to ~45 MB)
-# - phonemes.json (if needed)
+# - word_metadata.json - Word properties and psycholinguistic norms
+# - embeddings_quantized.json - Int8 quantized syllable embeddings
+# - minimal_pairs.json - Precomputed minimal pairs
 # - Other supporting data files
 ```
 

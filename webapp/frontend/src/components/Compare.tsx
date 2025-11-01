@@ -369,10 +369,10 @@ const Compare: React.FC = () => {
                   Differing Features:
                 </Typography>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                  {Object.entries(comparison.different_features).map(([feature, [val1, val2]]) => (
+                  {Object.entries(comparison.different_features).map(([feature]) => (
                     <Chip
                       key={feature}
-                      label={`${feature}: ${val1} ≠ ${val2}`}
+                      label={feature}
                       size="small"
                       color="warning"
                     />
@@ -387,10 +387,10 @@ const Compare: React.FC = () => {
                   Shared Features:
                 </Typography>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                  {Object.entries(comparison.shared_features).map(([feature, value]) => (
+                  {Object.entries(comparison.shared_features).map(([feature]) => (
                     <Chip
                       key={feature}
-                      label={`${feature}: ${value}`}
+                      label={feature}
                       size="small"
                       color="success"
                       variant="outlined"
