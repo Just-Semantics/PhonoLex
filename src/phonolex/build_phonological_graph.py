@@ -27,22 +27,23 @@ Query Functions (compute edges on-demand):
 For optimization details, see: IMPLEMENTATION_COMPLETE.md
 """
 
-import networkx as nx
-import pandas as pd
-import numpy as np
-import torch
-import pickle
 import json
-from pathlib import Path
-from typing import Dict, List, Tuple, Optional
+import pickle
 import sys
+from pathlib import Path
+from typing import Optional
+
+import networkx as nx
+import numpy as np
+import pandas as pd
+import torch
 from tqdm import tqdm
 
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 from src.phonolex.embeddings.english_data_loader import EnglishPhonologyLoader
-from src.phonolex.utils.syllabification import syllabify, Syllable
+from src.phonolex.utils.syllabification import Syllable, syllabify
 
 # === OPTIMIZATION: Numba JIT for 43x speedup on Levenshtein ===
 try:
@@ -277,7 +278,7 @@ class PhonologicalGraph:
 
             self.graph.nodes[word]['wcm_score'] = score
 
-        print(f"✓ Computed WCM scores")
+        print("✓ Computed WCM scores")
         print(f"  Mean WCM: {np.mean([self.graph.nodes[w]['wcm_score'] for w in self.graph.nodes()]):.2f}")
         print(f"  Range: {min([self.graph.nodes[w]['wcm_score'] for w in self.graph.nodes()])}-{max([self.graph.nodes[w]['wcm_score'] for w in self.graph.nodes()])}")
 
@@ -334,7 +335,7 @@ class PhonologicalGraph:
 
             self.graph.nodes[word]['msh_stage'] = stage
 
-        print(f"✓ Computed MSH stages")
+        print("✓ Computed MSH stages")
         stage_counts = {}
         for w in self.graph.nodes():
             stage = self.graph.nodes[w]['msh_stage']
@@ -347,7 +348,7 @@ class PhonologicalGraph:
     # QUERY FUNCTIONS - Compute edges on-demand to avoid dense graphs
     # ==========================================================================
 
-    def find_minimal_pairs(self, word: str, max_results: int = 100) -> List[Tuple[str, Dict]]:
+    def find_minimal_pairs(self, word: str, max_results: int = 100) -> list[tuple[str, dict]]:
         """
         Find minimal pairs for a given word (words differing by exactly 1 phoneme).
 
@@ -401,8 +402,8 @@ class PhonologicalGraph:
 
         return minimal_pairs
 
-    def find_maximal_oppositions(self, word: str, excluded_phonemes: List[str],
-                                  max_results: int = 50) -> List[Tuple[str, Dict]]:
+    def find_maximal_oppositions(self, word: str, excluded_phonemes: list[str],
+                                  max_results: int = 50) -> list[tuple[str, dict]]:
         """
         Find maximal opposition pairs for treatment planning.
 
@@ -467,7 +468,7 @@ class PhonologicalGraph:
         return maximal_pairs[:max_results]
 
     def find_phoneme_neighbors(self, word: str, max_edit_distance: int = 1,
-                               max_results: int = 100) -> List[Tuple[str, Dict]]:
+                               max_results: int = 100) -> list[tuple[str, dict]]:
         """
         Find phonological neighbors within edit distance threshold.
 
@@ -519,7 +520,7 @@ class PhonologicalGraph:
         return neighbors
 
     @staticmethod
-    def _levenshtein_distance(seq1: List, seq2: List) -> int:
+    def _levenshtein_distance(seq1: list, seq2: list) -> int:
         """
         Calculate Levenshtein (edit) distance between two sequences.
 
@@ -558,7 +559,7 @@ class PhonologicalGraph:
 
     def find_rhymes(self, word: str, rhyme_type: str = 'last_syllable',
                     perfect_only: bool = False, threshold: float = 0.7,
-                    max_results: int = 100) -> List[Tuple[str, Dict]]:
+                    max_results: int = 100) -> list[tuple[str, dict]]:
         """
         Find rhyming words using syllable structure and embedding similarity.
 
@@ -697,7 +698,10 @@ class PhonologicalGraph:
         self.max_len = checkpoint['max_length']
 
         # Import model class and similarity function from training script
-        from train_hierarchical_final import HierarchicalPhonemeEncoder, hierarchical_similarity
+        from train_hierarchical_final import (
+            HierarchicalPhonemeEncoder,
+            hierarchical_similarity,
+        )
         self.hierarchical_similarity = hierarchical_similarity
 
         # Load model
@@ -716,7 +720,7 @@ class PhonologicalGraph:
         print(f"✓ Loaded model from {model_path}")
         print(f"  Device: {self.device}")
         print(f"  Vocab size: {len(self.phoneme_to_id)}")
-        print(f"  Embedding dimension: 128")
+        print("  Embedding dimension: 128")
 
     def get_word_embedding(self, word: str) -> Optional[list]:
         """
@@ -765,7 +769,6 @@ class PhonologicalGraph:
 
         # === CRITICAL FIX: Aggregate phonemes into syllables ===
         from train_hierarchical_final import get_syllable_embedding
-        from src.phonolex.utils.syllabification import Syllable
 
         syllable_embeddings = []
         phoneme_idx = 0
@@ -803,7 +806,7 @@ class PhonologicalGraph:
 
     def find_similar_words_by_embedding(self, word: str, threshold: float = 0.7,
                                         max_results: int = 50,
-                                        comparison_sample_size: Optional[int] = None) -> List[Tuple[str, Dict]]:
+                                        comparison_sample_size: Optional[int] = None) -> list[tuple[str, dict]]:
         """
         Find phonologically similar words using hierarchical similarity.
 
@@ -901,7 +904,7 @@ class PhonologicalGraph:
         print(f"  ✓ Cached {len(embedding_cache):,} embeddings\n")
 
         # Now do comparisons using cached embeddings
-        print(f"  Step 2: Computing pairwise similarities...")
+        print("  Step 2: Computing pairwise similarities...")
         edges_added = 0
 
         for word in tqdm(words, desc="Finding similar words"):
@@ -1093,17 +1096,17 @@ def main(add_embedding_edges: bool = False):
     print("="*80)
     print(f"\n✓ {graph.graph.number_of_nodes():,} nodes with rich properties")
     print(f"✓ {graph.graph.number_of_edges():,} edges")
-    print(f"\nAvailable query functions:")
+    print("\nAvailable query functions:")
     print("  - find_minimal_pairs(word): Find words differing by 1 phoneme")
     print("  - find_maximal_oppositions(word, excluded_phonemes): For treatment planning")
     print("  - find_phoneme_neighbors(word, max_edit_distance): Phonological neighbors")
     if graph.model is not None:
         print("  - find_similar_words_by_embedding(word, threshold): Fuzzy phonological similarity")
-    print(f"\nPerformance improvements:")
-    print(f"  - Syllable similarity: 10K → 67K ops/sec (6.7x faster)")
-    print(f"  - Phoneme Levenshtein: 143K → 553K ops/sec (43x faster)")
-    print(f"  - Overall: ~100x faster graph building!")
-    print(f"\nNext steps:")
+    print("\nPerformance improvements:")
+    print("  - Syllable similarity: 10K → 67K ops/sec (6.7x faster)")
+    print("  - Phoneme Levenshtein: 143K → 553K ops/sec (43x faster)")
+    print("  - Overall: ~100x faster graph building!")
+    print("\nNext steps:")
     print("  1. Add syllable similarity queries for rhyme detection")
     print("  2. Build clinical query interface combining symbolic + embedding approaches")
     print("  3. Expand embedding edges to full vocabulary or clinical subset")

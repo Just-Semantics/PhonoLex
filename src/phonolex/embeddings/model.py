@@ -14,11 +14,12 @@ Objectives:
 Like Word2Vec/BERT but for phonemes.
 """
 
+from typing import Optional
+
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import numpy as np
-from typing import Dict, List, Tuple, Optional
 
 
 class PhonemeEmbedding(nn.Module):
@@ -76,7 +77,7 @@ class PhonemeEmbedding(nn.Module):
         # Set as initial embeddings
         self.embeddings.weight.data.copy_(projected)
 
-        print(f"  ✓ Initialized embeddings from Phoible features")
+        print("  ✓ Initialized embeddings from Phoible features")
         print(f"    {feature_matrix.shape[0]} phonemes × {self.embedding_dim} dims")
 
     def forward(self, phoneme_ids: torch.Tensor) -> torch.Tensor:
@@ -407,9 +408,9 @@ class MultiTaskPhonemeEmbedding(nn.Module):
 
     def compute_loss(
         self,
-        batch: Dict[str, torch.Tensor],
-        task_weights: Optional[Dict[str, float]] = None
-    ) -> Tuple[torch.Tensor, Dict[str, float]]:
+        batch: dict[str, torch.Tensor],
+        task_weights: Optional[dict[str, float]] = None
+    ) -> tuple[torch.Tensor, dict[str, float]]:
         """
         Compute multi-task loss
 
@@ -518,7 +519,7 @@ def create_model(
     total_params = sum(p.numel() for p in model.parameters())
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
 
-    print(f"\n  ✓ Model created")
+    print("\n  ✓ Model created")
     print(f"    Total parameters: {total_params:,}")
     print(f"    Trainable parameters: {trainable_params:,}")
     print(f"    Embedding dimension: {embedding_dim}")
@@ -560,15 +561,15 @@ if __name__ == '__main__':
 
     loss, loss_dict = model.compute_loss(batch)
 
-    print(f"\n✓ Forward pass successful")
+    print("\n✓ Forward pass successful")
     print(f"  Total loss: {loss.item():.4f}")
-    print(f"\n  Individual losses:")
+    print("\n  Individual losses:")
     for task, task_loss in loss_dict.items():
         print(f"    {task}: {task_loss:.4f}")
 
     # Test embeddings
     test_ids = torch.tensor([0, 1, 2, 3, 4])
     embeddings = model.get_embeddings(test_ids)
-    print(f"\n✓ Embedding extraction successful")
+    print("\n✓ Embedding extraction successful")
     print(f"  Shape: {embeddings.shape}")
     print(f"  Sample: {embeddings[0][:5]}...")

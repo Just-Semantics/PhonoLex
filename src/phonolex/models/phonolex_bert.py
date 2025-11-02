@@ -10,17 +10,16 @@ Features:
 Architecture: Phoneme → Contextual Embedding → Attention Pool → Word Embedding
 """
 
+import math
+import random
+import sys
+from pathlib import Path
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.utils.data import Dataset, DataLoader
-from pathlib import Path
-import json
+from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
-import sys
-import math
-import random
-import numpy as np
 
 sys.path.insert(0, str(Path(__file__).parent))
 from src.phonolex.embeddings.english_data_loader import EnglishPhonologyLoader
@@ -62,7 +61,7 @@ class PhonologyDataset(Dataset):
         self.max_length = max(len(phonemes) for phonemes in loader.lexicon.values()) + 2
 
         print(f"\n{'='*70}")
-        print(f"PHONOLOGY DATASET")
+        print("PHONOLOGY DATASET")
         print(f"{'='*70}")
         print(f"Vocabulary: {len(self.word_to_id):,} words")
         print(f"Phonemes: {len(self.phoneme_to_id)} (including special tokens)")
@@ -181,11 +180,11 @@ class PhonologyDataset(Dataset):
         pairs = []
         labels = []
 
-        for w1, w2, pair_type in positive_batch:
+        for w1, w2, _pair_type in positive_batch:
             pairs.append((self.word_to_id[w1], self.word_to_id[w2]))
             labels.append(1.0)  # Positive
 
-        for w1, w2, pair_type in negative_batch:
+        for w1, w2, _pair_type in negative_batch:
             pairs.append((self.word_to_id[w1], self.word_to_id[w2]))
             labels.append(0.0)  # Negative
 
@@ -357,7 +356,7 @@ def train():
     # Configuration
     device = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
     print(f"\n{'='*70}")
-    print(f"TRAINING CONFIGURATION")
+    print("TRAINING CONFIGURATION")
     print(f"{'='*70}")
     print(f"Device: {device}")
 
@@ -388,7 +387,7 @@ def train():
     # Training loop
     num_epochs = 15
     print(f"\n{'='*70}")
-    print(f"TRAINING")
+    print("TRAINING")
     print(f"{'='*70}")
     print(f"Epochs: {num_epochs}")
     print(f"Batch size: {dataloader.batch_size}")

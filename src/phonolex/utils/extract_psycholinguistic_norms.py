@@ -11,12 +11,12 @@ relevant for phonological treatment word selection:
 - And more...
 """
 
-import pickle
 import json
-import pandas as pd
-from pathlib import Path
-from typing import Dict, List, Optional
+import pickle
 import sys
+from pathlib import Path
+
+import pandas as pd
 
 # Add project root to path
 project_root = Path(__file__).parent.parent.parent.parent
@@ -39,7 +39,7 @@ def load_cognitive_graph(graph_path: str = None) -> object:
     if isinstance(graph, dict):
         if 'graph' in graph:
             graph = graph['graph']
-            print(f"Extracted NetworkX graph from dict")
+            print("Extracted NetworkX graph from dict")
         else:
             # It's just a dict representation, convert to what we need
             print(f"Graph is a dict with keys: {list(graph.keys())[:10]}...")
@@ -56,7 +56,7 @@ def load_metadata(metadata_path: str = None) -> dict:
     if metadata_path is None:
         metadata_path = project_root / "data" / "norms" / "cognitive_graph_v7.metadata.json"
 
-    with open(metadata_path, 'r') as f:
+    with open(metadata_path) as f:
         metadata = json.load(f)
 
     return metadata
@@ -145,7 +145,7 @@ def extract_norms_for_phonolex(graph) -> pd.DataFrame:
     return df
 
 
-def find_words_with_all_features(df: pd.DataFrame, required_features: List[str]) -> pd.DataFrame:
+def find_words_with_all_features(df: pd.DataFrame, required_features: list[str]) -> pd.DataFrame:
     """Find words that have all specified features (no NaN values)."""
     subset = df[['word'] + required_features].copy()
     complete_rows = subset.dropna()

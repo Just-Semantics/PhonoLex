@@ -115,17 +115,50 @@ class ClientSideDataService {
         fetch('/data/phonemes.json.gz'),
       ]);
 
-      if (!metadataRes.ok || !embeddingsRes.ok || !arpaRes.ok || !phonemesRes.ok) {
-        throw new Error('Failed to load data files');
+      // Check each response individually for better error messages
+      if (!metadataRes.ok) {
+        throw new Error(`Failed to load word_metadata.json.gz: ${metadataRes.status} ${metadataRes.statusText}`);
+      }
+      if (!embeddingsRes.ok) {
+        throw new Error(`Failed to load embeddings_quantized.json.gz: ${embeddingsRes.status} ${embeddingsRes.statusText}`);
+      }
+      if (!arpaRes.ok) {
+        throw new Error(`Failed to load arpa_to_ipa.json.gz: ${arpaRes.status} ${arpaRes.statusText}`);
+      }
+      if (!phonemesRes.ok) {
+        throw new Error(`Failed to load phonemes.json.gz: ${phonemesRes.status} ${phonemesRes.statusText}`);
       }
 
-      // Parse JSON
-      const [metadataJson, embeddingsJson, _arpaJson, phonemesJson] = await Promise.all([
-        metadataRes.json(),
-        embeddingsRes.json(),
-        arpaRes.json(),
-        phonemesRes.json(),
-      ]);
+      // Parse JSON with individual error handling
+      let metadataJson: any;
+      let embeddingsJson: any;
+      let _arpaJson: any;
+      let phonemesJson: any;
+
+      try {
+        metadataJson = await metadataRes.json();
+      } catch (error) {
+        throw new Error(`Failed to parse word_metadata.json.gz: ${error instanceof Error ? error.message : String(error)}`);
+      }
+
+      try {
+        embeddingsJson = await embeddingsRes.json();
+      } catch (error) {
+        throw new Error(`Failed to parse embeddings_quantized.json.gz: ${error instanceof Error ? error.message : String(error)}`);
+      }
+
+      try {
+        _arpaJson = await arpaRes.json();
+        void _arpaJson; // Loaded but not used (available in other data structures if needed)
+      } catch (error) {
+        throw new Error(`Failed to parse arpa_to_ipa.json.gz: ${error instanceof Error ? error.message : String(error)}`);
+      }
+
+      try {
+        phonemesJson = await phonemesRes.json();
+      } catch (error) {
+        throw new Error(`Failed to parse phonemes.json.gz: ${error instanceof Error ? error.message : String(error)}`);
+      }
 
       // Store metadata in Map for fast lookup
       Object.entries(metadataJson as Record<string, WordMetadata>).forEach(
@@ -496,10 +529,10 @@ class ClientSideDataService {
       }
     }
 
-    // Calculate similarity score (feature distance / total features)
+    // Calculate similarity score (1 - feature distance / total features)
     const totalFeatures = allFeatures.size;
     const differingCount = Object.keys(different).length;
-    const similarity_score = totalFeatures > 0 ? differingCount / totalFeatures : 0;
+    const similarity_score = totalFeatures > 0 ? 1 - (differingCount / totalFeatures) : 1;
 
     return {
       phoneme1: {
@@ -837,7 +870,7 @@ class ClientSideDataService {
       }
 
       // Calculate hierarchical soft Levenshtein similarity
-      const similarity = this._hierarchicalSoftLevenshtein(targetEmbeddings, candidateEmbeddings);
+      const similarity = this.computeSoftLevenshteinSimilarity(targetEmbeddings, candidateEmbeddings);
       if (similarity < threshold) {
         continue;
       }
@@ -901,83 +934,6 @@ class ClientSideDataService {
     }));
   }
 
-  /**
-   * Calculate hierarchical soft Levenshtein similarity between syllable sequences
-   * Implementation from scripts/build_layer4_syllable_embeddings.py
-   */
-  private _hierarchicalSoftLevenshtein(syllables1: number[][], syllables2: number[][]): number {
-    const len1 = syllables1.length;
-    const len2 = syllables2.length;
-
-    if (len1 === 0 && len2 === 0) {
-      return 1.0;
-    }
-
-    // Pre-compute all pairwise cosine similarities (vectorized)
-    const simMatrix: number[][] = [];
-    for (let i = 0; i < len1; i++) {
-      simMatrix[i] = [];
-      for (let j = 0; j < len2; j++) {
-        simMatrix[i][j] = this._cosineSimilarity(syllables1[i], syllables2[j]);
-      }
-    }
-
-    // Dynamic programming for edit distance with soft costs
-    const dp: number[][] = [];
-    for (let i = 0; i <= len1; i++) {
-      dp[i] = [];
-      dp[i][0] = i * 1.0; // Deletion cost
-    }
-    for (let j = 0; j <= len2; j++) {
-      dp[0][j] = j * 1.0; // Insertion cost
-    }
-
-    // Fill DP table
-    for (let i = 1; i <= len1; i++) {
-      for (let j = 1; j <= len2; j++) {
-        // Match/substitute cost: 1 - similarity (0 if identical, 2 if opposite)
-        const matchCost = 1.0 - simMatrix[i - 1][j - 1];
-
-        dp[i][j] = Math.min(
-          dp[i - 1][j] + 1.0,        // Delete from s1
-          dp[i][j - 1] + 1.0,        // Insert from s2
-          dp[i - 1][j - 1] + matchCost  // Match/substitute
-        );
-      }
-    }
-
-    // Normalize to [0, 1] similarity
-    const maxLen = Math.max(len1, len2);
-    if (maxLen === 0) {
-      return 1.0;
-    }
-
-    const editDistance = dp[len1][len2];
-    const similarity = 1.0 - (editDistance / maxLen);
-    return Math.max(0.0, Math.min(1.0, similarity));
-  }
-
-  /**
-   * Calculate cosine similarity between two embedding vectors
-   */
-  private _cosineSimilarity(vec1: number[], vec2: number[]): number {
-    if (vec1.length !== vec2.length) {
-      return 0;
-    }
-
-    let dotProduct = 0;
-    let norm1 = 0;
-    let norm2 = 0;
-
-    for (let i = 0; i < vec1.length; i++) {
-      dotProduct += vec1[i] * vec2[i];
-      norm1 += vec1[i] * vec1[i];
-      norm2 += vec2[i] * vec2[i];
-    }
-
-    const magnitude = Math.sqrt(norm1) * Math.sqrt(norm2);
-    return magnitude === 0 ? 0 : dotProduct / magnitude;
-  }
 
   // ==========================================================================
   // Statistics

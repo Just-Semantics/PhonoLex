@@ -57,13 +57,16 @@ def load_word_metadata(filtered_words):
     word_metadata = {}
 
     for word in tqdm(filtered_words, desc="  Processing words"):
-        # Get CMU pronunciation
-        ipa_phones = loader.lexicon.get(word)
-        if not ipa_phones:
+        # Get CMU pronunciation with stress markers
+        phonemes_with_stress = loader.lexicon_with_stress.get(word)
+        if not phonemes_with_stress:
             continue
 
         # Get syllables
-        syllables_list = syllabify(ipa_phones)
+        syllables_list = syllabify(phonemes_with_stress)
+
+        # Also get plain IPA phonemes for metadata
+        ipa_phones = loader.lexicon.get(word, [])
         syllables_data = [
             {
                 'onset': syl.onset,

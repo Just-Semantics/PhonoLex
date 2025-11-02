@@ -9,11 +9,11 @@ Compose word embeddings from phoneme embeddings using various strategies:
 4. Attention-based
 """
 
+from typing import Optional
+
+import numpy as np
 import torch
 import torch.nn as nn
-import numpy as np
-from typing import List, Optional
-from pathlib import Path
 
 
 class WordEmbedder:
@@ -46,7 +46,7 @@ class WordEmbedder:
 
         print(f"✓ Loaded phoneme embeddings: {len(self.phoneme_to_id)} phonemes × {self.embedding_dim}d")
 
-    def phonemes_to_ids(self, phonemes: List[str]) -> List[int]:
+    def phonemes_to_ids(self, phonemes: list[str]) -> list[int]:
         """Convert phoneme sequence to IDs"""
         ids = []
         for p in phonemes:
@@ -54,7 +54,7 @@ class WordEmbedder:
                 ids.append(self.phoneme_to_id[p])
         return ids
 
-    def average_embedding(self, phonemes: List[str]) -> Optional[np.ndarray]:
+    def average_embedding(self, phonemes: list[str]) -> Optional[np.ndarray]:
         """
         Simple average of phoneme embeddings
 
@@ -75,8 +75,8 @@ class WordEmbedder:
 
     def weighted_average_embedding(
         self,
-        phonemes: List[str],
-        weights: Optional[List[float]] = None
+        phonemes: list[str],
+        weights: Optional[list[float]] = None
     ) -> Optional[np.ndarray]:
         """
         Weighted average (e.g., by stress or position)
@@ -113,7 +113,7 @@ class WordEmbedder:
 
         return weighted.numpy()
 
-    def onset_nucleus_coda_embedding(self, phonemes: List[str]) -> Optional[np.ndarray]:
+    def onset_nucleus_coda_embedding(self, phonemes: list[str]) -> Optional[np.ndarray]:
         """
         Separate embeddings for onset, nucleus (vowel), coda
 

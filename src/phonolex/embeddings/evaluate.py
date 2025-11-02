@@ -9,19 +9,16 @@ Evaluates learned embeddings on multiple tasks:
 4. Visualization (t-SNE plots)
 """
 
-import torch
-import numpy as np
-from pathlib import Path
 import json
-from typing import Dict, List, Tuple
-from sklearn.metrics import accuracy_score, f1_score
-from sklearn.manifold import TSNE
-from sklearn.cluster import KMeans
-from scipy.stats import spearmanr
-import matplotlib.pyplot as plt
+from pathlib import Path
 
+import matplotlib.pyplot as plt
+import numpy as np
+import torch
 from data_loader import PhonemeEmbeddingDataLoader
-from model import create_model, MultiTaskPhonemeEmbedding
+from model import create_model
+from scipy.stats import spearmanr
+from sklearn.manifold import TSNE
 
 
 class PhonemeEmbeddingEvaluator:
@@ -58,7 +55,7 @@ class PhonemeEmbeddingEvaluator:
         self.model.load_state_dict(checkpoint['model_state_dict'])
         self.model.eval()
 
-        print(f"  ✓ Model loaded")
+        print("  ✓ Model loaded")
         print(f"    Phonemes: {config['num_phonemes']}")
         print(f"    Embedding dim: {config['embedding_dim']}")
 
@@ -70,7 +67,7 @@ class PhonemeEmbeddingEvaluator:
 
         print(f"  ✓ Extracted {self.embeddings.shape[0]} embeddings")
 
-    def evaluate_feature_reconstruction(self) -> Dict[str, float]:
+    def evaluate_feature_reconstruction(self) -> dict[str, float]:
         """
         Evaluate how well embeddings preserve phonological features
 
@@ -110,7 +107,7 @@ class PhonemeEmbeddingEvaluator:
             'mean_correlation': float(mean_corr)
         }
 
-    def evaluate_similarity(self, num_pairs: int = 1000) -> Dict[str, float]:
+    def evaluate_similarity(self, num_pairs: int = 1000) -> dict[str, float]:
         """
         Evaluate if similar phonemes have similar embeddings
 
@@ -161,7 +158,7 @@ class PhonemeEmbeddingEvaluator:
             'p_value': float(p_value)
         }
 
-    def evaluate_natural_classes(self) -> Dict[str, float]:
+    def evaluate_natural_classes(self) -> dict[str, float]:
         """
         Evaluate if natural classes cluster together
 
@@ -177,14 +174,8 @@ class PhonemeEmbeddingEvaluator:
         # Define natural classes based on features
         # For simplicity, use binary features: voiced, consonantal, sonorant
 
-        classes = {
-            'voiced_consonants': [],
-            'voiceless_consonants': [],
-            'sonorants': [],
-            'obstruents': []
-        }
 
-        for phoneme, idx in self.data_loader.phoneme_to_id.items():
+        for phoneme, _idx in self.data_loader.phoneme_to_id.items():
             features = self.data_loader.get_phoneme_features(phoneme)
             if features is None:
                 continue
@@ -252,7 +243,7 @@ class PhonemeEmbeddingEvaluator:
 
         plt.close()
 
-    def run_all_evaluations(self) -> Dict[str, Dict]:
+    def run_all_evaluations(self) -> dict[str, dict]:
         """
         Run all evaluation tasks
 
@@ -322,12 +313,12 @@ def main():
     print("=" * 70)
 
     if 'feature_reconstruction' in results:
-        print(f"\nFeature Reconstruction:")
+        print("\nFeature Reconstruction:")
         print(f"  MSE: {results['feature_reconstruction']['mse']:.4f}")
         print(f"  Correlation: {results['feature_reconstruction']['mean_correlation']:.4f}")
 
     if 'similarity' in results:
-        print(f"\nSimilarity:")
+        print("\nSimilarity:")
         print(f"  Spearman ρ: {results['similarity']['spearman_correlation']:.4f}")
 
 

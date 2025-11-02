@@ -5,7 +5,8 @@ Build filtered Layer 4 syllable embeddings with vocabulary reduction.
 This script creates syllable embeddings for only the filtered vocabulary
 (words with frequency + at least one other psycholinguistic norm).
 
-Reduces from 125K words → 24K words (80% reduction, 1.0GB → 0.2GB).
+Reduces from 125K words → ~24K words (80% reduction in vocabulary count).
+Reduces embeddings file from 1.0GB → ~0.5GB (49% file size reduction).
 """
 
 import sys

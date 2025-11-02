@@ -13,18 +13,20 @@ This is THE foundation for learning phoneme embeddings.
 
 import csv
 import json
-import numpy as np
-from pathlib import Path
-from typing import Dict, List, Tuple, Optional, Iterator
-from collections import defaultdict, Counter
+from collections import defaultdict
+from collections.abc import Iterator
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Optional
+
+import numpy as np
 
 
 @dataclass
 class PhonemeContextExample:
     """Example for context prediction (skip-gram style)"""
     center_phoneme: str
-    context_phonemes: List[str]
+    context_phonemes: list[str]
     word: str  # For debugging
 
 
@@ -33,8 +35,8 @@ class MorphologyExample:
     """Example for morphological pattern learning"""
     lemma: str
     inflected: str
-    lemma_phonemes: List[str]
-    inflected_phonemes: List[str]
+    lemma_phonemes: list[str]
+    inflected_phonemes: list[str]
     stem_final_phoneme: str  # Key for allomorph selection
     morphological_features: str  # e.g., "V;PST", "N;PL"
     allomorph: str  # e.g., "-ed", "-s"
@@ -53,7 +55,7 @@ class InventoryExample:
     """Phoneme inventory for a language"""
     language: str
     inventory_id: int
-    phonemes: List[str]
+    phonemes: list[str]
 
 
 class PhonemeEmbeddingDataLoader:
@@ -383,7 +385,7 @@ class PhonemeEmbeddingDataLoader:
         """Get unique ID for a phoneme"""
         return self.phoneme_to_id.get(phoneme)
 
-    def get_all_phonemes(self) -> List[str]:
+    def get_all_phonemes(self) -> list[str]:
         """Get list of all phonemes"""
         return list(self.phoneme_to_id.keys())
 
@@ -407,11 +409,11 @@ class PhonemeEmbeddingDataLoader:
         print("\n" + "=" * 70)
         print("DATASET STATISTICS")
         print("=" * 70)
-        print(f"\nPhonemes:")
+        print("\nPhonemes:")
         print(f"  Total unique phonemes: {self.stats['total_phonemes']:,}")
         print(f"  Languages: {self.stats['total_languages']:,}")
 
-        print(f"\nTraining Examples:")
+        print("\nTraining Examples:")
         print(f"  Context examples: {self.stats.get('context_examples', 0):,}")
         print(f"  Morphology examples: {self.stats.get('morphology_examples', 0):,}")
         print(f"  Contrastive pairs: {self.stats.get('contrastive_pairs', 0):,}")
@@ -426,7 +428,7 @@ def main():
 
     # Generate all data sources
     context_examples = list(loader.get_context_examples(window_size=2))
-    morphology_examples = list(loader.get_morphology_examples())
+    list(loader.get_morphology_examples())
     contrastive_pairs = list(loader.get_contrastive_pairs(num_pairs=10000))
     inventories = list(loader.get_inventory_examples())
 
@@ -439,21 +441,21 @@ def main():
     print("=" * 70)
 
     print("\n1. Context Examples (first 5):")
-    for i, ex in enumerate(context_examples[:5]):
+    for _i, ex in enumerate(context_examples[:5]):
         print(f"   {ex.center_phoneme} → context: {ex.context_phonemes} (word: {ex.word})")
 
     print("\n2. Contrastive Pairs (first 5):")
-    for i, pair in enumerate(contrastive_pairs[:5]):
+    for _i, pair in enumerate(contrastive_pairs[:5]):
         print(f"   /{pair.phoneme1}/ vs /{pair.phoneme2}/ → similarity: {pair.similarity:.3f}")
 
     print("\n3. Sample Inventories (first 3):")
-    for i, inv in enumerate(inventories[:3]):
+    for _i, inv in enumerate(inventories[:3]):
         print(f"   {inv.language}: {len(inv.phonemes)} phonemes")
         print(f"      {', '.join(inv.phonemes[:10])}...")
 
     # Get feature matrix
     features = loader.get_feature_matrix()
-    print(f"\n4. Feature Matrix:")
+    print("\n4. Feature Matrix:")
     print(f"   Shape: {features.shape}")
     print(f"   Sample (first phoneme): {features[0][:10]}...")
 

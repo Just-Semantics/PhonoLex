@@ -6,16 +6,17 @@ Extracts onset-nucleus-coda structure for each syllable.
 """
 
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import Optional
+
 from ..embeddings.english_data_loader import PhonemeWithStress
 
 
 @dataclass
 class Syllable:
     """A syllable with onset-nucleus-coda structure"""
-    onset: List[str]  # Consonants before nucleus
+    onset: list[str]  # Consonants before nucleus
     nucleus: str  # Vowel (required)
-    coda: List[str]  # Consonants after nucleus
+    coda: list[str]  # Consonants after nucleus
     stress: int  # 0=unstressed, 1=primary, 2=secondary
 
     def __str__(self):
@@ -23,7 +24,7 @@ class Syllable:
         coda_str = ''.join(self.coda) if self.coda else ''
         return f"[{onset_str}·{self.nucleus}{self.stress}·{coda_str}]"
 
-    def to_phoneme_list(self) -> List[str]:
+    def to_phoneme_list(self) -> list[str]:
         """Return flat phoneme list"""
         return self.onset + [self.nucleus] + self.coda
 
@@ -40,7 +41,7 @@ def is_vowel(phoneme: str) -> bool:
     return phoneme in VOWELS
 
 
-def syllabify(phonemes_with_stress: List[PhonemeWithStress]) -> List[Syllable]:
+def syllabify(phonemes_with_stress: list[PhonemeWithStress]) -> list[Syllable]:
     """
     Extract syllables from phoneme sequence with stress.
 
@@ -133,7 +134,7 @@ def syllabify(phonemes_with_stress: List[PhonemeWithStress]) -> List[Syllable]:
     return syllables
 
 
-def get_rhyme_part(syllables: List[Syllable]) -> Optional[str]:
+def get_rhyme_part(syllables: list[Syllable]) -> Optional[str]:
     """
     Get rhyme part (nucleus + coda of final stressed syllable).
 
@@ -151,8 +152,10 @@ def get_rhyme_part(syllables: List[Syllable]) -> Optional[str]:
 
 def demo():
     """Demo syllabification"""
+    import contextlib
+    import io
+
     from ..embeddings.english_data_loader import EnglishPhonologyLoader
-    import io, contextlib
 
     # Load data
     with contextlib.redirect_stdout(io.StringIO()):
@@ -175,7 +178,7 @@ def demo():
         print(f"  Phonemes: {' '.join(str(p) for p in phonemes)}")
         print(f"  Syllables: {' . '.join(str(s) for s in syllables)}")
         print(f"  Rhyme part: {get_rhyme_part(syllables)}")
-        print(f"  Structure:")
+        print("  Structure:")
         for i, syll in enumerate(syllables):
             stress_marker = "'" if syll.stress == 1 else "ˌ" if syll.stress == 2 else ""
             print(f"    Syllable {i+1}: onset={syll.onset or '∅'}, nucleus={stress_marker}{syll.nucleus}, coda={syll.coda or '∅'}")

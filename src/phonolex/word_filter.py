@@ -16,7 +16,7 @@ while improving data quality for research and clinical applications.
 
 import csv
 from pathlib import Path
-from typing import Set, Dict, Tuple
+
 import pandas as pd
 
 
@@ -32,12 +32,12 @@ class WordFilter:
     """
 
     def __init__(self):
-        self.freq_words: Set[str] = set()
-        self.conc_words: Set[str] = set()
-        self.aoa_words: Set[str] = set()
-        self.img_words: Set[str] = set()
-        self.fam_words: Set[str] = set()
-        self.vad_words: Set[str] = set()
+        self.freq_words: set[str] = set()
+        self.conc_words: set[str] = set()
+        self.aoa_words: set[str] = set()
+        self.img_words: set[str] = set()
+        self.fam_words: set[str] = set()
+        self.vad_words: set[str] = set()
 
         # Path from src/phonolex/ up to project root, then to data/
         self.data_dir = Path(__file__).parent.parent.parent / "data"
@@ -57,7 +57,7 @@ class WordFilter:
 
         # Report statistics
         total_eligible = self.get_eligible_words()
-        print(f"✓ Filtering criterion loaded:")
+        print("✓ Filtering criterion loaded:")
         print(f"  - {len(self.freq_words):,} words with frequency")
         print(f"  - {len(total_eligible):,} words meeting criterion (freq + any norm)")
 
@@ -65,7 +65,7 @@ class WordFilter:
         """Load SUBTLEXus frequency data"""
         freq_path = self.data_dir / "subtlex_frequency.txt"
 
-        with open(freq_path, 'r', encoding='utf-8') as f:
+        with open(freq_path, encoding='utf-8') as f:
             reader = csv.DictReader(f, delimiter='\t')
             for row in reader:
                 word = row['Word'].lower()
@@ -76,7 +76,7 @@ class WordFilter:
         """Load concreteness ratings"""
         conc_path = self.data_dir / "norms" / "concreteness.txt"
 
-        with open(conc_path, 'r', encoding='utf-8') as f:
+        with open(conc_path, encoding='utf-8') as f:
             reader = csv.DictReader(f, delimiter='\t')
             for row in reader:
                 word = row['Word'].lower()
@@ -105,7 +105,7 @@ class WordFilter:
         """Load Valence-Arousal-Dominance ratings"""
         vad_path = self.data_dir / "norms" / "Ratings_VAD_WarrinerEtAl.csv"
 
-        with open(vad_path, 'r', encoding='utf-8') as f:
+        with open(vad_path, encoding='utf-8') as f:
             reader = csv.DictReader(f)
             for row in reader:
                 word = row['word'].lower()
@@ -144,7 +144,7 @@ class WordFilter:
 
         return has_other_norm
 
-    def get_eligible_words(self) -> Set[str]:
+    def get_eligible_words(self) -> set[str]:
         """Get all words that meet the inclusion criterion"""
         if not self._loaded:
             raise RuntimeError("Must call load_all_norms() first")
@@ -156,7 +156,7 @@ class WordFilter:
 
         return eligible
 
-    def get_norm_coverage(self, word: str) -> Dict[str, bool]:
+    def get_norm_coverage(self, word: str) -> dict[str, bool]:
         """
         Get which norms are available for a word.
 

@@ -7,18 +7,16 @@ Focused on English phonology for cleaner results.
 
 import csv
 import json
-import numpy as np
-from pathlib import Path
-from typing import Dict, List, Tuple, Optional
-from collections import defaultdict
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Optional
 
 
 @dataclass
 class WordPronunciation:
     """A word with its pronunciation"""
     word: str
-    phonemes: List[str]  # IPA phonemes
+    phonemes: list[str]  # IPA phonemes
 
 
 @dataclass
@@ -39,8 +37,8 @@ class MorphologicalPair:
     lemma: str
     inflected: str
     features: str  # e.g., "N;PL", "V;PST"
-    lemma_phonemes: Optional[List[str]] = None
-    inflected_phonemes: Optional[List[str]] = None
+    lemma_phonemes: Optional[list[str]] = None
+    inflected_phonemes: Optional[list[str]] = None
 
 
 class EnglishPhonologyLoader:
@@ -60,9 +58,9 @@ class EnglishPhonologyLoader:
         self.arpa_to_ipa = self._load_arpa_mappings()
 
         # Data
-        self.lexicon: Dict[str, List[str]] = {}  # word -> phonemes (IPA, stress stripped)
-        self.lexicon_with_stress: Dict[str, List[PhonemeWithStress]] = {}  # word -> phonemes with stress
-        self.morphology: List[MorphologicalPair] = []
+        self.lexicon: dict[str, list[str]] = {}  # word -> phonemes (IPA, stress stripped)
+        self.lexicon_with_stress: dict[str, list[PhonemeWithStress]] = {}  # word -> phonemes with stress
+        self.morphology: list[MorphologicalPair] = []
         self.english_phonemes: set = set()
 
         print("\n" + "=" * 70)
@@ -73,12 +71,12 @@ class EnglishPhonologyLoader:
         self._load_sigmorphon()
         self._get_phoneme_inventory()
 
-    def _load_arpa_mappings(self) -> Dict[str, str]:
+    def _load_arpa_mappings(self) -> dict[str, str]:
         """Load ARPAbet to IPA mappings"""
         with open(self.data_dir / "mappings" / "arpa_to_ipa.json") as f:
             return json.load(f)
 
-    def _arpa_to_ipa_sequence(self, arpa_phones: List[str]) -> List[str]:
+    def _arpa_to_ipa_sequence(self, arpa_phones: list[str]) -> list[str]:
         """Convert ARPAbet sequence to IPA (stress stripped)"""
         ipa = []
         for phone in arpa_phones:
@@ -88,7 +86,7 @@ class EnglishPhonologyLoader:
                 ipa.append(self.arpa_to_ipa[base])
         return ipa
 
-    def _arpa_to_ipa_with_stress(self, arpa_phones: List[str]) -> List[PhonemeWithStress]:
+    def _arpa_to_ipa_with_stress(self, arpa_phones: list[str]) -> list[PhonemeWithStress]:
         """Convert ARPAbet sequence to IPA with stress preserved"""
         ipa_with_stress = []
         for phone in arpa_phones:
@@ -191,7 +189,7 @@ class EnglishPhonologyLoader:
         print(f"  ✓ Found {len(self.english_phonemes)} unique phonemes in English lexicon")
         print(f"  Phonemes: {sorted(self.english_phonemes)[:20]}...")
 
-    def get_allomorph_data(self, feature_type: str = "N;PL") -> List[Tuple[str, str, str]]:
+    def get_allomorph_data(self, feature_type: str = "N;PL") -> list[tuple[str, str, str]]:
         """
         Get data for allomorph prediction
 
@@ -226,7 +224,7 @@ class EnglishPhonologyLoader:
 
         return allomorph_data
 
-    def get_phonological_neighbors(self, word: str, max_distance: int = 1) -> List[Tuple[str, int]]:
+    def get_phonological_neighbors(self, word: str, max_distance: int = 1) -> list[tuple[str, int]]:
         """
         Find phonological neighbors (differ by max_distance phonemes)
 
@@ -254,7 +252,7 @@ class EnglishPhonologyLoader:
 
         return sorted(neighbors, key=lambda x: x[1])
 
-    def _edit_distance(self, seq1: List[str], seq2: List[str]) -> int:
+    def _edit_distance(self, seq1: list[str], seq2: list[str]) -> int:
         """Compute edit distance between two sequences"""
         m, n = len(seq1), len(seq2)
         dp = [[0] * (n + 1) for _ in range(m + 1)]
@@ -273,6 +271,104 @@ class EnglishPhonologyLoader:
 
         return dp[m][n]
 
+    def load_psycholinguistic_properties(self) -> dict[str, dict[str, float]]:
+        """
+        Load psycholinguistic properties for words.
+
+        Returns:
+            Dict mapping word to its psycholinguistic properties:
+            - frequency: Word frequency from SUBTLEXus
+            - log_frequency: Log10 of frequency
+            - concreteness: Concreteness rating (Brysbaert et al. 2014)
+            - aoa: Age of Acquisition (Glasgow Norms)
+            - imageability: Imageability rating (Glasgow Norms)
+            - familiarity: Familiarity rating (Glasgow Norms)
+            - valence: Valence rating (Warriner et al.)
+            - arousal: Arousal rating (Warriner et al.)
+            - dominance: Dominance rating (Warriner et al.)
+        """
+        import math
+
+        norms: dict[str, dict[str, float]] = {}
+
+        # Load frequency
+        freq_path = self.data_dir / "subtlex_frequency.txt"
+        if freq_path.exists():
+            with open(freq_path, encoding='utf-8') as f:
+                reader = csv.reader(f, delimiter='\t')
+                next(reader)  # Skip header
+                for row in reader:
+                    if len(row) < 2:
+                        continue
+                    word = row[0].lower()
+                    try:
+                        freq = float(row[1]) if row[1] else None
+                        if freq:
+                            norms.setdefault(word, {})
+                            norms[word]['frequency'] = freq
+                            norms[word]['log_frequency'] = math.log10(freq) if freq > 0 else None
+                    except (ValueError, IndexError):
+                        continue
+
+        # Load concreteness
+        conc_path = self.data_dir / "norms" / "concreteness.txt"
+        if conc_path.exists():
+            with open(conc_path, encoding='utf-8') as f:
+                reader = csv.reader(f, delimiter='\t')
+                next(reader)  # Skip header
+                for row in reader:
+                    if len(row) < 2:
+                        continue
+                    word = row[0].lower()
+                    try:
+                        conc = float(row[1]) if row[1] else None
+                        if conc:
+                            norms.setdefault(word, {})
+                            norms[word]['concreteness'] = conc
+                    except (ValueError, IndexError):
+                        continue
+
+        # Load Glasgow norms (AoA, Imageability, Familiarity)
+        glasgow_path = self.data_dir / "norms" / "GlasgowNorms.xlsx"
+        if glasgow_path.exists():
+            try:
+                import pandas as pd
+                df = pd.read_excel(glasgow_path, header=1)
+                for _, row in df.iterrows():
+                    word = str(row['word']).lower()
+                    norms.setdefault(word, {})
+                    if pd.notna(row.get('M.6')):  # AoA
+                        norms[word]['aoa'] = float(row['M.6'])
+                    if pd.notna(row.get('M.4')):  # Imageability
+                        norms[word]['imageability'] = float(row['M.4'])
+                    if pd.notna(row.get('M.5')):  # Familiarity
+                        norms[word]['familiarity'] = float(row['M.5'])
+            except Exception as e:
+                print(f"Warning: Could not load Glasgow norms: {e}")
+
+        # Load VAD ratings
+        vad_path = self.data_dir / "norms" / "Ratings_VAD_WarrinerEtAl.csv"
+        if vad_path.exists():
+            with open(vad_path, encoding='utf-8') as f:
+                reader = csv.reader(f)
+                next(reader)  # Skip header
+                for row in reader:
+                    if len(row) < 4:
+                        continue
+                    word = row[0].lower()
+                    norms.setdefault(word, {})
+                    try:
+                        if row[1]:
+                            norms[word]['valence'] = float(row[1])
+                        if row[2]:
+                            norms[word]['arousal'] = float(row[2])
+                        if row[3]:
+                            norms[word]['dominance'] = float(row[3])
+                    except (ValueError, IndexError):
+                        continue
+
+        return norms
+
     def summary(self):
         """Print data summary"""
         print("\n" + "=" * 70)
@@ -287,7 +383,7 @@ class EnglishPhonologyLoader:
         for feat in ["N;PL", "V;PST", "V;3;SG;PRS"]:
             data = self.get_allomorph_data(feat)
             if data:
-                allomorphs = set(a for _, _, a in data)
+                allomorphs = {a for _, _, a in data}
                 print(f"  {feat}: {len(data)} examples, {len(allomorphs)} unique allomorphs")
 
 

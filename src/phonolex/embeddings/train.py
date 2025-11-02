@@ -5,17 +5,16 @@ Training Script for Phoneme Embeddings
 Multi-task training loop that combines all data sources.
 """
 
+import json
+from pathlib import Path
+
+import numpy as np
 import torch
 import torch.optim as optim
-from torch.utils.data import Dataset, DataLoader
-import numpy as np
-from pathlib import Path
-from typing import Dict, List, Iterator
-import json
-from tqdm import tqdm
-
 from data_loader import PhonemeEmbeddingDataLoader
-from model import create_model, MultiTaskPhonemeEmbedding
+from model import MultiTaskPhonemeEmbedding, create_model
+from torch.utils.data import DataLoader, Dataset
+from tqdm import tqdm
 
 
 class PhonemeEmbeddingDataset(Dataset):
@@ -59,7 +58,7 @@ class PhonemeEmbeddingDataset(Dataset):
                 self.allomorph_to_id[ex.allomorph] = idx
                 self.id_to_allomorph[idx] = ex.allomorph
 
-        print(f"\n✓ Loaded all data:")
+        print("\n✓ Loaded all data:")
         print(f"  Context examples: {len(self.context_examples):,}")
         print(f"  Morphology examples: {len(self.morphology_examples):,}")
         print(f"  Contrastive pairs: {len(self.contrastive_pairs):,}")
@@ -70,7 +69,7 @@ class PhonemeEmbeddingDataset(Dataset):
         # Use context examples as primary dataset
         return len(self.context_examples)
 
-    def __getitem__(self, idx: int) -> Dict[str, torch.Tensor]:
+    def __getitem__(self, idx: int) -> dict[str, torch.Tensor]:
         """
         Get a training example
 
@@ -142,7 +141,7 @@ class PhonemeEmbeddingDataset(Dataset):
         return batch
 
 
-def collate_fn(batch: List[Dict]) -> Dict[str, torch.Tensor]:
+def collate_fn(batch: list[dict]) -> dict[str, torch.Tensor]:
     """
     Custom collate function to handle variable-sized batches
 
@@ -188,8 +187,8 @@ def train_epoch(
     dataloader: DataLoader,
     optimizer: optim.Optimizer,
     device: torch.device,
-    task_weights: Dict[str, float]
-) -> Dict[str, float]:
+    task_weights: dict[str, float]
+) -> dict[str, float]:
     """
     Train for one epoch
 
@@ -335,13 +334,13 @@ def train(
     print("\n" + "=" * 70)
     print("TRAINING")
     print("=" * 70)
-    print(f"\nConfiguration:")
+    print("\nConfiguration:")
     print(f"  Embedding dim: {embedding_dim}")
     print(f"  Batch size: {batch_size}")
     print(f"  Num epochs: {num_epochs}")
     print(f"  Learning rate: {learning_rate}")
     print(f"  Device: {device}")
-    print(f"\nTask weights:")
+    print("\nTask weights:")
     for task, weight in task_weights.items():
         print(f"  {task}: {weight}")
 
