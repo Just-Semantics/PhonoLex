@@ -170,7 +170,7 @@ const RhymeSetsTool: React.FC = () => {
                 Include near-matches (quality &lt; 1.0)
               </Typography>
               <Typography variant="caption" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', sm: '0.8125rem' } }}>
-                Checked: approximate matches. Unchecked: perfect matches only (quality = 1.0)
+                Uses syllable embeddings for approximate matching
               </Typography>
             </Box>
           }

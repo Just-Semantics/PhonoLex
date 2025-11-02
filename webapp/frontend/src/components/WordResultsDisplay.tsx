@@ -713,7 +713,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                 </TableSortLabel>
               </TableCell>
               <TableCell align="center">
-                <Tooltip title="Word frequency (per million)">
+                <Tooltip title="Word frequency (per million words)">
                   <TableSortLabel
                     active={sortField === 'frequency'}
                     direction={sortField === 'frequency' ? sortDirection : 'asc'}
@@ -724,7 +724,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                 </Tooltip>
               </TableCell>
               <TableCell align="center">
-                <Tooltip title="Age of Acquisition (1-7 rating: 1=earliest, 7=latest)">
+                <Tooltip title="Age of Acquisition (1-7: 1=earliest, 7=latest)">
                   <TableSortLabel
                     active={sortField === 'aoa'}
                     direction={sortField === 'aoa' ? sortDirection : 'asc'}
@@ -735,7 +735,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                 </Tooltip>
               </TableCell>
               <TableCell align="center">
-                <Tooltip title="Imageability (1-7 scale)">
+                <Tooltip title="Imageability (1-7: ease of mental imagery)">
                   <TableSortLabel
                     active={sortField === 'imageability'}
                     direction={sortField === 'imageability' ? sortDirection : 'asc'}
@@ -746,7 +746,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                 </Tooltip>
               </TableCell>
               <TableCell align="center">
-                <Tooltip title="Familiarity (1-7 scale)">
+                <Tooltip title="Familiarity (1-7: word familiarity)">
                   <TableSortLabel
                     active={sortField === 'familiarity'}
                     direction={sortField === 'familiarity' ? sortDirection : 'asc'}
@@ -757,7 +757,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                 </Tooltip>
               </TableCell>
               <TableCell align="center">
-                <Tooltip title="Concreteness (1-5 scale)">
+                <Tooltip title="Concreteness (1-5: concrete vs. abstract)">
                   <TableSortLabel
                     active={sortField === 'concreteness'}
                     direction={sortField === 'concreteness' ? sortDirection : 'asc'}
@@ -768,7 +768,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                 </Tooltip>
               </TableCell>
               <TableCell align="center">
-                <Tooltip title="Emotional Valence (1-9 scale)">
+                <Tooltip title="Valence (1-9: negative to positive)">
                   <TableSortLabel
                     active={sortField === 'valence'}
                     direction={sortField === 'valence' ? sortDirection : 'asc'}
@@ -779,7 +779,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                 </Tooltip>
               </TableCell>
               <TableCell align="center">
-                <Tooltip title="Emotional Arousal (1-9 scale)">
+                <Tooltip title="Arousal (1-9: calm to excited)">
                   <TableSortLabel
                     active={sortField === 'arousal'}
                     direction={sortField === 'arousal' ? sortDirection : 'asc'}
@@ -790,7 +790,7 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                 </Tooltip>
               </TableCell>
               <TableCell align="center">
-                <Tooltip title="Emotional Dominance (1-9 scale)">
+                <Tooltip title="Dominance (1-9: weak to powerful)">
                   <TableSortLabel
                     active={sortField === 'dominance'}
                     direction={sortField === 'dominance' ? sortDirection : 'asc'}

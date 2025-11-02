@@ -550,9 +550,9 @@ const Builder: React.FC = () => {
                       {/* Frequency */}
                       <Box>
                         <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
-                          Frequency: {filters.frequency[0]} - {filters.frequency[1]} per million
+                          Frequency: {filters.frequency[0]} - {filters.frequency[1]}
                           <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
-                            SUBTLEX-US corpus
+                            SUBTLEX-US (per million words)
                           </Typography>
                         </Typography>
                         <Slider
@@ -571,7 +571,7 @@ const Builder: React.FC = () => {
                         <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           Age of Acquisition: {filters.aoa[0]} - {filters.aoa[1]}
                           <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
-                            Glasgow Norms (1-7 scale: 1=earliest, 7=latest)
+                            Glasgow Norms (1-7: 1=earliest, 7=latest)
                           </Typography>
                         </Typography>
                         <Slider
@@ -602,7 +602,7 @@ const Builder: React.FC = () => {
                         <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           Imageability: {filters.imageability[0]} - {filters.imageability[1]}
                           <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
-                            How easily a word evokes a mental image
+                            Glasgow Norms (1-7: ease of mental imagery)
                           </Typography>
                         </Typography>
                         <Slider
@@ -621,7 +621,7 @@ const Builder: React.FC = () => {
                         <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           Familiarity: {filters.familiarity[0]} - {filters.familiarity[1]}
                           <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
-                            How familiar the word is
+                            Glasgow Norms (1-7: word familiarity)
                           </Typography>
                         </Typography>
                         <Slider
@@ -640,7 +640,7 @@ const Builder: React.FC = () => {
                         <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           Concreteness: {filters.concreteness[0]} - {filters.concreteness[1]}
                           <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
-                            How concrete vs. abstract (higher = more concrete)
+                            Brysbaert et al. (1-5: concrete vs. abstract)
                           </Typography>
                         </Typography>
                         <Slider
@@ -671,7 +671,7 @@ const Builder: React.FC = () => {
                         <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           Valence: {filters.valence[0]} - {filters.valence[1]}
                           <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
-                            Warriner et al. (2013) - Positive vs. negative emotion
+                            Warriner et al. (1-9: negative to positive)
                           </Typography>
                         </Typography>
                         <Slider
@@ -690,7 +690,7 @@ const Builder: React.FC = () => {
                         <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           Arousal: {filters.arousal[0]} - {filters.arousal[1]}
                           <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
-                            Emotional intensity (calm vs. excited)
+                            Warriner et al. (1-9: calm to excited)
                           </Typography>
                         </Typography>
                         <Slider
@@ -709,7 +709,7 @@ const Builder: React.FC = () => {
                         <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           Dominance: {filters.dominance[0]} - {filters.dominance[1]}
                           <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
-                            Perceived control (weak vs. powerful)
+                            Warriner et al. (1-9: weak to powerful)
                           </Typography>
                         </Typography>
                         <Slider
