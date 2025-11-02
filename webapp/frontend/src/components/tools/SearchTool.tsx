@@ -385,9 +385,11 @@ const SearchTool: React.FC = () => {
                   </Typography>
                 </Grid>
                 <Grid item xs={6} sm={4}>
-                  <Typography variant="caption" color="text.secondary">Age of Acquisition</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Age of Acquisition (1-7)
+                  </Typography>
                   <Typography variant="body1">
-                    {wordResult.aoa ? `${wordResult.aoa.toFixed(1)} years` : '-'}
+                    {wordResult.aoa ? wordResult.aoa.toFixed(1) : '-'}
                   </Typography>
                 </Grid>
               </Grid>

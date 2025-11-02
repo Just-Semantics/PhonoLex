@@ -569,9 +569,9 @@ const Builder: React.FC = () => {
                       {/* Age of Acquisition */}
                       <Box>
                         <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
-                          Age of Acquisition: {filters.aoa[0]} - {filters.aoa[1]} years
+                          Age of Acquisition: {filters.aoa[0]} - {filters.aoa[1]}
                           <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
-                            Kuperman et al. (2012) - Age typically learned
+                            Glasgow Norms (1-7 scale: 1=earliest, 7=latest)
                           </Typography>
                         </Typography>
                         <Slider
