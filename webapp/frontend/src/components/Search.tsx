@@ -27,14 +27,18 @@ import {
   CircularProgress,
   Divider,
   Paper,
+  IconButton,
 } from '@mui/material';
 import {
   Search as SearchIcon,
   Clear as ClearIcon,
+  Keyboard as KeyboardIcon,
 } from '@mui/icons-material';
 import api from '../services/phonolexApi';
 import type { Word, Phoneme, SimilarWord } from '../services/phonolexApi';
 import WordResultsDisplay from './WordResultsDisplay';
+import PhonemePickerDialog from './PhonemePickerDialog';
+import { validatePhonemeInput } from '../utils/ipaValidation';
 
 const Search: React.FC = () => {
   // Search mode
@@ -61,6 +65,10 @@ const Search: React.FC = () => {
   // Loading/error state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Phoneme picker state
+  const [phonemePickerOpen, setPhonemePickerOpen] = useState(false);
+  const [ipaWarning, setIpaWarning] = useState<string | null>(null);
 
   // Word lookup
   const handleWordLookup = async () => {
@@ -130,6 +138,12 @@ const Search: React.FC = () => {
     setSimilarityResults(null);
     setPhonemeResults(null);
     setError(null);
+    setIpaWarning(null);
+  };
+
+  // Handle phoneme selection from picker
+  const handlePhonemeSelect = (phoneme: string) => {
+    setPhonemeQuery((prev) => prev + phoneme);
   };
 
   return (
@@ -283,13 +297,48 @@ const Search: React.FC = () => {
             </Typography>
 
             <Stack spacing={3} sx={{ mt: 3 }}>
-              <TextField
-                label="IPA Symbol"
-                value={phonemeQuery}
-                onChange={(e) => setPhonemeQuery(e.target.value)}
-                placeholder="e.g., t, k, ʃ"
-                fullWidth
-              />
+              <Box>
+                <TextField
+                  label="IPA Symbol"
+                  value={phonemeQuery}
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    setPhonemeQuery(newValue);
+
+                    // Validate IPA input
+                    if (newValue.trim()) {
+                      const validation = validatePhonemeInput(newValue);
+                      if (!validation.isValid && validation.suggestion) {
+                        setIpaWarning(validation.suggestion);
+                      } else {
+                        setIpaWarning(null);
+                      }
+                    } else {
+                      setIpaWarning(null);
+                    }
+                  }}
+                  placeholder="Use keyboard icon → to select IPA"
+                  fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton
+                        onClick={() => setPhonemePickerOpen(true)}
+                        edge="end"
+                        color="primary"
+                        size="small"
+                        aria-label="Open phoneme picker"
+                      >
+                        <KeyboardIcon />
+                      </IconButton>
+                    )
+                  }}
+                />
+                {ipaWarning && (
+                  <Alert severity="warning" sx={{ mt: 1 }}>
+                    {ipaWarning}
+                  </Alert>
+                )}
+              </Box>
 
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={4}>
@@ -483,6 +532,13 @@ const Search: React.FC = () => {
           </Grid>
         </Paper>
       )}
+
+      {/* Phoneme Picker Dialog */}
+      <PhonemePickerDialog
+        open={phonemePickerOpen}
+        onClose={() => setPhonemePickerOpen(false)}
+        onSelect={handlePhonemeSelect}
+      />
     </Box>
   );
 };

@@ -198,7 +198,7 @@ const Compare: React.FC = () => {
               }
             }}
             onKeyPress={(e) => e.key === 'Enter' && handleCompare()}
-            placeholder="e.g., t, k, s"
+            placeholder="Use keyboard icon → to select IPA"
             fullWidth
             size="small"
             InputProps={{
@@ -251,7 +251,7 @@ const Compare: React.FC = () => {
               }
             }}
             onKeyPress={(e) => e.key === 'Enter' && handleCompare()}
-            placeholder="e.g., d, g, z"
+            placeholder="Use keyboard icon → to select IPA"
             fullWidth
             size="small"
             InputProps={{

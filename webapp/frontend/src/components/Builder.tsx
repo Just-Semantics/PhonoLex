@@ -368,7 +368,7 @@ const Builder: React.FC = () => {
                               value={pattern.phoneme}
                               onChange={(e) => updatePattern(idx, 'phoneme', e.target.value)}
                               size="small"
-                              placeholder="e.g., k, t, s"
+                              placeholder="Use keyboard icon → to select IPA"
                               fullWidth
                               InputProps={{
                                 endAdornment: (
@@ -766,7 +766,7 @@ const Builder: React.FC = () => {
                     }}
                     onKeyPress={(e) => e.key === 'Enter' && addExclusion()}
                     size="small"
-                    placeholder="e.g., r, l, θ"
+                    placeholder="Use keyboard icon → to select IPA"
                     fullWidth
                     InputProps={{
                       endAdornment: (

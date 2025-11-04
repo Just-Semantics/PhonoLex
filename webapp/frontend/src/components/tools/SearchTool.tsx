@@ -242,7 +242,7 @@ const SearchTool: React.FC = () => {
               }}
               onKeyPress={handleKeyPress}
               size="medium"
-              placeholder={mode === 'word' ? 'e.g., cat, computer, beautiful' : 'Click the keyboard icon to select'}
+              placeholder={mode === 'word' ? 'e.g., cat, computer, beautiful' : 'Use keyboard icon → to select IPA'}
               fullWidth
               autoFocus
               InputProps={mode === 'phoneme' ? {

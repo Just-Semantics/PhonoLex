@@ -5,6 +5,19 @@ All notable changes to PhonoLex will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.1-beta] - 2025-11-04
+
+### Improved
+- **IPA Keyboard Discoverability**: Updated all phoneme input placeholders to guide users to the keyboard icon
+  - Changed from generic examples ("e.g., t, k, s") to action-oriented prompts ("Use keyboard icon → to select IPA")
+  - Added missing IPA keyboard button to Search component's phoneme search mode
+  - All 5 components with phoneme inputs now have consistent, discoverable keyboard access
+  - Components updated: MinimalPairsTool, Compare, Builder, SearchTool, Search
+
+### Fixed
+- Added missing PhonemePickerDialog to Search.tsx phoneme search mode
+- Added IPA validation and warning alerts to Search.tsx
+
 ## [Unreleased] - 2025-11-01
 
 ### Added

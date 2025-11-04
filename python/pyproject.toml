@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phonolex"
-version = "2.0.0"
+version = "2.1.1-beta"
 description = "Phonological analysis toolkit with hierarchical embeddings"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -56,10 +56,10 @@ all = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/phonolex"
-Documentation = "https://github.com/yourusername/phonolex/tree/main/docs"
-Repository = "https://github.com/yourusername/phonolex"
-Issues = "https://github.com/yourusername/phonolex/issues"
+Homepage = "https://github.com/Just-Semantics/PhonoLex"
+Documentation = "https://github.com/Just-Semantics/PhonoLex/tree/main/docs"
+Repository = "https://github.com/Just-Semantics/PhonoLex"
+Issues = "https://github.com/Just-Semantics/PhonoLex/issues"
 
 # No CLI scripts - webapp is client-side only
 

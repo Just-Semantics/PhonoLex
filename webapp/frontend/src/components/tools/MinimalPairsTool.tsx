@@ -124,7 +124,7 @@ const MinimalPairsTool: React.FC = () => {
               }
             }}
             size="small"
-            placeholder="e.g., t, k, s"
+            placeholder="Use keyboard icon → to select IPA"
             fullWidth
             InputProps={{
               endAdornment: (
@@ -168,7 +168,7 @@ const MinimalPairsTool: React.FC = () => {
               }
             }}
             size="small"
-            placeholder="e.g., d, g, z"
+            placeholder="Use keyboard icon → to select IPA"
             fullWidth
             InputProps={{
               endAdornment: (

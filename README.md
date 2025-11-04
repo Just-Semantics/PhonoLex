@@ -2,9 +2,9 @@
 
 Phonological analysis toolkit with hierarchical embeddings and client-side web application.
 
-[![Version](https://img.shields.io/badge/version-2.1.0--beta-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.1.1--beta-blue.svg)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.txt)
-[![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](python/pyproject.toml)
+[![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](python/pyproject.toml)
 [![TypeScript](https://img.shields.io/badge/typescript-5.0+-blue.svg)](webapp/frontend/package.json)
 
 ## Overview
@@ -57,7 +57,7 @@ Access at http://localhost:3000. Available tools:
 The Python library is required only for building embeddings from scratch. The web application uses pre-computed embeddings
 
 ```bash
-git clone https://github.com/yourusername/PhonoLex.git
+git clone https://github.com/Just-Semantics/PhonoLex.git
 cd PhonoLex
 
 # Install for embedding generation
@@ -96,9 +96,9 @@ Layer 1: Raw Phoible Features (38-dim ternary: +, -, 0)
     ↓ normalization & interpolation
 Layer 2: Normalized Feature Vectors (76-dim endpoints / 152-dim trajectories)
     ↓ transformer learning + phonotactic patterns
-Layer 3: Contextual Phoneme Embeddings (128-dim) ⭐ ONLY TRAINED LAYER
+Layer 3: Contextual Phoneme Embeddings (128-dim) - ONLY TRAINED LAYER
     ↓ syllable aggregation (onset-nucleus-coda structure)
-Layer 4: Hierarchical Syllable Embeddings (384-dim) ⭐ MAIN PRODUCTION EMBEDDINGS
+Layer 4: Hierarchical Syllable Embeddings (384-dim) - MAIN PRODUCTION EMBEDDINGS
     ↓ soft Levenshtein distance on syllable sequences
 Word Similarity
 ```
@@ -121,7 +121,7 @@ Word Similarity
 - **Build time**: ~5 seconds
 - **Use for**: Continuous phoneme similarity, diphthong modeling, Layer 3 initialization
 
-#### Layer 3: Contextual Phoneme Embeddings (128-dim) ⭐
+#### Layer 3: Contextual Phoneme Embeddings (128-dim)
 - **TRAINED** - only layer that requires training
 - **Model**: `models/layer3/model.pt` (2.4 MB)
 - **Architecture**: PhonoLexBERT transformer (3 layers, 4 attention heads)
@@ -132,7 +132,7 @@ Word Similarity
 - **Training time**: ~10 minutes on Apple Silicon
 - **Use for**: Contextual phoneme analysis, foundation for Layer 4
 
-#### Layer 4: Hierarchical Syllable Embeddings (384-dim) ⭐
+#### Layer 4: Hierarchical Syllable Embeddings (384-dim)
 - **NOT trained** - built from frozen Layer 3 model
 - **Output**:
   - `embeddings/layer4/syllable_embeddings_filtered.pt` (137 MB) - **RECOMMENDED**
@@ -296,7 +296,7 @@ PhonoLex/
 ├── scripts/                         # Layer generation pipeline
 │   ├── compute_layer1_phoible_features.py       # Layer 1 (<1 sec)
 │   ├── compute_layer2_normalized_vectors.py     # Layer 2 (~5 sec)
-│   ├── train_layer3_contextual_embeddings.py    # Layer 3 (~10 min) ⭐
+│   ├── train_layer3_contextual_embeddings.py    # Layer 3 (~10 min) - trained
 │   ├── build_filtered_layer4_embeddings.py      # Layer 4 (~5 min) - RECOMMENDED
 │   ├── build_layer4_syllable_embeddings.py      # Layer 4 unfiltered (deprecated)
 │   ├── quantize_embeddings.py                   # Int8 quantization
@@ -306,11 +306,11 @@ PhonoLex/
 │   ├── layer1/phoible_features.csv              # 38-dim ternary (59 KB)
 │   ├── layer2/normalized_76d.pkl                # 76-dim continuous (59 KB)
 │   ├── layer2/normalized_152d.pkl               # 152-dim trajectories (115 KB)
-│   ├── layer4/syllable_embeddings_filtered.pt   # 384-dim filtered (137 MB) ⭐
+│   ├── layer4/syllable_embeddings_filtered.pt   # 384-dim filtered (137 MB) - recommended
 │   └── layer4/syllable_embeddings_filtered_quantized.pt  # Int8 (42 MB)
 │
 ├── models/                          # Trained models
-│   └── layer3/model.pt             # PhonoLexBERT (2.4 MB) ⭐
+│   └── layer3/model.pt             # PhonoLexBERT (2.4 MB)
 │
 ├── data/                            # Source data
 │   ├── cmu/                        # CMU Dictionary (125K words)
@@ -323,7 +323,7 @@ PhonoLex/
 │   └── frontend/                   # React + TypeScript
 │       ├── src/
 │       │   ├── services/
-│       │   │   ├── clientSideData.ts           # Main data service ⭐
+│       │   │   ├── clientSideData.ts           # Main data service
 │       │   │   ├── clientSideApiAdapter.ts     # API compatibility
 │       │   │   └── phonolexApi.ts              # Exports adapter
 │       │   ├── components/                     # UI components
@@ -337,7 +337,7 @@ PhonoLex/
 │
 ├── docs/                            # Documentation
 │   ├── INDEX.md                                # Documentation index
-│   ├── EMBEDDINGS_ARCHITECTURE.md              # ⭐ Complete architecture
+│   ├── EMBEDDINGS_ARCHITECTURE.md              # Complete architecture
 │   ├── CLIENT_SIDE_DATA_PACKAGE.md             # Client-side data format
 │   ├── MIGRATION_TO_CLIENT_SIDE.md             # v2.0 → v2.1 migration
 │   ├── VOCABULARY_FILTERING.md                 # Filtering strategy
@@ -733,8 +733,8 @@ If you use PhonoLex in your research, please cite:
   title = {PhonoLex: Hierarchical Phonological Embeddings with Client-Side Analysis},
   author = {[Your Name]},
   year = {2025},
-  version = {2.1.0-beta},
-  url = {https://github.com/yourusername/PhonoLex},
+  version = {2.1.1-beta},
+  url = {https://github.com/Just-Semantics/PhonoLex},
   note = {Four-layer phonological embedding pipeline with onset-nucleus-coda structure}
 }
 ```
@@ -768,4 +768,4 @@ If you use PhonoLex in your research, please cite:
 
 ---
 
-**Version 2.1.0-beta** | [Changelog](CHANGELOG.md) | [Documentation](docs/INDEX.md) | [GitHub](https://github.com/yourusername/PhonoLex)
+**Version 2.1.1-beta** | [Changelog](CHANGELOG.md) | [Documentation](docs/INDEX.md) | [GitHub](https://github.com/Just-Semantics/PhonoLex)
