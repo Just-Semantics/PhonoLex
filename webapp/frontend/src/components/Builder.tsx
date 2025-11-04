@@ -334,7 +334,7 @@ const Builder: React.FC = () => {
           <AccordionDetails sx={{ px: { xs: 1.5, sm: 2 }, py: { xs: 1, sm: 2 } }}>
             <Stack spacing={{ xs: 1.5, sm: 2 }}>
               <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
-                AND logic: all patterns must match. Space-separate phonemes (e.g., "s t" for /st/)
+                AND logic: all patterns must match. Use keyboard icon → to select IPA phonemes. Space-separate for sequences (e.g., "s t" for /st/).
               </Typography>
 
               <Stack spacing={{ xs: 1.5, sm: 2 }}>
@@ -364,7 +364,7 @@ const Builder: React.FC = () => {
                         <Box sx={{ display: 'flex', gap: 1, flex: 1, flexDirection: 'column' }}>
                           <Box sx={{ display: 'flex', gap: 1 }}>
                             <TextField
-                              label="Phoneme(s)"
+                              label="Phoneme(s) - use keyboard icon →"
                               value={pattern.phoneme}
                               onChange={(e) => updatePattern(idx, 'phoneme', e.target.value)}
                               size="small"
