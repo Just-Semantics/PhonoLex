@@ -20,7 +20,7 @@ If you use PhonoLex in your research or clinical work, please cite:
 
 ```
 Just Semantics. (2025). PhonoLex: Phonological Analysis and Word List Generation Tool.
-https://phonolex.app
+https://phonolex.justsemantics.net
 ```
 
 ## Disclaimer

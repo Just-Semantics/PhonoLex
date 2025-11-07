@@ -256,10 +256,9 @@ function softLevenshtein(seq1: Vec[], seq2: Vec[]): number {
 
 ### Vocabulary Coverage
 
-- **17,920 words** with syllable structures
-- **Filtered**: Only words with frequency + ≥1 psycholinguistic norm
-- **Reduction**: 84.9% from full CMU dict (125K → 18K)
-- **Quality**: High-quality research/clinical vocabulary
+- **24,744 words** with syllable structures
+- **Includes**: All words from CMU Pronouncing Dictionary
+- **Quality**: Comprehensive vocabulary for research and clinical applications
 
 ## Comparison with Previous Approaches
 

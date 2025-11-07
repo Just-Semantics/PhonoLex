@@ -12,7 +12,7 @@
 PhonoLex uniquely combines three powerful dimensions for word analysis:
 
 1. **Universal Phonological Features** - PHOIBLE database (38 distinctive features across 2,716 languages)
-2. **Psycholinguistic Norms** - 12 properties from 6 major research datasets (frequency, imageability, valence, etc.)
+2. **Psycholinguistic Norms** - 8 properties from 4 major research datasets (frequency, imageability, valence, etc.)
 3. **Phoneme-Sequence Similarity** - v2.3 soft Levenshtein distance preserving consonant clusters and diphthongs
 
 **Key Features**:
@@ -20,7 +20,7 @@ PhonoLex uniquely combines three powerful dimensions for word analysis:
 - **Contrastive Intervention** for speech therapy (minimal pairs, maximal opposition, multiple opposition)
 - **Phonological Similarity Explorer** with adjustable onset/nucleus/coda weights
 - **Lookup** for word details, phoneme features, and phoneme comparison
-- **18,000 words** with comprehensive psycholinguistic norms
+- **24,744 words** with comprehensive psycholinguistic norms
 - **Fully client-side** - no backend required, deploy anywhere
 - **99% compression** - 56.7 MB → 0.6 MB gzipped
 
@@ -88,9 +88,9 @@ Real-time weight sliders and threshold selection.
 - Phoneme comparison (feature-by-feature diff)
 - Feature-based phoneme search
 
-### Psycholinguistic Norms (12 Properties)
+### Psycholinguistic Norms (8 Properties)
 
-PhonoLex integrates norms from 6 major research datasets:
+PhonoLex integrates norms from 4 major research datasets:
 
 | Property | Source | Range | Description |
 |----------|--------|-------|-------------|
@@ -105,13 +105,14 @@ PhonoLex integrates norms from 6 major research datasets:
 | Valence | Warriner et al. (2013) | 1-9 | Negative→positive |
 | Arousal | Warriner et al. (2013) | 1-9 | Calm→excited |
 | Dominance | Warriner et al. (2013) | 1-9 | Weak→powerful |
-| **Phonological** |
-| Syllables | CMU Dictionary | 1-5 | Syllable count |
-| Phonemes | CMU Dictionary | 1-10+ | Phoneme count |
-| WCM | Stoel-Gammon (2010) | 0-15 | Word Complexity |
-| MSH | Phonological analysis | 1-6 | Mean Syllable Height |
 
-**Vocabulary Filtering**: Only words with **frequency + at least one additional psycholinguistic norm** are included (63% reduction: 48K → 18K words, ensuring high-quality data for research and clinical applications).
+**Plus 4 Phonological Complexity Measures**:
+- Syllables (CMU Dictionary): 1-5
+- Phonemes (CMU Dictionary): 1-10+
+- WCM (Stoel-Gammon 2010): 0-15
+- MSH (Phonological analysis): 1-6
+
+**Vocabulary**: 24,744 English words from the CMU Pronouncing Dictionary.
 
 ### Word Similarity Results (v2.3)
 
@@ -201,7 +202,7 @@ Word Similarity
 #### Phase 3: Phoneme-Sequence Syllable Structures ⭐ Main Production
 - **Output**: `embeddings/phase3/syllable_embeddings_phoible.pt` (~112 MB)
 - **Structure**: Onset/nucleus/coda as **sequences of Phase 2 vectors** (no averaging!)
-- **Vocabulary**: 18,000 words with psycholinguistic norms
+- **Vocabulary**: 24,744 English words
 - **Build time**: ~5 minutes
 - **Use for**: Word similarity, rhyme detection, phonological interventions
 
@@ -342,8 +343,8 @@ PhonoLex/
 - **Memory**: ~60MB for all data in browser
 
 ### Data Coverage
-- **18,000 words** with comprehensive psycholinguistic norms
-- **94 English phonemes** with PHOIBLE features
+- **24,744 words** with comprehensive psycholinguistic norms
+- **39 English phonemes** with PHOIBLE features
 - **General American English** dialect (CMU primary pronunciations)
 - **99% compression**: 56.7 MB → 0.6 MB gzipped
 
@@ -354,7 +355,7 @@ PhonoLex/
 - **v2.2.0-beta (Nov 2025)**: Phoneme-sequence soft Levenshtein (current)
   - No averaging - sequences preserved
   - 99% compression (56.7 MB → 0.6 MB gzipped)
-  - 18K words with comprehensive norms
+  - 24,744 words with comprehensive norms
 
 - **v2.2.1 (Oct 2025)**: Phoible component-wise averaging (deprecated)
   - Averaging destroyed structural information

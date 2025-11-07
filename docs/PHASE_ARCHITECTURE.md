@@ -22,7 +22,7 @@ Phase 1: Extract       Phase 2: Normalize     Phase 3: Aggregate
 **Purpose**: Extract universal phonological features from Phoible database
 
 **Input**: Phoible database CSV (2,716 languages, 38 distinctive features)
-**Output**: 38-dim ternary feature vectors (+, -, 0) for 94 English phonemes
+**Output**: 38-dim ternary feature vectors (+, -, 0) for 39 English phonemes
 **Format**: CSV file
 **Location**: `embeddings/phase1/phoible_features.csv`
 **Script**: `scripts/compute_phase1_features.py`

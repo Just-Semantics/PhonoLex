@@ -4,7 +4,7 @@ Welcome to PhonoLex! This guide will help you get started with the tool.
 
 ## Accessing PhonoLex
 
-Visit [phonolex.app](https://phonolex.app) to use PhonoLex in your browser. No installation or signup required!
+Visit [phonolex.justsemantics.net](https://phonolex.justsemantics.net) to use PhonoLex in your browser. No installation or signup required!
 
 ## Your First Word List
 
