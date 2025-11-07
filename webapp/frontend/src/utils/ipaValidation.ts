@@ -83,13 +83,13 @@ export function getIPASuggestion(input: string): string | null {
   // Check for common multi-character mistakes
   for (const [ascii, ipa] of Object.entries(ASCII_TO_IPA_SUGGESTIONS)) {
     if (cleaned === ascii || cleaned.includes(ascii)) {
-      return `Did you mean "${ipa}"? Use the keyboard icon to select IPA symbols.`;
+      return `Did you mean "${ipa}"? Use IPA keyboard.`;
     }
   }
 
   // Check if it's all ASCII (likely a mistake)
   if (/^[a-zA-Z]+$/.test(cleaned) && cleaned.length > 1) {
-    return `This looks like ASCII text. Use the keyboard icon (⌨️) to select IPA phonemes.`;
+    return `This looks like ASCII text. Use IPA keyboard (⌨️).`;
   }
 
   return null;
