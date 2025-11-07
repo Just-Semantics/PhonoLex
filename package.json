@@ -1,0 +1,27 @@
+{
+  "name": "phonolex",
+  "version": "2.3.0",
+  "description": "Phonological analysis toolkit - root workspace",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix webapp/frontend",
+    "build": "npm run build --prefix webapp/frontend",
+    "preview": "npm run preview --prefix webapp/frontend",
+    "test": "npm test --prefix webapp/frontend",
+    "type-check": "npm run type-check --prefix webapp/frontend",
+    "lint": "npm run lint --prefix webapp/frontend",
+    "lint:fix": "npm run lint:fix --prefix webapp/frontend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jneumann99/PhonoLex"
+  },
+  "keywords": [
+    "phonology",
+    "linguistics",
+    "embeddings",
+    "speech-language-pathology"
+  ],
+  "author": "Josh Neumann",
+  "license": "MIT"
+}
