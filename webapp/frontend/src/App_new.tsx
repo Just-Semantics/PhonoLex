@@ -5,7 +5,6 @@
  * - Custom Word Lists
  * - Contrastive Sets (Minimal Pairs, Maximal Opposition, Multiple Opposition)
  * - Phonological Similarity
- * - Phoneme Difficulty (Flege's SLM)
  * - Lookup (Words, Phonemes, Phoneme Comparison)
  */
 
@@ -23,20 +22,26 @@ import {
   Search as SearchIcon,
   CompareArrows as ContrastiveIcon,
   Tune as SimilarityIcon,
-  Psychology as PsychologyIcon,
 } from '@mui/icons-material';
 import { theme } from './theme/theme';
+import api from './services/phonolexApi';
 
 // Import components
 import AppHeader from './components/AppHeader';
 import ExpandableToolCard from './components/ExpandableToolCard';
 import ContrastiveInterventionTool from './components/tools/ContrastiveInterventionTool';
 import PhonologicalSimilarityTool from './components/tools/PhonologicalSimilarityTool';
-import PhonemeDifficultyTool from './components/tools/PhonemeDifficultyTool';
 import SearchTool from './components/tools/SearchTool';
 import Builder from './components/Builder';
 
 const App: React.FC = () => {
+  // Pre-load data at app startup to avoid lag when opening tools
+  React.useEffect(() => {
+    // Trigger data load in background
+    api.getStats().catch(err => {
+      console.error('Failed to pre-load data:', err);
+    });
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -86,16 +91,6 @@ const App: React.FC = () => {
             color="#D4A747"
           >
             <PhonologicalSimilarityTool />
-          </ExpandableToolCard>
-
-          {/* Phoneme Difficulty */}
-          <ExpandableToolCard
-            icon={<PsychologyIcon />}
-            title="Phoneme Difficulty"
-            description="Analyze L2 phoneme learning difficulty across 2,095 languages using Flege's Speech Learning Model"
-            color="#9C27B0"
-          >
-            <PhonemeDifficultyTool />
           </ExpandableToolCard>
 
           {/* Lookup */}

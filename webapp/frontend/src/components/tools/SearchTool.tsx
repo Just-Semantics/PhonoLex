@@ -92,12 +92,12 @@ const SearchTool: React.FC = () => {
   const [ipaWarning, setIpaWarning] = useState<string | null>(null);
   const [ipaWarning2, setIpaWarning2] = useState<string | null>(null);
 
-  // Load available features from phoneme data on mount
+  // Load available features from English phoneme data on mount
   React.useEffect(() => {
     const loadFeatures = async () => {
       try {
         const phonemeList = await api.listPhonemes();
-        // Extract feature names that have non-zero values ('+' or '-') for at least one English phoneme
+        // Extract feature names that have non-zero values ('+' or '-') for English phonemes
         const featureValues = new Map<string, Set<string>>();
 
         phonemeList.phonemes.forEach(p => {
@@ -118,8 +118,6 @@ const SearchTool: React.FC = () => {
         setAvailableFeatures(relevantFeatures);
       } catch (err) {
         console.error('Failed to load phoneme features:', err);
-        // Fallback to a basic set if API fails
-        setAvailableFeatures(['consonantal', 'sonorant', 'voice', 'nasal', 'continuant']);
       }
     };
     loadFeatures();
