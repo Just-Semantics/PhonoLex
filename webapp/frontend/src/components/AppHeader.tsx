@@ -117,6 +117,16 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
             </Button>
             <Button
               color="inherit"
+              startIcon={<DocsIcon />}
+              component="a"
+              href="https://phonolex.readthedocs.io"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Docs
+            </Button>
+            <Button
+              color="inherit"
               startIcon={<EmailIcon />}
               onClick={() => setContactDrawerOpen(true)}
             >
@@ -149,6 +159,15 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
       >
         <MenuItem onClick={() => { setInfoDrawerOpen(true); handleMobileMenuClose(); }}>
           <InfoIcon sx={{ mr: 1 }} /> Info
+        </MenuItem>
+        <MenuItem
+          component="a"
+          href="https://phonolex.readthedocs.io"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={handleMobileMenuClose}
+        >
+          <DocsIcon sx={{ mr: 1 }} /> Docs
         </MenuItem>
         <MenuItem onClick={() => { setContactDrawerOpen(true); handleMobileMenuClose(); }}>
           <EmailIcon sx={{ mr: 1 }} /> Contact
