@@ -1,6 +1,6 @@
 {
   "name": "phonolex",
-  "version": "2.2.0-beta",
+  "version": "2.3.0-beta",
   "description": "Phonological analysis toolkit - root workspace",
   "private": true,
   "scripts": {

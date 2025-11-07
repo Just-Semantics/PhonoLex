@@ -41,6 +41,12 @@ DOI: 10.3758/BF03195585
 Warriner, A. B., Kuperman, V., & Brysbaert, M. (2013). Norms of valence, arousal, and dominance for 13,915 English lemmas. *Behavior Research Methods*, 45(4), 1191-1207.
 DOI: 10.3758/s13428-012-0314-x
 
+### Phonotactic Probability
+
+**Biphone and Positional Segment Probability:**
+Vitevitch, M. S., & Luce, P. A. (2004). A Web-based interface to calculate phonotactic probability for words and nonwords in English. *Behavior Research Methods, Instruments, & Computers*, 36(3), 481-487.
+DOI: 10.3758/BF03195586
+
 ## Phonological Theory
 
 ### Word Complexity Measure

@@ -90,7 +90,7 @@ Each syllable component (onset/nucleus/coda) is represented as a **sequence of p
 - `crest`: onset = [[k], [ɹ]], nucleus = [[ɛ]], coda = [[s], [t]]
 - **Similarity**: 0.74 (correct!) vs old averaging: 0.99 (incorrect!)
 
-## Project Structure (v2.2.0-beta - Client-Side)
+## Project Structure (v2.3.0-beta - Client-Side)
 
 The project uses a **modern Python package structure** with a **fully client-side web application**:
 
@@ -613,7 +613,7 @@ git push origin feature/your-feature
 
 ## Future Roadmap
 
-**Current Version**: v2.2.0-beta (Client-Side, Phoneme-Sequence Architecture)
+**Current Version**: v2.3.0-beta (Client-Side, Phoneme-Sequence Architecture + Phonotactic Probability)
 
 Potential future enhancements:
 - Multi-language support (extend beyond English using Phoible's cross-linguistic features)

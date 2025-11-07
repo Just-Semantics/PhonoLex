@@ -5,9 +5,23 @@ All notable changes to PhonoLex will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.3.0-beta] - 2025-11-06
+## [2.3.0-beta] - 2025-01-07
 
 ### Added
+- **📊 Phonotactic Probability (Vitevitch & Luce 2004)**
+  - Computed on full CMU Pronouncing Dictionary (117,177 words) for unbiased estimates
+  - Three metrics per word:
+    - `phono_prob_avg`: Mean biphone probability (0-1, higher = more typical sound sequences)
+    - `phono_prob_sum_log`: Sum of log biphone probabilities (Vitevitch metric)
+    - `positional_prob_avg`: Mean positional segment probability
+  - 56-71% better biphone coverage than subset-only computation
+    - 238 onset biphones (vs 139 from subset)
+    - 136 coda biphones (vs 87 from subset)
+  - Integrated into Custom Word List Builder as filterable property
+  - Sortable "Phono" column in results table
+  - Citation added to Info drawer (Vitevitch & Luce 2004)
+  - Uses PhonoLex syllabification pipeline for IPA consistency
+  - Scripts: `compute_phonotactic_probability_full_cmu.py`, `merge_phonotactic_into_metadata.py`
 - **🎯 Phoneme-Sequence Soft Levenshtein Architecture**
   - Revolutionary approach: NO AVERAGING - preserves sequential structure within onset/nucleus/coda
   - Onset/coda: sequences of 76-dim phoneme vectors compared with soft Levenshtein distance

@@ -1,15 +1,16 @@
 # Psycholinguistic Norms Reference
 
-Complete documentation of all 12 word properties available in PhonoLex: 4 phonological complexity measures and 8 psycholinguistic properties.
+Complete documentation of all 15 word properties available in PhonoLex: 4 phonological complexity measures, 3 phonotactic probability metrics, and 8 psycholinguistic properties.
 
 ## Overview
 
-PhonoLex integrates word properties from multiple research datasets to provide comprehensive psycholinguistic characterization of 24,744 English words. Properties span four domains:
+PhonoLex integrates word properties from multiple research datasets to provide comprehensive psycholinguistic characterization of 24,744 English words. Properties span five domains:
 
 1. **Phonological Complexity** (4 properties): Syllables, Phonemes, WCM, MSH
-2. **Lexical Properties** (2 properties): Frequency, Age of Acquisition
-3. **Semantic Properties** (3 properties): Imageability, Familiarity, Concreteness
-4. **Affective Properties** (3 properties): Valence, Arousal, Dominance
+2. **Phonotactic Probability** (3 properties): Biphone Probability, Sum Log Probability, Positional Segment Probability
+3. **Lexical Properties** (2 properties): Frequency, Age of Acquisition
+4. **Semantic Properties** (3 properties): Imageability, Familiarity, Concreteness
+5. **Affective Properties** (3 properties): Valence, Arousal, Dominance
 
 **Total vocabulary**: 24,744 words from CMU Pronouncing Dictionary (General American English, primary pronunciations only)
 
@@ -295,6 +296,154 @@ MSH = (2.0 + 3.0) / 2 = 2.5
 
 **References**:
 - Namasivayam, A. K., et al. (2021). Milestones of speech production in children. *Journal of Speech, Language, and Hearing Research*.
+
+---
+
+## Phonotactic Probability (3 Properties)
+
+### Biphone Probability (Average)
+
+**Source**: Vitevitch & Luce (2004) - computed on full CMU Pronouncing Dictionary (117K words)
+
+**Range**: 0-1 (continuous)
+
+**Coverage**: ~100% (24,744 words)
+
+**Description**: Mean biphone probability across all phoneme pairs in the word. Higher values indicate more typical, phonotactically "legal" sound sequences in English.
+
+**What it measures**: The probability of phoneme sequences (biphones) occurring in English words, averaged across all biphones in the word.
+
+**Algorithm**:
+1. Syllabify word into onset-nucleus-coda structures
+2. Extract all biphone transitions:
+   - Within onset (e.g., /sp/ in "spray")
+   - Onset-to-nucleus (e.g., /s/-/ɪ/ in "sit")
+   - Nucleus-to-coda (e.g., /æ/-/t/ in "cat")
+   - Within coda (e.g., /st/ in "fast")
+3. Calculate probability of each biphone from full CMU corpus
+4. Average probabilities across all biphones in the word
+
+**Worked example: "cat" /kæt/**
+```
+Syllable: /kæt/
+  Onset: /k/
+  Nucleus: /æ/
+  Coda: /t/
+
+Biphone transitions:
+  1. /k/ → /æ/ (onset-to-nucleus): P = 0.0823
+  2. /æ/ → /t/ (nucleus-to-coda): P = 0.0412
+
+Average biphone probability: (0.0823 + 0.0412) / 2 = 0.0618
+```
+
+**Interpretation**:
+- **0.00-0.02**: Very low probability (unusual sound sequences) - "strengths", "twelfths"
+- **0.02-0.05**: Low-moderate probability - "splash", "squid"
+- **0.05-0.10**: Moderate-high probability - "cat", "dog", "jump"
+- **0.10+**: Very high probability (very typical sequences) - "mama", "no", "see"
+
+**Clinical use**: Phonotactic probability correlates with:
+- Word learning rate (high probability = faster learning)
+- Production accuracy (high probability = more accurate)
+- Neighborhood density effects (high probability words have denser neighborhoods)
+
+**Research use**: Phonotactic probability is key for:
+- Word learning studies (probability facilitates acquisition)
+- Speech perception (high probability aids recognition)
+- Phonological development (children acquire high-probability patterns first)
+
+**References**:
+- Vitevitch, M. S., & Luce, P. A. (2004). A Web-based interface to calculate phonotactic probability for words and nonwords in English. *Behavior Research Methods, Instruments, & Computers*, 36(3), 481-487.
+
+---
+
+### Sum Log Biphone Probability
+
+**Source**: Vitevitch & Luce (2004)
+
+**Range**: Negative values (typically -10 to 0)
+
+**Coverage**: ~100% (24,744 words)
+
+**Description**: Sum of log₁₀ probabilities for all biphones in the word. This is the standard metric from Vitevitch & Luce (2004).
+
+**Algorithm**:
+```
+For each biphone in word:
+  Add log₁₀(probability) to sum
+```
+
+**Why logarithms?**: Log transformation converts multiplicative probabilities to additive scores, making the metric more interpretable and reducing skew.
+
+**Worked example: "cat" /kæt/**
+```
+Biphone 1: /k/ → /æ/, P = 0.0823
+  log₁₀(0.0823) = -1.08
+
+Biphone 2: /æ/ → /t/, P = 0.0412
+  log₁₀(0.0412) = -1.39
+
+Sum log probability: -1.08 + (-1.39) = -2.47
+```
+
+**Interpretation**:
+- **More negative** = Lower phonotactic probability (unusual sequences)
+- **Less negative** (closer to 0) = Higher phonotactic probability (typical sequences)
+
+**Clinical use**: Sum log probability is the standard metric in research literature. Use for replicating published studies.
+
+**Research use**: This is the primary phonotactic probability metric in the literature, used in hundreds of studies on word learning, speech perception, and phonological development.
+
+---
+
+### Positional Segment Probability (Average)
+
+**Source**: Vitevitch & Luce (2004)
+
+**Range**: 0-1 (continuous)
+
+**Coverage**: ~100% (24,744 words)
+
+**Description**: Mean probability of individual phonemes occurring in their syllable positions (onset/nucleus/coda), averaged across all phonemes in the word.
+
+**What it measures**: How typical each individual phoneme is in its specific syllable position, independent of sequence probabilities.
+
+**Algorithm**:
+1. For each phoneme in word, determine its syllable position (onset, nucleus, or coda)
+2. Calculate probability of that phoneme in that position from full CMU corpus
+3. Average probabilities across all phonemes in word
+
+**Worked example: "cat" /kæt/**
+```
+Syllable: /kæt/
+  Onset: /k/
+  Nucleus: /æ/
+  Coda: /t/
+
+Positional probabilities:
+  1. /k/ in onset position: P = 0.0956 (9.56% of onsets are /k/)
+  2. /æ/ as nucleus: P = 0.0823 (8.23% of nuclei are /æ/)
+  3. /t/ in coda position: P = 0.0642 (6.42% of codas are /t/)
+
+Average positional probability: (0.0956 + 0.0823 + 0.0642) / 3 = 0.0807
+```
+
+**Comparison with biphone probability**:
+- **Biphone probability**: Measures phoneme *sequences* (transitions between phonemes)
+- **Positional probability**: Measures individual phoneme *frequencies* in specific positions
+
+**Interpretation**:
+- **0.00-0.02**: Rare phonemes in their positions
+- **0.02-0.05**: Uncommon phonemes
+- **0.05-0.10**: Common phonemes
+- **0.10+**: Very common phonemes (e.g., /t/ in coda, vowels in nucleus)
+
+**Clinical use**: Positional probability can guide phoneme selection:
+- High positional probability = phoneme occurs frequently in that position
+- Useful for selecting common sound targets in therapy
+
+**Research use**: Positional probability isolates segment frequency effects from sequence effects, useful for teasing apart different influences on word processing.
 
 ---
 
@@ -731,6 +880,7 @@ Low Arousal
 | Property Category | Properties | Average Coverage |
 |------------------|-----------|------------------|
 | **Phonological** | Syllables, Phonemes, WCM, MSH | 98% |
+| **Phonotactic** | Biphone Prob, Sum Log Prob, Positional Prob | 100% |
 | **Lexical** | Frequency, AoA | 87% |
 | **Semantic** | Imageability, Familiarity, Concreteness | 47% |
 | **Affective** | Valence, Arousal, Dominance | 50% |
