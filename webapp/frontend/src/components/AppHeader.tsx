@@ -5,7 +5,7 @@
  * - Branding/logo
  * - Navigation menu
  * - About/Info drawer
- * - Settings
+ * - Contact drawer
  */
 
 import React, { useState } from 'react';
@@ -29,7 +29,6 @@ import {
 import {
   Menu as MenuIcon,
   Info as InfoIcon,
-  Settings as SettingsIcon,
   Description as DocsIcon,
   GitHub as GitHubIcon,
   Close as CloseIcon,
@@ -45,7 +44,6 @@ interface AppHeaderProps {
 const AppHeader: React.FC<AppHeaderProps> = () => {
   const [mobileMenuAnchor, setMobileMenuAnchor] = useState<null | HTMLElement>(null);
   const [infoDrawerOpen, setInfoDrawerOpen] = useState(false);
-  const [settingsDrawerOpen, setSettingsDrawerOpen] = useState(false);
   const [contactDrawerOpen, setContactDrawerOpen] = useState(false);
   const [citationDialogOpen, setCitationDialogOpen] = useState(false);
   const [activeCitationCategory, setActiveCitationCategory] = useState<'phonological' | 'lexical' | 'semantic' | 'affective' | 'embeddings' | 'data-sources' | 'clinical-interventions' | null>(null);
@@ -118,13 +116,6 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
             </Button>
             <Button
               color="inherit"
-              startIcon={<SettingsIcon />}
-              onClick={() => setSettingsDrawerOpen(true)}
-            >
-              Settings
-            </Button>
-            <Button
-              color="inherit"
               startIcon={<EmailIcon />}
               onClick={() => setContactDrawerOpen(true)}
             >
@@ -157,9 +148,6 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
       >
         <MenuItem onClick={() => { setInfoDrawerOpen(true); handleMobileMenuClose(); }}>
           <InfoIcon sx={{ mr: 1 }} /> Info
-        </MenuItem>
-        <MenuItem onClick={() => { setSettingsDrawerOpen(true); handleMobileMenuClose(); }}>
-          <SettingsIcon sx={{ mr: 1 }} /> Settings
         </MenuItem>
         <MenuItem onClick={() => { setContactDrawerOpen(true); handleMobileMenuClose(); }}>
           <EmailIcon sx={{ mr: 1 }} /> Contact
@@ -390,51 +378,6 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
               Licensed under CC BY-SA 3.0 • Data resource for phonological research
             </Typography>
           </Box>
-        </Box>
-      </Drawer>
-
-      {/* Settings Drawer */}
-      <Drawer
-        anchor="right"
-        open={settingsDrawerOpen}
-        onClose={() => setSettingsDrawerOpen(false)}
-        sx={{
-          '& .MuiDrawer-paper': {
-            width: { xs: '100%', sm: 400 },
-            maxWidth: '100%',
-          },
-        }}
-      >
-        <Box sx={{ p: 3 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-            <Typography variant="h5" fontWeight={700}>
-              Settings
-            </Typography>
-            <IconButton onClick={() => setSettingsDrawerOpen(false)}>
-              <CloseIcon />
-            </IconButton>
-          </Box>
-
-          <Typography variant="body2" color="text.secondary">
-            Settings panel coming soon! This will include:
-          </Typography>
-          <List dense>
-            <ListItem>
-              <ListItemText primary="• Display preferences" />
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="• Default filter values" />
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="• Column visibility presets" />
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="• IPA vs ARPAbet display" />
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="• Export format preferences" />
-            </ListItem>
-          </List>
         </Box>
       </Drawer>
 
