@@ -354,8 +354,9 @@ Needs pronunciation lookup to extract actual allomorphs from SIGMORPHON data. Cu
 
 ### Conceptual Inspiration
 - **Word2Vec**: Mikolov et al. (2013) - Distributional semantics
-- **BERT**: Devlin et al. (2019) - Multi-task pre-training
-- **Phonological Features**: Chomsky & Halle (1968) - SPE
+- **Phonological Features**: Chomsky & Halle (1968) - SPE feature theory
+- **Levenshtein Distance**: Levenshtein, V. I. (1966) - String edit distance
+  - PhonoLex uses **soft Levenshtein distance** with cosine similarity-based substitution costs for phoneme-sequence comparison
 
 ### Data Sources
 - **Phoible**: Moran & McCloy (2019) - Cross-linguistic phonology

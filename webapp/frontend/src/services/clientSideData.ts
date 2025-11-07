@@ -53,6 +53,9 @@ interface WordMetadata {
   valence: number | null;
   arousal: number | null;
   dominance: number | null;
+  phono_prob_avg: number | null;
+  phono_prob_sum_log: number | null;
+  positional_prob_avg: number | null;
 }
 
 interface EmbeddingsData {
@@ -279,6 +282,10 @@ class ClientSideDataService {
       // Dominance
       if (request.min_dominance !== undefined && (metadata.dominance === null || metadata.dominance < request.min_dominance)) matches = false;
       if (request.max_dominance !== undefined && (metadata.dominance === null || metadata.dominance > request.max_dominance)) matches = false;
+
+      // Phonotactic Probability
+      if (request.min_phono_prob_avg !== undefined && (metadata.phono_prob_avg === null || metadata.phono_prob_avg < request.min_phono_prob_avg)) matches = false;
+      if (request.max_phono_prob_avg !== undefined && (metadata.phono_prob_avg === null || metadata.phono_prob_avg > request.max_phono_prob_avg)) matches = false;
 
       if (matches) {
         results.push(this.metadataToWord(metadata));
@@ -1421,6 +1428,7 @@ class ClientSideDataService {
       phonemes: { min: Infinity, max: -Infinity },
       wcm: { min: Infinity, max: -Infinity },
       msh: { min: Infinity, max: -Infinity },
+      phono_prob_avg: { min: Infinity, max: -Infinity },
       frequency: { min: Infinity, max: -Infinity },
       aoa: { min: Infinity, max: -Infinity },
       imageability: { min: Infinity, max: -Infinity },
@@ -1449,6 +1457,10 @@ class ClientSideDataService {
       if (metadata.msh_stage !== null && metadata.msh_stage !== undefined) {
         ranges.msh.min = Math.min(ranges.msh.min, metadata.msh_stage);
         ranges.msh.max = Math.max(ranges.msh.max, metadata.msh_stage);
+      }
+      if (metadata.phono_prob_avg !== null && metadata.phono_prob_avg !== undefined) {
+        ranges.phono_prob_avg.min = Math.min(ranges.phono_prob_avg.min, metadata.phono_prob_avg);
+        ranges.phono_prob_avg.max = Math.max(ranges.phono_prob_avg.max, metadata.phono_prob_avg);
       }
 
       // Lexical
@@ -1540,6 +1552,9 @@ class ClientSideDataService {
       valence: metadata.valence,
       arousal: metadata.arousal,
       dominance: metadata.dominance,
+      phono_prob_avg: metadata.phono_prob_avg,
+      phono_prob_sum_log: metadata.phono_prob_sum_log,
+      positional_prob_avg: metadata.positional_prob_avg,
     };
   }
 

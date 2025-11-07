@@ -122,6 +122,18 @@ Users can adjust weights to emphasize different components:
 | Assonance | 0.0 | 1.0 | 0.0 | Vowel matching |
 | Consonance | 0.5 | 0.0 | 0.5 | Consonant sounds (onset + coda) |
 
+## Algorithm References
+
+**Soft Levenshtein Distance**:
+- **Base algorithm**: Levenshtein, V. I. (1966). Binary codes capable of correcting deletions, insertions, and reversals. *Soviet Physics Doklady*, 10(8), 707-710.
+- **PhonoLex adaptation**: Custom implementation using cosine similarity between phoneme feature vectors as substitution costs, rather than binary match/mismatch
+- **Application**: Phoneme-sequence comparison with syllable-level structural preservation (onset/nucleus/coda)
+
+**Phoible Features**:
+- Moran, S., & McCloy, D. (2019). PHOIBLE 2.0. *Jena: Max Planck Institute*. https://phoible.org/
+
+---
+
 ## Data Pipeline
 
 ### Backend: Build Syllable Structures

@@ -54,7 +54,7 @@ import SelectionToolbar from './SelectionToolbar';
 // ============================================================================
 
 type SortField = 'word' | 'wcm_score' | 'msh_stage' | 'syllable_count' | 'similarity' |
-  'frequency' | 'aoa' | 'imageability' | 'familiarity' | 'concreteness' |
+  'phono_prob_avg' | 'frequency' | 'aoa' | 'imageability' | 'familiarity' | 'concreteness' |
   'valence' | 'arousal' | 'dominance';
 type SortDirection = 'asc' | 'desc';
 
@@ -158,6 +158,10 @@ const WordListTable: React.FC<WordListTableProps> = ({
         case 'syllable_count':
           aVal = a.syllable_count || 0;
           bVal = b.syllable_count || 0;
+          break;
+        case 'phono_prob_avg':
+          aVal = a.phono_prob_avg || 0;
+          bVal = b.phono_prob_avg || 0;
           break;
         case 'frequency':
           aVal = a.frequency || 0;
@@ -628,6 +632,17 @@ const WordListTable: React.FC<WordListTableProps> = ({
                     </Tooltip>
                   </TableCell>
                   <TableCell align="center">
+                    <Tooltip title="Phonotactic Probability (0-1, higher = more typical)">
+                      <TableSortLabel
+                        active={sortField === 'phono_prob_avg'}
+                        direction={sortField === 'phono_prob_avg' ? sortDirection : 'asc'}
+                        onClick={() => handleSort('phono_prob_avg')}
+                      >
+                        Phono
+                      </TableSortLabel>
+                    </Tooltip>
+                  </TableCell>
+                  <TableCell align="center">
                     <Tooltip title="Word frequency (per million words)">
                       <TableSortLabel
                         active={sortField === 'frequency'}
@@ -799,6 +814,13 @@ const WordListTable: React.FC<WordListTableProps> = ({
                     <TableCell align="center">
                       <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'monospace' }}>
                         {word.msh_stage?.toString() || '-'}
+                      </Typography>
+                    </TableCell>
+
+                    {/* Phonotactic Probability */}
+                    <TableCell align="center">
+                      <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'monospace' }}>
+                        {word.phono_prob_avg !== null && word.phono_prob_avg !== undefined ? word.phono_prob_avg.toFixed(3) : '-'}
                       </Typography>
                     </TableCell>
 
