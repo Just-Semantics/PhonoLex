@@ -364,7 +364,7 @@ const Builder: React.FC = () => {
                                     edge="end"
                                     color="primary"
                                     size="small"
-                                    sx={{ minWidth: 40, minHeight: 40 }}
+                                    sx={{ minWidth: { xs: 48, sm: 44 }, minHeight: { xs: 48, sm: 44 } }}
                                   >
                                     <KeyboardIcon />
                                   </IconButton>
@@ -777,7 +777,7 @@ const Builder: React.FC = () => {
                         edge="end"
                         color="primary"
                         size="small"
-                        sx={{ minWidth: 40, minHeight: 40 }}
+                        sx={{ minWidth: { xs: 48, sm: 44 }, minHeight: { xs: 48, sm: 44 } }}
                       >
                         <KeyboardIcon />
                       </IconButton>

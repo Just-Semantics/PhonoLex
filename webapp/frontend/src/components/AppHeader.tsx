@@ -94,12 +94,13 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
               label="v2.2.0-beta"
               size="small"
               sx={{
-                height: { xs: 18, sm: 20 },
-                fontSize: { xs: '0.65rem', sm: '0.7rem' },
+                display: { xs: 'none', sm: 'inline-flex' },
+                height: { sm: 20 },
+                fontSize: { sm: '0.7rem' },
                 bgcolor: 'rgba(255,255,255,0.2)',
                 color: 'white',
                 '& .MuiChip-label': {
-                  px: { xs: 0.5, sm: 1 },
+                  px: { sm: 1 },
                 },
               }}
             />

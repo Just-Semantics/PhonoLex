@@ -415,7 +415,7 @@ const ContrastiveInterventionTool: React.FC = () => {
 
         {/* Stepper for Maximal Mode */}
         {mode === 'maximal' && (
-          <Stepper activeStep={maximalStep} sx={{ pt: 2, pb: 1 }}>
+          <Stepper activeStep={maximalStep} alternativeLabel={isMobile} sx={{ pt: 2, pb: 1 }}>
             <Step>
               <StepLabel>Enter Phonemes & Position</StepLabel>
             </Step>
@@ -467,7 +467,7 @@ const ContrastiveInterventionTool: React.FC = () => {
                           edge="end"
                           color="primary"
                           size="small"
-                          sx={{ minWidth: 40, minHeight: 40 }}
+                          sx={{ minWidth: { xs: 48, sm: 44 }, minHeight: { xs: 48, sm: 44 } }}
                         >
                           <KeyboardIcon />
                         </IconButton>
@@ -510,7 +510,7 @@ const ContrastiveInterventionTool: React.FC = () => {
                           edge="end"
                           color="primary"
                           size="small"
-                          sx={{ minWidth: 40, minHeight: 40 }}
+                          sx={{ minWidth: { xs: 48, sm: 44 }, minHeight: { xs: 48, sm: 44 } }}
                         >
                           <KeyboardIcon />
                         </IconButton>
@@ -572,7 +572,7 @@ const ContrastiveInterventionTool: React.FC = () => {
                           edge="end"
                           color="primary"
                           size="small"
-                          sx={{ minWidth: 40, minHeight: 40 }}
+                          sx={{ minWidth: { xs: 48, sm: 44 }, minHeight: { xs: 48, sm: 44 } }}
                         >
                           <KeyboardIcon />
                         </IconButton>
@@ -615,7 +615,7 @@ const ContrastiveInterventionTool: React.FC = () => {
                           edge="end"
                           color="primary"
                           size="small"
-                          sx={{ minWidth: 40, minHeight: 40 }}
+                          sx={{ minWidth: { xs: 48, sm: 44 }, minHeight: { xs: 48, sm: 44 } }}
                         >
                           <KeyboardIcon />
                         </IconButton>
@@ -678,7 +678,7 @@ const ContrastiveInterventionTool: React.FC = () => {
                           edge="end"
                           color="primary"
                           size="small"
-                          sx={{ minWidth: 40, minHeight: 40 }}
+                          sx={{ minWidth: { xs: 48, sm: 44 }, minHeight: { xs: 48, sm: 44 } }}
                         >
                           <KeyboardIcon />
                         </IconButton>
@@ -723,7 +723,7 @@ const ContrastiveInterventionTool: React.FC = () => {
                           edge="end"
                           color="primary"
                           size="small"
-                          sx={{ minWidth: 40, minHeight: 40 }}
+                          sx={{ minWidth: { xs: 48, sm: 44 }, minHeight: { xs: 48, sm: 44 } }}
                         >
                           <KeyboardIcon />
                         </IconButton>

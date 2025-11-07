@@ -17,6 +17,8 @@ import {
   Tab,
   IconButton,
   CircularProgress,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import api from '../services/phonolexApi';
@@ -41,6 +43,8 @@ const PhonemePickerDialog: React.FC<PhonemePickerDialogProps> = ({
   onSelect,
   filter,
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [tabIndex, setTabIndex] = React.useState(0);
   const [consonants, setConsonants] = React.useState<string[]>([]);
   const [vowels, setVowels] = React.useState<string[]>([]);
@@ -110,7 +114,7 @@ const PhonemePickerDialog: React.FC<PhonemePickerDialogProps> = ({
       }}
       maxWidth="md"
       fullWidth
-      fullScreen={false}
+      fullScreen={isMobile}
       sx={{
         '& .MuiDialog-paper': {
           maxHeight: { xs: '90vh', sm: '80vh' },

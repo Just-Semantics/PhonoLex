@@ -146,7 +146,7 @@ const PhonologicalSimilarityTool: React.FC = () => {
                     ? 'primary'
                     : 'default'
                 }
-                sx={{ mb: 1 }}
+                sx={{ mb: { xs: 1.5, sm: 1 } }}
               />
             ))}
           </Stack>

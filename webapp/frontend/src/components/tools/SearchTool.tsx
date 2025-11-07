@@ -349,6 +349,7 @@ const SearchTool: React.FC = () => {
                       onClick={() => openPhonemePicker('phoneme1')}
                       edge="end"
                       color="primary"
+                      sx={{ minWidth: { xs: 48, sm: 44 }, minHeight: { xs: 48, sm: 44 } }}
                     >
                       <KeyboardIcon />
                     </IconButton>
@@ -399,6 +400,7 @@ const SearchTool: React.FC = () => {
                         onClick={() => openPhonemePicker('phoneme2')}
                         edge="end"
                         color="primary"
+                        sx={{ minWidth: { xs: 48, sm: 44 }, minHeight: { xs: 48, sm: 44 } }}
                       >
                         <KeyboardIcon />
                       </IconButton>
@@ -411,6 +413,7 @@ const SearchTool: React.FC = () => {
                     color="primary"
                     size="small"
                     title="Swap phonemes"
+                    sx={{ minWidth: { xs: 48, sm: 44 }, minHeight: { xs: 48, sm: 44 } }}
                   >
                     <SwapIcon />
                   </IconButton>
@@ -434,8 +437,8 @@ const SearchTool: React.FC = () => {
               Search for phonemes by Phoible features
             </Typography>
             {featureFilters.map((filter, index) => (
-              <Stack key={index} direction="row" spacing={1} sx={{ mb: 1 }}>
-                <FormControl size="small" sx={{ flex: 1 }}>
+              <Stack key={index} direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ mb: 1 }}>
+                <FormControl size="small" sx={{ flex: 1, width: { xs: '100%', sm: 'auto' } }}>
                   <InputLabel>Feature</InputLabel>
                   <Select
                     value={filter.feature}
@@ -447,25 +450,28 @@ const SearchTool: React.FC = () => {
                     ))}
                   </Select>
                 </FormControl>
-                <FormControl size="small" sx={{ width: 100 }}>
-                  <InputLabel>Value</InputLabel>
-                  <Select
-                    value={filter.value}
-                    label="Value"
-                    onChange={(e) => updateFeatureFilter(index, 'value', e.target.value)}
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <FormControl size="small" sx={{ width: { xs: 120, sm: 100 } }}>
+                    <InputLabel>Value</InputLabel>
+                    <Select
+                      value={filter.value}
+                      label="Value"
+                      onChange={(e) => updateFeatureFilter(index, 'value', e.target.value)}
+                    >
+                      <MenuItem value="+">+</MenuItem>
+                      <MenuItem value="-">-</MenuItem>
+                      <MenuItem value="0">0</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <IconButton
+                    onClick={() => removeFeatureFilter(index)}
+                    disabled={featureFilters.length === 1}
+                    size="small"
+                    sx={{ minWidth: { xs: 48, sm: 44 }, minHeight: { xs: 48, sm: 44 } }}
                   >
-                    <MenuItem value="+">+</MenuItem>
-                    <MenuItem value="-">-</MenuItem>
-                    <MenuItem value="0">0</MenuItem>
-                  </Select>
-                </FormControl>
-                <IconButton
-                  onClick={() => removeFeatureFilter(index)}
-                  disabled={featureFilters.length === 1}
-                  size="small"
-                >
-                  <RemoveIcon />
-                </IconButton>
+                    <RemoveIcon />
+                  </IconButton>
+                </Stack>
               </Stack>
             ))}
             <Button
