@@ -269,7 +269,7 @@ const MaximalOppositionTool: React.FC = () => {
             <Select
               value={position}
               label="Position in Word"
-              onChange={(e) => setPosition(e.target.value as any)}
+              onChange={(e) => setPosition(e.target.value as 'initial' | 'medial' | 'final' | 'any')}
             >
               <MenuItem value="initial">Word-Initial</MenuItem>
               <MenuItem value="medial">Word-Medial</MenuItem>

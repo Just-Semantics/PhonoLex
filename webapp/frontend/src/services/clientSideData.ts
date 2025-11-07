@@ -134,10 +134,10 @@ class ClientSideDataService {
       }
 
       // Parse JSON with individual error handling
-      let metadataJson: any;
-      let embeddingsJson: any;
-      let _arpaJson: any;
-      let phonemesJson: any;
+      let metadataJson: Record<string, WordMetadata>;
+      let embeddingsJson: EmbeddingsData;
+      let _arpaJson: Record<string, string>;
+      let phonemesJson: { phonemes: PhonemeData[] };
 
       try {
         metadataJson = await metadataRes.json();
@@ -165,7 +165,7 @@ class ClientSideDataService {
       }
 
       // Store metadata in Map for fast lookup
-      Object.entries(metadataJson as Record<string, WordMetadata>).forEach(
+      Object.entries(metadataJson).forEach(
         ([word, data]) => {
           this.wordMetadata.set(word, data);
         }
