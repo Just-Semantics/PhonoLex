@@ -29,9 +29,8 @@ interface FormData {
 
 type SubmitStatus = 'idle' | 'submitting' | 'success' | 'error';
 
-// TODO: Replace with your Web3Forms access key from https://web3forms.com/
-// Sign up with contact@justsemantics.net to get your key
-const WEB3FORMS_ACCESS_KEY = 'YOUR_WEB3FORMS_ACCESS_KEY_HERE';
+// Web3Forms access key for contact@justsemantics.net
+const WEB3FORMS_ACCESS_KEY = '925e5689-79f2-4d95-9704-18c21d1933d1';
 
 export default function ContactForm() {
   const [formData, setFormData] = useState<FormData>({
