@@ -52,11 +52,17 @@ nav:
   - Getting Started:
     - Quick Start: getting-started/quick-start.md
     - Tools Overview: getting-started/tools-overview.md
+    - Practical Examples: getting-started/examples.md
   - User Guide:
     - Custom Word Lists: user-guide/custom-word-lists.md
     - Contrastive Sets: user-guide/contrastive-sets.md
     - Phonological Similarity: user-guide/phonological-similarity.md
     - Lookup: user-guide/lookup.md
+  - Technical:
+    - Architecture: technical/architecture.md
+  - Reference:
+    - Psycholinguistic Norms: reference/psycholinguistic-norms.md
+    - PHOIBLE Features: reference/phoible-features.md
   - About:
     - Citations: about/citations.md
     - License: about/license.md

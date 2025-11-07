@@ -172,6 +172,9 @@ This version has a critical bug where component-wise averaging destroys sequenti
   - Integration tests for minimal set generation with real phoneme data
   - API adapter tests for all public methods
   - Edge case handling (phonotactic constraints, duplicate detection)
+- **Example Verification Script**: Added `scripts/verify_examples.py` to programmatically test all documentation examples
+  - Validates all 8 Custom Word Lists examples against actual word data
+  - Ensures documentation accuracy by checking expected keywords appear in results
 
 ### Changed
 - **Unified Tool Architecture**: Replaced separate MinimalPairsTool and MaximalOppositionTool with ContrastiveInterventionTool
@@ -181,21 +184,58 @@ This version has a critical bug where component-wise averaging destroys sequenti
 - **Improved Example Placeholders**: Updated Multiple Opposition mode to use t→d,k example (works in all positions)
 - **TypeScript Type Safety**: Fixed 3 `any` type warnings in ContrastiveInterventionTool
 
+### Improved
+- **🎯 Logarithmic Frequency Slider**: Fixed severe usability issue with frequency filtering
+  - Old: Linear slider made low frequencies (0-100) impossible to select - first tick at 1,300+
+  - New: Log10 scale with fine control at low end while preserving full range (0-2.1M)
+  - Added frequency marks: 0, 10, 100, 1K, 10K for intuitive reference
+  - Displays actual frequency values (not log values) for user clarity
+- **Unified Exclusion Field UX**: Made phoneme exclusions consistent with pattern fields
+  - Removed "Add" button requirement - now space-separated like all other phoneme inputs
+  - Removed chip display for consistency
+  - Auto-spacing when selecting multiple phonemes from IPA keyboard
+  - Same placeholder text as pattern fields: "Use keyboard icon → to select IPA"
+
 ### Fixed
+- **🐛 Critical: Concreteness Data Loading Bug**
+  - Was reading wrong column (Bigram instead of Conc.M) from psycholinguistic norms
+  - Fixed column index from row[1] to row[2] in `english_data_loader.py`
+  - Coverage increased from 0% to 97.8% (24,189 words now have concreteness values)
+  - Re-exported all client-side data with corrected values
 - Removed unused `beforeAll` import from test files (ESLint error)
 - Fixed duplicate phonemes appearing in Multiple Opposition sets
 - Added proper type annotations for Select onChange handlers
+
+### Documentation
+- **Updated Examples for Accuracy**: Fixed 4 examples to reflect actual app behavior
+  - Example 3: Updated expected words (hear, hair, air, fair, bear, chair, fear)
+  - Example 4: Updated for negative valence thresholds (afraid, scared, mad, evil, dangerous, attack)
+  - Example 16: Updated for concreteness after bug fix (justice, theory, particular, professional, affair, destiny, former, instance)
+  - Example 17: Updated for neutral valence/arousal (table, paper, floor, time, thing, work, wait, put)
+- All 8 Custom Word Lists examples verified with real data (✅ passing)
 
 ### Research
 - Implemented algorithms from Storkel (2022): "Minimal, maximal, or multiple: Which contrastive intervention approach to use with children with speech sound disorder?"
 - Validated Maximal Classification for target diversity
 - Validated Maximal Distinction for phonological distance maximization
 
+### Code Quality
+- **Python Formatting**: Applied Black formatting to 24 files (100% compliance)
+  - All scripts and source files now follow consistent PEP 8 style
+  - Automated formatting for maintainability
+- **Python Linting**: Fixed all Ruff linting issues
+  - Auto-fixed 49 style violations
+  - Removed unused variable in `export_phoneme_data.py`
+  - Added proper `noqa` directives for intentional late imports (E402)
+- **Frontend Quality**: All checks passing
+  - TypeScript type checking: ✅ No errors
+  - ESLint: ✅ 5 warnings (within limit of 50)
+  - Production build: ✅ 672.86 kB → 199.17 kB gzipped
+
 ### Technical
 - All tests passing (35/35)
-- Lint warnings: 5 (within project limit of 50)
-- TypeScript type checking: No errors
 - Zero breaking changes to existing APIs
+- All example verification tests passing (8/8)
 
 ## [2.1.1-beta] - 2025-11-04
 

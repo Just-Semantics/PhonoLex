@@ -15,7 +15,6 @@ from pathlib import Path
 import torch
 import numpy as np
 import gzip
-import pickle
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -77,8 +76,8 @@ def quantize_syllable_embeddings(embeddings_path: str, output_path: str = None):
 
     # Load embeddings
     print(f"\n[1/4] Loading embeddings from {embeddings_path}...")
-    checkpoint = torch.load(embeddings_path, map_location='cpu', weights_only=False)
-    word_to_syllable_embeddings = checkpoint['word_to_syllable_embeddings']
+    checkpoint = torch.load(embeddings_path, map_location="cpu", weights_only=False)
+    word_to_syllable_embeddings = checkpoint["word_to_syllable_embeddings"]
 
     print(f"✓ Loaded {len(word_to_syllable_embeddings):,} words")
 
@@ -87,7 +86,7 @@ def quantize_syllable_embeddings(embeddings_path: str, output_path: str = None):
     print(f"✓ Total syllables: {total_syllables:,}")
 
     # Quantize all embeddings
-    print(f"\n[2/4] Quantizing embeddings (float32 → int8)...")
+    print("\n[2/4] Quantizing embeddings (float32 → int8)...")
 
     quantized_data = {}
     scales = {}
@@ -108,21 +107,23 @@ def quantize_syllable_embeddings(embeddings_path: str, output_path: str = None):
     print(f"✓ Quantized {len(quantized_data):,} words")
 
     # Create output checkpoint
-    print(f"\n[3/4] Creating quantized checkpoint...")
+    print("\n[3/4] Creating quantized checkpoint...")
 
     quantized_checkpoint = {
-        'quantized_embeddings': quantized_data,
-        'scales': scales,
-        'embedding_dim': 384,
-        'quantization': 'int8_symmetric',
-        'num_words': len(quantized_data),
-        'original_path': embeddings_path,
-        'filter_criterion': checkpoint.get('filter_criterion', 'unknown')
+        "quantized_embeddings": quantized_data,
+        "scales": scales,
+        "embedding_dim": 384,
+        "quantization": "int8_symmetric",
+        "num_words": len(quantized_data),
+        "original_path": embeddings_path,
+        "filter_criterion": checkpoint.get("filter_criterion", "unknown"),
     }
 
     # Save quantized embeddings
     if output_path is None:
-        output_path = Path(embeddings_path).parent / (Path(embeddings_path).stem + '_quantized.pt')
+        output_path = Path(embeddings_path).parent / (
+            Path(embeddings_path).stem + "_quantized.pt"
+        )
 
     print(f"\n[4/4] Saving to {output_path}...")
     torch.save(quantized_checkpoint, output_path)
@@ -132,8 +133,8 @@ def quantize_syllable_embeddings(embeddings_path: str, output_path: str = None):
     quantized_size = Path(output_path).stat().st_size / (1024 * 1024)
     reduction = 100 * (1 - quantized_size / original_size)
 
-    print(f"\n✓ Saved quantized embeddings")
-    print(f"\n" + "=" * 80)
+    print("\n✓ Saved quantized embeddings")
+    print("\n" + "=" * 80)
     print("SIZE COMPARISON")
     print("=" * 80)
     print(f"Original (float32):  {original_size:>6.1f} MB")
@@ -141,17 +142,17 @@ def quantize_syllable_embeddings(embeddings_path: str, output_path: str = None):
     print(f"Reduction:           {reduction:>6.1f}%")
 
     # Test compression
-    print(f"\n" + "=" * 80)
+    print("\n" + "=" * 80)
     print("COMPRESSION TEST (gzip)")
     print("=" * 80)
 
     # Compress original
-    with open(embeddings_path, 'rb') as f:
+    with open(embeddings_path, "rb") as f:
         original_data = f.read()
     compressed_original = gzip.compress(original_data, compresslevel=9)
 
     # Compress quantized
-    with open(output_path, 'rb') as f:
+    with open(output_path, "rb") as f:
         quantized_file_data = f.read()
     compressed_quantized = gzip.compress(quantized_file_data, compresslevel=9)
 
@@ -160,10 +161,12 @@ def quantize_syllable_embeddings(embeddings_path: str, output_path: str = None):
 
     print(f"Original compressed:  {original_compressed_size:>6.1f} MB")
     print(f"Quantized compressed: {quantized_compressed_size:>6.1f} MB")
-    print(f"Total reduction:      {100*(1-quantized_compressed_size/original_compressed_size):>6.1f}%")
+    print(
+        f"Total reduction:      {100*(1-quantized_compressed_size/original_compressed_size):>6.1f}%"
+    )
 
     # Test reconstruction error
-    print(f"\n" + "=" * 80)
+    print("\n" + "=" * 80)
     print("QUALITY TEST (Reconstruction Error)")
     print("=" * 80)
 
@@ -176,7 +179,9 @@ def quantize_syllable_embeddings(embeddings_path: str, output_path: str = None):
         quantized_sylls = quantized_data[word]
         word_scales_list = scales[word]
 
-        for orig_syl, quant_syl, scale in zip(original, quantized_sylls, word_scales_list):
+        for orig_syl, quant_syl, scale in zip(
+            original, quantized_sylls, word_scales_list
+        ):
             reconstructed = dequantize_vector(quant_syl, scale)
 
             # Compute relative error
@@ -189,13 +194,15 @@ def quantize_syllable_embeddings(embeddings_path: str, output_path: str = None):
 
     print(f"Mean relative error:  {mean_error:.4f} ({mean_error*100:.2f}%)")
     print(f"Max relative error:   {max_error:.4f} ({max_error*100:.2f}%)")
-    print(f"\n✓ Quantization quality: {'Excellent' if mean_error < 0.01 else 'Good' if mean_error < 0.05 else 'Acceptable'}")
+    print(
+        f"\n✓ Quantization quality: {'Excellent' if mean_error < 0.01 else 'Good' if mean_error < 0.05 else 'Acceptable'}"
+    )
 
     print("\n" + "=" * 80)
     print("✓ SUCCESS: Embeddings quantized")
     print("=" * 80)
-    print(f"\nUsage:")
-    print(f"  from load_quantized_embeddings import load_quantized")
+    print("\nUsage:")
+    print("  from load_quantized_embeddings import load_quantized")
     print(f"  embeddings = load_quantized('{output_path}')")
 
     return output_path
@@ -211,10 +218,10 @@ def load_quantized_embeddings(checkpoint_path: str):
     Returns:
         Dict[str, List[np.ndarray]] - word -> syllable embeddings (float32)
     """
-    checkpoint = torch.load(checkpoint_path, map_location='cpu', weights_only=False)
+    checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
 
-    quantized_data = checkpoint['quantized_embeddings']
-    scales = checkpoint['scales']
+    quantized_data = checkpoint["quantized_embeddings"]
+    scales = checkpoint["scales"]
 
     # Dequantize
     dequantized = {}
@@ -239,13 +246,13 @@ def main():
         "--input",
         type=str,
         default="embeddings/layer4/syllable_embeddings_filtered.pt",
-        help="Path to input embeddings"
+        help="Path to input embeddings",
     )
     parser.add_argument(
         "--output",
         type=str,
         default=None,
-        help="Path to output quantized embeddings (auto-generated if not specified)"
+        help="Path to output quantized embeddings (auto-generated if not specified)",
     )
     args = parser.parse_args()
 

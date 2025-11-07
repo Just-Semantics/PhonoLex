@@ -24,30 +24,57 @@ Date: 2025-01-06
 
 import csv
 from pathlib import Path
-from typing import Dict, List, Tuple, Set, Optional
+from typing import Dict, List, Tuple, Optional
 from dataclasses import dataclass, field
 from collections import defaultdict
-import numpy as np
 
 
 # Feature order from Phoible (38 features)
 PHOIBLE_FEATURES = [
-    'tone', 'stress', 'syllabic', 'short', 'long',
-    'consonantal', 'sonorant', 'continuant', 'delayedRelease', 'approximant',
-    'tap', 'trill', 'nasal', 'lateral',
-    'labial', 'round', 'labiodental',
-    'coronal', 'anterior', 'distributed', 'strident',
-    'dorsal', 'high', 'low', 'front', 'back', 'tense',
-    'retractedTongueRoot', 'advancedTongueRoot',
-    'periodicGlottalSource', 'epilaryngealSource',
-    'spreadGlottis', 'constrictedGlottis', 'fortis',
-    'raisedLarynxEjective', 'loweredLarynxImplosive', 'click'
+    "tone",
+    "stress",
+    "syllabic",
+    "short",
+    "long",
+    "consonantal",
+    "sonorant",
+    "continuant",
+    "delayedRelease",
+    "approximant",
+    "tap",
+    "trill",
+    "nasal",
+    "lateral",
+    "labial",
+    "round",
+    "labiodental",
+    "coronal",
+    "anterior",
+    "distributed",
+    "strident",
+    "dorsal",
+    "high",
+    "low",
+    "front",
+    "back",
+    "tense",
+    "retractedTongueRoot",
+    "advancedTongueRoot",
+    "periodicGlottalSource",
+    "epilaryngealSource",
+    "spreadGlottis",
+    "constrictedGlottis",
+    "fortis",
+    "raisedLarynxEjective",
+    "loweredLarynxImplosive",
+    "click",
 ]
 
 
 @dataclass
 class MaximalOppositionPair:
     """A pair of phonemes suitable for maximal opposition intervention"""
+
     phoneme1: str
     phoneme2: str
 
@@ -62,10 +89,12 @@ class MaximalOppositionPair:
     maximal_opposition_score: float
 
     def __repr__(self):
-        return (f"MaximalOppositionPair(/{self.phoneme1}/ - /{self.phoneme2}/, "
-                f"major_class={self.major_class_diff}, "
-                f"feature_diffs={self.num_feature_diffs}, "
-                f"score={self.maximal_opposition_score:.2f})")
+        return (
+            f"MaximalOppositionPair(/{self.phoneme1}/ - /{self.phoneme2}/, "
+            f"major_class={self.major_class_diff}, "
+            f"feature_diffs={self.num_feature_diffs}, "
+            f"score={self.maximal_opposition_score:.2f})"
+        )
 
 
 class MaximalOppositionGenerator:
@@ -88,7 +117,9 @@ class MaximalOppositionGenerator:
         if phoible_data_path is None:
             # Default to bundled data
             repo_root = Path(__file__).parent.parent.parent.parent
-            phoible_data_path = repo_root / 'data' / 'phoible' / 'phoible-segments-features.tsv'
+            phoible_data_path = (
+                repo_root / "data" / "phoible" / "phoible-segments-features.tsv"
+            )
 
         self.phoneme_features = self._load_features(phoible_data_path)
 
@@ -96,10 +127,10 @@ class MaximalOppositionGenerator:
         """Load Phoible features for all phonemes"""
         features = {}
 
-        with open(tsv_path, 'r', encoding='utf-8') as f:
-            reader = csv.DictReader(f, delimiter='\t')
+        with open(tsv_path, "r", encoding="utf-8") as f:
+            reader = csv.DictReader(f, delimiter="\t")
             for row in reader:
-                segment = row['segment']
+                segment = row["segment"]
                 # Store all features
                 features[segment] = {feat: row[feat] for feat in PHOIBLE_FEATURES}
 
@@ -111,7 +142,7 @@ class MaximalOppositionGenerator:
             return False
 
         # Consonantal = + means it's a consonant
-        return self.phoneme_features[phoneme]['consonantal'] == '+'
+        return self.phoneme_features[phoneme]["consonantal"] == "+"
 
     def is_sonorant(self, phoneme: str) -> bool:
         """
@@ -123,7 +154,7 @@ class MaximalOppositionGenerator:
         if phoneme not in self.phoneme_features:
             return False
 
-        return self.phoneme_features[phoneme]['sonorant'] == '+'
+        return self.phoneme_features[phoneme]["sonorant"] == "+"
 
     def is_obstruent(self, phoneme: str) -> bool:
         """
@@ -135,7 +166,7 @@ class MaximalOppositionGenerator:
             return False
 
         feats = self.phoneme_features[phoneme]
-        return feats['consonantal'] == '+' and feats['sonorant'] == '-'
+        return feats["consonantal"] == "+" and feats["sonorant"] == "-"
 
     def has_major_class_difference(self, phoneme1: str, phoneme2: str) -> bool:
         """
@@ -147,7 +178,10 @@ class MaximalOppositionGenerator:
         This distinction is clinically meaningful because it captures
         a wide range of phonological patterns children struggle with.
         """
-        if phoneme1 not in self.phoneme_features or phoneme2 not in self.phoneme_features:
+        if (
+            phoneme1 not in self.phoneme_features
+            or phoneme2 not in self.phoneme_features
+        ):
             return False
 
         # Both must be consonants
@@ -160,14 +194,19 @@ class MaximalOppositionGenerator:
 
         return son1 != son2
 
-    def count_feature_differences(self, phoneme1: str, phoneme2: str) -> Tuple[int, List[str]]:
+    def count_feature_differences(
+        self, phoneme1: str, phoneme2: str
+    ) -> Tuple[int, List[str]]:
         """
         Count how many distinctive features differ between two phonemes
 
         Returns:
             (num_diffs, list_of_differing_features)
         """
-        if phoneme1 not in self.phoneme_features or phoneme2 not in self.phoneme_features:
+        if (
+            phoneme1 not in self.phoneme_features
+            or phoneme2 not in self.phoneme_features
+        ):
             return (0, [])
 
         feats1 = self.phoneme_features[phoneme1]
@@ -185,11 +224,7 @@ class MaximalOppositionGenerator:
 
         return (len(diffs), diffs)
 
-    def calculate_maximal_opposition_score(
-        self,
-        phoneme1: str,
-        phoneme2: str
-    ) -> float:
+    def calculate_maximal_opposition_score(self, phoneme1: str, phoneme2: str) -> float:
         """
         Calculate a score indicating how suitable this pair is for
         maximal opposition intervention
@@ -223,7 +258,7 @@ class MaximalOppositionGenerator:
         unknown_sounds: List[str],
         known_sounds: Optional[List[str]] = None,
         min_score: float = 100.0,
-        top_n: int = 10
+        top_n: int = 10,
     ) -> List[MaximalOppositionPair]:
         """
         Generate maximal opposition pairs from unknown sounds
@@ -241,7 +276,7 @@ class MaximalOppositionGenerator:
 
         # Only consider pairs where BOTH sounds are unknown
         for i, p1 in enumerate(unknown_sounds):
-            for p2 in unknown_sounds[i+1:]:
+            for p2 in unknown_sounds[i + 1 :]:
                 # Skip if either is known
                 if known_sounds and (p1 in known_sounds or p2 in known_sounds):
                     continue
@@ -259,7 +294,7 @@ class MaximalOppositionGenerator:
                         major_class_diff=major_class,
                         num_feature_diffs=num_diffs,
                         feature_diffs=diff_list,
-                        maximal_opposition_score=score
+                        maximal_opposition_score=score,
                     )
                     pairs.append(pair)
 
@@ -288,7 +323,7 @@ class MaximalOppositionGenerator:
             return
 
         # Classification
-        print(f"\nCLASSIFICATION:")
+        print("\nCLASSIFICATION:")
         print(f"  /{phoneme1}/: ", end="")
         if self.is_consonant(phoneme1):
             if self.is_sonorant(phoneme1):
@@ -311,7 +346,9 @@ class MaximalOppositionGenerator:
         major_class = self.has_major_class_difference(phoneme1, phoneme2)
         print(f"\nMAJOR CLASS DIFFERENCE: {'✓ YES' if major_class else '✗ NO'}")
         if not major_class:
-            print("  → Not suitable for maximal opposition (requires major class difference)")
+            print(
+                "  → Not suitable for maximal opposition (requires major class difference)"
+            )
 
         # Feature differences
         num_diffs, diff_list = self.count_feature_differences(phoneme1, phoneme2)
@@ -325,31 +362,34 @@ class MaximalOppositionGenerator:
         score = self.calculate_maximal_opposition_score(phoneme1, phoneme2)
         print(f"\nMAXIMAL OPPOSITION SCORE: {score:.1f}")
         if score >= 100:
-            print(f"  → ✓ EXCELLENT candidate for maximal opposition")
+            print("  → ✓ EXCELLENT candidate for maximal opposition")
             print(f"     (Major class difference + {num_diffs} feature differences)")
         else:
-            print(f"  → ✗ NOT recommended for maximal opposition")
-            print(f"     (Lacks major class difference)")
+            print("  → ✗ NOT recommended for maximal opposition")
+            print("     (Lacks major class difference)")
 
 
 @dataclass
 class MinimalPairWordList:
     """Word lists for maximal opposition intervention"""
+
     phoneme1: str
     phoneme2: str
     position: str  # 'initial', 'medial', 'final'
     word_pairs: List[Tuple[str, str]] = field(default_factory=list)
 
     def __repr__(self):
-        return (f"MinimalPairWordList(/{self.phoneme1}/ - /{self.phoneme2}/ "
-                f"in {self.position} position, {len(self.word_pairs)} pairs)")
+        return (
+            f"MinimalPairWordList(/{self.phoneme1}/ - /{self.phoneme2}/ "
+            f"in {self.position} position, {len(self.word_pairs)} pairs)"
+        )
 
 
 def generate_word_lists(
     phoneme_pair: MaximalOppositionPair,
     lexicon: Dict[str, List[str]],
-    position: str = 'initial',
-    max_pairs: int = 10
+    position: str = "initial",
+    max_pairs: int = 10,
 ) -> MinimalPairWordList:
     """
     Generate minimal pair word lists for a maximal opposition phoneme pair
@@ -385,10 +425,11 @@ def generate_word_lists(
 
         # Compare all pairs of same length
         for i, (word1, phonemes1) in enumerate(words):
-            for word2, phonemes2 in words[i+1:]:
+            for word2, phonemes2 in words[i + 1 :]:
                 # Check if they differ by exactly one phoneme
                 diff_positions = [
-                    idx for idx, (ph1, ph2) in enumerate(zip(phonemes1, phonemes2))
+                    idx
+                    for idx, (ph1, ph2) in enumerate(zip(phonemes1, phonemes2))
                     if ph1 != ph2
                 ]
 
@@ -399,19 +440,22 @@ def generate_word_lists(
                 diff_pos = diff_positions[0]
 
                 # Check position match
-                if position == 'initial' and diff_pos != 0:
+                if position == "initial" and diff_pos != 0:
                     continue
-                elif position == 'final' and diff_pos != len(phonemes1) - 1:
+                elif position == "final" and diff_pos != len(phonemes1) - 1:
                     continue
-                elif position == 'medial' and (diff_pos == 0 or diff_pos == len(phonemes1) - 1):
+                elif position == "medial" and (
+                    diff_pos == 0 or diff_pos == len(phonemes1) - 1
+                ):
                     continue
 
                 # Check if the differing phonemes match our target pair
                 ph1_at_pos = phonemes1[diff_pos]
                 ph2_at_pos = phonemes2[diff_pos]
 
-                if (ph1_at_pos == p1 and ph2_at_pos == p2) or \
-                   (ph1_at_pos == p2 and ph2_at_pos == p1):
+                if (ph1_at_pos == p1 and ph2_at_pos == p2) or (
+                    ph1_at_pos == p2 and ph2_at_pos == p1
+                ):
                     word_pairs.append((word1, word2))
 
                     if len(word_pairs) >= max_pairs:
@@ -424,39 +468,33 @@ def generate_word_lists(
             break
 
     return MinimalPairWordList(
-        phoneme1=p1,
-        phoneme2=p2,
-        position=position,
-        word_pairs=word_pairs
+        phoneme1=p1, phoneme2=p2, position=position, word_pairs=word_pairs
     )
 
 
 def main():
     """Demo: Generate maximal opposition pairs and word lists"""
 
-    print("="*70)
+    print("=" * 70)
     print("MAXIMAL OPPOSITION GENERATOR")
     print("Based on Gierut (1989-1992) and Storkel (2022)")
-    print("="*70)
+    print("=" * 70)
 
     # Initialize generator
     generator = MaximalOppositionGenerator()
 
     # Example: Child with severe SSD (from Storkel 2022 paper)
     # These are sounds the child produces incorrectly
-    unknown_sounds = ['g', 'θ', 'ð', 'ʃ', 'ʤ', 'ŋ', 'l', 'r']
+    unknown_sounds = ["g", "θ", "ð", "ʃ", "ʤ", "ŋ", "l", "r"]
 
     print(f"\nUnknown sounds (child cannot produce): {', '.join(unknown_sounds)}")
-    print(f"\nGenerating maximal opposition pairs...")
+    print("\nGenerating maximal opposition pairs...")
 
     # Generate pairs
-    pairs = generator.generate_pairs(
-        unknown_sounds=unknown_sounds,
-        top_n=10
-    )
+    pairs = generator.generate_pairs(unknown_sounds=unknown_sounds, top_n=10)
 
     print(f"\n{'='*70}")
-    print(f"TOP MAXIMAL OPPOSITION PAIRS")
+    print("TOP MAXIMAL OPPOSITION PAIRS")
     print(f"{'='*70}\n")
 
     for i, pair in enumerate(pairs, 1):
@@ -477,7 +515,7 @@ def main():
     print(f"{'='*70}")
     print("\nConventional minimal pair would pair target with its substitute:")
     print("Example: /θ/ (target) with /t/ (substitute)")
-    generator.analyze_pair('θ', 't')
+    generator.analyze_pair("θ", "t")
 
     # Generate word lists
     print(f"\n{'='*70}")
@@ -488,23 +526,23 @@ def main():
     try:
         # Load lexicon
         from ..embeddings.english_data_loader import EnglishPhonologyLoader
+
         loader = EnglishPhonologyLoader()
         lexicon = loader.lexicon  # word -> List[str] (IPA phonemes)
 
         print(f"Loaded {len(lexicon):,} words")
 
         # Generate word lists for top 3 pairs
-        print(f"\nGenerating word lists for top 3 maximal opposition pairs...\n")
+        print("\nGenerating word lists for top 3 maximal opposition pairs...\n")
 
         for i, pair in enumerate(pairs[:3], 1):
-            print(f"\n{i}. /{pair.phoneme1}/ - /{pair.phoneme2}/ (Score: {pair.maximal_opposition_score:.1f})")
+            print(
+                f"\n{i}. /{pair.phoneme1}/ - /{pair.phoneme2}/ (Score: {pair.maximal_opposition_score:.1f})"
+            )
 
             # Try initial position first
             word_list = generate_word_lists(
-                phoneme_pair=pair,
-                lexicon=lexicon,
-                position='initial',
-                max_pairs=5
+                phoneme_pair=pair, lexicon=lexicon, position="initial", max_pairs=5
             )
 
             if len(word_list.word_pairs) > 0:
@@ -512,14 +550,11 @@ def main():
                 for w1, w2 in word_list.word_pairs[:5]:
                     print(f"     {w1} - {w2}")
             else:
-                print(f"   Initial position: No pairs found")
+                print("   Initial position: No pairs found")
 
                 # Try medial if initial fails
                 word_list = generate_word_lists(
-                    phoneme_pair=pair,
-                    lexicon=lexicon,
-                    position='medial',
-                    max_pairs=5
+                    phoneme_pair=pair, lexicon=lexicon, position="medial", max_pairs=5
                 )
 
                 if len(word_list.word_pairs) > 0:
@@ -530,13 +565,13 @@ def main():
     except ImportError:
         print("Could not load English lexicon (EnglishPhonologyLoader not available)")
 
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("RECOMMENDATION")
-    print("="*70)
+    print("=" * 70)
     print("\nMaximal opposition pairs (like /g/-/l/ or /θ/-/r/) are predicted to")
     print("produce better system-wide generalization than conventional minimal")
     print("pairs (like /θ/-/t/) for children with moderate-to-severe SSD.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

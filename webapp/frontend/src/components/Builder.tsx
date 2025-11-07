@@ -18,7 +18,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Chip,
   Stack,
   Alert,
   CircularProgress,
@@ -124,7 +123,6 @@ const Builder: React.FC = () => {
   }, []);
 
   // Exclusions state
-  const [excludePhonemes, setExcludePhonemes] = useState<string[]>([]);
   const [excludePhonemeInput, setExcludePhonemeInput] = useState('');
 
   // Results state
@@ -145,12 +143,15 @@ const Builder: React.FC = () => {
   // Handle phoneme selection
   const handlePhonemeSelect = (phoneme: string) => {
     if (phonemePickerTarget?.type === 'pattern') {
-      // Append to existing phoneme value
+      // Append to existing phoneme value with auto-spacing
       const currentPattern = patterns[phonemePickerTarget.index];
-      updatePattern(phonemePickerTarget.index, 'phoneme', currentPattern.phoneme + phoneme);
+      const newValue = currentPattern.phoneme
+        ? currentPattern.phoneme + ' ' + phoneme
+        : phoneme;
+      updatePattern(phonemePickerTarget.index, 'phoneme', newValue);
     } else if (phonemePickerTarget?.type === 'exclusion') {
-      // Append to exclusion input
-      setExcludePhonemeInput((prev) => prev + phoneme);
+      // Append to exclusion input with auto-spacing
+      setExcludePhonemeInput((prev) => prev ? prev + ' ' + phoneme : phoneme);
     }
     // Don't close - allow multiple selections
   };
@@ -200,29 +201,16 @@ const Builder: React.FC = () => {
     }
   };
 
-  // Add exclusion
-  const addExclusion = () => {
-    if (excludePhonemeInput.trim() && !excludePhonemes.includes(excludePhonemeInput.trim())) {
-      setExcludePhonemes([...excludePhonemes, excludePhonemeInput.trim()]);
-      setExcludePhonemeInput('');
-    }
-  };
-
-  // Remove exclusion
-  const removeExclusion = (phoneme: string) => {
-    setExcludePhonemes(excludePhonemes.filter((p) => p !== phoneme));
-  };
 
   // Build word list
   const handleBuild = async () => {
     setLoading(true);
     setError(null);
 
-    // Auto-add any typed exclusion
-    const finalExclusions = [...excludePhonemes];
-    if (excludePhonemeInput.trim() && !finalExclusions.includes(excludePhonemeInput.trim())) {
-      finalExclusions.push(excludePhonemeInput.trim());
-    }
+    // Parse space-separated exclusions from input field
+    const finalExclusions = excludePhonemeInput.trim()
+      ? excludePhonemeInput.trim().split(/\s+/).filter(p => p)
+      : [];
 
     try {
       // Only include filter values if they differ from the full DB range
@@ -315,7 +303,6 @@ const Builder: React.FC = () => {
       arousal: dbRanges.arousal as [number, number],
       dominance: dbRanges.dominance as [number, number],
     });
-    setExcludePhonemes([]);
     setExcludePhonemeInput('');
     setResults(null);
     setError(null);
@@ -550,18 +537,35 @@ const Builder: React.FC = () => {
                       {/* Frequency */}
                       <Box>
                         <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
-                          Frequency: {filters.frequency[0]} - {filters.frequency[1]}
+                          Frequency: {Math.round(filters.frequency[0])} - {Math.round(filters.frequency[1])}
                           <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
-                            SUBTLEX-US (per million words)
+                            SUBTLEX-US (per million words, log scale)
                           </Typography>
                         </Typography>
                         <Slider
-                          value={filters.frequency}
-                          onChange={(_, value) => handleFilterChange('frequency', value as [number, number])}
-                          min={dbRanges.frequency[0]}
-                          max={dbRanges.frequency[1]}
-                          step={10}
+                          value={[
+                            filters.frequency[0] > 0 ? Math.log10(filters.frequency[0]) : 0,
+                            Math.log10(filters.frequency[1])
+                          ]}
+                          onChange={(_, value) => {
+                            const [minLog, maxLog] = value as [number, number];
+                            handleFilterChange('frequency', [
+                              minLog > 0 ? Math.pow(10, minLog) : 0,
+                              Math.pow(10, maxLog)
+                            ]);
+                          }}
+                          min={0}
+                          max={Math.log10(dbRanges.frequency[1])}
+                          step={0.01}
                           valueLabelDisplay="auto"
+                          valueLabelFormat={(value) => Math.round(Math.pow(10, value)).toString()}
+                          marks={[
+                            { value: 0, label: '0' },
+                            { value: 1, label: '10' },
+                            { value: 2, label: '100' },
+                            { value: 3, label: '1K' },
+                            { value: 4, label: '10K' },
+                          ].filter(mark => mark.value <= Math.log10(dbRanges.frequency[1]))}
                           sx={{ '& .MuiSlider-markLabel': { fontSize: { xs: '0.625rem', sm: '0.75rem' } } }}
                         />
                       </Box>
@@ -744,77 +748,48 @@ const Builder: React.FC = () => {
           <AccordionDetails sx={{ px: { xs: 1.5, sm: 2 }, py: { xs: 1, sm: 2 } }}>
             <Stack spacing={{ xs: 1.5, sm: 2 }}>
               <Stack spacing={{ xs: 1, sm: 0 }}>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 2 }}>
-                  <TextField
-                    label="Phoneme to exclude"
-                    value={excludePhonemeInput}
-                    onChange={(e) => {
-                      const newValue = e.target.value;
-                      setExcludePhonemeInput(newValue);
+                <TextField
+                  label="Phonemes to exclude"
+                  value={excludePhonemeInput}
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    setExcludePhonemeInput(newValue);
 
-                      // Validate IPA input
-                      if (newValue.trim()) {
-                        const validation = validatePhonemeInput(newValue);
-                        if (!validation.isValid && validation.suggestion) {
-                          setExclusionWarning(validation.suggestion);
-                        } else {
-                          setExclusionWarning(null);
-                        }
+                    // Validate IPA input
+                    if (newValue.trim()) {
+                      const validation = validatePhonemeInput(newValue);
+                      if (!validation.isValid && validation.suggestion) {
+                        setExclusionWarning(validation.suggestion);
                       } else {
                         setExclusionWarning(null);
                       }
-                    }}
-                    onKeyPress={(e) => e.key === 'Enter' && addExclusion()}
-                    size="small"
-                    placeholder="Use keyboard icon → to select IPA"
-                    fullWidth
-                    InputProps={{
-                      endAdornment: (
-                        <IconButton
-                          onClick={() => openPhonemePicker({ type: 'exclusion' })}
-                          edge="end"
-                          color="primary"
-                          size="small"
-                          sx={{ minWidth: 40, minHeight: 40 }}
-                        >
-                          <KeyboardIcon />
-                        </IconButton>
-                      ),
-                    }}
-                  />
-                  <Button
-                    variant="outlined"
-                    startIcon={<AddIcon />}
-                    onClick={addExclusion}
-                    sx={{
-                      minHeight: 44,
-                      minWidth: { sm: 100 },
-                      width: { xs: '100%', sm: 'auto' },
-                    }}
-                  >
-                    Add
-                  </Button>
-                </Stack>
+                    } else {
+                      setExclusionWarning(null);
+                    }
+                  }}
+                  size="small"
+                  placeholder="Use keyboard icon → to select IPA"
+                  fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton
+                        onClick={() => openPhonemePicker({ type: 'exclusion' })}
+                        edge="end"
+                        color="primary"
+                        size="small"
+                        sx={{ minWidth: 40, minHeight: 40 }}
+                      >
+                        <KeyboardIcon />
+                      </IconButton>
+                    ),
+                  }}
+                />
                 {exclusionWarning && (
                   <Alert severity="warning" sx={{ mt: 1 }}>
                     {exclusionWarning}
                   </Alert>
                 )}
               </Stack>
-
-              {excludePhonemes.length > 0 && (
-                <Stack direction="row" spacing={1} flexWrap="wrap">
-                  {excludePhonemes.map((phoneme) => (
-                    <Chip
-                      key={phoneme}
-                      label={phoneme}
-                      onDelete={() => removeExclusion(phoneme)}
-                      color="error"
-                      variant="outlined"
-                    />
-                  ))}
-                </Stack>
-              )}
             </Stack>
           </AccordionDetails>
         </Accordion>
@@ -831,7 +806,7 @@ const Builder: React.FC = () => {
           size="large"
           startIcon={<BuildIcon />}
           onClick={handleBuild}
-          disabled={loading || patterns.every((p) => !p.phoneme.trim())}
+          disabled={loading}
           fullWidth
           sx={{ minHeight: 48 }}
         >

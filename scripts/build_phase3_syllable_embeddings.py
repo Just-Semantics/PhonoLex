@@ -49,7 +49,9 @@ def build_phoible_syllable_embeddings(word, phonemes_with_stress, phoible_featur
                     onset_vecs.append(phoible_features[phoneme])
                     phoneme_idx += 1
 
-                onset_emb = np.mean(onset_vecs, axis=0)  # Average if multiple consonants
+                onset_emb = np.mean(
+                    onset_vecs, axis=0
+                )  # Average if multiple consonants
                 onset_norm = np.linalg.norm(onset_emb)
                 if onset_norm > 0:
                     onset_emb = onset_emb / onset_norm  # Normalize separately
@@ -89,7 +91,7 @@ def build_phoible_syllable_embeddings(word, phonemes_with_stress, phoible_featur
 
         return syllable_embeddings
 
-    except Exception as e:
+    except Exception:
         return None
 
 
@@ -109,8 +111,8 @@ def main():
 
     # Load Phase 2 Phoible features
     print("[1/4] Loading Phase 2 Phoible features...")
-    phase2_path = Path('embeddings/phase2/normalized_76d.pkl')
-    with open(phase2_path, 'rb') as f:
+    phase2_path = Path("embeddings/phase2/normalized_76d.pkl")
+    with open(phase2_path, "rb") as f:
         phoible_features = pickle.load(f)
     print(f"✓ Loaded {len(phoible_features)} phoneme feature vectors (76-dim)")
 
@@ -131,14 +133,18 @@ def main():
     word_to_syllable_embeddings = {}
     skipped = 0
 
-    for word, phonemes_with_stress in tqdm(loader.lexicon_with_stress.items(), desc="Processing words"):
+    for word, phonemes_with_stress in tqdm(
+        loader.lexicon_with_stress.items(), desc="Processing words"
+    ):
         # Apply filter
         if word.lower() not in eligible_words:
             skipped += 1
             continue
 
         # Compute syllable embeddings
-        syllable_embs = build_phoible_syllable_embeddings(word, phonemes_with_stress, phoible_features)
+        syllable_embs = build_phoible_syllable_embeddings(
+            word, phonemes_with_stress, phoible_features
+        )
 
         if syllable_embs is not None:
             word_to_syllable_embeddings[word] = syllable_embs
@@ -153,16 +159,17 @@ def main():
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     import torch
+
     checkpoint = {
-        'word_to_syllable_embeddings': word_to_syllable_embeddings,
-        'source': 'phase2_phoible_features',
-        'filter_criterion': 'frequency + at least one psycholinguistic norm',
-        'num_words': len(word_to_syllable_embeddings),
-        'embedding_dim': 228,
-        'syllable_structure': 'onset(76) + nucleus(76) + coda(76)',
-        'normalization': 'component-wise (onset, nucleus, coda normalized separately)',
-        'weighting': 'user-adjustable at query time',
-        'training': 'none (pure feature-based)',
+        "word_to_syllable_embeddings": word_to_syllable_embeddings,
+        "source": "phase2_phoible_features",
+        "filter_criterion": "frequency + at least one psycholinguistic norm",
+        "num_words": len(word_to_syllable_embeddings),
+        "embedding_dim": 228,
+        "syllable_structure": "onset(76) + nucleus(76) + coda(76)",
+        "normalization": "component-wise (onset, nucleus, coda normalized separately)",
+        "weighting": "user-adjustable at query time",
+        "training": "none (pure feature-based)",
     }
 
     torch.save(checkpoint, output_path)
@@ -176,7 +183,7 @@ def main():
     mlm_path = Path("embeddings/phase3/syllable_embeddings_filtered.pt")
     if mlm_path.exists():
         mlm_size_mb = mlm_path.stat().st_size / (1024 * 1024)
-        print(f"\n  Comparison:")
+        print("\n  Comparison:")
         print(f"    MLM (384-dim):     {mlm_size_mb:.1f} MB")
         print(f"    Phoible (228-dim): {size_mb:.1f} MB")
         print(f"    Reduction: {100*(mlm_size_mb-size_mb)/mlm_size_mb:.1f}%")
@@ -189,7 +196,9 @@ def main():
     print("\nExample words with embeddings:")
     for word in list(word_to_syllable_embeddings.keys())[:5]:
         num_syllables = len(word_to_syllable_embeddings[word])
-        print(f"  {word}: {num_syllables} syllable(s), {num_syllables*228} dimensions total")
+        print(
+            f"  {word}: {num_syllables} syllable(s), {num_syllables*228} dimensions total"
+        )
 
     print()
     print("Next steps:")

@@ -3,7 +3,7 @@
   "created": "1762511838.527301",
   "vocabulary_size": 24744,
   "minimal_pairs_count": 31399,
-  "phoneme_count": 35,
+  "phoneme_count": 39,
   "filter_criterion": "frequency + at least one psycholinguistic norm",
   "files": {
     "word_metadata.json": "Word properties, IPA, syllables, psycholinguistic norms",

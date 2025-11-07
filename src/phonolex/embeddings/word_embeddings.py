@@ -28,23 +28,25 @@ class WordEmbedder:
         Args:
             model_path: Path to trained phoneme embedding model
         """
-        checkpoint = torch.load(model_path, map_location='cpu')
+        checkpoint = torch.load(model_path, map_location="cpu")
 
-        self.phoneme_to_id = checkpoint['phoneme_to_id']
-        self.id_to_phoneme = checkpoint['id_to_phoneme']
-        self.embedding_dim = checkpoint['embedding_dim']
+        self.phoneme_to_id = checkpoint["phoneme_to_id"]
+        self.id_to_phoneme = checkpoint["id_to_phoneme"]
+        self.embedding_dim = checkpoint["embedding_dim"]
 
         # Extract phoneme embeddings
-        if 'model_state_dict' in checkpoint:
-            state = checkpoint['model_state_dict']
-            if 'embeddings.weight' in state:
-                self.phoneme_embeddings = state['embeddings.weight']
+        if "model_state_dict" in checkpoint:
+            state = checkpoint["model_state_dict"]
+            if "embeddings.weight" in state:
+                self.phoneme_embeddings = state["embeddings.weight"]
             else:
                 raise ValueError("No embeddings found in model")
         else:
             raise ValueError("No model_state_dict in checkpoint")
 
-        print(f"✓ Loaded phoneme embeddings: {len(self.phoneme_to_id)} phonemes × {self.embedding_dim}d")
+        print(
+            f"✓ Loaded phoneme embeddings: {len(self.phoneme_to_id)} phonemes × {self.embedding_dim}d"
+        )
 
     def phonemes_to_ids(self, phonemes: list[str]) -> list[int]:
         """Convert phoneme sequence to IDs"""
@@ -74,9 +76,7 @@ class WordEmbedder:
         return embeddings.mean(dim=0).numpy()
 
     def weighted_average_embedding(
-        self,
-        phonemes: list[str],
-        weights: Optional[list[float]] = None
+        self, phonemes: list[str], weights: Optional[list[float]] = None
     ) -> Optional[np.ndarray]:
         """
         Weighted average (e.g., by stress or position)
@@ -123,8 +123,27 @@ class WordEmbedder:
             return None
 
         # Simple vowel detection (crude but works)
-        vowels = {'a', 'æ', 'e', 'ɛ', 'i', 'ɪ', 'o', 'ɔ', 'u', 'ʊ', 'ʌ', 'ɑ', 'ɝ', 'ə',
-                  'aɪ', 'aʊ', 'eɪ', 'oʊ', 'ɔɪ'}
+        vowels = {
+            "a",
+            "æ",
+            "e",
+            "ɛ",
+            "i",
+            "ɪ",
+            "o",
+            "ɔ",
+            "u",
+            "ʊ",
+            "ʌ",
+            "ɑ",
+            "ɝ",
+            "ə",
+            "aɪ",
+            "aʊ",
+            "eɪ",
+            "oʊ",
+            "ɔɪ",
+        }
 
         # Find nucleus (first vowel)
         nucleus_idx = None
@@ -140,7 +159,7 @@ class WordEmbedder:
         # Split into onset / nucleus / coda
         onset = phonemes[:nucleus_idx]
         nucleus = [phonemes[nucleus_idx]]
-        coda = phonemes[nucleus_idx + 1:]
+        coda = phonemes[nucleus_idx + 1 :]
 
         # Get embeddings
         parts = []
@@ -180,20 +199,19 @@ class LSTMWordEmbedder(nn.Module):
         self,
         phoneme_embeddings: torch.Tensor,
         hidden_dim: int = 64,
-        output_dim: int = 32
+        output_dim: int = 32,
     ):
         super().__init__()
 
         self.phoneme_embeddings = nn.Embedding.from_pretrained(
-            phoneme_embeddings,
-            freeze=False  # Can fine-tune
+            phoneme_embeddings, freeze=False  # Can fine-tune
         )
 
         self.lstm = nn.LSTM(
             input_size=phoneme_embeddings.size(1),
             hidden_size=hidden_dim,
             num_layers=1,
-            batch_first=True
+            batch_first=True,
         )
 
         self.projection = nn.Linear(hidden_dim, output_dim)
@@ -212,10 +230,7 @@ class LSTMWordEmbedder(nn.Module):
 
         # Pack padded sequence
         packed = nn.utils.rnn.pack_padded_sequence(
-            embs,
-            lengths.cpu(),
-            batch_first=True,
-            enforce_sorted=False
+            embs, lengths.cpu(), batch_first=True, enforce_sorted=False
         )
 
         # LSTM
@@ -238,7 +253,8 @@ def demo():
     print("=" * 70)
 
     import sys
-    sys.path.insert(0, '/Users/jneumann/Repos/PhonoLex')
+
+    sys.path.insert(0, "/Users/jneumann/Repos/PhonoLex")
     from src.phonolex.embeddings.english_data_loader import EnglishPhonologyLoader
 
     # Load
@@ -246,7 +262,7 @@ def demo():
     loader = EnglishPhonologyLoader()
 
     # Test words
-    test_words = ['cat', 'dog', 'phone', 'hello', 'world']
+    test_words = ["cat", "dog", "phone", "hello", "world"]
 
     print("\n1. Simple Average:")
     for word in test_words:
@@ -254,7 +270,9 @@ def demo():
             phonemes = loader.lexicon[word]
             emb = embedder.average_embedding(phonemes)
             if emb is not None:
-                print(f"  {word:10s} /{' '.join(phonemes):20s} → {emb[:5]} (showing first 5 dims)")
+                print(
+                    f"  {word:10s} /{' '.join(phonemes):20s} → {emb[:5]} (showing first 5 dims)"
+                )
 
     print("\n2. Weighted Average (position-based):")
     for word in test_words:
@@ -284,12 +302,7 @@ def demo():
             return None
         return np.dot(e1, e2) / (np.linalg.norm(e1) * np.linalg.norm(e2))
 
-    pairs = [
-        ('cat', 'bat'),
-        ('cat', 'dog'),
-        ('phone', 'clone'),
-        ('hello', 'yellow')
-    ]
+    pairs = [("cat", "bat"), ("cat", "dog"), ("phone", "clone"), ("hello", "yellow")]
 
     for w1, w2 in pairs:
         sim = word_similarity(w1, w2)
@@ -297,5 +310,5 @@ def demo():
             print(f"  {w1} - {w2}: {sim:.4f}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     demo()

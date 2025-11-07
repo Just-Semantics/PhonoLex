@@ -39,7 +39,7 @@ class PhonemeEmbedding(nn.Module):
         num_phonemes: int,
         embedding_dim: int = 32,
         feature_dim: int = 38,
-        init_from_features: bool = True
+        init_from_features: bool = True,
     ):
         super().__init__()
 
@@ -69,7 +69,7 @@ class PhonemeEmbedding(nn.Module):
 
         # SVD for dimensionality reduction
         U, S, V = torch.svd(feature_tensor)
-        projected = torch.mm(feature_tensor, V[:, :self.embedding_dim])
+        projected = torch.mm(feature_tensor, V[:, : self.embedding_dim])
 
         # Normalize
         projected = F.normalize(projected, p=2, dim=1)
@@ -106,9 +106,7 @@ class ContextPredictionHead(nn.Module):
         self.projection = nn.Linear(embedding_dim, num_phonemes)
 
     def forward(
-        self,
-        center_embedding: torch.Tensor,
-        context_ids: Optional[torch.Tensor] = None
+        self, center_embedding: torch.Tensor, context_ids: Optional[torch.Tensor] = None
     ) -> torch.Tensor:
         """
         Predict context phonemes
@@ -124,9 +122,7 @@ class ContextPredictionHead(nn.Module):
         return logits
 
     def loss(
-        self,
-        center_embedding: torch.Tensor,
-        context_ids: torch.Tensor
+        self, center_embedding: torch.Tensor, context_ids: torch.Tensor
     ) -> torch.Tensor:
         """
         Compute skip-gram loss (negative sampling or softmax)
@@ -164,7 +160,7 @@ class MorphologyPredictionHead(nn.Module):
             nn.Linear(embedding_dim, 64),
             nn.ReLU(),
             nn.Dropout(0.2),
-            nn.Linear(64, num_allomorphs)
+            nn.Linear(64, num_allomorphs),
         )
 
     def forward(self, phoneme_embedding: torch.Tensor) -> torch.Tensor:
@@ -180,9 +176,7 @@ class MorphologyPredictionHead(nn.Module):
         return self.classifier(phoneme_embedding)
 
     def loss(
-        self,
-        phoneme_embedding: torch.Tensor,
-        allomorph_ids: torch.Tensor
+        self, phoneme_embedding: torch.Tensor, allomorph_ids: torch.Tensor
     ) -> torch.Tensor:
         """
         Cross-entropy loss for allomorph prediction
@@ -210,9 +204,7 @@ class ContrastiveLearningHead(nn.Module):
         self.temperature = temperature
 
     def forward(
-        self,
-        embedding1: torch.Tensor,
-        embedding2: torch.Tensor
+        self, embedding1: torch.Tensor, embedding2: torch.Tensor
     ) -> torch.Tensor:
         """
         Compute cosine similarity
@@ -237,7 +229,7 @@ class ContrastiveLearningHead(nn.Module):
         self,
         embedding1: torch.Tensor,
         embedding2: torch.Tensor,
-        target_similarity: torch.Tensor
+        target_similarity: torch.Tensor,
     ) -> torch.Tensor:
         """
         Contrastive loss
@@ -270,7 +262,7 @@ class FeatureReconstructionHead(nn.Module):
             nn.Linear(embedding_dim, 64),
             nn.ReLU(),
             nn.Linear(64, feature_dim),
-            nn.Tanh()  # Features are in [-1, +1]
+            nn.Tanh(),  # Features are in [-1, +1]
         )
 
     def forward(self, embedding: torch.Tensor) -> torch.Tensor:
@@ -286,9 +278,7 @@ class FeatureReconstructionHead(nn.Module):
         return self.decoder(embedding)
 
     def loss(
-        self,
-        embedding: torch.Tensor,
-        target_features: torch.Tensor
+        self, embedding: torch.Tensor, target_features: torch.Tensor
     ) -> torch.Tensor:
         """
         MSE loss for feature reconstruction
@@ -316,16 +306,11 @@ class InventoryCooccurrenceHead(nn.Module):
         super().__init__()
 
         self.classifier = nn.Sequential(
-            nn.Linear(embedding_dim * 2, 64),
-            nn.ReLU(),
-            nn.Linear(64, 1),
-            nn.Sigmoid()
+            nn.Linear(embedding_dim * 2, 64), nn.ReLU(), nn.Linear(64, 1), nn.Sigmoid()
         )
 
     def forward(
-        self,
-        embedding1: torch.Tensor,
-        embedding2: torch.Tensor
+        self, embedding1: torch.Tensor, embedding2: torch.Tensor
     ) -> torch.Tensor:
         """
         Predict co-occurrence probability
@@ -342,10 +327,7 @@ class InventoryCooccurrenceHead(nn.Module):
         return self.classifier(combined)
 
     def loss(
-        self,
-        embedding1: torch.Tensor,
-        embedding2: torch.Tensor,
-        target: torch.Tensor
+        self, embedding1: torch.Tensor, embedding2: torch.Tensor, target: torch.Tensor
     ) -> torch.Tensor:
         """
         Binary cross-entropy loss
@@ -383,7 +365,7 @@ class MultiTaskPhonemeEmbedding(nn.Module):
         embedding_dim: int = 32,
         feature_dim: int = 38,
         num_allomorphs: int = 10,  # Will be determined from data
-        init_from_features: bool = True
+        init_from_features: bool = True,
     ):
         super().__init__()
 
@@ -392,7 +374,7 @@ class MultiTaskPhonemeEmbedding(nn.Module):
             num_phonemes=num_phonemes,
             embedding_dim=embedding_dim,
             feature_dim=feature_dim,
-            init_from_features=init_from_features
+            init_from_features=init_from_features,
         )
 
         # Task heads
@@ -409,7 +391,7 @@ class MultiTaskPhonemeEmbedding(nn.Module):
     def compute_loss(
         self,
         batch: dict[str, torch.Tensor],
-        task_weights: Optional[dict[str, float]] = None
+        task_weights: Optional[dict[str, float]] = None,
     ) -> tuple[torch.Tensor, dict[str, float]]:
         """
         Compute multi-task loss
@@ -424,41 +406,53 @@ class MultiTaskPhonemeEmbedding(nn.Module):
         """
         if task_weights is None:
             task_weights = {
-                'context': 1.0,
-                'morphology': 1.0,
-                'contrastive': 1.0,
-                'feature': 1.0,
-                'inventory': 1.0
+                "context": 1.0,
+                "morphology": 1.0,
+                "contrastive": 1.0,
+                "feature": 1.0,
+                "inventory": 1.0,
             }
 
         losses = {}
 
         # Context prediction
-        if 'center_ids' in batch and 'context_ids' in batch:
-            center_emb = self.embedding(batch['center_ids'])
-            losses['context'] = self.context_head.loss(center_emb, batch['context_ids'])
+        if "center_ids" in batch and "context_ids" in batch:
+            center_emb = self.embedding(batch["center_ids"])
+            losses["context"] = self.context_head.loss(center_emb, batch["context_ids"])
 
         # Morphology prediction
-        if 'stem_final_ids' in batch and 'allomorph_ids' in batch:
-            stem_emb = self.embedding(batch['stem_final_ids'])
-            losses['morphology'] = self.morphology_head.loss(stem_emb, batch['allomorph_ids'])
+        if "stem_final_ids" in batch and "allomorph_ids" in batch:
+            stem_emb = self.embedding(batch["stem_final_ids"])
+            losses["morphology"] = self.morphology_head.loss(
+                stem_emb, batch["allomorph_ids"]
+            )
 
         # Contrastive learning
-        if 'phoneme1_ids' in batch and 'phoneme2_ids' in batch and 'similarity' in batch:
-            emb1 = self.embedding(batch['phoneme1_ids'])
-            emb2 = self.embedding(batch['phoneme2_ids'])
-            losses['contrastive'] = self.contrastive_head.loss(emb1, emb2, batch['similarity'])
+        if (
+            "phoneme1_ids" in batch
+            and "phoneme2_ids" in batch
+            and "similarity" in batch
+        ):
+            emb1 = self.embedding(batch["phoneme1_ids"])
+            emb2 = self.embedding(batch["phoneme2_ids"])
+            losses["contrastive"] = self.contrastive_head.loss(
+                emb1, emb2, batch["similarity"]
+            )
 
         # Feature reconstruction
-        if 'phoneme_ids' in batch and 'features' in batch:
-            emb = self.embedding(batch['phoneme_ids'])
-            losses['feature'] = self.feature_head.loss(emb, batch['features'])
+        if "phoneme_ids" in batch and "features" in batch:
+            emb = self.embedding(batch["phoneme_ids"])
+            losses["feature"] = self.feature_head.loss(emb, batch["features"])
 
         # Inventory co-occurrence
-        if 'inv_phoneme1_ids' in batch and 'inv_phoneme2_ids' in batch and 'cooccur' in batch:
-            emb1 = self.embedding(batch['inv_phoneme1_ids'])
-            emb2 = self.embedding(batch['inv_phoneme2_ids'])
-            losses['inventory'] = self.inventory_head.loss(emb1, emb2, batch['cooccur'])
+        if (
+            "inv_phoneme1_ids" in batch
+            and "inv_phoneme2_ids" in batch
+            and "cooccur" in batch
+        ):
+            emb1 = self.embedding(batch["inv_phoneme1_ids"])
+            emb2 = self.embedding(batch["inv_phoneme2_ids"])
+            losses["inventory"] = self.inventory_head.loss(emb1, emb2, batch["cooccur"])
 
         # Weighted sum
         total_loss = sum(task_weights.get(k, 1.0) * v for k, v in losses.items())
@@ -487,7 +481,7 @@ def create_model(
     num_phonemes: int,
     feature_matrix: Optional[np.ndarray] = None,
     embedding_dim: int = 32,
-    num_allomorphs: int = 10
+    num_allomorphs: int = 10,
 ) -> MultiTaskPhonemeEmbedding:
     """
     Factory function to create and initialize model
@@ -509,7 +503,7 @@ def create_model(
         num_phonemes=num_phonemes,
         embedding_dim=embedding_dim,
         num_allomorphs=num_allomorphs,
-        init_from_features=(feature_matrix is not None)
+        init_from_features=(feature_matrix is not None),
     )
 
     if feature_matrix is not None:
@@ -529,7 +523,7 @@ def create_model(
     return model
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Demo: Create model and test forward pass
 
     print("Demo: Creating phoneme embedding model\n")
@@ -543,20 +537,20 @@ if __name__ == '__main__':
         num_phonemes=num_phonemes,
         feature_matrix=feature_matrix,
         embedding_dim=32,
-        num_allomorphs=5
+        num_allomorphs=5,
     )
 
     # Test forward pass
     print("\nTesting forward pass...")
 
     batch = {
-        'center_ids': torch.randint(0, num_phonemes, (16,)),
-        'context_ids': torch.randint(0, num_phonemes, (16, 4)),
-        'phoneme1_ids': torch.randint(0, num_phonemes, (16,)),
-        'phoneme2_ids': torch.randint(0, num_phonemes, (16,)),
-        'similarity': torch.rand(16),
-        'phoneme_ids': torch.randint(0, num_phonemes, (16,)),
-        'features': torch.randn(16, 38)
+        "center_ids": torch.randint(0, num_phonemes, (16,)),
+        "context_ids": torch.randint(0, num_phonemes, (16, 4)),
+        "phoneme1_ids": torch.randint(0, num_phonemes, (16,)),
+        "phoneme2_ids": torch.randint(0, num_phonemes, (16,)),
+        "similarity": torch.rand(16),
+        "phoneme_ids": torch.randint(0, num_phonemes, (16,)),
+        "features": torch.randn(16, 38),
     }
 
     loss, loss_dict = model.compute_loss(batch)

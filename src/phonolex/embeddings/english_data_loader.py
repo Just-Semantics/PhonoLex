@@ -15,6 +15,7 @@ from typing import Optional
 @dataclass
 class WordPronunciation:
     """A word with its pronunciation"""
+
     word: str
     phonemes: list[str]  # IPA phonemes
 
@@ -22,6 +23,7 @@ class WordPronunciation:
 @dataclass
 class PhonemeWithStress:
     """Phoneme with stress marker"""
+
     phoneme: str  # IPA
     stress: Optional[int] = None  # 0=unstressed, 1=primary, 2=secondary, None=consonant
 
@@ -34,6 +36,7 @@ class PhonemeWithStress:
 @dataclass
 class MorphologicalPair:
     """Lemma + inflection for learning allomorphy"""
+
     lemma: str
     inflected: str
     features: str  # e.g., "N;PL", "V;PST"
@@ -58,8 +61,12 @@ class EnglishPhonologyLoader:
         self.arpa_to_ipa = self._load_arpa_mappings()
 
         # Data
-        self.lexicon: dict[str, list[str]] = {}  # word -> phonemes (IPA, stress stripped)
-        self.lexicon_with_stress: dict[str, list[PhonemeWithStress]] = {}  # word -> phonemes with stress
+        self.lexicon: dict[str, list[str]] = (
+            {}
+        )  # word -> phonemes (IPA, stress stripped)
+        self.lexicon_with_stress: dict[str, list[PhonemeWithStress]] = (
+            {}
+        )  # word -> phonemes with stress
         self.morphology: list[MorphologicalPair] = []
         self.english_phonemes: set = set()
 
@@ -81,28 +88,29 @@ class EnglishPhonologyLoader:
         ipa = []
         for phone in arpa_phones:
             # Remove stress markers
-            base = phone.rstrip('012')
+            base = phone.rstrip("012")
             if base in self.arpa_to_ipa:
                 ipa.append(self.arpa_to_ipa[base])
         return ipa
 
-    def _arpa_to_ipa_with_stress(self, arpa_phones: list[str]) -> list[PhonemeWithStress]:
+    def _arpa_to_ipa_with_stress(
+        self, arpa_phones: list[str]
+    ) -> list[PhonemeWithStress]:
         """Convert ARPAbet sequence to IPA with stress preserved"""
         ipa_with_stress = []
         for phone in arpa_phones:
             # Extract stress marker if present
             stress = None
-            if phone and phone[-1] in '012':
+            if phone and phone[-1] in "012":
                 stress = int(phone[-1])
                 base = phone[:-1]
             else:
                 base = phone
 
             if base in self.arpa_to_ipa:
-                ipa_with_stress.append(PhonemeWithStress(
-                    phoneme=self.arpa_to_ipa[base],
-                    stress=stress
-                ))
+                ipa_with_stress.append(
+                    PhonemeWithStress(phoneme=self.arpa_to_ipa[base], stress=stress)
+                )
         return ipa_with_stress
 
     def _load_cmu_dict(self):
@@ -116,10 +124,10 @@ class EnglishPhonologyLoader:
 
         cmu_path = self.data_dir / "cmu" / "cmudict-0.7b"
 
-        with open(cmu_path, encoding='latin-1') as f:
+        with open(cmu_path, encoding="latin-1") as f:
             for line in f:
                 line = line.strip()
-                if not line or line.startswith(';;;'):
+                if not line or line.startswith(";;;"):
                     continue
 
                 parts = line.split()
@@ -128,7 +136,7 @@ class EnglishPhonologyLoader:
                 # Skip variant pronunciations - use only primary (no parentheses)
                 # This ensures consistent, standard pronunciations
                 # Example: GOOD  G UH1 D (primary) vs GOOD(1)  G IH0 D (variant - skip)
-                if '(' in word:
+                if "(" in word:
                     continue
 
                 # Convert ARPAbet to IPA (both with and without stress)
@@ -146,7 +154,15 @@ class EnglishPhonologyLoader:
         """Load SIGMORPHON English morphology"""
         print("\nLoading SIGMORPHON English morphology...")
 
-        sig_path = self.data_dir / "learning_datasets" / "sigmorphon2020" / "task0" / "data" / "germanic" / "eng.trn"
+        sig_path = (
+            self.data_dir
+            / "learning_datasets"
+            / "sigmorphon2020"
+            / "task0"
+            / "data"
+            / "germanic"
+            / "eng.trn"
+        )
 
         if not sig_path.exists():
             print("  ✗ SIGMORPHON data not found")
@@ -154,7 +170,7 @@ class EnglishPhonologyLoader:
 
         with open(sig_path) as f:
             for line in f:
-                parts = line.strip().split('\t')
+                parts = line.strip().split("\t")
                 if len(parts) != 3:
                     continue
 
@@ -164,19 +180,25 @@ class EnglishPhonologyLoader:
                 lemma_phones = self.lexicon.get(lemma.lower())
                 inflected_phones = self.lexicon.get(inflected.lower())
 
-                self.morphology.append(MorphologicalPair(
-                    lemma=lemma.lower(),
-                    inflected=inflected.lower(),
-                    features=features,
-                    lemma_phonemes=lemma_phones,
-                    inflected_phonemes=inflected_phones
-                ))
+                self.morphology.append(
+                    MorphologicalPair(
+                        lemma=lemma.lower(),
+                        inflected=inflected.lower(),
+                        features=features,
+                        lemma_phonemes=lemma_phones,
+                        inflected_phonemes=inflected_phones,
+                    )
+                )
 
         print(f"  ✓ Loaded {len(self.morphology):,} morphological pairs")
 
         # Count how many have pronunciations
-        with_phones = sum(1 for m in self.morphology if m.lemma_phonemes and m.inflected_phonemes)
-        print(f"  ✓ {with_phones:,} pairs have pronunciations ({100*with_phones/len(self.morphology):.1f}%)")
+        with_phones = sum(
+            1 for m in self.morphology if m.lemma_phonemes and m.inflected_phonemes
+        )
+        print(
+            f"  ✓ {with_phones:,} pairs have pronunciations ({100*with_phones/len(self.morphology):.1f}%)"
+        )
 
     def _get_phoneme_inventory(self):
         """Get English phoneme inventory"""
@@ -186,10 +208,14 @@ class EnglishPhonologyLoader:
         for phonemes in self.lexicon.values():
             self.english_phonemes.update(phonemes)
 
-        print(f"  ✓ Found {len(self.english_phonemes)} unique phonemes in English lexicon")
+        print(
+            f"  ✓ Found {len(self.english_phonemes)} unique phonemes in English lexicon"
+        )
         print(f"  Phonemes: {sorted(self.english_phonemes)[:20]}...")
 
-    def get_allomorph_data(self, feature_type: str = "N;PL") -> list[tuple[str, str, str]]:
+    def get_allomorph_data(
+        self, feature_type: str = "N;PL"
+    ) -> list[tuple[str, str, str]]:
         """
         Get data for allomorph prediction
 
@@ -218,13 +244,15 @@ class EnglishPhonologyLoader:
             if inflected_len > lemma_len:
                 # Simple suffixation
                 allomorph_phones = pair.inflected_phonemes[lemma_len:]
-                allomorph = ''.join(allomorph_phones)
+                allomorph = "".join(allomorph_phones)
 
                 allomorph_data.append((pair.lemma, final_phoneme, allomorph))
 
         return allomorph_data
 
-    def get_phonological_neighbors(self, word: str, max_distance: int = 1) -> list[tuple[str, int]]:
+    def get_phonological_neighbors(
+        self, word: str, max_distance: int = 1
+    ) -> list[tuple[str, int]]:
         """
         Find phonological neighbors (differ by max_distance phonemes)
 
@@ -264,10 +292,10 @@ class EnglishPhonologyLoader:
 
         for i in range(1, m + 1):
             for j in range(1, n + 1):
-                if seq1[i-1] == seq2[j-1]:
-                    dp[i][j] = dp[i-1][j-1]
+                if seq1[i - 1] == seq2[j - 1]:
+                    dp[i][j] = dp[i - 1][j - 1]
                 else:
-                    dp[i][j] = 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])
+                    dp[i][j] = 1 + min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1])
 
         return dp[m][n]
 
@@ -294,8 +322,8 @@ class EnglishPhonologyLoader:
         # Load frequency
         freq_path = self.data_dir / "subtlex_frequency.txt"
         if freq_path.exists():
-            with open(freq_path, encoding='utf-8') as f:
-                reader = csv.reader(f, delimiter='\t')
+            with open(freq_path, encoding="utf-8") as f:
+                reader = csv.reader(f, delimiter="\t")
                 next(reader)  # Skip header
                 for row in reader:
                     if len(row) < 2:
@@ -305,26 +333,28 @@ class EnglishPhonologyLoader:
                         freq = float(row[1]) if row[1] else None
                         if freq:
                             norms.setdefault(word, {})
-                            norms[word]['frequency'] = freq
-                            norms[word]['log_frequency'] = math.log10(freq) if freq > 0 else None
+                            norms[word]["frequency"] = freq
+                            norms[word]["log_frequency"] = (
+                                math.log10(freq) if freq > 0 else None
+                            )
                     except (ValueError, IndexError):
                         continue
 
         # Load concreteness
         conc_path = self.data_dir / "norms" / "concreteness.txt"
         if conc_path.exists():
-            with open(conc_path, encoding='utf-8') as f:
-                reader = csv.reader(f, delimiter='\t')
+            with open(conc_path, encoding="utf-8") as f:
+                reader = csv.reader(f, delimiter="\t")
                 next(reader)  # Skip header
                 for row in reader:
-                    if len(row) < 2:
+                    if len(row) < 3:
                         continue
                     word = row[0].lower()
                     try:
-                        conc = float(row[1]) if row[1] else None
+                        conc = float(row[2]) if row[2] else None  # Column 2 is Conc.M
                         if conc:
                             norms.setdefault(word, {})
-                            norms[word]['concreteness'] = conc
+                            norms[word]["concreteness"] = conc
                     except (ValueError, IndexError):
                         continue
 
@@ -333,23 +363,24 @@ class EnglishPhonologyLoader:
         if glasgow_path.exists():
             try:
                 import pandas as pd
+
                 df = pd.read_excel(glasgow_path, header=1)
                 for _, row in df.iterrows():
-                    word = str(row['word']).lower()
+                    word = str(row["word"]).lower()
                     norms.setdefault(word, {})
-                    if pd.notna(row.get('M.6')):  # AoA
-                        norms[word]['aoa'] = float(row['M.6'])
-                    if pd.notna(row.get('M.4')):  # Imageability
-                        norms[word]['imageability'] = float(row['M.4'])
-                    if pd.notna(row.get('M.5')):  # Familiarity
-                        norms[word]['familiarity'] = float(row['M.5'])
+                    if pd.notna(row.get("M.6")):  # AoA
+                        norms[word]["aoa"] = float(row["M.6"])
+                    if pd.notna(row.get("M.4")):  # Imageability
+                        norms[word]["imageability"] = float(row["M.4"])
+                    if pd.notna(row.get("M.5")):  # Familiarity
+                        norms[word]["familiarity"] = float(row["M.5"])
             except Exception as e:
                 print(f"Warning: Could not load Glasgow norms: {e}")
 
         # Load VAD ratings
         vad_path = self.data_dir / "norms" / "Ratings_VAD_WarrinerEtAl.csv"
         if vad_path.exists():
-            with open(vad_path, encoding='utf-8') as f:
+            with open(vad_path, encoding="utf-8") as f:
                 reader = csv.reader(f)
                 next(reader)  # Skip header
                 for row in reader:
@@ -359,11 +390,11 @@ class EnglishPhonologyLoader:
                     norms.setdefault(word, {})
                     try:
                         if row[1]:
-                            norms[word]['valence'] = float(row[1])
+                            norms[word]["valence"] = float(row[1])
                         if row[2]:
-                            norms[word]['arousal'] = float(row[2])
+                            norms[word]["arousal"] = float(row[2])
                         if row[3]:
-                            norms[word]['dominance'] = float(row[3])
+                            norms[word]["dominance"] = float(row[3])
                     except (ValueError, IndexError):
                         continue
 
@@ -384,10 +415,12 @@ class EnglishPhonologyLoader:
             data = self.get_allomorph_data(feat)
             if data:
                 allomorphs = {a for _, _, a in data}
-                print(f"  {feat}: {len(data)} examples, {len(allomorphs)} unique allomorphs")
+                print(
+                    f"  {feat}: {len(data)} examples, {len(allomorphs)} unique allomorphs"
+                )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Demo
     loader = EnglishPhonologyLoader()
     loader.summary()
@@ -406,7 +439,7 @@ if __name__ == '__main__':
     print("PHONOLOGICAL NEIGHBORS OF 'cat'")
     print("=" * 70)
 
-    neighbors = loader.get_phonological_neighbors('cat', max_distance=1)[:10]
+    neighbors = loader.get_phonological_neighbors("cat", max_distance=1)[:10]
     for neighbor, dist in neighbors:
-        phones = ''.join(loader.lexicon[neighbor])
+        phones = "".join(loader.lexicon[neighbor])
         print(f"  {neighbor:15s} /{phones}/ (distance: {dist})")
