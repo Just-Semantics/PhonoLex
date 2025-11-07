@@ -1,0 +1,2122 @@
+
+--- Page 1 ---
+See discussions, st ats, and author pr ofiles f or this public ation at : https://www .researchgate.ne t/public ation/333815781
+Second language speech learning: Theory, ﬁndings and problems
+Chapt er · Januar y 1995
+CITATIONS
+2,152READS
+45,596
+1 author:
+James Emil Fle ge
+Univ ersity of Alab ama at Birmingham
+267 PUBLICA TIONS    25,436  CITATIONS    
+SEE PROFILE
+All c ontent f ollo wing this p age was uplo aded b y James Emil Fle ge on 17 June 2019.
+The user has r equest ed enhanc ement of the do wnlo aded file.
+
+--- Page 2 ---
+I In Winifred Strange (editOf), Speech Perception and Linguislic Experience : 
+Issues in Cross-Language Research. Timonium , MD: York Press, 1995. 
+Chapter • 8 
+Second Language Speech Learning 
+Theory, Findings, and 
+Problems 
+James Emil Flege 
+The aim of OUT research is to understand how 
+speech learning changes over the life span and to explain why "earlier 
+is better" as far as learning to pronounce a second language (L2) is con­
+cerned. An assumption we make is that the phonetic systems used in 
+the production and perception of vowels and consonants remain adap· 
+live over the hfe span, and that phonetic systems reorganize in response 
+to sounds encountered in an L2 through the addition of new phonetic 
+categories, or through the modification of old ones. The chapter is 
+organized in the following way. Several general hypotheses concern­
+ing the cause of foreign accent in L2 speech production are summa­
+rized in the introductory section. In the next section, a model of L2 
+speech learning that aims to account for age-related changes in 12 pro­
+nunciation is presented. The next three sections present summaries of 
+empirical research dealing with the production and perception of L2 
+vowels, word-initial consonants, and word-final consonants. The final 
+section discusses questions of general theoretical interest, with special 
+attention to a featural (as opposed to a segmental) level of analysis. 
+Although nonsegmental (i.e., prosodic) dimensions are an important 
+source of foreign accent, the present chapter focuses on phoneme-sized 
+units of speech. Although many different languages are learned as an 
+L2, the focus is on the acquisition of English. 
+INTRODUCTION 
+Foreign accents in English are common in the speech of non-native 
+speakers. Listeners hear foreign accents when they detect divergences 
+from English phonetic norms along a wide range of segmental and 
+suprasegmental (i.e., prosodic) dimensions . Foreign accents may have 
+a number of undesirable consequences for non-native speakers. They 
+233 
+
+--- Page 3 ---
+234 I FJe8e 
+may make non-natives difficult to understand, especially in non-ideal 
+listening conditions (e.g., Lane 1963). They may cause listeners to mis­
+judge a non-native speaker's affective state (e.g., Gumperz 1982; Fayer 
+and Krasinksi 1987; Holden and Hogan 1993), or provoke negative 
+personal eyaluations, either as the result or the extra eUort a listener 
+must expend in order to understand, or by evoking negative group 
+stereotypes (Lambert et a!. 1960; Giles 1970). 
+Researchers have proposed many different explanations for foreign 
+accents., For example, neurological maturation might reduce neural 
+plasticity (Penfield 1965; Lenneberg 19(7), leading to a diminished 
+ability to add or modify sensorimotor programs for producing sounds 
+in an L2 (Sapon 1952; McLaughlin 1977). Others have suggested that 
+foreign accents are caused, at least in part, by the inaccurate perception 
+of sounds in an L2 (Flege 1992a,b; Rochet this volume). Still others have 
+proposed that the primary cause of foreign accents is inadequate pho­
+netic input, insufficienbmotivation, psychological reasons for wanting 
+to retain a foreign accent, or the establishment of incorrect habits in 
+early stages of L21earning (see Flege 1988b, for review). The diversity 
+of these hypotheses attests to the complexity of the phenomenon of 
+foreign accent. 
+Neurological maturation has often been cited as the primary 
+impetus for a critical period for speech learning. Many believe that 
+new forms of speech cannot be learned perfectly once a crHical period. 
+has been passed (e.g., Lenneberg 1967; Scovel 1988; Patkowski 1990). 
+Although this may be true, such a conclusion fails to provide insight 
+into how l2 learning differs hom L1 acquisition, or what actually causes 
+foreign accent (FJege 1987b; Long 1990). Nor does a critical period 
+hypothesis seem consistent with the foreign accent ratings obtained 
+by Flege, Munro, and MacKay (1995a). This study assessed degree of 
+perceived foreign accent in the English spoken by native Italian (NO 
+sub;ects who differed according to their age of learning (AOL) English. 
+The 240 Nt subjects examined had begun learning English between 
+the ages of 3 and 21 years in Canada, where they had lived for over 30 
+years on average. Native English-speaking listeners used a continuous 
+scale to rate English sentences for degree of accent in English. Figure 1 
+shows a strong linear component (r = 0.71) in the relation between the 
+NI subjects' AOL and their degree of perceived foreign accent. The later 
+in life the NI subjects began learning English, the more strongly 
+foreign-accented their English sentences were judged to be. If a critical 
+period exists, it apparently does nut resilit in a sharp discontinuity in 
+L2 pronunciation ability at around puberty. 
+In 1981, Flege noted the following paradox, which eventually led 
+to the formulation of the model presented below. At an age when chil­
+dren's sensorimotor abilities are generally improving, they seem to 
+
+--- Page 4 ---
+Second-Language Speech Learning 1235 
+250~---'-----r----,----,----~ -c 
+Q) 
+9 .... 200 
+al 
+.~ 
+Q) 
+~ 
+~ -o 
+Q) 
+~ 
+0> 
+Q) o 
+Q) 
+0> 
+~ 
+Q) 
+~ 150 
+100 
+50 
+0 
+0 • 
+• 
+• • .... 
+': • I 
+• 
+5 10 15 20 25 
+Age of Arrival in Canada (years) 
+Figure 1. The mean foreign accent ratings accorded English sentences spoken 
+by 240 native Italian speakers of Italian who differed according to age of 
+learning (AOL) English, in years. Each mean is based on 150 judgments (5 
+sentences x 10 native English-speaking listeners) (data are from Flege, Munro, 
+and MacKay 1995a). 
+lose the ability to learn the vowels and consonants of an L2. Segmental 
+produchon research in the 19705 focused on the classroom learning of 
+foreign languages, or on early stages of naturalistic L2 learning. 
+Interference from the L 1 was seen as the primary phonological cause 
+of foreign accent. A common view was that 1) an L2 sound that is 
+"identified" with a sound in the L1 will be replaced by the L1 sound, 
+even if the L 1 and L2 sounds differ phonetically; 2) contrasts between 
+sounds in the L2 that do not exist in the Ll will not be honored; and 
+3) contrasts in the L1 that are not found in the L2 may nevertheless be 
+produced in the L2 (e.g., Weinreich 1953; Lehiste 1988). Little attention 
+was paid to the effect of AOL or variations in amount of L2 experi­
+ence. Thus, it was common to encounter descriptions of L2 production 
+errors that contained no reference to when in life L2 learning com­
+menced, or how 10118 the L2 had been spoken, aT with whom (e.g., 
+Koutsoudas and Koutsoudas 1983). 
+Second-language speech learning has been characterized as more 
+"analytic" than L1 acquisition <e.g., Mack 1988), especially for those 
+
+--- Page 5 ---
+2361 Flege 
+whose early exposure to the target L2 comes primarily through the 
+written word. Interference was usually described as occurring at a 
+segmental level (but d. Weinreich 1957, who emphasized featural-Iev­
+el analysis). This assumed that bilinguals decompose unfamiliar 
+words of the L2 into phonemes and allophones. Given this conceptu· 
+alization, accurate production of an l2 sound would require: (1) an 
+accurate appraisal of ' the properties that differentiate the L2 sounds 
+from one another, and from sounds in the L1; (2) the storing and 
+structuring of this information in long-term memory; and (3) the 
+learning of gestures with which to reliably reproduce the represented L2 
+sounds. 
+The view that foreign accent is caused by motoric difficulty (3, 
+above) is inconsistent with the following observations. Although very 
+common, foreign accents are apparently not inevitable (Hill 1970; 
+Novoa, Fein, and Obler 198B). For example, Neufeld (1979) required 
+his adult subjects to listen for a long time before talking. They were 
+then apparently able to pronounce sentences in an unfamiliar foreign 
+language without foreign accent. Adults may be as able as children to 
+imitate foreign sounds. Finally, Snow and Hoefnagel·H6hle (1979) 
+examined the naturalistic acquisition of Dutch by native English (NE) 
+speakers differing in chronological age. Adults were at first better able 
+than children to imitate and spontaneously produce Dutch sounds. By 
+the end of the one-year study period, the spontaneous production of 
+Dutch sounds by the NE adults and children was roughly equivalent. 
+Why do adults fail to exploit their motoric abilities fully? One 
+possibility is that they fail to perceive L2 sounds accurately (1 and 2, 
+above). Diffetences in segmental perception between native and non­
+native speal<;ers have been. shown to exist in many studies (e.g., Miya· 
+waki .t al. 1975; Flege and Eefting 19t16; Flege and Hillenbrand 1986, 
+1987). In gating experiments, non·natives must hear a larger portion of 
+a word than native speaker~ to recognize the word (Nooteboom and 
+Truin 1980; Koster 1987). Perceptual differences are indirectly evident 
+in the difficulty non·nativcs may have in comprehending English, 
+especially distorted or synthetiC spee(:h versions of English or anom· 
+aious sentences (Oyama 1978; Nabelck and Donahue 1984; Greene 
+Pisani, and Gradman 1985; Mack 1988; Ozawa and Logan 1989; Mack 
+et al. 1990; McAllister 1990). 
+The hypothesis that articuiatory errors have a perceptual basis 
+has been examined extensively in LI acquisition research. Powers 
+(1957) reviewed evidence that children's misarticulalion of sounds 
+cannot usually be traced to deficits in auditory acuity. A large number 
+of studies that attempted to establish a link between the ability to dis· 
+criminute a broad range of speech sounds, on the one hand, and 
+speech sound production errors, on the other, yielded contradictory 
+
+--- Page 6 ---
+Second·Lan8uage Speech Learning 1237 
+results, at least for normany developing children (Weiner 1967). Other 
+studies tested the hypothesis that the inaccurate production of an L1 
+sound could be attributed to an inadequate perceptual specification of 
+it (Spriestersbach and Curtis 1951), or to difficulty discriminating a 
+sound produced in error from its replacement. For example, Monnin 
+and Huntington (1974) found that children who misarticulated /J/ 
+(usually as /w/l were less able to correctly identify /JI and Iwl in a 
+picture pointing task than were children who produced / J/ correctly. 
+Other studies, however , failed to reveal a direct link between the per­
+ception and misarticulation of particular sounds (e.g., Haggard, Corri­
+gall, and legg 1971; Waldman, Singh, and Hayden 1978). locke (1980) 
+designed special tests for children .. ged 3-7 years, based on the specif­
+ic consonants each child misarticulated. The children failed to percep­
+tually distinguish a sound they misarticulated from its replacement 
+sound in less than one·third of instances. Furthermore, many of the 
+observed perceptual errors involved /fl versus 10/, and so might 
+have had an auditory basis (see Sussman 1993). This led Locke (1980, 
+p. 465) to conclude that the root cause of many L1 segmental produc­
+tion errors is to be found at a "motor" level rather than at a Hmentalis­
+tic (level) of linguistic organization ." 
+The conclusion drawn for L1 acquisition may not apply equally to 
+L2 learning, which differs from Ll acquisition in certain respects. 
+Most importantly , bilinguals tend to interpret sounds encountered in 
+an l2 through the "grid" of their 11 phonology (Trubetzkoy 1939; 
+Wode 1978). This virtually ensures that non-native speakers will per­
+ceive at least some L2 vowels and consonants differently than do 
+native speakers. For example, French Iyl is mispronounced as IiI by 
+Portuguese learners. but as luI by native English learners. Data re­
+ported by Rochet (this volume) suggests that native Portuguese learn­
+ers of French may hear Iyl tokens as /i/, whereas English learners of 
+French hear /yl tokens as luI. Japanese and Russian both have lsI 
+and ttl, but lack 18/. Japanese leMners mispronounce English 10/ as 
+lsI, Russians as /t/ (Weinberger 1990). This is not to say, however, 
+that non-natives' perception of L2 sounds remains constant. The 
+results of feedback training experiments have suggested that lan­
+guage-specific perceptual patterns are modifiable to some extent (e.g., 
+Logan, Lively, and Pisani 1991; Strange 1992). This suggests that the 
+perceived relation of L1 and L2 sounds may change during naturalis­
+tic 1..2 learning . 
+SPEECH LEARNING MODEL 
+F1ege and his colleagues have developed a speech learning model (SlM) 
+that aims to account for age-related limits on the ability to produce 1..2 
+vowels and consonants in a native-like fashion. The SLM is concerned 
+
+--- Page 7 ---
+2381 Fleye 
+primarily with the ultimate attainment of L2 pronunciation , so work 
+carried out within its framework focuses on bilinguals who have spoken 
+their L2 for many years, not beginners . During Ll acquisition, speech 
+perception becomes attuned to the contrastive phonic elements of the 
+L1. Learners of an L2 may fail to discern the phonetic differences 
+between pairs of sounds in the L2, or between L2 and L 1 sounds, either 
+because phonetically distinct sounds in the L2 are "assimilated " to a sin­
+gle category (see Best this volume), because the L 1 phonology filters out 
+features (or properties) of U sounds that are important phonetically but 
+not phonologically , or both. The model claims that without accurate per­
+ceptual "targets" to guide the sensorimotor learning of L2 sounds, pro­
+duction of the 12 sounds will be inaccurate. The model does ,wI claim, 
+however, that all L2' production errors are perceptually motivated. For 
+example , motoric output constraint s b .. sed on permissible syllable types 
+in the L 1 may cause Spanish speakers to pronounce the word "school" 
+as Icskull. Still, a basic tenet of the mudel is thai many 12 production 
+errors have a perceptual basis. 
+The postulates and hypolheses Ihat comprise the current version 
+of the SLM are presented in Table 1. The hypotheses derive from the 
+postulates , and from empirical data presented in previous articles 
+and chapters (see, e.g., Flege 1981, 1988b, 1991a, 1992a,b). It should 
+be emphasized that this is a working model and is subject to further 
+revision as new data are gathered . Regardless of whether the SLM is 
+ultimately supported or disconfirmed , it serves as a useful heuristic 
+for planning research. Also, it generates testable predictions and can 
+be used to organize and interpret a wide range of empirical data. In 
+th~ following section we discuss the model's hypotheses in general 
+terms, and illustrate how they apply to important questions pertain­
+ing to students of L2 learning . Specific hypotheses are indicated by 
+boldface (e.g., H4, H7, and so on). 
+The SLM differs from other approaches to L2 acquisition in 
+important ways. According to the model's first hypothesiS (Hl), learn­
+ers perceptually relate positional allophones in the L2 to the closest 
+positionally defined al~ophone (or "sound ") in the L 1. Weinreich 
+(1957) referred to L1 and L2 sounds that have been linked perceptually 
+in this way as "diaphones ." The phonetic level of analysis envisaged 
+by Ht is less abstract than the phonemic level of Contrastive Analysis 
+(e.g., Lada 1957), but is, neverthdess , an abstract level of organization . 
+Even within a single phonetic context, the production of a position­
+sensitive allophone is apt to vary conSiderably according to such fac­
+tors as' speaking rale, degree of stress, the talker's age and gender, and 
+speaking style or clarity (Lindblom 1990a,b). 
+Support for HI comes from evidence that L2 learners are more 
+successful at producing and perceiving certain allophones of English 
+
+--- Page 8 ---
+Second-Language Speech Learning I 239 
+Table I. Postulates and hypotheses forming a speech learning model (SlM) of 
+second language sound acquisition. 
+Postulates 
+P1 The mechanisms and processes used in learning the II sound system, 
+including category formation , remain intact over the life span, and can be 
+applied to l2 learning. 
+P2 language -specific aspects of speech sounds are specified in long-term 
+memory representations called phonetic categories. 
+Pl Phonetic categories established in childhood for II sounds evolve over the 
+life span to reneet the proper1ies of allll or l2 phones identified as a real-
+ization of each category. . 
+P4 Bilinguals strive to maintain contrast between 11 and L2 phonetic cate­
+gories, which exist in a common phonological space. 
+Hypotheses 
+H1 Sounds in the 11 and l2 are related perceptually to one another at a posi· 
+tion·sensitive allophonic level, rather than at a more abstract phonemic 
+level. 
+H2 A new phonetic category can be established for an l2 sound that diHers 
+phonetically from the closest II sound if bilinguals discern atleasl some of 
+the phonetic differences between the II and l2 sounds. 
+Hl The greater the perceived phonetic dissimilarity between an l2 sound and 
+the closest II sound, the more likely it is that phonetic differences between 
+the sounds will be discerned. 
+H4 The likelihood of phonetic differences between II and L2 sounds, and 
+between l2 sounds that are noncontrastive in the L 1, being discerned 
+decreases as AOl increases . 
+HS Category formation for an 12 sound may be blocked by the mechanism of 
+equivalence classification . When this happens, a single phonetic category 
+will be used to process perceptually linked II and L2 sounds (diaphones). 
+Evenlually , the diaphones will resemble one another in production. 
+H6 The phonetic category established for l2 sounds by a bilingual may differ 
+from a monolingual 's if: 1) the bilingual's category is '"deflected'" away from 
+an II category 10 maintain phonetic conlrast between categories in a com­
+mon ll-12 phonological space; or 2) the bilingual's representation is based 
+on different features, or feature weights, than a monolingual's . 
+H7 The production of a sound eventually corresponds to the properties repre­
+st:nted in ils phonetic category representation . 
+phonemes than others. For example, native Japanese (NJ) speakers 
+have difficulty producing and perceiving English /11 and / J/. This is 
+because Japanese has just one liquid, whereas English has two. 
+However , allophones of English / JI and 11/ differ phonetically and 
+are learned by non-native speakers at different rates and to differing 
+extents. For example , NJ learners of English characteristically perceive 
+and produce English liquids more accurately in word-final than word­
+initial position (Strange 1992), perhaps because the acoustic difference 
+
+--- Page 9 ---
+240 I Flege 
+between English / J/ and /1/ is more robust in final than initial posi­
+tion (Sheldon and Strange 1~82). Another possible explanation for the 
+word-position. effect is that final but not initial allophones of English 
+I JI and /II are categorized differently by NJ learners of English. 
+Takagi (1993) examined the perceived relation between Japanese /T/, 
+English hi, and English III. Native Japanese subjects who had 
+arrived recently in the United States used katakana symbols to write 
+English nonsense words presented auditorily. As expected from loan­
+word phonology data, English flV / and / JV / syllables were written 
+with the symbols for Japanese IrV /. However, whereas tokens of 
+word-final EngHsh / J/ were written as "a" (78% of instances), word­
+final /1/ tokens were written as "ru" (53%) or "0" (30% of instances). 
+Rochet (this volume) suggested that all L2 vowels are identified 
+as realizations of an existing L1 vowel category. Best, McRoberts, and 
+Sithole (1988) suggested that foreign consonants are judged to be real· 
+izations of an L1 consonant, or else are heard as nonspeech (but d. Best 
+this volume). However, many L2 production studies have provided 
+indirect evidence that, over lime, L21earners take note in some way of 
+cross·language phonetic diiferences (e.g., Wenk 1979; Hammarberg 
+1988,1990; Wieden 1990). According to the model's second hypothesis 
+(H2), bilinguals sometimes establish a new phonetic category repre­
+sentation for sounds in the L2. And, according to H7, L2 sounds will 
+eventually be produced as specified in phonetic category representa· 
+tions. If the new phonetic category established by a bilingual for an L2 
+sound matches native speakers', then the L2 sound will be produced 
+accurately. 
+According to H3, the likelihood of cross·language phonetic dif· 
+ferences being discerned iucreases with degree of perceived cross­
+language phonetic differen ce. There is evidence, for example, that 
+Japanese Irl (despite its symbolization) is closer perceptually to 
+English III than IJ/,(Sekiyama and Tohkura 1993; Takagi 1993). This 
+leads to the-expectatiun thai a larger proportion of Japanese learners 
+of English will discern some or all of the phonetic differences between 
+Japanese Ir I and English I jl than between Japanese Irl and English 
+II/.. H4 states that the likelihood of cross·language phonetic differ· 
+ences being discerned decreases wilh AOL. So, for example, more 
+German·speaking l()...year olds than adults should discern the phonetic 
+difference between English / a!1 and the closest German vowel (proba­
+bly le/J, In fact, Ihe perceived distance between lEI and lrel vowels 
+is greater for German children than adults (Butcher 1976); and German 
+adults but not children have difficulty discriminating leI and lrel in 
+an oddity task (Weiher 1975; see Figure 2 below). 
+As mentioned earlier, neurological maturation is often identified 
+as the cause .of foreign accentedness. Patkowski (1990, p. 87) suggested 
+
+--- Page 10 ---
+Second·Language Speech Learning 124 r 
+that "the difference between child and adult learners (of speech and 
+language) is of a fundamental, qualitative nature" and that preadoles­
+cent versus postadolescent L2 learners represent "different popula­
+tions" of learners. We might suppose that if L2 production accuracy 
+were limited by maturation, such a limitation would apply across the 
+board to the full range of L2 sounds that differ phonetically from 
+sounds in the L1. On the other hand, H3 and H4 predict that fewer 
+sounds in the L2 will be produced accurately as AOL increases (both 
+in terms of the range of sounds and the proportion of bilinguals). 
+Degree of foreign accent is correlated with the number of segmental 
+errors (e.g., Brennan , Ryan and Dawson 1975). Thus, the linear 
+increase of foreign accent with AOL shown in Figure 1 seems to agree 
+better with the SLM than with the prediction generated by a neurolog­
+ical maturation hypothesis . 
+A failure to discern cross-language phonetic differences may arise 
+at one or more processing levels. In some circumstances, listeners can 
+gain access to the sensory properties which distinguish pairs of unfa­
+miliar L2 sounds (Miyawaki et al. 1975; Werker and Tees 1984; Mann 
+1986), or L1 and L2 sounds (Rege 1984; Rege and Munro 1994). How­
+ever, they may fail to do so during the on-line processing of speech. 
+Speech perception becomes automatic during L1 speech development 
+(e.g., Linell 1982), which frees resources for other processing tasks 
+(e,g., Mayberry and Eichen 1991). This may cause learners to attend 
+less to phonetic detail when learning L2 than L1 sounds. Listeners 
+may fail to gain access to sensory properties associated with certain U 
+sounds as the result of pre-attentive processes. Neisser (1976, p. 20) 
+spoke of "anticipatory schemata" that "prepare the perceiver to accept 
+certain kinds of information rather than others." Jusczyk (1992, 1993) 
+later posited the existence of automatic interpretative schemes that 
+determine which properties of incoming words are attended to in 
+early stages of processing . It is also possible that sensory information 
+that has initially been processed is discarded at a later processing 
+stage by non ~native speakers as nondistinctive , or that nOll-natives 
+weight features differently than do NE speakers {e.g., Weinreich 1953; 
+Rege and Hillenbrand 1986,1987; Flege 1988}, 
+Traditionally, the term "interference" has applied only to the influ­
+ence of the L1 on the producti on of an L2. According to H5 and H6, 
+however, cross-language phonetic interference is bidirectional in 
+nature. The model predicts two different effects of 12 learning on the 
+production of sounds in an L1, depending upon whether or not a new 
+category has been established for an 12 sound in the same portion of 
+phonological space as an L1 sound. Previous shtdies have supported 
+HS by showing that L1 and 1.2 sounds that are perceptually linked to 
+one another (diaphones) come to resemble one another in production. 
+
+--- Page 11 ---
+2421 Flege 
+For example, F1ege (1987a) found that bilinguals produced stops in their 
+L1 with VOT values resembling those typical for stops in the L2 (see 
+also Peng 1993). 
+H6 was added recently to the model. It is based on the observa­
+tion that in the vowel system of languages, vowels tend to disperse so 
+as t~ maintain suHicient auditory contrast (e.g., Liljencrants and 
+Lindblom 1972;.Lindblom 1990b). Recently obtained L2 production 
+data (Bohn and Flege 1992) led us to accept that a bilingual 's Ll and 
+L2 categories exist ill a comlllOll phonological space. By hypothesis, a 
+bilingual 's L1 and L2 vowels disperse so as to maintain contrast with­
+in that individual 's phonolo~ ;ica) space. If 50, then a category estab­
+lished by a bilingual for an 1.2 vowel may be "deflected" away from 
+an L1 yowel, and so differ from a native speaker's category for the L2 
+vowel sound. 
+Analogies to H6 can be found in historical sound change and 
+dialect geography . As languages change, the raising of vowel A may 
+precipitate the raising of 5, ...... hich then causes C to rise. As the result 
+of such push chains, the vowels A, 13, and C may be produced differ· 
+ently, while the contrasts between them are preserved (Martinet 1955). 
+Moulton (1945) observed that in Swis~ German dialects that had an 
+lre/; the vowel lal was produced with backed variants. In I~/-Iess 
+.. dialects, on the other hand, I al was produced with central, or even 
+fronted, variants. The results of a case study by Mack (1990) were con­
+sistent with H6. Acoustic measurements revealed that a 10-year-old 
+boy who spoke French at home and English elsewhere produced 
+Ib d gl with short-lag voice-onset time (VOT) values in both French 
+and English. He produced Ip t kl with VOT values averaging 66 ms 
+in French, but with values averaging 108 ms in English. Thus, this 
+child mahaglld to maintain IJltonetic cOlltrast between three categories 
+in his L1 and L2, but at the cost of producing I p t k/ inaccurately in 
+both languages (i.e., with VOT values that were too long for both 
+French and English). 
+The kinds of Ll production changes predicted by H5 and H6 are 
+consistent with an incidental finding of a study by Flege, Munro, and 
+MacKay (1995a). The 240 NI ~peakers who participated were a~kt.>d to 
+evaluat~ their own ability to pronounce Italian and English. There was 
+a modest negative correlation between self-estimated ability tu pro· 
+nounce the L1 and L2. The Nt subjecl ~ who began learning English 
+before the age of 12 years s.lid they pronounced English better than 
+Italian; whereas, the reverse held true for those who began learning 
+English later in life. Very few (6%) of the Nl subjects pre· and post­
+adolescent learners indicated that they could speak both English and 
+Italian without accent, including subjects who used English and Italian 
+with equal frequency. 
+
+--- Page 12 ---
+Second-Language Speech Learning I 243 
+H6 specifies a second circumstance in which a category established 
+for an L2 sound by a non-native speaker may differ from a native 
+speaker's category. This is predicted if the non-native speaker's ph<>­
+netic category is based on different features than the native speaker's, 
+which could arise if an L2 sound is distinguished from other L2 
+sounds by features not exploited in the L1. This important revision of 
+the SLM leads us to expect that, even when categories are established 
+for an L2 sound, the U sound might tlOt be produced exactly as it is pro­
+duced by native speakers. Thus, the model no longer predicts "mastery" 
+of certain L2 sounds, and the model is ·now congruent with Grosjean's 
+view of bilingualism . Grosjean (1989) suggested that the Hmixing" of 
+the L1 and L2 is inevitable, because a bilingual's two language sys­
+tems are both constantly engaged . This view implies that bilinguals do 
+not "switch" between two distinct phonetic systems, at least not as has 
+been assumed traditionally.1 
+PRODUCTION AND PERCEPTION OF VOWELS 
+The SLM generates specific predictions concerning the production and 
+perception of l2 vowels. First, even adult l2 learners are likely to dis­
+cern the phonetic differences between certain LI and L2 vowels, espe­
+cially if Ihe LI has fewer vowels than Ihe L2 (e.g., the 5-vowel system 
+of Spanish in comparison to the IS-vowel English system). When this 
+happens , new phonetic categories will be established for the L2 vow­
+els (H2), and the L2 vowels will eventually be produced as specified 
+in their phonetic category representations (H7). By H3, the greater the 
+perceived distance of an L2 vowel from the closest Ll vowel, the 
+greater is the likelihood that a new category will be established for the 
+L2 vowel. So, for example , a native Spanish (NS) speaker should be 
+more likely to establish a phonetic category for English /tr.1 or /&/ 
+than for English Iii (which differs only slightly from Spanish Iii). By 
+H4, a native Spanish a-year old should be more likely to establish a 
+category for English Iff/ and la-I than a native Spanish I6-year old. 
+The model predicts different effects of L2 learning on the produc­
+lion of L2 vowels, depending upon whether or not a new category has 
+been established for an L2 vowel. For example. using an orthographic 
+classification task, Flege (199Ic) showed that Spanish speakers with lit­
+tle or no experience in English tend to identify English hr./ tokens as 
+realizations of their Spanish /a/ category. If Spanish learners of English 
+persist in doing so, and are, thereby, unable to establish a category for 
+English 1 .... 1, Ihe model predicls that they will produce English 1 .... 1 
+'Mack (1989) claimed, for example, thai the "dominant" language may remain 
+"impervious " to an influence by the nondominant language, at Jeast for certain pho­
+nellc dimensions . 
+
+--- Page 13 ---
+2441 Flege 
+with Spanish / a/ -like properties, and vice ver<'.xl. (That is, their L2 / 11!/ 
+will have F2 (second formant) values that are too low, and their L1 /a/ 
+will have F2 values that are too high.) However, if a category is estab­
+lished for English lre/, then the model predicts accurate production 
+unless the Spanish'learner's new English /re/ category is deflected 
+away from Spanish /a/. An indirect consequence of a "deflection" 
+would be a lowering of F2 values in Spanish /a/ (Le., a backing of 
+Spanish /al in phonological space away from English lce/). Although 
+testable, the data now available are insufficient t'O support or disconfirm 
+such hypotheses. One, gap in the literature is the virtual absence of work 
+examining bilinguals' production of L1 vowels (but see Bohn and Flege 
+1992). The general pattern of available data reviewed below, however, 
+are consistent with the framework just outlined. 
+Categorial Discrimination of L 1 and L2 Vowels 
+Best (1994) observed that I'ropcrtie s defining category membership 
+are likely to differ from those defining the systematic relationship 
+among categories. Perceptual training data obtained by Morosan and 
+Jamieson (1989) suggested that learning to distinguish a sound, X, 
+from another sound, Y, will not necessarily generalize to an X-Z con­
+trast because cues to an X-Y contrast Inay not suffice to distinguish X 
+from Z. Thus, the notion "phonetic category" implies the perceptual 
+ability to: 1) identify a wide range of different phones as being "the 
+same," despite auditorily detectable differences between them along 
+dimensions that are not phonetically relevant; and 2) ability to distin­
+guish the multiple exemplars of a category from realizations of other 
+categories, even in the face of noncriterial commonalities (Kluender, 
+Diehl, and Killeen 1987). 
+A two-alternative forced-choice (2AFC) identification test is not 
+well suited as a test of category formation . For example, Flege and 
+Bohn (1989) examined NS subjects' identification of vowels in beat-bit 
+(Ii-II) and bet-bat (le.-rel) continua . In both, Fl (first formant> fre­
+quency and vowel duration were varied orthogonally. The NS sub­
+jects managed to partition both continua into two response categories, 
+but in neither instance did the data provide compelling evidence for 
+the establishment of categories for vowels not found in Spanish 
+(namely, /a:.1 anJ II/). As discusseu by Bohn (this volume), many NS 
+subjects identified members of the beat-bit continuum based primarily 
+on vowel duration rather than on spectral quality, as was the case for 
+NE subjects. These NS subjects may have based their identifications 
+on a readily available auditory property (duration) rather than by ref­
+erencing incoming stimuli to two distinct long-term memory repre­
+sentations. An over-reliance on duration was not evident for the bet-bat 
+continuum . However, evidence obtained by Flege (1991c) suggested 
+
+--- Page 14 ---
+Second-Language Speech Learning I 245 
+that some of the NS subjects may have identified endpoints of this 
+continuum (lEI and Ir./l in terms of two distinct Spanish categories 
+(lei and laf). 
+An oddity discrimination task has been used in L2 research to 
+determine if learners can discriminate various L2 sounds (e.g., Weiher 
+1975; Lamminmaki 1979), and might be used to test for category forma­
+tion. Gottfried (1983) administered an ABX (3 stimuli: A, B always dif­
+ferent) "categorial" discrimination task (see Beddor and Gottfried this 
+volume) to French nalive speakers and inexperienced NE speakers of 
+French. Triads of stimuli contained potentially confusable French 
+vowels. As expected, the NE subjects made more errors than the 
+French subjects (25% vs. 17%), especially on triads containing the front 
+rounded vowels lyre "I, which do not occur in English. The lack of a 
+categorical representation for French front rounded vowels may have 
+contributed to errors by the NE subjects. 
+Flege, Munro, and Fox (1995) modified the categorial discrimi­
+nation task to discourage within-category discrimination, and to 
+encourage subjects to group sounds into plJOndiclllly rdewllt equiva­
+lence classes. As in the Gottfried (1983) study, the three stimuli in each 
+triad were spok~n by different talkers to encourage responses in a 
+general rather than token-specifi c mode (e.g., Mullinex, Pisani, and 
+Martin 1989; Uchanski et al. 1991). The inter-stimulus interval between 
+the men"lhers of each triad was somewhat longer than the one used by 
+Gottfried (983) to further reduce the possibility that correct responses 
+could be based on information in auditory short-term memory (see, 
+e.g., Ferrero et al. 1979; Werker and Logan 1985). Finally, the inclusion 
+of "catch" triads, which consisted of realizations of a single category 
+spoken by three different talkers (correct response : "no odd item out") 
+encouraged subjects to respond only to phonetically relevant differences, 
+not merely auditorily detectable ones.2 
+Table II summarizes the results obtained by Flege, Munro, and 
+Fox (1995) for NE speakers and groups of native Spanish subjects who 
+were relatively experienced (NS-1) or inexperienced (NS-2) in English. 
+The pattern of between-group differences varied as a function of the 
+acoustic and articulatory differences between the vowel contrasts tested. 
+The subjects in all three groups readily discriminated Spanish /al 
+tokens from realizations of English leI, Iii and /1/. However, for 
+triads testing the categorial discrimination of Spanish tal versus 
+English /01, Significantly lower percent correct scores were obtained 
+--_.-----------------------------------
+Tfhe categoria l discrimination task just described did not require training and 
+obviated problems seen in identification tasks where listeners must choose from • large 
+set of response alternatives . or in tasks thai make use oC written key words. 
+
+--- Page 15 ---
+2461 Flege 
+from the NS-1 and the NS-2 subjects than from NE subjects. For triads 
+testing the I~/-/E/, and la/-/~I contrasts, the subjects in NS-2 but 
+not in NS-1 responded correctly significantly less often than did the 
+NE subjects (p < .05). 
+These results were interpreted to mean that the NS subjects iden­
+tified Spanish and English vowels that are distant from one another in 
+phonological space (Moulton 1945) in terms of two distincl categories; 
+whereas, they were less likely to do so for less distant pairs of vowels. 
+The NE'subjects were likely to have performed well on triads testing 
+the contrast between Spanish /a/ and the English vowels leI and 
+/1£,/ because they identified Spanish /a/ tokens as realizations of 
+English /0/ (and, thus, distinct from the other two English vowels). 
+The fact that inexperienced but not experienced NS subjects per­
+formed more poorly than did the NE subjects on la/-lEI and 
+a/-/fr,f contrasts suggests that some of the experienced NS subjects 
+may have established categories for /e/ and /Il!/, neither of which 
+occur phonemicaUy in Spanish. 
+Flege, Munro, and Fox (1995, Experiment 1) provided additional 
+evidence of categorical effects on the perception of L2 vowels. Native 
+English and NS subjects rated pairs of Spanish and English vowels for 
+degree of dissimilarity using a nine-point scale. The results for five 
+different vowel pairs containing a Spanish / a/ token and a token of 
+English IiI, 1./, lEI, I~/, or IAI are shown in Figure 2. The NE sub­
+jects rated la/-lEI and .fa/-/re/ pairs <is si3nificantly more dissimi­
+lar than did experienced (NS·1) or inexperienced (NS-2) native 
+Spanish subjects.} It appears that the NE subjects were more likely 
+than the NS subjects to identify vowels in la/-/EI and la/-I.,I 
+pairs as realizations of two phonetically distinct categories and that this 
+augmented the degree of perceived vowel dissimilarity. 
+The NE and NS subjects responded to other vowel pairs in much 
+the same manner, however. Both the NE and NS subjects rated the 
+vowels in /a/-/A/ pairs as very similar, probably because all subjects 
+heard ~ealizalions of a Single vowel c,ltegory. The NE and NS subjects 
+agreed in rating the vowels in /a/-/II pairs as somewhat less dissim­
+ilar than vowels in la/-/il pairs. Vowels in both of these pairs were 
+likely to have been classified differently by all subjects, and so the 
+common response by the NE and NS subjects may have reflected 
+degree.of auditory difference . Although not shown in Figure 2, the NS 
+subjects rated English Iii-Ill pairs as significantly more Similar than 
+did the NE subjects. This finding, when taken together with converging 
+evidence obtained using other paradigms (Flege and Bohn 1989; Flege 
+'Different sub;ects participated in the similarity rating experiment (Experiment 1) 
+and in the calegorial discrimination lest (Experiment 2) mentioned earlier. 
+
+--- Page 16 ---
+Second·Language Speech Learning I 247 
+Table II. Percentage of correct responses obtained from native speakers of 
+English and Spanish in a calegorial discrimina tion task." 
+Subject group 
+Vowel Contrast NEb NS·l' NS-2' 
+Ia/-N 98(4) 95(6) 95(5) 
+la/-/&! 91(15) 96(7) 89(17) 
+Ia/-/." 98(5) 95 (5) 97(6) 
+/a/-/</ 80(29) 66 (26) 51(27) 
+/a/-/"" 77(31) 59 (24) 38(25) 
+/a/-/o/ 57(36) 26 (18) 18(5) 
+·Triads of stimuli tested the contrast between tokens of Spanish Ial and tokens of 
+English /v.lv./ev./e/, 1Je/ and 10/ (data are ftom flege, Munro. and fox 1995). 
+bNE, monolinguat native speakers of English. 
+eNS·1, relatively experienced Spanish speakers of English. 
+dNS-2, inexperienced Spanish speakers of English. 
+9 
+~ 8 -c: 
+CO --.E 7 
+If) 
+.'il 6 0 
+"0 
+C1) 5 .> 
+fl 4 ~ 
+C1) 
+0. 3 c: 
+CO 
+C1) 2 ::ii: 
+1 " • o • to. fv 
+III 
+lzel 
+1£1 
+ItJ 
+Figure 2. The mean perceived dlsslmtlarlly of vowel pairs by English­
+speaking listeners (EN-A, EN· B), relatively experienced native Spanish 
+speakers of English (NS-l), and relatively inexperienced Spanish speakers of 
+English (NS-2). Multiple tokens of Spanish /a/ were paired with tokens of 
+English lit, /1/, /re/, /e/, and /0/ (data are from Rege. Munro. and Fox 
+1994. Experiment 1). . 
+
+--- Page 17 ---
+2481 Flege • 
+1991 C), suggests indirectly that some NS speakers of English detect the 
+allditory difference between Iii and III tokens, although they do not 
+categorize these vowels as different. This is consistent with the model's 
+claim that changes in L2 production can come about even when phonetic 
+differences between Ll and L2 sounds are not discerned (i.e., when 
+phonetic category formation is blocked by equivalence classification). 
+Flege (1995) used the categorial discrimination task described ear­
+lier to assess the perception of English vowels b~' non-native subjects 
+differing in L1 background . The study's aims were to: 1) determine if 
+the non-natives would fail to discrimin ate English vowels that could be 
+discriminated by NE subjects; and 2) In determine if the non-natives' 
+pattern of diSClCiminative failures would vary according to the nature of 
+their L1 vowel inventory. The /bVtl words used as stimuli were spo­
+ken at a relatively rapid rale by five NE speakers .· Fourteen vowel con­
+trasts (e.g., IiI vs. 1.1> were tested by cight "change" triads, in which 
+there was an odd item out, and by eight "catch" triads, which consist'ed 
+of three different realizations of a single vowel category. 
+Figure 3 presents data obtained from 10 NE subjects and from 36 
+of the non-nativ e subjects tested (6 L1 backgrounds x 6 talkers). The 
+non-natives were slightly older than the NE subjects (M = 35 vs. 31 
+years). They'arrived in the United States at an average age of 27 years 
+(range: 14-52 years) and had lived there for an average of 7 years 
+(range: 0.6-38 years). The size of the non-native subjects' L1 vowel 
+inventories appeared to influence whether they did, or did not, differ­
+entially classify certain English vowels. Of the six non-native groups 
+shown in the figure, only the native Spanish and Portuguese subjects 
+made significantly more errors on the catch triads (20% and 21 'Yo, 
+respcct'ive ly) than did the NE subjects (2%). For change tdads, far 
+more errors were made by the native Portuguese and Spanish subjects 
+(26%,27%) than by the NE subjects (4fft.). The German and Dutch sub­
+jects also made more errors 00%, 12%) than did the NE subjects. Given 
+that German and Dutch have more vowels than either Portuguese or 
+Spanish, speakers of the former language s were probably more likely 
+to identify two different English vowels in lerms of different L1 vowel 
+categories than were speakers of the latter language s. 
+A failure to discriminate two English vowels was said to have 
+occurred when the six subjects in an L1 group responded Significantly 
+less often to the change triads testing the contrast between those 
+English vowels Ihan in responding to tdads testing at least three other 
+English vowel contrasts. Just one such discriminative failure was noled • 
+'Although this reduced the spectral and temporal contrasts seen in carefully artic­
+ulated English vowels. all vowels were readily identifiable as intended by NE listeners. 
+
+--- Page 18 ---
+~ 
+I " Z ~Qnd-l~n84~Re SPl'f'Ch learning I 249 
+8 
+7 
+0 
+~ 
+4 Span. 3 
+2 Port. 1 
+'"" 'i' .... :I: ~9P~<6:"?O . .:...-~ NO" _ % 0 ~ '" 
+8 
+7 
+8 
+6 
+4 
+3 • Out. 
+2 .. Ger . , 
+'I' ---
+~ 99~- <=000 ._ .... X .:. 
+fd " 0 ~ " .; %" ~ 
+8 ~~:::::;j~~~~ 7 
+8 
+5 
+4 
+3 
+2 , Ker. 
+Ara. 
+Figure 3. Data (rom a calegorlal discrimination study by Fltlge (1994) in 
+which subjects attempted to choose the odd item oulln triads !eliling 14 
+English vowel contrasts , The subjects were 10 native .peaken pf English 
+(open circles), and 6 native speakers each of Spanllih .nd Portuguese (top), 
+German and Dutch (middle), and Korean and Arabic (bottom). 
+for the German subjects (/e/-/8!/), and two for the Dutch subjects 
+(/u/-/u/, and lo/-/A/). Four such failures were noted for the 
+Portuguese subjects (/e/-/l/, /e/-/ .. /, /0/-/./, and /u/-/ull. five 
+for the Spanish subjects (/0/-/./, luI-luI, /e/-(./, /e/-/l,,/, and 
+/"/-/0/), and four for the native Arabic subjects (fe/-/l/, /e/-/",/, 
+lui-lui, and /0/-/./). 
+
+--- Page 19 ---
+250 I Flege 
+The pattern of discriminative failures noted by Flege (995) is 
+consistent with the hypothesis that L2 learners will have difficulty 
+discriminating a pair of English vowels if both vowels are identified 
+in terms of a single Ll category (Best this volume), For example, the 
+midvo,!"eis Ie 0/ of the five-vowel Spanish inventory <Ii e a 0 uf) 
+can be realized as IE} and [:J]. The lEI of the seven-vowel Portuguese 
+inventory (Ii e E a a ~ un is often realized as [",I (Major 1987a). The 
+Portuguese subjects may have managed 10 discriminate /~/-/o/ by 
+virtue of identifying English /a!/ tokens in terms of Portuguese fE/, 
+and'English /0/ tokens in terms of Portugue se /a/. The native 
+Spanish subjects, on the other hand, may have failed 10 discriminate 
+/~/-/a/ because Ihey identified realiz.ations of both English vowels in 
+terms of Spanish /a/ (see Flege 1991d. Similarly , the native Spanish 
+subjects may have failed to discriminate /E/-/'/ either because real­
+izations of both English categories were identified as realizations of 
+the Spanish /el category (Flege 1991d, or because Iwitller vowel could 
+be categorized in terms of an L1 vowl!! (Dest 1994). 
+An unresolved question at present is how, or if, the kinds of dis­
+criminative "failures just .reported relate to the productioH of English 
+vowels. The model predicts that if a bilingual is unable to discriminate 
+categorially an L2 vowel from neighboring L2 vowels, as well as from 
+neighboring L 1 vowels that are distinct phonetically from the L2 vowel, 
+then the L2 vowel will be produced inaccurately. To my knowledge , 
+this has never been tested directly. However, the data now available 
+are consistent with the hypothe sis that certain L2 vowel production 
+errors arise from discriminative failures. 
+Flege (1995) found that native Korean (NK) subjects failed to dis­
+criminate English IE/-/oel and Iii_hi.! This is understandable in 
+the light of vowel production and perception data obtained in an un­
+published study by Flege .and Yang, which examined the production 
+of English /i • E;r./ in a Ib_t/ context by NK subjects from Seoul. The 
+NK subjects began learning English in the United States as adults. The 
+10 subjects in groHp NK-l had lived in the United States between 4 
+and 18 years (M = 7.3 years), the 10 subjects in NK-2 for just 1.5 years 
+(M = 0.8 years). Vowels spoken by NE subjects were identified cor­
+rectly in nearly every instance by native English-speaking listeners , 
+whereas vowels spoken by the subjects in grBups NK-l and NK-2 
+were often misidentified. Intended Iii tokens were heard as /II (33% 
+of instances), 1.1 as IiI (23%), leI as l.e/ (19%). and lrel as lEI (70% 
+of instances). The rate of misidentifications of vowels spoken by the 
+two Korean groups did not differ Significantly. 
+'The other discriminative failures noted for NK subjects were lui-lot, /0/-/"/, 
+/e/-/l/. 
+
+--- Page 20 ---
+Second·Language Speech Learning 1251 
+When plotted in an F1 x F2 acoustic space, the Koreans' productions 
+of English IiI and III showed substantially more overlap than did vow­
+els spoken by the NE subjects. However, the NK subjects produced a 
+larger temporal contrast between IiI and /II (56 ms, or 45%) than did 
+the NE subjects (30 ms, 21%). The NK subjects' 1.1 and /leI producHons 
+also showed much spectral overlap. However, although the NE subjects 
+made 1",1 longer than lEI (by 56 ms, or 31.,,), the NK subjects did not 
+produce a temporal difference between these vowels. The NK subjects 
+also identified members of the benl-bit ·(fi/-/11l and bel-bal (/e/-/fell 
+continua (see Flege and Bohn 1989). Changes in Fl frequency had a far 
+larger effect on NE subjects' identification of vowels in both vowel ron­
+tinua than did changes in duration. The NK subject'S showed a substan­
+tially greater effect of duration changes than did NE subjects when iden­
+tifying members of the bent-bit continuum, but they did not respond 
+systematicaUy to changes in vowel duration in the bet-blt continuum. 
+Korean is ohef'! analyzed as having a phonemic length contrast 
+between IiI and liJ, but this distinction is being merged in modern 
+Seoul Korean (Magen and Blumstein 1993). Other evidence points to 
+the merger of two Korean vowels in the portion of the phonological 
+space occupied by English 1.1 and 1.,1. We might infer that the NK 
+subjects tested by Flege and Yang (unpublished) incorrectly judged 
+the duration difference between Iii and /II to be more important 
+than the spectral difference between these EngHsh vowels by analogy 
+to the Korean /i/-/i:/ distinction produced by an older generation of 
+speakers of Seoul Korean. The NK subjects may have been unable to 
+make any "phonetic sense" of the English 1e.I-ltel contrast, on the 
+other hand, because neither temporal nor spectral cues are used sys­
+tematically to distinguish vowels in this portion of the Korean vowel 
+space. This could explain the NK subjects' failure to discriminate 
+le/-/rel and Ii/-III in the categorial discrimination test (Flege 
+1995). We might speculate that it is especially difficult for non-natives 
+to discriminate two L2 vowels if phones resembling realizations of the 
+L2 vowels occur in free variation in the Ll. 
+The protocol used by Flege and Yang (unpublished) was adminis­
+tered to native German subjects by Bohn and F1ege (1990. 1992) and to 
+native Spanish subjects (Flege, 801m, and Schmidt, unpublished). The 
+NS subjects in the Flege et a1. study had aU begun learning English as 
+adults. The subjects in N5-1 had lived in the United States for an aver­
+age of 9.0 years, those in NS-2 for just 0.5 years on average. Vowels 
+produced by NS and NE subjects were presented for forced-choice 
+identification to native English-speaking listeners. As mentioned earli­
+er, the NE subjects' vowels were identified at near·perfect rates. The 
+correct identification rates obtained for the subjects in NS-1 were lower 
+than those obtained for NE subjects (fi/-57.", 11/-<'1 %,1£/-99%, 
+
+--- Page 21 ---
+2521 Flege 
+"</-73% correct), and those for NS-2 subjects were lower still (fi/ -69%, 
+/1/-51 %, /£/-91%, and /,,-/-70%). 
+Spme NS subjects showed bidirectional errors in producing English 
+IiI and /1/ (i.e., their IiI attempts were heard as /1/, and vice versa), 
+Acoustic analyses revealed that the NS subjects' productions of IiI and 
+/1/ showed far more spectral overlap in an Fl-F2 space than did vowels 
+spoken by the NE subjects. These prodllction data suggested that at least 
+some of the NS subjects failed. to discern the phonetic contrast between 
+English /i/ and /1/, however , the NS subjects tested perceptually by 
+Flege (1995) managed to discriminate English IiI versus /1/ categori· 
+lIny. Two explanations for this apparent discrepan cy are possible. First, 
+different NS subjects participated in the two studies. II is possible that 
+more sub)ects in the Aege (1995) study Ih1'.11 in the Aege et a!. (unpulr 
+Iished) study had established a phonetic category for English /1/. 
+Alternatively, the subjects in the F1ege et al. study rnay have established 
+an /1/ category in which duration figured rnore prominently than it 
+does in NE speakers' categories. These subjects produced temporal con­
+trasts between English lit and /1/ resembling those of NE subjects, 
+although Spanish does not use duration to contrast vowel phonemes. 
+Bahn (this volume) suggested that adult L2 learners may be more atten­
+tive to temporal than spectral ales to a novel L2 phonetic contrast. 
+According to the model, the production of an 12 vowel will change 
+if a ca.tegory is established for it. The production of an L2 vowel may 
+also change if a new category is not established. This is predicted to 
+happen if the phonetic category used to prccer.s an L2 vowel that is 
+linked Perceptually to L1 vowel (diaphone) changes to reflect a two­
+language source of input. Both developrnents should lead to more 
+native-like productions of L2 vowels, although the former might result 
+in more rapid and dramatic changes in L2 production than the latter. 
+A number of studies have shown that late learners' productions 
+of L2 vowels become more native-like as they gain experience in their 
+1..2, and that subjects who pronoun ce their L2 well overall produce L2 
+vowels better than less proficient speakers from the same Ll back­
+ground. For example, acoustic measurements by Flege (1987b) revealed 
+that experienced but not inexperienced NE speakers of French produced 
+French Iyl accurately . Wang (1988) found that relatively experienced 
+but not inexperienced Mandarin speakers of English produced a signifi­
+cant spectral difference between two English vowels not distinguished 
+in the L1 (namely Iii and /II). Three studies showed Significant im­
+provements in the production of English lcel by native speakers of 
+L1s in which /8!/ does not occur phonemic::tli y; namely, Portuguese 
+(Major 1987a), German (Bahn and F1ege 1992), and Dutch (F1ege 1992b). 
+The literature provides indirect support for H5, which predicts a 
+kind of "merger" of Ll and L2 vowels that have been equated percep­
+tually, and H6, whicJl predicts the deflection of a new L2 vowel category 
+
+--- Page 22 ---
+Second-Language Speech Learning 12SJ 
+away from the category for a neighboring L1 vowel(s). In the study by 
+Major (1987a), Portuguese subjects' production of English /E/ deterio­
+rated as their production of lrel improved. In a cross-sectional study, 
+Flege (1992b) found that Dutch subjects' production of English lui, 
+which is more fronted than Dutch luI, deteriorated as they gained 
+proficiency in English. Balm and F1ege (1992) found that inexperienced 
+German subjects produced English lei less accurately than did more 
+experienced subjects, despite the fact that leI has a close counterpart 
+in German. HS and H6 will need to be investigated more closely by 
+examining longitudinal changes in the production of vowels in both 
+the l2 and the Ll, as well as concomitant changes in the discriminabil­
+ity of pairs of L2 vowels, and pairs of adjacent Ll and L2 vowels. 
+Most non-native subjects examined in the vowel production studies 
+just cited had never lived in an English-speaking country, or else had 
+done 50 for less than 8 years. The results of two recent studies suggest 
+that certain vowel errors persist in the speech of highly experienced U 
+learners. Munro (1993) found that many English vowels spoken by 
+native Arabic subjects who had lived in the United States for over 15 
+years were judged to be foreign-accented. The Arabic subjects greatly 
+exaggerated the duration differences between tense/lax English vowel 
+pairs, as if they were Arabic-like long versus short contrasts. It is, there­
+fore, possible that use of non-English feature specifications was re­
+sponsible for foreign accent in the Arabic subjects' English vowels, as 
+stated by H6. 
+Although early learners generally produce L2 vowels more accu­
+rately than late learners, their productions of l2 vowels do not always 
+match perfectly those of native speakers . Data presented by Flege 
+(19913) showed that native Spanish speakers who learned English by 
+the age of 7 years produced English vowels that were identified as often 
+as vowels spoken by NE speakers. The early learners' vowels were not 
+scaled for degree of perceived foreign accent, however, and thus, the 
+study may have overestimated the early learners' success in producing 
+English vowels. Munro, Flege, and MacKay (1995) provided the first 
+comprehensive analysis of the effect of AOL on L2 vowel production. 
+The subjects were 240 NI subjects who began learning English between 
+the ages of 3 and 21 years. These subjects produced English /i lee !C 0 A 
+a-0 u u/ in a consonant-vowel-consonant (eVe) context. These English 
+vowels vary in acoustic distance from the closest of the seven vowels of 
+Italian U i e £ a :> a uf). English vowels produced by nearly all of the 
+Italian subjects, even those who began learning English in adulthood, 
+were identified correctly .· Assuming that no Italian vowel would be 
+"The one exception 10 this was /11./, which was often identified incorrectly when 
+produced by subjects who began learning English after the age of 10 years. 
+
+--- Page 23 ---
+154/ fI~8e 
+identified as English 1.1, he/, I~I or 111/, we might take this to mean 
+that these English vowels had been "mastered." 
+A very different pattern of results emerged, however, when 
+the "Italian subjects' vowels were rated for dpgree of foreign accent. 
+Figure 4 presents foreign accent ratings taken from the study by 
+Munro, Flege, and MacKay (1995). Shown here are the number of NI 
+subjects in subgroups of 24 subjects each whose vowels received a rat­
+ing that fell within a 95% confidence interval of the mean rating 
+obtained for 2'4 NE subjects. As AOL increased, fewer NI subjects mel 
+this criterion, both for English vowels with a counterpart in Italian 
+(e.g., jil, lu/) and for English vowel:; without an Italian counterpart 
+(e.g., /a!/, ~a-/). Certain English vowds produced by subjects who 
+began learning English as children were found ~o be foreign-accented. 
+Given that the NI subjects had lived in Canada for over 30 years on 
+average and spoke English more often than Italian, the Nt subjects' for- , 
+eign-accented productions could not be attributed to a lack of native 
+speaker input. 
+The discrepancy between the intelligibility data and the foreign 
+accent, ratings obtained by Munro, Flege, and MacKay (1995) was 
+especially evident for /a-/. Although the Nt subjects' /a-I productions 
+were identified correctly in nearly every instance, few Nl subjects 
+with an AOL greater than 10 years managed to produce la-I without 
+foreign accent. One possible explanation for the accentedness of la-I 
+is that, beyond an AOL of about 10 years, Nl subjects failed to attend 
+to the retroflex feature (i.e., energy in the region of F3) which is used 
+to distingUish 1<>1 from all other English vowels (Terbeek 1977) but 
+apparently is not used in Italian. Additional work wi1l be needed to 
+test this featural hypothesis and to learn if NI subjects' ability to cale­
+gorially discriminate English vowels from other English and Italian 
+vowels shows the same effect of AOL as the one seen in Figure 4. 
+PRODUCTION AND PERCEPTION Of INITIAL CONSONANTS 
+Age of learning exerts an effect on consonant pmduction that is com­
+parable to the one described earlier for vowels. Flege, Munro, and 
+MaCKay 0995b) examined the production of consonants by 240 NI 
+subjects differing in AOL. Native English-speaking listeners identified 
+consonants as having been produced "correctly," in a "distorted" 
+fashion, or as having been replaced hy some other consonant. Italian 
+does not possess a /0/ or /e/. As shown in Figure 5, the NI subjects 
+who began learning English in Canada by about the age of 10 years 
+were judged to have produced the English fricatives correctly as often 
+as did the NE subjects. Beyond that AOL, the number of NI subjects 
+who produced them correctly declined precipitously. When the NI 
+
+--- Page 24 ---
+24 
+22 
+'" 20 U 
+Q) 18 
+B 16 :J en 1. -12 0 
+~ 10 Q) .0 8 E 6 :J Z • 2 
+0 
+24 
+22 
+'" 20 U 
+Q) 18 
+"is 16 :J (f) 1. -12 0 
+~ 10 Q) .0 8 E 6 :J 
+Z • 2 
+0 Second·Language Speech Learning I 255 
+• bit 
+o beat 
+• 
+o bet 
+o 3 6 9 12 15 1621 
+Age of arrival (AOL) • book "'c><>-,~ 
+o boot 
+• Bert 
+o but 
+o 3 6 9 12 15 16 21 
+Age of arrival (AOL) 
+Figure 4. The number of subjects in subgroups of 24 whose production of 
+English vowels received foreign accent ratings that fell within a 95% confi­
+dence interval of the mean ratings obtained for 24 native English (NE) sub­
+jects. Subgroups of nalive italian subjects differed according to their ase of 
+learning (AOL) English. The NE subjects are designated as having an AOL of 
+o years. The vowels shown here are those In beat (III), bit (/If), book (luI>. 
+boot (Iu/), kit (/II!/), bd (/e/), Bt!rt (/"'/), and bill (fA/) (from Munro, Flege, 
+and MacKay 1995). 
+subjects erred in producing /0/ and /9/, it was usually as /d/ and 
+/t/, respectively <something never observed for the NE subjects), The 
+Italian "r" is a trilled hI rather Ihan a dorsal (or retroflexed) approxi ­
+mant / J/, as in English. Age of learning exerted a comparable effect 
+on the production of English / J/. 
+A principal components analysis (Flege. Munro, and MacKay 
+1995C) provided no evidence that attitudinal or motivational factors 
+influenced the NI subjects' production of the English consonants. 
+Perceptual factors may have been at work, however. Farnetani (1994, 
+
+--- Page 25 ---
+2561 F1ese 
+80 
+70 
+;... u 60 .~ 
+~ 
+0 50 u 
+VI 
+IU 40 
+al .g> 30 
+::J "-/J/ -. 
+<l< 20 • /8/ 
+10 0 /5/ 
+o 2 4 6 810121416182022 
+Age of arrival in Canada (AOL). in years 
+Figure 5. The mean percentage of subjects in subgroups of 24 whose produc· 
+lions of English word-initial consonants were judged by native English-speaking 
+listeners to be "correct." Subgroups of nalive Italian subjects differed according 
+to their age of learning (AOL) English. The NE subjects are designated as hay­
+ing an AOL of 0 years (data are from Munro, Rege, and MacKay 1995b). 
+personal communication} observed , for example , that Italians tend to 
+hear word-initial English /0/ tokens as /d/. II would, therefore, be 
+useful to determine if inaccurate production of English /8/ and /~/ 
+arises from the kind of "discriminative failure" discussed earlier for 
+vowels and if so, whether their frequency increases with AOL, as pre­
+dicted by H4. As for I J/, it would be worthwhile to determine if AOL 
+influenced the features used by NJ subjects to distinguish I JI from 
+other consonant s in English and Italinn. 
+Phon.::s such as English IJ] and II] do not occur systematically in 
+Japanese. Native Japanese adults' difficulty producing and perceiving 
+English I JI and III is well known, but the effect of AOL is only par­
+tially understood (but see Yamada Ihis volume). There is evidence, 
+however, that Japanese children who learn English produce I JI and 
+11/ more accurately than adult learners (Cochrane 1977; see also Yeni­
+Komshian and Flege 1993). Yamada and Tohkura (1992b) examined 
+the perception of a synthetic I JI to III continuum by Nj subjects dif­
+fering in AOL. Subjects exposed to English in the United States by the 
+
+--- Page 26 ---
+Second-Languase Speech Learning I 251 
+age of 5 years performed in a native-like fashion, as did roughly two­
+thirds of subjects first exposed to English between the ages of 5 and 10 
+years. However, fewer than one-fourth of the NJ subjects who were 
+first exposed to English after the age of 10 years identified the syn­
+thetic tokens in a native-like fashion (see also Nakauchi 1993). Thus, a 
+question of interest is whether NJ subjects' ability to discern the pho­
+netic difference between English / J/ and /11, and between these 
+English consonants and the percep~aUy closest Japanese consonant(s) 
+declines as AOL increases (H4) and whether a failure to discriminate L1 
+and L2 liquids (and glides) leads to production errors (H7). 
+Two recent studies provided evidence that, for NJ adults, Japanese 
+/r/ is closer perceptually to English /I! than /J/ (5ekiyama and Tohkura 
+1993; Takagi 1993). Thus, the model (specifically: H2, H3, H7) predicts 
+that NJ adults are more likely to establish a new category for I J/ than 
+III, and will, therefore , be more likely to produce English I JI accurately 
+Ihan to do so for English /1/. Results obtained by Flege, Takagi, and 
+Mann (1995b) were consistent with the model's predictions. This study 
+examined the Identification of liquids in naturally produced English 
+minimal pairs by three groups of listeners: NE subjects, experienced 
+Japanese subjects (NJ-l) who had lived in the United States for more 
+than 12 years (M ~ 21), and inexperien ced subjects (NJ-2) who had 
+lived in the United Slates for less Ihan 3 years (M ~ 1.6). As expected, 
+the NE subjects Identified /1/ and / J/ correctly In nearly every instance. 
+As In previous studies wllh native Japa~ese subjects, / J/lokens Were 
+identified correctly at higher rates than /I! by the subjects In NJ-1 (92% 
+vs. 77% correcl) and NJ-2 (76% vs. 63%). Belore identifying word-Initial 
+liquids, the NJ subjects rated the words in which they occurred for 
+subjective familiarity . Both NJ groups showed effects of subjective lex­
+ical famillarity on their identification of I JI and Ill. For example, they 
+correctly Identified the I J/ in room (which Is paired to a less familiar 
+word, loom) more often than the I JI in rook (which Is paired to a more 
+famUlar word, look). The effect of familiarity on the identification of 
+III was equally strong for the two NJ groups. For hI I on the other 
+hand, it was significantly stronger for the inexperienced subjects in NJ-2 
+than for the subjects in NJ-l. 
+When unaUected by lexical familiarity, the experienced subjects 
+in NJ-l Identified IJ/ tokens correctly at native-like rates. In minimal 
+pairs consisting of equally familiar words, the correct Identification 
+rates for /J/ and II/ averaged 96% and 81% for the subjects In NJ-l, 
+and 87% and 53% correct for the subjects in NJ-2. lexical familiarity 
+effects disappeared in a second experiment in which word-initial liquids 
+were edited out of their original word contexts. When the data for one 
+subject who reversed labels were excluded, the correct identification 
+rale of Ihe subjects In NJ-l averaged 98% correct for / J/, but Jusl S3% 
+
+--- Page 27 ---
+2581 Flege 
+correct for /1/ ,7 The experienced Nj subjects' near-perfect identifica­
+tion rate for / J/ is consistent with the hypothesis that they established 
+a phonetic category for English / J/. 
+In a study by Flege, Takagi, and Mann (1995a), the same Japanese 
+subjects produced minimally paired English words beginning with 
+/J/ and /1/ in three speaking tasks. Native English listeners later 
+attempted to identify the initial consunant in these words as / J/ or 
+/1/ and ralEd th~ degree of foreign accent. Liquids spoken by the 
+experienced NJ-l subjecfs were identified correctly at the same high 
+rales as liquids spoken by NE subjects; whereas, liquids produced by 
+the inexperienced NJ-2 subjects were often misidentified. Liquids pro­
+duced by the NJ-l subjects were identified as intended, and the /J/ 
+and /1/ tokens produced by 10 of the 12 NJ-l subjects received ratings 
+similar to those for liquids produced by the NE subjects. Inasmuch as 
+the inexperienced NJ-2 subjects identified I JI tokens at somewhat 
+higher rates than III tokens in the earlier perception experiment, it 
+came as a surprise (H3, H7) that their III and I JI tokens were judged 
+to have been produced with equal accuracy, at least insofar as the for­
+eign accent ratings ~ere concerned (see also Sheldon and Strange 
+1982). 
+A great deal of L2 research has examined the production and per­
+ception of English voiceless stops. In many languages (e.g., Dutch, 
+French, Italian, Portuguese, Italian), Ip t k/ are realized as unaspirated 
+stops having short-lag VOT values. When ?dult native speakers of 
+such languages learn English, they tend to produce / p t k/ with longer 
+VOT values in English than in their l1, but with values that are never­
+theless too short for English (e.g., Caramazza et a1. 1973; Williams 1979; 
+Aege and Port 1981; Major 1987b; Flegc and Eefting 1987a). According to 
+lhe model, category formation for English stops may be blocked by the 
+continued perceptual linkage of L1 and L2 sounds (Le., by equivalence 
+classification). This limits the accuracy with which English Ip t kl can be 
+produced (H5, H7). Learners nevertheless have access at an auditory 
+level to cross-language phonetic differences (Flege and Hammond 1982; 
+Aege and Munro 1994). When category formation is blocked, the pho­
+netic norms of English may be approximated indirectly through a 
+restructuring of the properties specified in a phonetic category used to 
+process perceptually linked L1 and L2 diaphones. Several studies 
+have provided evidence that, in such instances, the production of Ll 
+stops begins-Io resemble that of corresponding 1.2 stops (H5, H7). Flege 
+(1987b) found that experienced NE speakers of French produced English 
+Ip t kl with shorter (French-like) VaT values than did English mono-
+'The-higher rate for / JI than II/ probably cannot be attribute-d 10 an overall bias 
+In favor of I J/ responses, for NJ subjects identified III correctly more often than I JI in 
+word-initial dusters (in a case study by Sheldon and Strange 1982). 
+
+--- Page 28 ---
+Second-Language Speech Learning I 259 
+linguals. Conversely, experienced native French speakers of English 
+produced French Ip t kl with longer (English-like) VaT values than 
+did French monolinguals (see also Major 1992; Flege and Eefting 
+1987b). 
+According to the model, individuals who begin learning English 
+as children are more likely than adults to discern the phonetic differ­
+ences between /p t k/ in Ll and L2 and establish phonetic categories 
+(or English Ip t k/. This leads to the prediction that early learners will 
+produce these stops accurately more often than late learners. This pre­
+diction was can finned by Aege (1991b) in a study that examined stops 
+produced by native Spanish (NS) speakers who learned English as 
+adults (late learners) or as children (early learners) . The NS late learn­
+ers produced English /p t kl wilh Ihe expected "compromise" VaT 
+values; whereas, the early learners produced English stops with the 
+same VaT values as did NE subjects. This was interpreted to mean 
+that the early learners, unlike the late learners, had established pho­
+netic categories for English I p t k/. 
+This conclusion is consistent with the results of an imitation study 
+by Flege and Eefting (1988). Members of a consonant-vowel (CV) con­
+tinuum in which VOT of the initial consonant varied were imitated by 
+English monolinguais , Spanish monolinguals. and NS early learners. 
+The monolinguals tended to produce stops with VaT values falling 
+within the two modal VOT ranges used for slops in their Ll (Spanish: 
+lead, shorl-Iag; English: short-lag, long-lag). The NS early learners, on 
+the other hand, produced stops with values in all three modal VaT 
+ranges. Additional analyses revealed that the subjects covertly classified 
+stops before imitating them. Thus, the results suggested that the early 
+learners processed stops in the VOT continuum in tenns of three pho­
+netic categories : a prevoiced (Spanish or English) /d/ category, a short­
+lag (Spanish) 11= I calegory, and a long-lag (English) I~ I calegory. 
+Acoustic analysis by Flege. Munro. and MacKay (1995b) identified 
+the AOL at which divergences from the phonetic norms of English first 
+become apparent in Nt subjects' productions of English stop conso­
+nants. Voice-onset time was measured in word-initial English stops 
+produced by NI subjects who began learning English between the ages 
+of 3 and 21 years. Their production of var in English /p t k/ varied 
+inversely with AOL. A subgroup of 24 NI subjects who began learning 
+English at an average age of 21 years produced English /p/. /t/ and 
+Ik/ with VOT values that were almost exactly intermediate to values 
+measured for 24 NE subjects and values reported for Italian /p t k/. 
+Native Italian subjects who arrived in Canada at earlier ages produced 
+English stops with increasingly longer, and thus. more accurate. VOT 
+values. The first Nl subgroups to have produced It I and Ipl with 
+significantly shorter VaT values than did the NE subjects consisted of 
+
+--- Page 29 ---
+260 I Flege 
+individuals with average AOLs of 11 and 17 years, respectively .-
+It should be emphasized that the kind of age limit jus, mentipneq 
+does not necessarily apply to all individuals within a certain AOL range. 
+For example, Flege and Schmidt (1995) recently used the speakin~ r~l~ 
+paradigm 01 Miller and Volaitis (1989) to test for category (PrIn.lion , 
+Native English and NS late learners rated the members of a, labial fitop 
+continuum for goodness . Voice·onsel time ranged from short-lag vahle~ 
+to long-lag values exceeding those typical for English Ipl, The ~ame 
+VaT values occurred in short-duration syllables , which sim"lated a 
+fast speaking rate, and in longer-duration syllables , which simulated a 
+slower, rate of speech. As expected , the NE subjects' goodness rilltinga 
+increased as stimulus VOT values increased, then decreased as VaT 
+increased beyond Viii lues typical for English. Also as expected, the NE 
+subjects showed an effect of speaking rate on their goodness ratings. 
+They gave higher ratings ttl stops with long-lag VOT values in the 
+long-duration stimuli than to stops with the same VOT values in ~hort­
+duration syllables. This mat'ched how VOT varies according to speaking 
+rate in the production of English. 
+According to Miller and Volaitis (1989), the speaking rate effects 
+shown by NE subjects demonstrates "internal phonetic category struc­
+ture," F1ege and Schmidt (1995) reasoned that unless NS subjects had 
+a category for long-lag voiceless stops, they would nat show an English~ 
+like speaking rate effect on their goexiness judgments of long·lag stops. 
+When the NS subjects were subdivided, into two groups based on 
+length of residence in the United States, neither group showed a sig· 
+nificant speaking rate effect. However , when lOubdivided according to 
+how well they pronoun ced English sentences. proficient but not non­
+proficient NS subjects showed a significant speaking rate effect. This 
+suggested that some of the late learners may have established a phonetic 
+category for the long-lag /p/ of English. Schmidt and Flege (1995) 
+examined the NS subjects' production of English /p/ at relatively slow 
+and fast speaking rates. Roughly one-half of the proficient NS subjects 
+produced /p/ with VOT values that were comparable to those observed 
+for NE subjects. When speaking, these subjects adjusted VaT as a 
+functio~ of speaking rate (i.e., produced /p/ with longer VaT values 
+at a slow than fast rale). 
+PRODUCTION AND PERCEPTION Of WORD-fINAL CONSONANTS 
+Acco.rding 10 HI, position-sensitive allophones in the L2 and Ll are 
+related perceptually to one another. This leads 10 the prediction that 
+rrhe VOT for Italian /k/ falls within the long-Ii'S ri'nge. None of the 10 Nt sub­
+groups differed significantly from the NE subjects for /k/, apparently because the VOT 
+difference between English and 1talian /k/ is too small to permit the measurement of 
+ttOS6-language interference . 
+
+--- Page 30 ---
+Second-l.anguage Speech l.earning 1261 
+speakers of an LI without word-final stops will not relate English 
+word-final stops perceptually to word-medial or word-initial stops in 
+their L1. If so, then we might expect them to eventually produce 
+word-final stops in English accurately . This is because, if HI is correct, 
+L1 phonetic structures should not interfere with the establishment of 
+new phonetic categories. 
+Contrary to HI (and H1), inexperienced late learners of English 
+have been shown to delete final stops, to devoice Ib d g/, or to add an 
+epenthetic vowel to eve words (e.g., Eckman 1981; F1ege 1988a, 1989; 
+Ftege and Davidian 1984; Weinberger 1987). Flege, Munro, and 
+Skelton (1992) examined the production of Hnal stops in English 
+words such as bent and bend by groups of native Mandarin (NM) and 
+native Spanish (NS) late learners differing in length of residence in the 
+United States (NM-1 = 6 years, NM-2 = 1 year, N5-1 = 9 years, N5-2 = 2 
+years). Neither Mandarin nor Spanish permits word-final stops. Word­
+final stops produced by the NE subjects were almost always identified 
+correctly by native English-speaking listeners. Stops produced by the 
+non-native subjects were identified far Jess often (NM-1 = 62%, NM-2 
+= 65%, NS-l = 73%, NS-2 = 71%). Surprisingly, the experienced non­
+native subjects' stops were identified correctly no more often than 
+were stops spoken by the relatively inexperienced non-native speakers 
+of English. 
+Flege, Munro, and Skelton (1992) carried out acoustic analyses to 
+determine why the non-natives' production of both It I and Idl were 
+often misidentified . As with the NE speakers, the non-natives sustained 
+closure significantly longer in Idl than It I ,made vowels significantly 
+longer before Idl than It I , and produced Significantly lower Fl fre­
+quencies at the end of transitions leading into Idl than It I . However, 
+the non-natives' acoustic distinctions were smaller than those of the 
+NE speakers. The subjects in NM-l, NM-2, and NS-1 produced signifi­
+cantly smaller closure voicing differences between It I and Idl than 
+did the NE subjects, but the closure voicing difference produced by 
+the experienced NS subjects did not differ significantly from the NE 
+subjects', This suggests that clOSUTt voicing may be learned more readily 
+than other cues 10 the It/-/dl distinction (see Kluender et a1. 1988), 
+but that a native-like production of closure voicing does not ensure 
+correct identification by NE listeners. 
+Aege et a!. (1995b) examtned the production of word-final English 
+stops by 240 NI subjects who had spoken English for over 30 years on 
+average. The results of this study ruled out the possibility that the native 
+Mandarin and Spanish subjects' stop production errors (Flege Munro, 
+and Skelton 1992) were caused by a lack of sufficient native-speaker 
+input. The NI subjects, who began learning English between the ages 
+of 3 and 21 years, produced English Ip t kl accurately. Those who 
+
+--- Page 31 ---
+2621 Flege 
+began learning English by the age of 15 years also produced Ib d gl 
+accurately. However , roughly 40% of NI subjects with an AOL of 15 to 
+21 years de""iced Ib d g/. 
+Table III presents acoustic measurements of tack and tag tokens that 
+were spoken by 24 NE subjects and 4B NI subjects with AOLs ranging 
+from 12 to 21 years. Productions of Ikl and Igl by the 24 subjects in 
+NI·l were identified correctly in every instance. Stops produced by 
+the 24 subjects in NI-2 {matched in AOL to the NI-l subjects> were 
+identified correctly in only 64% of instances. The acoustic measurements 
+make i~ apparent why this was so. The NI-2 subjects (unlike the NI-l 
+subjects> produced a significantly smaller vowel duration difference pre­
+ceding Igl versus Ikl than did the NE subjects, and a significantly 
+smaller closure voicing difference (p < .01). llowever , they produced a 
+somewhat larger stop closure difference between Ikl and lSI than 
+did the NE subjects. Interestingly, the NI-1 sub~ects produced a signif­
+icantly larger closure voicing contrast between /kl and Igl than did 
+the NE subjects (p < .01 >. 
+It is not clear why the'NI-1 but not NI-2 subjects managed to pro­
+duce a perceptually effective contrast between Ikl and Ig/, which 
+the model predicts for till highly experh::nced Italian learners of English. 
+If certain NI learners of English treat word-final English stops as if 
+they were word-medial Italian stops (contrary to HI), we would expect 
+NI spea,kers to produce larger closure voicing differences between 
+English Ikl and Igi than NE speakers and to produce a larger stop 
+closure duration difference. We would 1Iot expect an English-like 
+vowel duration difference , however (Mack 1982; Vagges et al. 1978: 
+Magno Caldognetto et al. 1979; see also Crowther 1993). If, on the 
+olher hand, NT subjects trealed the word-final stops in English eve 
+words as "new," we might have expected a thoroughly English-like 
+Ikl versus IgI contrast, which was not observed for either the NI-1 
+or NI-2 subjects. Perhaps some Nt subjects tend to rely on acoustic 
+cues exploited in HaHan more than others, and the use of L1 cues does 
+not apply across the board to all relevant phonetic dimensions . This 
+could explain the overuse of closure vuicing and closure duration cues 
+by certain subjects, and the underuse of vowel duration cues by other 
+subjects (see also Flege 1989; Crowther 1993; Flege and Wang 1990). 
+THEORETICAL ISSUES 
+According 10 the contrastive analysis approach, the presence of 
+phone'me s in an L2 that do not occur in the L1 necessarily represents a 
+learning problem (e,g., Lado 1957; Moulton 1962; Koutsoudas and 
+Koutsoudas 1983). The learner's response may be to use the closest L1 
+phoneme as a "substitute" for the unfamiliar l2 phoneme (Lehiste 1988). 
+
+--- Page 32 ---
+Second-Language Speech Learning I 26~ 
+Table III. Temporal acoustic measurements of tack and tag as spoken by native 
+English (NE) speakers and two groups of native Italian (NI) speakers who began 
+learning English after the age of 12 years' 
+Subject group 
+Variable NE NI-l NI-2 
+Number of subjects 24 24 24 
+Age at arrival in Canada 0(0) 18(2) 18 (3) 
+% correct identification of /k gI 97 (7) 100 10) 64(10) 
+Vowel duration-lag 246(48) 226(46) 210(53) 
+Vowel duration-lack 191(33) 170(38) 196(53) 
+Difference: 55 56 I. 
+Stop closure duration-tack 102(28) 129(29) 149(44) 
+Slap closure duration-tag 75(24) 100(19) 113(33) 
+Difference; 27 29 36 
+Closure voicing duration-t,1S 51(22) 77(26) 41(28) 
+Closure voicing duration-tack 6(13) 13(13) 16(19) 
+Difference: 43 64 23 ----
+'The Italian subjects in NI-l produced final stops that were alWAYS idenlifled correctly . 
+The slops produced by subjects in Nt-2, who were matched according 10 AOL 10 the Nt-l 
+subjects, were ohen misidentified by NE listeners. Values for the acoustic variables are in 
+ms; standard deviations are in parentheses (data are from Flege, Munro, and MacKay 1995bl_ 
+An ll-for-L2 substitution implies that an L2 phoneme (or position­
+sensitive allophone) has been perceptually linked to a particular L1 
+phoneme (allophone) on some basis. It implies, further, that the learner 
+has either failed to discern the phonetic difference between the 11 and 
+L2 phonemes or allophones, is unable motorically to render a correctly 
+perceived difference , or both. 
+First-language -for-second -Ianguage substitutions raise a number 
+of theoretically important questions. According to some (e.g., Rachet 
+this volume) , most or all L2 sounds will be identified with an L1 
+sound. However , some analysts draw a distinction between L2 sounds 
+that are relalively similar to sounds in the ll, as opposed to L2 sounds 
+that are more dissimilar or even "new" (see Mueller and Niedzielski 
+1963; Pimsleur 1963; Bri~re 1966; Henning 1966; Delattre 1964, 1969; 
+Flege 1981; Wade 1978). According to the SLM, the full range of L2 
+sounds may at first be identified in terms of a positionally defined 
+allophone of the II but, as L2 learners gain experience in the L2, they 
+may gradually discern the phonetic difference between certain L2 
+sounds and the closest Ll sound(s) . When this happens, a phonetic 
+category representation may be established for the new U sound that 
+is independent of representations established previously for Ll 
+sounds. 
+
+--- Page 33 ---
+264 f Flege . 
+According to the model, the phonetic category established in 
+childhood for an L1 sound may evolve gradually if it is linked percep­
+tually to an L2 sound. For example, a French speaker's representation 
+for word·initial /t/ may evolve to specHy somewhat longer VOT val· 
+ues if English /t/ tokens are persistently identified as rea1izations of 
+the French /t/ category. This might explain why highly experienced 
+French learners of English tend to produce English /t/ with "compro· 
+mise" VOT values and why their productions of /t/ in French may 
+take on English phonetic characteristics (see above). According to the 
+SLM, these developments are influenced by two important variables: 
+AOL and perceived cross-language pholletic distance. The greater the 
+perceived distance of an L2 sOllnd from the closest L1 sound, the marc 
+likely it i!. that a separate category will be established for the L2 
+sound. Moreover, the earlier 1.2 learning commences, the smaller the 
+perceived phonetic distance needed to trigger the process of category 
+formation. 
+An obstacle to testing hypotheses Stich as these is the lack of an 
+objective means for gauging degree of perceived cross-language pho­
+netic distance. It is uncertain, also, what metric bilinguals use in doing 
+so. Cross-language phonetic distance might be assessed in terms of the 
+sensory (auditory, visual) properties associated with Ll and L2 sounds. 
+However, Ladefoged (1990) concluded that although trained phoneti­
+cians may be able to agree as to whether or not sounds in two languages 
+are "the same," their judgments may have no "principled basis:' and 
+their thresholds are "unknown ." Another possibility is that cross­
+language distance is gauged in terms of differences in perceived ges­
+tures (Browman and Goldstein 1990). Dest (this volume) suggested 
+Ihal L1 versus L2 distances can be gaug~d by the "spatial proximity of 
+constriction locations and active articulators" and by "similarities in 
+constriction degree and gestural phasing." Although appealing, this 
+metric may also be difficult to apply. James (1984) suggested that three 
+lliffcrent n:'etrics (gestural, acoustic phonetic, abstract phonological) 
+may be applied depending on syllabic position. His observation was 
+motivated, in part, by the observation that native Dutch learners of 
+English use Dutch /d/ for English In/ in word-initial position; 
+whereas, they replace /0/ with an alveolar fricative in word-final 
+position~ 
+The research reviewed in this chapter demonstrated that AOL 
+exerls a powerful influence on the production of L2 sounds. (Similar 
+tests of the eff~t of AOL on perception have yet to be undertaken, but 
+see Oyama, 1978 and Yamada this volume.) Some studies provided 
+evidence that L2 sounds not found in the Ll inventory may be pro­
+duced more accurately than are L2 sounds with a counterpart in the 
+Ll inventory. If we assume that the noninventory sounds are treated 
+
+--- Page 34 ---
+Second-Language Speech Learning J 265 
+as "new"; whereas, the within-inventory sounds are treated as "simi­
+lar," this might be taken as support for a new versus similar distinc­
+tion (Flege 1988b). However, research reviewed in the chapter provided 
+evidence that non inventory sounds may in some instances be pro­
+duced inaccurately, even by highly experienced L2 learners. 
+It may be that, in certain instances, the positionally defined allo­
+phone is too coarse a unit of analysis to provide accurate predictions 
+concerning L2 sound production . 'Trubetzkoy (1939) compared the 
+mature L 1 phonological system to a sieve. According to this conceptu­
+alization , the Ll phonology passes only that information ahout L2 
+sounds that is relevant to L1 phonemic contrasts (see also Koutsoudas 
+and Koutsoudas 1983). Weinreich (1953, 1957) noted that feature mis­
+matches between the L 1 and U sounds may lead to Dverdirrerentiation, 
+reinterpretation , or underdifferentiation of feature contrasts (see also 
+Lehiste 1988). The first two kinds of errors may not lead to detectable 
+production errors, but the last kind of error may result in a sound sub­
+stitution. For example , if NS speakers of English treat the (-continuant) 
+feature of English word-initial /d/ tokens as a redundant feature (as 
+it is in Spanish) rather than as a distinctive feature (as it is in English), 
+they would not be expected to render word-initial /d/ tokens as stops, 
+but as fricatives (Weinreich 1957). 
+Linguistically trained analysts tend to focus on "distinctive" fea­
+tures. Mismatches between L1 and L2 sounds may also be described 
+in terms of differences in the acoustic cues used to contrast phones. 
+So, for example , we might interpret the replacement of English word­
+initial/O/ by /d/ as arising from lack of aUention to, or inappropriate 
+weighting of, the amplitude , frequency, and temporal differences 
+between word-initial tokens of English /0/ and /d/ (Morosan and 
+Jamieson 1989i Crowther and Mann 1992; Crowther 1993). Some part 
+or all of what is referred to as language's "phonological filter" may 
+consist of learned aspects of perceptual processing that are an out­
+growth of "interpretative schemes" established in early childhood for 
+word recognition (Jusczyk 1992). Such schemes are thought to focus 
+attention automatically on auditory patterns important to meaning 
+distinctions in the L1 and may become more abstract as children 
+develop larger lexicons. Jusczyk (1985) suggested, for example, that 
+allophoni c variants may not be grouped into a single phonemic cate­
+gory by children until the age of 5 or 6 years, when they begin learning 
+to read. 
+Alternatively , the feature differences between languages could be 
+stated in terms of the "contrastive gestures" used to signal meaning 
+differences (Brow man and Goldstein 1990). According to Best's direct 
+realist account (this volume), perceivers have direct access through 
+their senses to the elemental gestures used to fonn speech sounds. 
+
+--- Page 35 ---
+266/ F/ege • 
+During speech development, children Jearn to pick up information 
+in speech more quickly and efficiently by virtue of learning what are 
+the "critical" aspects of gestures llSed in the L 1. This leads to the estab­
+lishment of "lower-order invariants," which are generally relational 
+• in nature and which permit perceptual constancy in the face of acoustic 
+variation. As the phonological system matures, the lower-order 
+invariants may give way to higher-order, language-specific invariants 
+that reduce the amount of lower-order phonetic detail that is detected 
+(Best 1994). 
+One possible explanation for the ubiquitolls age effects on L2 pro­
+duction discussed earlier in this chapter is that early learners of an L2 
+art.! morc likely to "pick up" detailed information concerning the spec­
+ification of L2 sounds than arc individuals who begin learning an L2 
+later in life. Early learners may perceive L2 sounds in terms of "Iower­
+order" rather than "higher-order" invariants. Changes in the level of 
+auditory-acoustic analysis might also be impOilant. Koutsoudas and 
+Koutsoudas (983) suggested that inlerlingual identification occurs at 
+a phonemic level and is based on the articulatory phonetic "common 
+denominator" of all allophones of a phoneme. Perhaps this statement 
+is more true {or individuals who begin learning the L2 after about the 
+age of 10 years than it is for those who begin learning their L2 earlier 
+in life. 
+Regardless of how the feature differences between L 1 and L2 
+sounds are stated, it seems that non-natives often do not perceive L2 
+sounds in exactly the same way monolingual native speakers of the 
+target L2 do. As noted earlier, they may fail to discern the phonetic 
+differences between contrastive phones in the L2, or between L1 and 
+L2 phones. Discriminative failures in L2 acquisition usually do not 
+have an auditory basis. For example, Miyawaki et al. (197S) found that 
+Japanese listeners who were unable to discriminate / JO/ and /10/ syl­
+lables were, nonetheless, able to discriminate isolated third formants 
+taken from those syllables. Werker and Tees (1984) found that NE sub­
+jects could discriminate short portions extracted from a foreign lan­
+guage contTast (Hindi dental vs. retroflex stops), but not the original 
+CV syllables (rom which those portions had been edited. Mann (1986) 
+noted an effect of preceding context (/ JI versus II!) on Id/-/gl 
+phoneme boundaries for native Japanese subjects who could not differ­
+entially identify I JI versus /1/ that was much the same as the effect 
+noted for NE subjects. Finally. Best et al. (1966) observed surprisingly 
+good discrimination of Zulu clicks by NE adults, apparently because 
+the clicks wer~ not identified as speech sounds. 
+What kind of features are used by L2 learners as they begin to 
+analyze the phonic elements of their L2? What kind do they use once 
+they have gained a thorough familiarity with the L2 sound system? 
+
+--- Page 36 ---
+Second·LanguaBt Speech Learning I 267 
+Answers to these questions are not yet possible, but several points can 
+be made with some certainty. First, the features used to distinguish Ll 
+sounds can probably not be freely recombined to produce new L2 
+sounds. F1ege and Port (]981) examined native A.rabic (NA) subjects 
+who began learning English in adulthood, and had lived for several 
+years in the United States. Arabic has the stop consonants Ib t d k/, 
+but no Ipl or Ig/. Many of the NA subjects' English Ipl productions 
+were heard as fbi because they were produced with closure voicing 
+(as are the Ibl and I dl of Arabic). However , the NA subjects produced 
+much the same temporal contrast between English Ipl and Ibl as they 
+produced between It I and Id/. This suggested that they had recog­
+nized the phonological nature of the English /p/ versus /b/ contrast, 
+but did not transfer the voiceless feature of their Itt and /kl to Ip/. 
+Some production difficulties may arise because features used in 
+the L2 are not used in the Ll. In a recent multidimensional scaling 
+(MDS) analysis, Fox, Flege, and Munro (1995) found that NE subjects 
+used three dimensions in perceiving naturally produced vowels; 
+whereas, NS subjects used just two, probably because Spanish has far 
+fewer vowels than English. As mentioned earlier, Munro et a1. (1995) 
+found that NI subjects who began learning English after about the age 
+of 10 years produced English 1.".1 inaccurately. These NI subjects may 
+have been unable to acquire sensitivity to the retroflex feature that NE 
+listeners use to distinguish English /..,.1 from all other English vowels 
+(Terbeek 1977). Beyond a certain AOL, L2 learners may rely on features 
+used in the Ll to interpret and represent sounds encountered. in the 
+12, even those 12 sounds that are treated as "new" (i.e., as falling out­
+side the Ll phonetic inventory). For example, neither Swedish nor 
+Finnish has an /s/-/z/ contrast in final position. Flege and 
+Hillenbrand (1986) found that Swedes and Finns used different 
+acoustic cues (vowel duration, but not fricative duration) than did NE 
+subjects (who used both) to identify final consonants in a pence-peas 
+continuum . Work by Gottfried and Beddor (1988) and Munro (1992) 
+suggested that the overall use made of duration in the Ll may influence 
+the extent to which L2 learners exploit temporal cues to a novel L2 
+contrast. 
+The phenomenon of "differential substitution" shows that we need 
+recourse to more than just a simple listing of features used in the Ll and 
+L.2 to explain certain L2 production errors. For example, although both 
+Russian and Japan~e have /5/ and /t/, Russians tend to substitute 
+It I for English /81, whereas Japanese learners use /s/. Weinberger 
+(1990) presented evidence that feature counting, feature weighting, 
+and universal marking conventions cannot account for differential 
+substitution patterns. Radical underspedfi cation theory (which treats 
+features, not segments, as primitives) on the other hand, may do so 
+
+--- Page 37 ---
+2681 Flege 
+given certain assumptions about the underlying feature matrix, re­
+dundancy rules, and feature pruning. 
+Certain features may enjoy an advantage over others because of 
+the'nature of their acoustic (or gestural) specification, or their reliability 
+of occurrence. Polka (1991) found that Hindi dental versus retroflex 
+place distinctions may be discriminated more accurately by native 
+speakers Of English in voiceless unaspirated stops than in prevoiced 
+stops. This appeared to be the case because the place distinction is 
+supported by grealer formant transition differences in the former than 
+the latter stops. Flege and Hillenbrand (1987) obtained data suggesting 
+that native French speakers make greater use of release burst infor­
+mation in judging the VOicing feature in word-final stops than do NE 
+spealfers, apparently because final stops are released consistently by 
+speakers of French but not English. 
+Finally, features may be evaluated differently as a function of 
+position in the syllable. Urowman and Goldstein (1990) suggested that, 
+in English, vowel gestures are coordinated (phased) with respect to 
+the gestures used for a preceding consonant, and final consonant ges­
+tures are "phased with respect to preceding vocalic gestures." Samuel, 
+Kat. and Tartter (1984) provided evidence that initial. medial, and 
+final consonants are processed differently by NE listeners. Languages 
+differ considerably in the range of permitted syllables , which leads to 
+differences in syllable-processing strategit:5 (Cutler et al. 1983, 1986; 
+F1ege 1989; F1ege and Wang 1990). Not unexpectedly, then, studies have 
+shown that the perceptual difficulty of a novel L2 phonemic contrast 
+may vary accordIng to syllable position (e.g., Sheldon and Strange 
+1982; James 1988; Weiden 1990; Pisani and Lively this volume) . For 
+example, Major (1986) found that NE subjects' accuracy in producing 
+Spanish / r I varied considerably as a function of position in the syl­
+lable. Morosan and Jamieson (1989) found that effects of perceptual 
+training on word-initial allophones did not transfer completely to 
+medial or final positions , which suggested to them that listeners may 
+learn "syllabically ." 
+Given the ubiquity of foreign accents in L2 production, an impor­
+tant general questio,n for future research is how, or it the perception 
+of L2 sounds changes as AOL increases. Hammarb erg (1988, 1990) 
+suggested that phonetic -level comparisons oj L1 and L2 sounds may 
+be more prevalent in early than later stages of L2 learning. Another 
+important . question is huw, and to what extent, an individual's per­
+ception changes during L2 learning. Flege (1991c) found that as NS 
+subjects gained familiarity with English, they became less likely to 
+identify English /II tokens as exemplars of their Spanish Iii category. 
+Thus, L2 learners may discover that certain sounds in an L2 are not 
+"the same" phonetically as sounds they already know from the Ll. The 
+
+--- Page 38 ---
+Second-Language Speech Learning I 269 
+observation that "schooled" native French (NF) speakers of French 
+substitute /s/ for English /8/, whereas "unschooled" NF subjects sub­
+stitute /t/ suggests that the metric used to gauge cross-language dis­
+tance might also change as a function of L2 experience or proficiency 
+(Berger 1951; see also Wenk 1979). If the perception of U sounds does 
+change, we need to know haw it changes, and what impact perceptual 
+changes have on L2 speech production . These, and many other ques­
+tions, must be resolved in order to understand fully the contribution 
+of perception to foreign accented ness. 
+REfERENCES 
+Berger, M. 1951. The American English pronunciation of Russian immigrants . 
+Ph.D. dissertation , Columbia University , New York. 
+Best, C. 1993. Emergen ce of language-specific constraints in perception of non­
+native speech; A window on early phonological development. In Develop­
+melltat Neurocog'lition ,' SptecJl and Fact Processjng j" tIle First Year of Life, ed. B. 
+de Boysson-Bardies , S. de Schonen, P. }usczyk, P. MacNeilage, and }. Mor­
+Ion. Dordrecht, the Netherlands : Kiuwer Academic Publishers. 
+Best, c., McRoberts, G., and Sithole, N. 1988. The phonological basis of per­
+ceptualloss for non-native contrasts: Maintenance of discrimination among 
+Zulu clicks by English-speaking adults and infants. Journal of Experimental 
+Psychology: Human Peraption and Performance 14:345-60. 
+Bahn, 0.-5., and Flege, J. E. 1990.lnterlingual identification and the role of for­
+eign language experience in L2 vowel perception . Applied Psycholinguislics 
+]]:303-28. 
+Bahn, 0.-5., and Flege,}. E. 1992. The production of new and similar vowels 
+by adult German learners of English. Studies in Second lAnguage Acquisition 
+14:131-58. 
+Brennan. E .• Ryan. E .• and Dawson, W. 1975. Scaling of apparent accented ness 
+by magnitude estimation and sensory modality matching . 1014"lal of 
+Psycllolingui stic Researcll 4:27-36. 
+Bri~re , E. 1966. An investigation of phonological interference . tnngl/Qse 
+42:769-96. 
+8rowman , c., and Goldstein, L. 1990. Gestural specification using dynamically ~ 
+defined articulatory structures .lol/fllal of Phonetics 18:299-320. 
+Butcher, A. 1976. The influence of the native language on the perception of 
+vowel quality. M.Phil. thesis, Kiel University . 
+Caramazza, A., Yeni-Komshlan, G., Zurif, E., and Carbone, E. 1973. The acqui­
+sition of a new phonological contrast: The case of stop consonants in French­
+English bilinguals . lOUr/lid of the AcoJlslical Society of AmeriOl 54:421-28 . 
+Cochrane, R. 1977. The acquisition of Irl and III by Japanese children and 
+adults Learning English as a second language. Unpublished Ph.D. disserta­
+tion, University of Connecticut. 
+Crowther, C. 1993. The Operation of Vocalic Duration and F1 Offset 
+Frequen cy as Voicing and Vowel Cues. Ph.D. dissertation, University of 
+California-Irvine. 
+Crowther, c., and Mann, V. 1992. Native language factors affecting use of 
+vocalic cues to final consonant voiting in English. Journal of the Acoustical 
+Socidy of America 92:711-22. 
+
+--- Page 39 ---
+210 I Flege 
+Crystal, T., and House, A. 1988. TIle duration of American-English vowels: An 
+overview . /o"",a/ of Phonetics 16:263-84 . 
+Cutler, A., Mehler, L Norris, D., and Segui. J. 1983. A language specific com­
+prehension strategy. Nature 304:159-60. 
+Cutler, A" Mehler, L Norris, D., and Segui, J. 1986. The syllable's differing 
+role in the segmentation of French and English. lounwl of Memory and 
+LlIIgl/age 25:385--400. 
+Delattre, P. 1964. Comparing the vocalic features of English, German, Spanish. 
+and French.lIltemaliolla/ Reviewal Appfh'd Lillguistics 2:71-97 
+Delattre, P. 1969. An acoustic and articulatory study of vowel reduction in 
+four ianguages .llllemntiolial Review of Applied Lingllistics 7:295-323. 
+Eckman, F. 1981. On the naturalness of interlanguage phonological rules. 
+li/ngllnge Lt'llrll;IIg 31:195-216. 
+Eilers, I~., Wilson, W. and Moore, J. 1977. Developmental changes in speech 
+discrimination in infants. Joufl/n/ of Spee{'/, and Hearing Resenrd, 20:766-80. 
+Fay~r . Land Krasinksi , E. 1987. Native and non-native judgments of intelligi­
+bilily and irritation . Language Learning 37:313-26. 
+Ferrero. F .. Mchelolli. E., Pelamatti. C .. and V3gges, K. 1978. Some acoustic 
+cll<~ra cterislics of Italian vowels. Joumalof Ilaliall Linguistics 3:87-95. 
+Ferrero, F., Michelotti , E., Peiamatti , C .. Umilita. c., and Vagges, K. 1979. 
+Auditory and phonetic processing of Italian voiceless fricatives shortened in 
+duration . lIalian JOllrnal of Psychology 6:237--49. 
+Flege, J. E. 1981. The phonological basis of foreign accent. TESOL Quarterly 
+15,44:>-55. 
+Aege, J. E. 1987a. A critical period for learning to pronounce foreign languages? 
+Applied Lingll;stic s 8:'162-77. 
+Fiege, J. E. 1987b. The production of "new" and "similar" phones in a foreign 
+language : Evidence for the effect of el)uivalen c~ classification . JOllrnal of 
+PllDlletics 15:47-65. 
+Fiege, J. E. 1938a. The developm~nt of skill in prodUCing word-final English 
+stops: Kinematic parameters . JOllmal of tile Aco:4stical Sodety of America 
+84,1639-52. 
+Flege, J. E. 1988b. The production and perception of foreign language speech 
+sounds. In Hllmau Commulli cation alld lis Disorders , A RevielQ-1988 , ed. H. 
+WinHz. Norwood , NI: Ablex. 
+Flege, J. E. 1989. Chinese subjects ' perception of the word-final English 
+It/-/dl contrast : Performance bdon' and after training. Joumal ol/he 
+Acoustkal Society of Aml!ricu 86:1684-97. 
+Flege, J. E. 1991a. Perception and production: The relevance of phonetic input 
+to.L2 phonological learning. In Crosscurrents in Second uwguage Acquisilioll 
+alld Linguisti c Theory. ed. T. Heubner, and C. Ferguson. Philadelphia: John 
+Benjamins. 
+Rege. J. E. 1991b. Age oC learning aHects the authenticily of voice onset time 
+(VOT) In stop consonants produced in a second language . Journal of Ill, 
+Acoustical Society of America 89:395--411 . 
+Flege, J. E. 1991c. Orthographic evidence for the perceptual identlHcaUon of 
+vowels in Spanish and English. Quarterly JOUr/wi 01 Experimental Psychology 
+43:701-31. 
+Flege, J. E. 1992a. Speech learning in a second language . In Phonological 
+Development : Models. Research. (llId Application, ed. C. Ferguson , L. Menn, and 
+C. Stoel-Cammon. Timonium, MD: York Press. 
+Flege, }. E. 1992b. The intemgibility of English vowels spoken by British and 
+
+--- Page 40 ---
+Second-Language Speech Learning 1271 
+Dulch talkers. In llltflligibility ill Speec" Disorders, ed. R. Kent. Amsterdam: 
+john Benjamins. 
+Flege, J. E. 1993. Production and perception of a novel, second-language pho­
+netic contrast. Journal of ti,e Acollstical Society of America 93:1589-1608. 
+Flege, J. E. 1995. Oddity discrimination of English vowels by non-natives. Ms. 
+in preparation. Department of Biocommunication, University of Alabama at 
+Birmingham . 
+Flege, J. E., and Bohn, 0.-5. 1989. The perception of English vowels by native 
+Spanish speakers. }DllrlJal of 'he Acoustical Society of America 85:S85(A) . 
+Flege, J. E., and Davidian , D. 1984. Transfer and developmental processes in 
+adult foreign language speech production. Applied PSycilOlil1guistics 
+5323-47. 
+Flege, J. E., and Eelling, W. 1986. Linguistic and developmental effects on the 
+production and perception of slop consonants. PhOllfticn 43:155-71. 
+F1ege, J. E., and Eefting. W. 1987a. The production and perception of English 
+slaps by Spanish speakers of English./ollrIJlIl of P/lOlltlics 15:67-83. 
+Flege, J. E., and Eefting, W. 1987b. Cross-language switching in stop conso­
+nant production and perception by Dulch speakers of English. Spudl 
+COlllllllluiclltillf1 6: 185-:-202. 
+Flege, J. E., and Eefting, W. 1988. Imitation of a VOT continuum by native 
+speakers of English and Spanish: Evidence for phonetic category formation. 
+/ollrual of 'he Acousticnl Socie'y of Americn 83:n9-40. 
+Flege, J. E" and Hammond, R. 1982. Mimicry of non..<fistinctive phonetic dif­
+ferences between language varieties. Stud its in Second umgllQge Acquisition 
+5:1-18. 
+Aege, j. E., and Hillenbrand, J. 1986. Dil£erential use of temporal cues to the 
+/S/-/2/ contrast by native and non-native speakers of English. }ollrJIal of the 
+Acoustical Society of America 79:508-17. 
+Rege, J. E .• and Hillenbrand, J. 1987. Differential use of closure voicing and 
+release burst as cue to stop voicing by native speakers of French and English. 
+}ollrJIai of Phone,jcs 15:203-8. 
+Rege, J. E., and Munro, M. 1994. The word unit in L2 speech production and 
+perception . Studies ill Suond Lnngllage Acquisitiotl16:381-411. 
+Flege, J. E., Munro, M., and Fox, R. 1994. Auditory and categorical effects on 
+cross-language vowel perception . JOllrJIa/ of ti,e Acol/slicnl SOCiety of AmericII 
+95:3623-41 . 
+Flege,1. E .• Munro, M., and MacKay, I. 1995a. Factors affecting degree of per­
+ceived foreign accent in a second language. /ourllal of tile Acolistical Soddy of 
+America 97:3125-34. 
+Rege, J. E., Munro, M ., and MacKay, I. 1995b. Effects of age of second-language 
+learning on the production of English consonants. Speech Communicatiol' 
+16:1-26. 
+Flege, J. E., Munro. M ., and MacKay. I. t995c. Factors affecting the production 
+of word-initial consonants in a second language . In Variation Unguistics and 
+SLA. ed. D. PreSion. Amsterdam: John Benjamins. In press. 
+Flege, ]. E., Munro, M., and Skelton, L. 1992. Production of the word-final 
+English /t/-/d/ contrast by native speakers of English, Mandarin, and 
+Spanish./olln/1I1 of tI,e Acoustical Society of Alllltrica 92:128-43. 
+Flege, j. E., and Port, R. 1981. Cross-language phonetic interference : Arabic to 
+English. umgl4age and Speech 24:125-46 . 
+Flege, J. E., and Schmidt, A. 1995. Native speakers of Spanish show rale­
+dependent processing of English stop consonants. PhonttiCA 52:90-111. , ; 
+
+--- Page 41 ---
+2721Flese 
+Aege, J. E., and Takagi, N. 1994, Speaking task effects on Japanese speakers' 
+production of English / J/ and /1/, Lnllgllage and SpeeclJ. Under review. 
+Rege, J. E., Takagi, N., and Mann, V. 1995a. Japanese adults can learn to pro­
+duce /J/ and III accurately. umglla>!t' a1ld Speech 38, Part L In press. 
+Rege, J. E., Takagi, N., and Mann, V. 1995b. Experienced Japanese speakers of 
+English can identify English I JI accurately, but not III. /ollrual of the Acolls­
+tical Society of America. Under review. 
+Aege, j. E., and Wang, C. 1990, Native-language phonotactic constraints arlect 
+how well Chinese subjects perceive the word-final English It/-/dl conlrast. 
+/ollmal of Phollelics 17:299-315 . 
+Fox. R. A.. Flege. J. E., and Munro. M. J. 1994, A multidimensional scaling 
+analysis of Spanish and English vowels. }ol/nlal of lI.e Acoustical Suc;i!ly uf 
+America 97:2540--51. 
+Giles, H. 1970, Evaluation.11 reactions 10 accents. £'/Ilcatilllml ReViall 22:211-27. 
+Goldstein , L., and Browltlan, C. 1986. Representation of voicing conLrasts 
+using articulatory gestures. /ollmal of Phonetics !4:339-42. 
+Gottfried, T. 1983. Effects of consonant context on the perception of French 
+vowcls.Joun.t:l1 of PllOtlelics 12:91-114. 
+Gottfried. T., and Beddor. P. 1988. Perception of temporal and spectral infor­
+mation in French voweb. LJwguage alii' Speedt 3157-75. 
+Greene. U., Pisoni. D" and Gradman. II. 1985. Perception of synthetic speech 
+by non-native sgeakers of English. I<eseard, all Speedt Perceptioll 11:419-28 
+(Department of Psychology , Indiana University). 
+Grosjean, F. 1989. Neurolinguists. beware! The bilingual is not two monolin­
+guals in one person. Brail/ alld umgllage 36:3-15. 
+Gumperz. j. 1982. Discourse Strategies. Cambridge: Cambridge University Press. 
+Haggard, M., Corrigall, j., and Legg, A. 1971. Perceptual factors in articulatory 
+defects. Folia Phoniatrica 23:33-40. 
+Hammarberg, B, 1988. Studielf zl/r PllOl/o/ogie des Zweits/lfachhelltTWerbs. 
+Stockholm: Almqvist and Wiksell. 
+Hammarberg , B. 1990. Conditions on transfer in second language phonology 
+acquisition. In New $ollllds 90, Proceedillgs of /he 1990 Allls/eTllam Symposium 
+on the Acquisition of Sectllld-lallgllage Speedl, cd: J. Leather and A. James. 
+Amsterdam; University of Amslerdam , 
+Henning. W. 1966. Discrimination training and self-evaluation in the tcaching 
+of pronunciation. I"ternal iOllal RtvieUl of Applied Lill8uist ics 4:7-17. 
+Hill, J, 1970. Foreign accents, language acquisition, and cerebral dominance 
+revisite~. Langl/age LeaT/llllg 20:237-4~ . 
+Hold~n, K., and Hogan. J. 1993. The emotive impact of foreign intonation: An 
+experiment in switching English and Russian intonation , umguage and 
+Speech 36:67-88. 
+James, A. 1984. Phonetic transfer: The structural bases of interlingual as­
+sessments. In Proceedings of the Tellll, IIden/atiOllal Congress of Pllont/ic 
+Sciulces. ed. M. van den Broecke, and A. Cohen. Dordrccht. The Neth­
+erlands: Foris. 
+James, A 1988. The Acquisilioll of Second lAnguage Phollology . Tubingen: Gunter 
+Narr. 
+Jamieson , D .• and Morosan , D. 1986. Training non-native speech contrasts in 
+adults: Acquisition or the English /0/-/8/ contrast by francophones , Per­
+ceplion & Psychophysics 40:205--15. 
+Jusczyk, P. 1985. On characterizing the development of speech perception . 
+Neonate Cognition ; Beyond the Blooming. Buzzitlg Confusion , ed, J, Mehler, and 
+R. Fox. Hillsdale, NJ: Lawrence Erlbaum. 
+
+--- Page 42 ---
+t 
+J Second·Language Speech Learning I 27 
+Jusczyk, P. 1992. Developing phonological categories from the speech signal 
+In PhonologiclJl Developmetll : Models, ReseIJrch, and ImpliclJtions, ed. C 
+Ferguson , L Menn, and C. Stoel-Gammon . Timonium, MD: York Press. 
+Kluender , K., Diehl. R., and Killeen, P. 1987. Japanese quail can learn phoneti, 
+categories . Sciener 237:1195-97 . 
+Kluender. K .• Diehl, R.. and Wright, 8. 1988. Vowel·tength differences befon 
+voiced and voiceless consonants : An auditory explanation . /owrnal o. 
+P/'Olletics 16:153-69. 
+Koster, C. 1987. Word Recognitioll in Foreign and NIJtiw umgwIJge. Dordrecht 
+The Netherlands : Faris. 
+Koutsoudas , A., and Koutsoudas. O. 1983. A contrastive analysis of the seg· 
+mental phonemes of Greek and English. In Srcotld LA'lgllagr Learning 
+Cu"trastivt A'ia/ysis. Error Analysis, fwd Rr/ntrd Aspects, ed. n. Robinett, and 
+J. Schachter. Ann Arbor: University of Michigan Press. 
+Ladefoged , P. 1990. Some reflections on the IPA. Jouflln/ of Pllonrtics 18:335--46. 
+Lado, R. 1957. Litlguistics across ClIltllres . Ann Arbor: University of Michigall 
+Press. 
+Lambert, W., Hodgson . R., Gardner, R., and Fillenbaum , S. 1960. Evaluationa ' 
+reactions to spoken languages . 10l/fllnl of Abllormal SOcilJ/ Psychology 60:44-51. 
+Lamminmiiki , R. 1979. The discrimination and identification of English vowels 
+consonants, junctures , and sentence stress by Finnish comprehensive schoo 
+pupils. Papt:rs ;', Contrastive Phondics , lyw'skylli Cross·lAngllagr Studie~ 
+7:165-231. (Department of English. Jyvaskyli University .) 
+Lane, H. 1963. Foreign accent and speech distortion . /ounlal of tile Acowstica l 
+Sodrty of Amrrica 35:451-53. 
+Lehiste, l. 1988. l1clures On lAnguagr Conlacl. Cambridge , MA: MIT Press. 
+Lenneberg , E. 1967. BiologiCQI FoulidatiOfls of Lang~agr. New York: Wiley. 
+Liljencrants , J., and Lindblom , B. 1972. Numerical simulation 01 vowel quality 
+systems: TIle role of perceptual contrast. umgullge 48:83~2. 
+Lindblom , 8. 1990a. On the notion of "possible speech sound." /ollrnal of Pho­
+ndics 18:135-52. 
+Lindblom , n. 1990b. Explaining phonetic variation : A sketch of the Hand H 
+theory. In Sperclt Production alld S,Jeedl Madding. ed. W. Hardcastle, and A. 
+Marchal. Amsterdam: Kluwer. 
+Llnell. P. 1982. The concept of phonological form and the activities of speech 
+production and speech perception . /ollnul/ of Pllonrtics 10:37-72. 
+Locke J. 1980. The inference of speech perception in the phonOlogically disor· 
+dered child. Part II: Some clinically novel procedures, their use, some finding. 
+Jounml of Sperch and Hellrillg Disordt:rs 45:445-68. 
+Logan. L Lively. S., and Pisoni, D. 1991. Training Japanese listeners to identify 
+/rl and III: A first report. Jourt/al of the .... coustical Society 0/ Amrrica 
+89,874-86. 
+Long. M. 1990. Maturational constraints on language development. St~dies in 
+~'olld uwgllage ACqllisitioll 12:251-85. 
+Mack, M. 1982. Voicing-dependent vowel duration in English and French: 
+Monolingual and bilingual production . Journal of Ole Acoustical Soddy of 
+Amrrica 71:173-78. 
+Mack, M. 1988. Sentence processing by non-native speakers of English: Evidence 
+from the perception of natural and computer-genera ted anomalous 1..2 sen· 
+tences./ollrnal of Neuroling~isli cs 3:293-316. 
+Mack, M. 1989. Consonant and vowel perception and production: Early English· 
+French bilinguals and English monoUnguals . Perception & Psychophysics 
+46,187-200. 
+
+--- Page 43 ---
+274 I Flege 
+Mack, M. 1990. Phonetic transfer in a French·English bilingual child. In 
+Lnllguage Attitudes Dud ulI1guage Collflicl, ed. P. H. Nelde. Bonn, Germany: 
+Diimmler. 
+Mack M., Tierpey. J.. and Boyle, M. 1990. The iJltelligibility of natural and 
+LPC-vocode d words and sentences presented to native and non-native 
+speakers of English. MIT Lincoln Laboratory. Technical Report 869 (32 pps). 
+Magen, H., and Blumstein, S. 1993. Effects of speaking rate on the vowel 
+length distinction in Korean. Journal of PI'Ollelics 21 :387-410. 
+Magno Caldognetto , E., Ferrero, F., Vagges K., and Bagno. M. 1979. Indici acusti­
+ci e indio percevelti oel riconosdmento dei suoni Iinguistici. Acla Pllo,,;atrica 
+LAtina 1:21~6 . 
+Major, R., 1986. The ontogeny model: Evidence from L2 acquisition of Spanish 
+r.LAnguage Learning 36:453-504. 
+Mater, R. 1987a. Phonological similarity. markedness . and rate of U acquisition. 
+Studi~s ill S~colld uwglmge Acquisitioll 9:63-82. 
+Major, R. 1987b. English voiceless stop production by speakers of Brazilian 
+Portuguese .lol/rllIlI of P/lOnelics 15:197-202. 
+Major, R. 1992. Losing English as a first language . Ti,e Modeflllnllgllage JOl/mal 
+76,190-208. 
+Mann, V. 1986. Distinguishing universal and language -dependent levels of 
+speech perception: Evidence from Japanese listeners ' perception of English 
+"I" and "rN. Cognition 24:169-96. 
+Martinet, A. 1955. Eeanomie des Oultlgemellts PJJolliti'1" ts lkme: A. Franke. 
+Mayberry , R.. and Eichen, E. 1991. The long-lasting advantage of learning sign 
+language in childhood : Another look at the critical period for language 
+acqUisition . /ollrnal of Memory and lnll811age 30:486-512. 
+McAllister. R. 1990. Perceptual foreign accent: 12 user's comprehension ability. 
+In New Sounds 90. Proceeding s of the 1990 Amstudam Symposium Oil IIle 
+ACqllisilioli of Second-language Speech. eel. J. Leather, and A. James. Depart­
+ment of English, University of Amsterdam. 
+Miller, J., and Volaitis, L. 1989. Effect of speaking rate on the perceptual struc­
+ture of a phonetic category. Puaptioll & PsycJlOphysics 46:505-12. 
+Miyawaki , K., Liberman , A., Jenkins, j., and Fujimura, O. 1975. An effect of 
+Iinguislic experience: The discrinlination of Irl and 111 by native speakers of 
+Japanese and English. Percep/joll & Psyc/lOpllysics 18:331-40. 
+Munnin. L., and Hunlington , D. 1974. Relationship of articulatory defects to 
+speech-sound identification./ollrllal of Speech alld Hearing ResearciJ 17:352-66. 
+Morosan, D., and JatniEjson , D. 1989. Evaluation of a technique for Iraining 
+new speech contrasts: Generalization across voices, bul not word-position 
+or lask. Joumal of Speech and Hearing Research 32:501-11. 
+Moulton , W. 1945. Diait.oct geography and Ihe conc~!-,I of phonological space. 
+Word 18:23-32. 
+Moulton , W. ]962. 11le Sol/lids of English alld German. Chicago: University of 
+Chicago Pre.s. 
+Mueller, T., and Niedzielski,.H. 1963. The influence of discriminatiun training 
+on pronuncintion . Modem lAtlgllage lelllmat 52:410-16. 
+Mullennix ,1-. I'isoni. D. and Martin. C. 19t19. Some effecls of lalker variability on 
+spoken"word recognition . /olfrual of "Ie Aeausliml Sodely of America 85:365-78. 
+Munro. M. 191J2. Perception and production of English vowels by native 
+speakers of Arabic. Unpublished Ph.D. disserlati on, University of Alberta. 
+Munro, M. 1993. Non-native productions of English vowels: Acoustic measure-­
+ments and accented ness ratings. Applied Psycllofin811istics 36:39-66 . . , 
+
+--- Page 44 ---
+Second-Language Speech Learning I 275 
+Munro, M., Flege,]. E., and MacKay, 1.1995. Effects of age of second-language 
+learning on the production of English vowels. Applied Psycholingui stics. To 
+appear. 
+Nabelek, A., and Donahue , A. 1984. Perception of consonants in reverberation 
+by native and non-native listeners . ]ouma' of the AcollstiCJII Society of America 
+75,632-34. 
+Nakauchi, J. 1993. The identification of /1/ and Ir/ by Japanese early, in­
+termediate and late bilinguals . Spud •• HeariF!g gnd l..Ilnguage, Work iF! 
+Progress 7:155-79 (University College, London, Dept. of Phonetics and Lin­
+guistics.) 
+Neufeld, G. 1979. Towards a theory of. language learning ability. LAnguage 
+J..eami"8 29:227-41. 
+Nooleboom, 5., and Truin, P. 1980. Word recognition from fragments of sJX>ken 
+words by native and non-native listeners. JPO Arllli/al Progress Report 15:42-47. 
+Novoa, L., Fein, D., and Obler, L. 1988. Talent in foreign languages : A case 
+study. In Tile fxceptioulIl BT/~i", Neuropsychology of Tale,,' aPld Special Abilities, 
+ed. L. Obler, and D. Fein. New York: Guilford Press. 
+Oyama, S. 1976. The sensitive period for the acquisition of a non-native 
+phonological system. /oumal of Psycllolillguisti c Re5ellrch 5:261-85. 
+Oyama, S. 1978. The sensitive period and comprehension of speech. Workillg 
+Paptrsotl Bilillgllalism 16:1-17. 
+ratkowski , M. 1990. Age and accent in a second language : A reply to James 
+Emil Rege. App/itd U,lgu;stics 11:73-89. 
+Penfield, W. 1965. Conditioning the uncommitted cortex for language learn­
+ing. Brain 88:787-98. 
+Peng, S. H. 1993. Cross-language influence on the production of Mandarin If I 
+and Ixl and Taiwanese Ihl by native speakers of Taiwanese Amoy_ 
+Pllolletica 50:245-60. 
+Pimsleur , P. 1963. Discrimination training in the teaching of French pronunci­
+ation. ModUli Lallguage ]0Ilnla/47 :199-203. 
+Polka, L. 1991. Cross-language speech perception in adults: Phonemic . pho­
+netic, and acoustic c<;mtTibutions . /ollmal of tilt Acoustical Society of America 
+89,2961-77. 
+Powers. M. 1957. Functional disorders of articulation -symptomatology and 
+etiology. In Travis Hamlbook of Speech Pathology . New York: Appleton Cen­
+tury Crorts. 
+Samuel, A., Kat, D .• and Tactter, V. 1984. Which syllable does an intervocalic 
+stop be10ng t07 A selective adaptation study. /ol/mlll of the Acol/stical Society 
+of America 6:1652-63. 
+Schmidt , A. M., and Flege, J. E. 1995. Effects of speaking rate changes on 
+native and non-native production . Phollelica 52:41-54. 
+Scovel, T. 1988. A Time to Sptnk, A PsycllOlitlgllisti c Illquiry into tlle Critical Period 
+for Hllmall Speech. Cambridge, MA: Newbury House. 
+Sekiyama , K.. and Tohkura , Y. 1993. Inter-language differences in the innuence 
+of visual cues in speech perception . lallmal 0/ Plfolletics 21:427-44 . 
+Sheldon, A., and Strange, W. 1982. The acquisition of Irl and III by Japanese 
+learners of English: Evidence that speech production can precede speech 
+perception. Applied Psycllo/itl8"; StiN 3:243-61. 
+Snow, C., and Hoefnagel -H6hle, M. 1979. lndividual differences in second­
+language ability: A factor-analytic study. lAllguage and Speech 22:151-62. 
+Spriestersba ch, R., and Curtis, J. 1951. Misarticuiation and discrimination of 
+speech sounds. QURrt~rly /ournal of Speech 37:483-91. 
+
+--- Page 45 ---
+2761Flese . 
+Strange, W. 1992. Learning non-native phoneme contrasts: Interactions among 
+subject, stimulus, and task variables. in Speech Ptrceptiol1 , Production , rwd 
+Linguistic Strllchlre, eel. E. Tohkura, E. Vatikiotis-Bateson, and Y. Sagisaka . 
+Tokyo: Ohmsha. 
+Sussman,}. 1993. Auditory processing in children's speech perception : Results 
+of selective adaptation and discrimination tests. JOIl",al 0/ Speech and Hetlriu8 
+Researcn 36:380-95. 
+Takagi. N. 1993. Percepti on of American English Irl and III by adult 
+Japanese learners of English: A unified view. Unpublished Ph.D dissertation , 
+University of California-Irvine. 
+Terheek, D. 1977. A cross-language multidimension al scaling study of vowel 
+perception . UCLA Working Papers in Pllolletics, 37. _ 
+Trubelzkoy, N. 1939/1%9. Principles of PllOllology. Translated by C. A. Baltaxe, 
+Berkeley, CA University of California Presto. 
+Uchanski, M., Miller, D., Honan, C., Reed, M., and Uraida, L. 1991. Effects of 
+token va"riability on r~solution for vowel sounds. /011"'''' of llle Acollstical 
+Society of America, 9O:2254(A). 
+Vagges, K., Fenero, F., Magno-Caldognetto E., and Lavagnoli C. 1978. Some 
+acoustic characteristics of Italian consonants. JOIl"'''' of It"/;",, Linguistics 
+3,69-85. 
+Waldman , F., Singh, S., and Hayden, M. 1978. A comparison of speech-sound 
+producti on and discrimination in children with functional articulation dis­
+orders. lnngllage and Speech 21:205--20. 
+Wang, C. 1988. The production and perception of English vowels by native 
+sp'eakers of Mandarin . Unpublished MA thesis, University of Alabama at 
+Binningham . 
+Weiher, E. 1975. Lautwahmehmung und Lautproduktion im Englischunterricht 
+fUr Deutsche . Working Papers, 3, Institute of Phc.netics, University of Kie), 
+Weinberger, S. 1987. The influence of linguistic 'context of syllable structure 
+. simplification . In lnter/allguage Phonology, ed. C. loup, and S. Weinberber. 
+Rowley, MA: Newbury House. 
+Weinberger , S. 1990. Minimal segments in second language phonology . In New 
+Sol/nds 90, Proceedings of the ]990 Amsterdam Symposium OIl the Acquisition of 
+Second-ungl/flBe Speech, ed. J. Lealher, and A. James. Amsterdam : University 
+of Amsterdam . 
+Weiner, P. 1967. Auditory discrimination and articulation . jOlml,,1 of Speech & 
+HMrillg Disorders 32:19-38. 
+Weinreich , U. 1953. l.Jlngliage s in Contact, Findings and Problems. The Hague: 
+Mouton. 
+Weinreich, U. 1957. On the description of phonic interference . Word 13:1-11. 
+Wenk, B. 1979, Articulatory setting and de-fossilization. Interlanglmge Studies 
+Bullet;I.4 :202-20. . 
+Werker, ]., and Logan, J. 1985. Cross-language evidence for three factors in 
+speech perception . Perception & Psychophysics 37:35-44. 
+Werker, J., and Tees, O. 1983. Developmental changes across childhood in the 
+percepti on of non-native speech sounds. Canadian Journal of Psycllology 
+37,271Hl6 . 
+Werker, L and Tees, D. 1984. Phonemic and phonetic factors in adult cross­
+language speech Berception . /014rn,,1 of the Acoustic,,/ Society of Americ" 
+75,1866-78. 
+Wieden, W. 1990. Some remarks on developing phonological representations . 
+In New Sounds 90, Proceedings of lhe 1990 Amsterdam Symposium 0" the 
+
+--- Page 46 ---
+Second ~l.an8uage Speech l.earn;n8 I 277 
+Acquisition of Stco"d·language Speech, ed. ]. leather, and A. James. 
+Amsterdam: University of Amsterdam. 
+Williams, L. 1979. The modjfication of speech perception and production in 
+second-language learning. Perctp/ioll & Psychopllysics 26:95-104. 
+Wade, H. 1978. The beginning of non-school room l2 phonological acquisition. 
+Illtullali01IQ/ Revitw of Applial Linguistics 16:109-25. 
+Yamada, R., and Tohkura, Y. 1992a. The effects of experimental variables on 
+the perception of American English Irl and II/ by Japanese listeners . 
+Perception & PSycilOphysics 52:376-92 . 
+Yamada, R., and Tohkura, Y. 1992b. Perception of American English /rl and 
+/1/ by native speakers of Japanese . In Spttch Perception , Produclion, and 
+Linguistic Structure, ed. E. Tohkura, E. Vatikiotis-Baleson, and Y. Sagisaka. 
+Tokyo: Ohmsha. 
+Ycni-Komshian, G., and Flege, J. E. 1993. The effect of age of L2 acquisition on 
+accuracy of pronunciation of phonetic segments. Paper presented at the 6th 
+International Congress for the Study of Child Language. Trieste, Italy, July 
+18-24,1993 . 
+View publication stats

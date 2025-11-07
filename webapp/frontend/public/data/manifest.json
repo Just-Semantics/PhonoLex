@@ -1,14 +1,18 @@
 {
-  "version": "2.0.0",
-  "created": "1762511838.527301",
+  "version": "2.3.0",
+  "created": "1762533483.120206",
   "vocabulary_size": 24744,
   "minimal_pairs_count": 31399,
   "phoneme_count": 39,
+  "phoible_phoneme_count": 3142,
+  "phoible_language_count": 2095,
   "filter_criterion": "frequency + at least one psycholinguistic norm",
   "files": {
-    "word_metadata.json": "Word properties, IPA, syllables, psycholinguistic norms",
-    "embeddings.json": "Phoible-based syllable embeddings (onset/nucleus/coda)",
-    "minimal_pairs.json": "Precomputed minimal pair relationships",
-    "phoneme_features.json": "Phoneme inventory with Phoible features"
+    "word_metadata.json": "Word properties, IPA, syllables, psycholinguistic norms (English)",
+    "embeddings.json": "Phoible-based syllable embeddings (onset/nucleus/coda, English)",
+    "minimal_pairs.json": "Precomputed minimal pair relationships (English)",
+    "phoneme_features.json": "Phoneme inventory with Phoible features (English)",
+    "phoible_phonemes.json": "3,142 phonemes with 76-dim vectors (all languages)",
+    "phoible_languages.json": "2,095 language phoneme inventories (all languages)"
   }
 }
