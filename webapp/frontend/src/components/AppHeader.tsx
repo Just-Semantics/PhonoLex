@@ -347,7 +347,7 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
             <ListItemButton onClick={() => handleCitationClick('phonological')} sx={{ borderRadius: 1 }}>
               <ListItemText
                 primary="Phonological Complexity"
-                secondary="WCM, MSH, distinctive features"
+                secondary="WCM, MSH, phonotactic probability, distinctive features"
               />
               <ChevronRightIcon />
             </ListItemButton>

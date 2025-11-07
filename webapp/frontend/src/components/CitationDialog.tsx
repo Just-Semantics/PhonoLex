@@ -55,6 +55,16 @@ const citations: Record<string, Citation[]> = {
       doi: '10.3109/02699200903581059',
     },
     {
+      authors: 'Vitevitch, M. S., & Luce, P. A.',
+      year: '2004',
+      title: 'A Web-based interface to calculate phonotactic probability for words and nonwords in English',
+      journal: 'Behavior Research Methods, Instruments, & Computers',
+      volume: '36',
+      issue: '3',
+      pages: '481-487',
+      doi: '10.3758/BF03195586',
+    },
+    {
       authors: 'Hayes, B.',
       year: '2009',
       title: 'Introductory Phonology',
