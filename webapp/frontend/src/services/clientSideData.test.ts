@@ -1,12 +1,28 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { tokenizePhonemes, containsSequence } from '../utils/phonemeUtils';
 import { clientSideData } from './clientSideData';
+import { mockWordMetadata, mockPhonemeData } from '../test/fixtures/testData';
 
 /**
  * Unit tests for phoneme tokenization and pattern matching logic
  *
  * These tests verify the actual production code works correctly.
  */
+
+// Mock fetch for integration tests
+beforeEach(() => {
+  // Mock the internal state of clientSideData for tests that need data
+  // This avoids network calls while still testing the actual business logic
+  const mockMetadataMap = new Map(Object.entries(mockWordMetadata));
+  const mockPhonemesMap = new Map(mockPhonemeData.phonemes.map(p => [p.ipa, p]));
+
+  // @ts-expect-error - accessing private property for testing
+  clientSideData.wordMetadata = mockMetadataMap;
+  // @ts-expect-error - accessing private property for testing
+  clientSideData.phonemes = mockPhonemesMap;
+  // @ts-expect-error - accessing private property for testing
+  clientSideData.loaded = true;
+});
 
 describe('Phoneme Tokenization', () => {
   it('should tokenize space-separated phonemes', () => {
@@ -135,11 +151,7 @@ describe('Multiple Opposition - Representative Target Selection', () => {
 });
 
 describe('Multiple Opposition - Minimal Set Generation', () => {
-  // Note: These are integration tests that require data loading
-  // Skipped in unit test suite - run with a test server for full integration testing
-
-  it.skip('should return array of minimal sets', async () => {
-    // Integration test - requires data files to be served
+  it('should return array of minimal sets', async () => {
     const result = await clientSideData.generateMultipleOppositionSets('t', ['d', 'k'], 'initial', 5);
     expect(Array.isArray(result)).toBe(true);
 
@@ -160,8 +172,7 @@ describe('Multiple Opposition - Minimal Set Generation', () => {
     }
   });
 
-  it.skip('should enforce no duplicate phonemes in sets', async () => {
-    // Integration test - requires data files to be served
+  it('should enforce no duplicate phonemes in sets', async () => {
     const result = await clientSideData.generateMultipleOppositionSets('t', ['d', 'k', 'g'], 'initial', 10);
 
     // Each set should have unique phonemes (no duplicates)
@@ -172,8 +183,7 @@ describe('Multiple Opposition - Minimal Set Generation', () => {
     }
   });
 
-  it.skip('should respect position parameter', async () => {
-    // Integration test - requires data files to be served
+  it('should respect position parameter', async () => {
     // Test with phonemes that work in initial position
     const initialResult = await clientSideData.generateMultipleOppositionSets('t', ['d', 'k'], 'initial', 5);
 
@@ -185,17 +195,15 @@ describe('Multiple Opposition - Minimal Set Generation', () => {
 });
 
 describe('Multiple Opposition - Edge Cases', () => {
-  it.skip('should handle substitute phoneme that matches one target', async () => {
-    // Integration test - requires data files to be served
+  it('should handle substitute phoneme that matches one target', async () => {
     // t→t,d should still work (though clinically unusual)
     const result = await clientSideData.generateMultipleOppositionSets('t', ['t', 'd'], 'initial', 5);
     expect(Array.isArray(result)).toBe(true);
   });
 
-  it.skip('should handle phonotactically invalid positions gracefully', async () => {
-    // Integration test - requires data files to be served
+  it('should handle phonotactically invalid positions gracefully', async () => {
     // /w/ cannot appear word-finally in English
-    const result = await clientSideData.generateMultipleOppositionSets('w', ['r', 'l'], 'final', 5);
+    const result = await clientSideData.generateMultipleOppositionSets('w', ['ɹ', 'l'], 'final', 5);
     expect(Array.isArray(result)).toBe(true);
     // May return empty array, but shouldn't crash
   });

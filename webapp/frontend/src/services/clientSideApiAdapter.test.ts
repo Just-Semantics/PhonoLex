@@ -1,12 +1,28 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { applyExclusions } from '../utils/phonemeUtils';
 import { api } from './clientSideApiAdapter';
+import { clientSideData } from './clientSideData';
+import { mockWordMetadata, mockPhonemeData } from '../test/fixtures/testData';
 
 /**
  * Unit tests for exclusion filtering logic and API adapter methods
  *
  * These tests verify the actual production code works correctly.
  */
+
+// Mock data loading for integration tests
+beforeEach(() => {
+  // Mock the internal state of clientSideData
+  const mockMetadataMap = new Map(Object.entries(mockWordMetadata));
+  const mockPhonemesMap = new Map(mockPhonemeData.phonemes.map(p => [p.ipa, p]));
+
+  // @ts-expect-error - accessing private property for testing
+  clientSideData.wordMetadata = mockMetadataMap;
+  // @ts-expect-error - accessing private property for testing
+  clientSideData.phonemes = mockPhonemesMap;
+  // @ts-expect-error - accessing private property for testing
+  clientSideData.loaded = true;
+});
 
 // Mock word interface matching actual structure
 interface MockWord {
@@ -116,8 +132,7 @@ describe('API Adapter - Multiple Opposition Set Generation', () => {
     expect(typeof api.generateMultipleOppositionSets).toBe('function');
   });
 
-  it.skip('should return promise with array structure', async () => {
-    // Integration test - requires data files to be served
+  it('should return promise with array structure', async () => {
     const result = await api.generateMultipleOppositionSets({
       substitute_phoneme: 't',
       target_phonemes: ['d', 'k'],
@@ -128,8 +143,7 @@ describe('API Adapter - Multiple Opposition Set Generation', () => {
     expect(Array.isArray(result)).toBe(true);
   });
 
-  it.skip('should use default position of "initial" when not specified', async () => {
-    // Integration test - requires data files to be served
+  it('should use default position of "initial" when not specified', async () => {
     const result = await api.generateMultipleOppositionSets({
       substitute_phoneme: 't',
       target_phonemes: ['d', 'k'],
@@ -139,8 +153,7 @@ describe('API Adapter - Multiple Opposition Set Generation', () => {
     expect(Array.isArray(result)).toBe(true);
   });
 
-  it.skip('should use default max_sets of 10 when not specified', async () => {
-    // Integration test - requires data files to be served
+  it('should use default max_sets of 10 when not specified', async () => {
     const result = await api.generateMultipleOppositionSets({
       substitute_phoneme: 't',
       target_phonemes: ['d', 'k'],
@@ -151,8 +164,7 @@ describe('API Adapter - Multiple Opposition Set Generation', () => {
     expect(result.length).toBeLessThanOrEqual(10);
   });
 
-  it.skip('should handle all position values', async () => {
-    // Integration test - requires data files to be served
+  it('should handle all position values', async () => {
     const positions: Array<'initial' | 'medial' | 'final' | 'any'> = ['initial', 'medial', 'final', 'any'];
 
     for (const position of positions) {
