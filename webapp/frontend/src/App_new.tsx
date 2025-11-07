@@ -24,6 +24,7 @@ import {
   Tune as SimilarityIcon,
 } from '@mui/icons-material';
 import { theme } from './theme/theme';
+import api from './services/phonolexApi';
 
 // Import components
 import AppHeader from './components/AppHeader';
@@ -34,6 +35,13 @@ import SearchTool from './components/tools/SearchTool';
 import Builder from './components/Builder';
 
 const App: React.FC = () => {
+  // Pre-load data at app startup to avoid lag when opening tools
+  React.useEffect(() => {
+    // Trigger data load in background
+    api.getStats().catch(err => {
+      console.error('Failed to pre-load data:', err);
+    });
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>

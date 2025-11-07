@@ -23,6 +23,15 @@ import {
 import { Close as CloseIcon } from '@mui/icons-material';
 import api from '../services/phonolexApi';
 
+// English CMU phoneme set (41 phonemes from CMU Pronouncing Dictionary)
+// Extracted from src/phonolex/embeddings/english_data_loader.py
+// Includes stress-dependent phonemes: ə/ʌ (AH0/AH1) and ɚ/ɝ (ER0/ER1)
+const ENGLISH_CMU_PHONEMES = new Set([
+  'aɪ', 'aʊ', 'b', 'd', 'dʒ', 'eɪ', 'f', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+  'oʊ', 'p', 's', 't', 'tʃ', 'u', 'v', 'w', 'z', 'æ', 'ð', 'ŋ', 'ɑ', 'ɔ',
+  'ɔɪ', 'ə', 'ɚ', 'ɛ', 'ɝ', 'ɡ', 'ɪ', 'ɹ', 'ʃ', 'ʊ', 'ʌ', 'ʒ', 'θ'
+]);
+
 interface PhonemePickerDialogProps {
   open: boolean;
   onClose: () => void;
@@ -50,7 +59,7 @@ const PhonemePickerDialog: React.FC<PhonemePickerDialogProps> = ({
   const [vowels, setVowels] = React.useState<string[]>([]);
   const [loading, setLoading] = React.useState(true);
 
-  // Load phonemes from API on mount
+  // Load phonemes from API when dialog opens (English CMU only)
   React.useEffect(() => {
     const loadPhonemes = async () => {
       setLoading(true);
@@ -60,9 +69,14 @@ const PhonemePickerDialog: React.FC<PhonemePickerDialogProps> = ({
         const vows: string[] = [];
 
         data.phonemes.forEach((p: Phoneme) => {
+          // Filter to English CMU phonemes only
+          if (!ENGLISH_CMU_PHONEMES.has(p.ipa)) {
+            return;
+          }
+
           const phonemeType = p.type || p.segment_class;
           if (phonemeType === 'consonant') {
-            // Apply filter if specified
+            // Apply sonorant/obstruent filter if specified
             if (filter === 'sonorants') {
               // Sonorants: consonantal:+ AND sonorant:+
               if (p.features.sonorant === '+') {
@@ -122,11 +136,15 @@ const PhonemePickerDialog: React.FC<PhonemePickerDialogProps> = ({
       }}
     >
       <DialogTitle>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Box>
-            <Typography variant="h6">IPA Keyboard</Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 2 }}>
+          <Box sx={{ flex: 1 }}>
+            <Typography variant="h6" gutterBottom>IPA Keyboard</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+              English (CMU) - {consonants.length + vowels.length} phonemes
+            </Typography>
+
             {filter && (
-              <Typography variant="caption" color="text.secondary">
+              <Typography variant="caption" color="text.secondary" display="block">
                 Showing {filter === 'sonorants' ? 'sonorants only (m, n, ŋ, l, r, w, j)' : 'obstruents only (p, t, k, f, s, etc.)'}
               </Typography>
             )}

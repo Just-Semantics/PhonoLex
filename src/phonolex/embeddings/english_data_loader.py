@@ -87,10 +87,17 @@ class EnglishPhonologyLoader:
         """Convert ARPAbet sequence to IPA (stress stripped)"""
         ipa = []
         for phone in arpa_phones:
-            # Remove stress markers
-            base = phone.rstrip("012")
-            if base in self.arpa_to_ipa:
-                ipa.append(self.arpa_to_ipa[base])
+            # Try full form first (for stress-dependent phonemes like AH, ER)
+            # then fall back to base form
+            if phone in self.arpa_to_ipa:
+                # Strip stress markers from IPA result
+                ipa_phone = self.arpa_to_ipa[phone].lstrip("ˈˌ")
+                ipa.append(ipa_phone)
+            else:
+                # Fall back to base form
+                base = phone.rstrip("012")
+                if base in self.arpa_to_ipa:
+                    ipa.append(self.arpa_to_ipa[base])
         return ipa
 
     def _arpa_to_ipa_with_stress(
@@ -103,14 +110,21 @@ class EnglishPhonologyLoader:
             stress = None
             if phone and phone[-1] in "012":
                 stress = int(phone[-1])
-                base = phone[:-1]
-            else:
-                base = phone
 
-            if base in self.arpa_to_ipa:
+            # Try full form first (for stress-dependent phonemes like AH, ER)
+            if phone in self.arpa_to_ipa:
+                # Strip stress markers from IPA (we store stress separately)
+                ipa_phone = self.arpa_to_ipa[phone].lstrip("ˈˌ")
                 ipa_with_stress.append(
-                    PhonemeWithStress(phoneme=self.arpa_to_ipa[base], stress=stress)
+                    PhonemeWithStress(phoneme=ipa_phone, stress=stress)
                 )
+            else:
+                # Fall back to base form
+                base = phone.rstrip("012")
+                if base in self.arpa_to_ipa:
+                    ipa_with_stress.append(
+                        PhonemeWithStress(phoneme=self.arpa_to_ipa[base], stress=stress)
+                    )
         return ipa_with_stress
 
     def _load_cmu_dict(self):

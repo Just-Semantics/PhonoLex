@@ -5,13 +5,17 @@ Export all data needed for client-side PhonoLex app.
 This script creates a comprehensive data package for running PhonoLex entirely
 in the browser, eliminating the need for backend servers and databases.
 
-Outputs:
-1. word_metadata.json - All word properties, IPA, syllables, psycholinguistic norms
+Outputs (English-specific):
+1. word_metadata.json - All word properties, IPA, syllables, psycholinguistic norms (24,744 words)
 2. embeddings.json - Phoible-based syllable embeddings (onset/nucleus/coda, 228-dim)
 3. minimal_pairs.json - Precomputed minimal pairs relationships
 4. phoneme_features.json - Phoneme inventory with Phoible features
 
-Total size: ~50MB uncompressed, ~2MB gzipped (perfect for browser loading)
+Outputs (Cross-linguistic for difficulty tool):
+5. phoible_phonemes.json - 3,142 phonemes with 76-dim feature vectors (all languages)
+6. phoible_languages.json - 2,095 language phoneme inventories
+
+Total size: ~58MB uncompressed, ~2.5MB gzipped (perfect for browser loading)
 No quantization needed - Phoible embeddings compress extremely well!
 """
 
@@ -318,13 +322,57 @@ def load_phoneme_features():
     return features_dict
 
 
+def load_phoible_data():
+    """Load PHOIBLE phoneme vectors and language inventories for difficulty tool"""
+    print("\n[5/6] Loading PHOIBLE data for difficulty tool...")
+    import pickle
+
+    # Load 76-dim vectors (Phase 2)
+    vectors_path = project_root / "embeddings/phase2/phoible_all_phonemes_76d.pkl"
+    with open(vectors_path, "rb") as f:
+        vectors_76d = pickle.load(f)
+
+    # Load language inventories
+    inventories_path = (
+        project_root / "embeddings/phase2/phoible_language_inventories.json"
+    )
+    with open(inventories_path, "r") as f:
+        language_inventories = json.load(f)
+
+    # Load phoneme metadata
+    metadata_path = project_root / "embeddings/phase2/phoible_phoneme_metadata.json"
+    with open(metadata_path, "r") as f:
+        phoneme_metadata = json.load(f)
+
+    print(f"  ✓ Loaded {len(vectors_76d):,} phoneme vectors")
+    print(f"  ✓ Loaded {len(language_inventories):,} language inventories")
+    print(f"  ✓ Loaded metadata for {len(phoneme_metadata):,} phonemes")
+
+    # Convert numpy arrays to lists for JSON
+    vectors_json = {}
+    for phoneme, vec in vectors_76d.items():
+        vectors_json[phoneme] = vec.tolist()
+
+    return {
+        "phonemes": vectors_json,
+        "languages": language_inventories,
+        "metadata": phoneme_metadata,
+    }
+
+
+
 def export_data(
-    embeddings_checkpoint, word_metadata, minimal_pairs, phoneme_features, output_dir
+    embeddings_checkpoint,
+    word_metadata,
+    minimal_pairs,
+    phoneme_features,
+    phoible_data,
+    output_dir,
 ):
     """Export all data to files and compress them"""
     import gzip
 
-    print("\n[5/5] Exporting data...")
+    print("\n[6/6] Exporting data...")
 
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -374,19 +422,49 @@ def export_data(
     size_mb = features_path.stat().st_size / 1024 / 1024
     print(f"  ✓ phoneme_features.json ({size_mb:.1f} MB)")
 
-    # 5. Create manifest
+    # 5. Export PHOIBLE phoneme vectors
+    phoible_phonemes_path = output_dir / "phoible_phonemes.json"
+    phoible_phonemes_export = {
+        "phonemes": phoible_data["phonemes"],
+        "metadata": phoible_data["metadata"],
+        "vector_dim": 76,
+        "source": "PHOIBLE + Phase 2 normalized vectors",
+        "description": "3,142 phonemes from 2,095 languages with 76-dim feature vectors",
+    }
+    with open(phoible_phonemes_path, "w") as f:
+        json.dump(phoible_phonemes_export, f, separators=(",", ":"))
+    size_mb = phoible_phonemes_path.stat().st_size / 1024 / 1024
+    print(f"  ✓ phoible_phonemes.json ({size_mb:.1f} MB)")
+
+    # 6. Export PHOIBLE language inventories
+    phoible_languages_path = output_dir / "phoible_languages.json"
+    phoible_languages_export = {
+        "languages": phoible_data["languages"],
+        "language_count": len(phoible_data["languages"]),
+        "description": "2,095 language phoneme inventories from PHOIBLE",
+    }
+    with open(phoible_languages_path, "w") as f:
+        json.dump(phoible_languages_export, f, separators=(",", ":"))
+    size_mb = phoible_languages_path.stat().st_size / 1024 / 1024
+    print(f"  ✓ phoible_languages.json ({size_mb:.1f} MB)")
+
+    # 7. Create manifest
     manifest = {
-        "version": "2.0.0",
+        "version": "2.3.0",
         "created": str(Path(__file__).stat().st_mtime),
         "vocabulary_size": len(word_metadata),
         "minimal_pairs_count": len(minimal_pairs),
         "phoneme_count": len(phoneme_features),
+        "phoible_phoneme_count": len(phoible_data["phonemes"]),
+        "phoible_language_count": len(phoible_data["languages"]),
         "filter_criterion": "frequency + at least one psycholinguistic norm",
         "files": {
-            "word_metadata.json": "Word properties, IPA, syllables, psycholinguistic norms",
-            "embeddings.json": "Phoible-based syllable embeddings (onset/nucleus/coda)",
-            "minimal_pairs.json": "Precomputed minimal pair relationships",
-            "phoneme_features.json": "Phoneme inventory with Phoible features",
+            "word_metadata.json": "Word properties, IPA, syllables, psycholinguistic norms (English)",
+            "embeddings.json": "Phoible-based syllable embeddings (onset/nucleus/coda, English)",
+            "minimal_pairs.json": "Precomputed minimal pair relationships (English)",
+            "phoneme_features.json": "Phoneme inventory with Phoible features (English)",
+            "phoible_phonemes.json": "3,142 phonemes with 76-dim vectors (all languages)",
+            "phoible_languages.json": "2,095 language phoneme inventories (all languages)",
         },
     }
 
@@ -449,6 +527,9 @@ def main():
     # Load phoneme features
     phoneme_features = load_phoneme_features()
 
+    # Load PHOIBLE data for difficulty tool
+    phoible_data = load_phoible_data()
+
     # Export everything
     output_dir = project_root / "webapp/frontend/public/data"
     export_data(
@@ -456,6 +537,7 @@ def main():
         word_metadata,
         minimal_pairs,
         phoneme_features,
+        phoible_data,
         output_dir,
     )
 
@@ -463,11 +545,14 @@ def main():
     print("✓ SUCCESS: Client-side data package created!")
     print("=" * 80)
     print(f"\nData exported to: {output_dir}")
+    print("\nNew in v2.3:")
+    print("  • 3,142 phonemes with 76-dim vectors")
+    print("  • 2,095 language phoneme inventories")
+    print("  • Ready for phoneme difficulty tool (Flege's SLM)")
     print("\nNext steps:")
-    print("1. Update frontend to load data from public/data/*.json")
-    print("2. Implement client-side similarity computation using quantized embeddings")
-    print("3. Remove backend API dependencies")
-    print("4. Deploy as static site (Netlify, Cloudflare Pages, etc.)")
+    print("1. Existing tools (Builder, Contrastive Intervention) filter to English only")
+    print("2. New difficulty tool uses all 2,095 languages")
+    print("3. Deploy as static site (Netlify, Cloudflare Pages, etc.)")
 
 
 if __name__ == "__main__":
