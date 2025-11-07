@@ -36,6 +36,7 @@ import {
   Email as EmailIcon,
 } from '@mui/icons-material';
 import CitationDialog from './CitationDialog';
+import ContactForm from './ContactForm';
 
 interface AppHeaderProps {
   onNavigate?: (section: string) => void;
@@ -434,63 +435,52 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
         <Box sx={{ p: { xs: 2, sm: 3 } }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
             <Typography variant="h5" fontWeight={700}>
-              Contact & Support
+              Contact
             </Typography>
             <IconButton onClick={() => setContactDrawerOpen(false)}>
               <CloseIcon />
             </IconButton>
           </Box>
 
-          <Typography variant="body2" paragraph color="text.secondary">
-            Licensed under CC BY-SA 3.0. Contributions, bug reports, and feedback welcome.
-          </Typography>
+          {/* Contact Form */}
+          <ContactForm />
 
           <Divider sx={{ my: 3 }} />
 
           <Typography variant="h6" gutterBottom fontWeight={600}>
-            Repository
+            Other Ways to Reach Us
           </Typography>
-          <Typography variant="body2" paragraph color="text.secondary">
-            Issues, features, contributions
-          </Typography>
-          <Button
-            variant="outlined"
-            startIcon={<GitHubIcon />}
-            href="https://github.com/Just-Semantics/PhonoLex"
-            target="_blank"
-            fullWidth
-            sx={{ mb: 3 }}
-          >
-            View on GitHub
-          </Button>
 
-          <Divider sx={{ my: 3 }} />
-
-          <Typography variant="h6" gutterBottom fontWeight={600}>
-            Contact
-          </Typography>
           <Typography variant="body2" color="text.secondary" paragraph>
-            General inquiries, collaboration, and support
+            Prefer email? Reach us directly at:
           </Typography>
           <Button
             variant="outlined"
             startIcon={<EmailIcon />}
             href="mailto:contact@justsemantics.net"
             fullWidth
-            sx={{ mb: 3 }}
+            sx={{ mb: 2 }}
           >
             contact@justsemantics.net
           </Button>
 
-          <Typography variant="body2" color="text.secondary">
-            Bug reports and feature requests via GitHub Issues.
+          <Typography variant="body2" color="text.secondary" paragraph>
+            For bug reports and feature requests:
           </Typography>
+          <Button
+            variant="outlined"
+            startIcon={<GitHubIcon />}
+            href="https://github.com/Just-Semantics/PhonoLex/issues"
+            target="_blank"
+            fullWidth
+            sx={{ mb: 3 }}
+          >
+            GitHub Issues
+          </Button>
 
-          <Box sx={{ mt: 4, p: 2, bgcolor: 'primary.50', borderRadius: 1 }}>
+          <Box sx={{ mt: 4, p: 2, bgcolor: 'info.50', borderRadius: 1, border: 1, borderColor: 'info.light' }}>
             <Typography variant="caption" color="text.secondary" align="center" display="block">
               PhonoLex v2.2.0-beta • Licensed under CC BY-SA 3.0
-              <br />
-              ShareAlike license required due to PHOIBLE data
             </Typography>
           </Box>
         </Box>
