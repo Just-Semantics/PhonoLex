@@ -2,7 +2,7 @@
 
 **Comprehensive word analysis and list generation for phonological research, speech-language pathology, and language education.**
 
-[![Version](https://img.shields.io/badge/version-2.2.0--beta-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.3.0--beta-blue.svg)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-CC%20BY--SA%203.0-green.svg)](LICENSE.txt)
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](python/pyproject.toml)
 [![TypeScript](https://img.shields.io/badge/typescript-5.0+-blue.svg)](webapp/frontend/package.json)
@@ -352,7 +352,7 @@ PhonoLex/
 
 ## Architecture History
 
-- **v2.2.0-beta (Nov 2025)**: Phoneme-sequence soft Levenshtein (current)
+- **v2.3.0-beta (Jan 2025)**: Phonotactic probability integration (current)
   - No averaging - sequences preserved
   - 99% compression (56.7 MB → 0.6 MB gzipped)
   - 24,744 words with comprehensive norms
@@ -397,7 +397,7 @@ If you use PhonoLex in research or clinical work, please cite:
 **PhonoLex**:
 ```
 Neumann, J. (2025). PhonoLex: Comprehensive word analysis with phonological features
-and psycholinguistic norms (Version 2.2.0-beta). https://github.com/Just-Semantics/PhonoLex
+and psycholinguistic norms (Version 2.3.0-beta). https://github.com/Just-Semantics/PhonoLex
 ```
 
 **PHOIBLE**:

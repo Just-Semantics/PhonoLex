@@ -7,18 +7,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **PhonoLex** is a comprehensive word analysis and list generation tool for phonological research, speech-language pathology, and language education. It uniquely combines:
 
 1. **Universal Phonological Features** - PHOIBLE database (38 distinctive features across 2,716 languages)
-2. **Psycholinguistic Norms** - 8 properties from 4 major research datasets
+2. **Psycholinguistic Norms** - 11 properties from 5 major research datasets
 3. **Phoneme-Sequence Similarity** - v2.3 soft Levenshtein distance preserving consonant clusters and diphthongs
 
 ###  Four Core Tools
 
 1. **Custom Word List Builder** ⭐ THE POWER TOOL
    - Pattern matching (STARTS_WITH, ENDS_WITH, CONTAINS) with IPA phonemes
-   - Multi-dimensional property filtering across 4 domains:
+   - Multi-dimensional property filtering across 5 domains:
      - **Phonological Complexity**: Syllable count, phoneme count, WCM, MSH
      - **Lexical Properties**: Frequency (SUBTLEX-US), Age of Acquisition
      - **Semantic Properties**: Imageability, familiarity, concreteness
      - **Affective Properties**: Valence, arousal, dominance (Warriner norms)
+     - **Phonotactic Probability**: Biphone probability, positional segment probability (Vitevitch & Luce 2004)
    - Phoneme exclusion rules
    - AND logic for combined queries
    - Export results with all properties
@@ -49,9 +50,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
    - Phoneme comparison (feature-by-feature diff)
    - Feature-based phoneme search
 
-### Psycholinguistic Norms (8 Properties)
+### Psycholinguistic Norms (11 Properties)
 
-PhonoLex integrates psycholinguistic norms from 4 major research datasets:
+PhonoLex integrates psycholinguistic norms from 5 major research datasets:
 
 | Property | Source | Range | Description |
 |----------|--------|-------|-------------|
@@ -66,6 +67,10 @@ PhonoLex integrates psycholinguistic norms from 4 major research datasets:
 | Valence | Warriner et al. (2013) | 1-9 | Negative to positive |
 | Arousal | Warriner et al. (2013) | 1-9 | Calm to excited |
 | Dominance | Warriner et al. (2013) | 1-9 | Weak to powerful |
+| **Phonotactic Probability** |
+| Phono Prob (Avg) | Vitevitch & Luce (2004) | 0-1 | Mean biphone probability (higher = more typical) |
+| Phono Prob (Sum Log) | Vitevitch & Luce (2004) | negative | Sum of log biphone probabilities |
+| Positional Prob (Avg) | Vitevitch & Luce (2004) | 0-1 | Mean positional segment probability |
 
 **Plus 4 Phonological Complexity Measures**:
 - Syllables (CMU Dictionary): 1-5 - Number of syllables
@@ -85,7 +90,7 @@ Each syllable component (onset/nucleus/coda) is represented as a **sequence of p
 - `crest`: onset = [[k], [ɹ]], nucleus = [[ɛ]], coda = [[s], [t]]
 - **Similarity**: 0.74 (correct!) vs old averaging: 0.99 (incorrect!)
 
-## Project Structure (v2.2.0-beta - Client-Side)
+## Project Structure (v2.3.0-beta - Client-Side)
 
 The project uses a **modern Python package structure** with a **fully client-side web application**:
 
@@ -583,16 +588,18 @@ git push origin feature/your-feature
 
 ## References
 
-**Phonological Features**:
+**Phonological Features & Similarity**:
 - Moran, S., & McCloy, D. (2019). PHOIBLE 2.0. Max Planck Institute. https://phoible.org/
 - Hayes, B. (2009). Introductory Phonology. Wiley-Blackwell.
 - Stoel-Gammon, C. (2010). The Word Complexity Measure: Description and application to developmental phonology and disorders. Clinical Linguistics & Phonetics.
+- Levenshtein, V. I. (1966). Binary codes capable of correcting deletions, insertions, and reversals. Soviet Physics Doklady. (Basis for soft Levenshtein similarity algorithm)
 
 **Psycholinguistic Norms**:
 - Brysbaert, M., & New, B. (2009). Moving beyond Kučera and Francis: A critical evaluation of current word frequency norms and the introduction of a new and improved word frequency measure for American English. Behavior Research Methods, 41(4), 977-990.
 - Brysbaert, M., Warriner, A. B., & Kuperman, V. (2014). Concreteness ratings for 40 thousand generally known English word lemmas. Behavior Research Methods, 46, 904-911.
 - Kuperman, V., Stadthagen-Gonzalez, H., & Brysbaert, M. (2012). Age-of-acquisition ratings for 30,000 English words. Behavior Research Methods, 44, 978-990.
 - Scott, G. G., Keitel, A., Becirspahic, M., Yao, B., & Sereno, S. C. (2019). The Glasgow Norms: Ratings of 5,500 words on nine scales. Behavior Research Methods, 51, 1258-1270.
+- Vitevitch, M. S., & Luce, P. A. (2004). A Web-based interface to calculate phonotactic probability for words and nonwords in English. Behavior Research Methods, Instruments, & Computers, 36(3), 481-487.
 - Warriner, A. B., Kuperman, V., & Brysbaert, M. (2013). Norms of valence, arousal, and dominance for 13,915 English lemmas. Behavior Research Methods, 45, 1191-1207.
 
 **Clinical Interventions**:
@@ -606,7 +613,7 @@ git push origin feature/your-feature
 
 ## Future Roadmap
 
-**Current Version**: v2.2.0-beta (Client-Side, Phoneme-Sequence Architecture)
+**Current Version**: v2.3.0-beta (Client-Side, Phoneme-Sequence Architecture + Phonotactic Probability)
 
 Potential future enhancements:
 - Multi-language support (extend beyond English using Phoible's cross-linguistic features)

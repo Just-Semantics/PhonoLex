@@ -6,7 +6,7 @@ The Custom Word Lists tool is the most powerful feature in PhonoLex, allowing yo
 
 Build word lists by combining:
 - **Phoneme patterns** (STARTS_WITH, ENDS_WITH, CONTAINS, CONTAINS_MEDIAL)
-- **Property filters** (12 psycholinguistic and phonological properties)
+- **Property filters** (15 psycholinguistic and phonological properties)
 - **Phoneme exclusions** (exclude words containing specific phonemes)
 - **AND logic** (words must match ALL criteria)
 
@@ -118,6 +118,40 @@ Examples:
 - "cat" = 4.0 (stops only)
 - "fish" = 5.0 (fricatives)
 - "splash" = 6.0 (liquid in cluster)
+
+#### Phonotactic Probability (3 properties)
+
+| Property | Range | Source | Description | Coverage |
+|----------|-------|--------|-------------|----------|
+| **Biphone Probability** | 0-1 | Vitevitch & Luce (2004) | Mean probability of phoneme sequences (higher = more typical) | ~100% |
+| **Sum Log Probability** | -10 to 0 | Vitevitch & Luce (2004) | Sum of log biphone probabilities (less negative = more typical) | ~100% |
+| **Positional Probability** | 0-1 | Vitevitch & Luce (2004) | Mean probability of phonemes in their syllable positions | ~100% |
+
+**Biphone Probability:**
+- Measures how typical the sound sequences are in English
+- Computed on full CMU Pronouncing Dictionary (117K words) for unbiased estimates
+- Higher values = more phonotactically "legal" or common sequences
+
+Interpretation:
+- 0.00-0.02: Very low (unusual sequences like "strengths")
+- 0.02-0.05: Low-moderate (e.g., "splash", "squid")
+- 0.05-0.10: Moderate-high (e.g., "cat", "dog", "jump")
+- 0.10+: Very high (very typical sequences like "mama", "see")
+
+**Sum Log Probability:**
+- Standard metric from Vitevitch & Luce (2004)
+- Negative values (more negative = less typical sequences)
+- Useful for replicating published research studies
+
+**Positional Probability:**
+- Measures individual phoneme frequencies in onset/nucleus/coda positions
+- Independent of sequence probability (biphone)
+- Higher values = phonemes that occur frequently in their positions
+
+**Clinical/Research use:**
+- High phonotactic probability correlates with faster word learning
+- Children acquire high-probability patterns before low-probability patterns
+- Useful for controlling word learning difficulty in intervention or research
 
 #### Lexical Properties (2 properties)
 
@@ -259,9 +293,9 @@ Does not match: cat+s (has /s/), big (has /g/)
 
 **Format:**
 ```csv
-word,ipa,syllables,phonemes,wcm,msh,frequency,aoa,imageability,familiarity,concreteness,valence,arousal,dominance
-cat,kæt,1,3,2,4.0,182.5,2.1,6.8,6.9,4.93,7.2,3.8,5.2
-dog,dɔg,1,3,1,4.0,245.3,1.8,6.9,7.0,5.0,7.5,4.2,5.5
+word,ipa,syllables,phonemes,wcm,msh,phono_prob_avg,phono_prob_sum_log,positional_prob_avg,frequency,aoa,imageability,familiarity,concreteness,valence,arousal,dominance
+cat,kæt,1,3,2,4.0,0.062,-2.46,0.081,182.5,2.1,6.8,6.9,4.93,7.2,3.8,5.2
+dog,dɔg,1,3,1,4.0,0.054,-2.89,0.073,245.3,1.8,6.9,7.0,5.0,7.5,4.2,5.5
 ```
 
 **Details:**
@@ -316,6 +350,7 @@ See [Practical Examples](../getting-started/examples.md) for detailed walkthroug
 | Category | Properties | Average Coverage |
 |----------|-----------|------------------|
 | Phonological | Syllables, Phonemes, WCM, MSH | 98% |
+| Phonotactic | Biphone Prob, Sum Log Prob, Positional Prob | 100% |
 | Lexical | Frequency, AoA | 87% |
 | Semantic | Imageability, Familiarity, Concreteness | 47% |
 | Affective | Valence, Arousal, Dominance | 50% |
@@ -379,6 +414,9 @@ See [Practical Examples](../getting-started/examples.md) for detailed walkthroug
 **Phonological Complexity:**
 - Stoel-Gammon, C. (2010). The Word Complexity Measure: Description and application to developmental phonology and disorders. *Clinical Linguistics & Phonetics*, 24(4-5), 271-282.
 - Namasivayam, A. K., et al. (2021). Milestones of speech production in children. *Journal of Speech, Language, and Hearing Research*.
+
+**Phonotactic Probability:**
+- Vitevitch, M. S., & Luce, P. A. (2004). A Web-based interface to calculate phonotactic probability for words and nonwords in English. *Behavior Research Methods, Instruments, & Computers*, 36(3), 481-487.
 
 **Psycholinguistic Norms:**
 - Brysbaert, M., & New, B. (2009). Moving beyond Kučera and Francis. *Behavior Research Methods*, 41(4), 977-990.

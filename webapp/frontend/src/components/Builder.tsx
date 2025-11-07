@@ -56,6 +56,7 @@ const Builder: React.FC = () => {
     phonemes: [1, 10],
     wcm: [0, 15],
     msh: [1, 6],
+    phono_prob_avg: [0, 1],
     frequency: [0, 1000],
     aoa: [2, 10],
     imageability: [1, 7],
@@ -74,6 +75,7 @@ const Builder: React.FC = () => {
     phonemes: [1, 10] as [number, number],
     wcm: [0, 15] as [number, number],
     msh: [1, 6] as [number, number],
+    phono_prob_avg: [0, 1] as [number, number],
 
     // Lexical Properties
     frequency: [0, 1000] as [number, number],
@@ -105,6 +107,7 @@ const Builder: React.FC = () => {
           phonemes: ranges.phonemes as [number, number],
           wcm: ranges.wcm as [number, number],
           msh: ranges.msh as [number, number],
+          phono_prob_avg: ranges.phono_prob_avg as [number, number],
           frequency: ranges.frequency as [number, number],
           aoa: ranges.aoa as [number, number],
           imageability: ranges.imageability as [number, number],
@@ -265,6 +268,10 @@ const Builder: React.FC = () => {
           filtersObj.min_dominance = filters.dominance[0];
           filtersObj.max_dominance = filters.dominance[1];
         }
+        if (filters.phono_prob_avg[0] !== dbRanges.phono_prob_avg[0] || filters.phono_prob_avg[1] !== dbRanges.phono_prob_avg[1]) {
+          filtersObj.min_phono_prob_avg = filters.phono_prob_avg[0];
+          filtersObj.max_phono_prob_avg = filters.phono_prob_avg[1];
+        }
       }
 
       const request: BuilderRequest = {
@@ -294,6 +301,7 @@ const Builder: React.FC = () => {
       phonemes: dbRanges.phonemes as [number, number],
       wcm: dbRanges.wcm as [number, number],
       msh: dbRanges.msh as [number, number],
+      phono_prob_avg: dbRanges.phono_prob_avg as [number, number],
       frequency: dbRanges.frequency as [number, number],
       aoa: dbRanges.aoa as [number, number],
       imageability: dbRanges.imageability as [number, number],
@@ -321,7 +329,7 @@ const Builder: React.FC = () => {
           <AccordionDetails sx={{ px: { xs: 1.5, sm: 2 }, py: { xs: 1, sm: 2 } }}>
             <Stack spacing={{ xs: 1.5, sm: 2 }}>
               <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
-                AND logic: all patterns must match. Use keyboard icon → to select IPA phonemes. Space-separate for sequences (e.g., "s t" for /st/).
+                AND logic: all patterns must match. Space-separate phonemes (e.g., "s t" for /st/).
               </Typography>
 
               <Stack spacing={{ xs: 1.5, sm: 2 }}>
@@ -351,11 +359,11 @@ const Builder: React.FC = () => {
                         <Box sx={{ display: 'flex', gap: 1, flex: 1, flexDirection: 'column' }}>
                           <Box sx={{ display: 'flex', gap: 1 }}>
                             <TextField
-                              label="Phoneme(s) - use keyboard icon →"
+                              label="Phoneme(s)"
                               value={pattern.phoneme}
                               onChange={(e) => updatePattern(idx, 'phoneme', e.target.value)}
                               size="small"
-                              placeholder="Use keyboard icon → to select IPA"
+                              placeholder="Use IPA →"
                               fullWidth
                               InputProps={{
                                 endAdornment: (
@@ -518,6 +526,26 @@ const Builder: React.FC = () => {
                           step={1}
                           marks
                           valueLabelDisplay="auto"
+                          sx={{ '& .MuiSlider-markLabel': { fontSize: { xs: '0.625rem', sm: '0.75rem' } } }}
+                        />
+                      </Box>
+
+                      {/* Phonotactic Probability */}
+                      <Box>
+                        <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
+                          Phonotactic Probability: {filters.phono_prob_avg[0].toFixed(3)} - {filters.phono_prob_avg[1].toFixed(3)}
+                          <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
+                            How common the sound sequences are (Vitevitch & Luce, 2004). Higher = more typical English patterns
+                          </Typography>
+                        </Typography>
+                        <Slider
+                          value={filters.phono_prob_avg}
+                          onChange={(_, value) => handleFilterChange('phono_prob_avg', value as [number, number])}
+                          min={dbRanges.phono_prob_avg[0]}
+                          max={dbRanges.phono_prob_avg[1]}
+                          step={0.001}
+                          valueLabelDisplay="auto"
+                          valueLabelFormat={(value) => value.toFixed(3)}
                           sx={{ '& .MuiSlider-markLabel': { fontSize: { xs: '0.625rem', sm: '0.75rem' } } }}
                         />
                       </Box>
@@ -768,7 +796,7 @@ const Builder: React.FC = () => {
                     }
                   }}
                   size="small"
-                  placeholder="Use keyboard icon → to select IPA"
+                  placeholder="Use IPA →"
                   fullWidth
                   InputProps={{
                     endAdornment: (

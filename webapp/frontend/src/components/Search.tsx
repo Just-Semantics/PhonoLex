@@ -317,7 +317,7 @@ const Search: React.FC = () => {
                       setIpaWarning(null);
                     }
                   }}
-                  placeholder="Use keyboard icon → to select IPA"
+                  placeholder="Use IPA →"
                   fullWidth
                   InputProps={{
                     endAdornment: (

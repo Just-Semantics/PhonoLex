@@ -338,7 +338,7 @@ const SearchTool: React.FC = () => {
                 }}
                 onKeyPress={handleKeyPress}
                 size="medium"
-                placeholder="Use keyboard icon → to select IPA"
+                placeholder="Use IPA →"
                 fullWidth
                 autoFocus
                 InputProps={{
@@ -390,7 +390,7 @@ const SearchTool: React.FC = () => {
                   }}
                   onKeyPress={handleKeyPress}
                   size="medium"
-                  placeholder="Use keyboard icon → to select IPA"
+                  placeholder="Use IPA →"
                   fullWidth
                   InputProps={{
                     endAdornment: (
