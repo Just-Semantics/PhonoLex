@@ -17,6 +17,8 @@ import {
   Tab,
   IconButton,
   CircularProgress,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import api from '../services/phonolexApi';
@@ -25,6 +27,7 @@ interface PhonemePickerDialogProps {
   open: boolean;
   onClose: () => void;
   onSelect: (phoneme: string) => void;
+  filter?: 'sonorants' | 'obstruents';
 }
 
 interface Phoneme {
@@ -38,7 +41,10 @@ const PhonemePickerDialog: React.FC<PhonemePickerDialogProps> = ({
   open,
   onClose,
   onSelect,
+  filter,
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [tabIndex, setTabIndex] = React.useState(0);
   const [consonants, setConsonants] = React.useState<string[]>([]);
   const [vowels, setVowels] = React.useState<string[]>([]);
@@ -56,7 +62,21 @@ const PhonemePickerDialog: React.FC<PhonemePickerDialogProps> = ({
         data.phonemes.forEach((p: Phoneme) => {
           const phonemeType = p.type || p.segment_class;
           if (phonemeType === 'consonant') {
-            cons.push(p.ipa);
+            // Apply filter if specified
+            if (filter === 'sonorants') {
+              // Sonorants: consonantal:+ AND sonorant:+
+              if (p.features.sonorant === '+') {
+                cons.push(p.ipa);
+              }
+            } else if (filter === 'obstruents') {
+              // Obstruents: consonantal:+ AND sonorant:-
+              if (p.features.sonorant === '-') {
+                cons.push(p.ipa);
+              }
+            } else {
+              // No filter - include all consonants
+              cons.push(p.ipa);
+            }
           } else if (phonemeType === 'vowel') {
             vows.push(p.ipa);
           }
@@ -75,7 +95,7 @@ const PhonemePickerDialog: React.FC<PhonemePickerDialogProps> = ({
     if (open) {
       loadPhonemes();
     }
-  }, [open]);
+  }, [open, filter]);
 
   const handleSelect = (phoneme: string) => {
     onSelect(phoneme);
@@ -94,7 +114,7 @@ const PhonemePickerDialog: React.FC<PhonemePickerDialogProps> = ({
       }}
       maxWidth="md"
       fullWidth
-      fullScreen={false}
+      fullScreen={isMobile}
       sx={{
         '& .MuiDialog-paper': {
           maxHeight: { xs: '90vh', sm: '80vh' },
@@ -103,7 +123,14 @@ const PhonemePickerDialog: React.FC<PhonemePickerDialogProps> = ({
     >
       <DialogTitle>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="h6">IPA Keyboard - Click phonemes to add</Typography>
+          <Box>
+            <Typography variant="h6">IPA Keyboard</Typography>
+            {filter && (
+              <Typography variant="caption" color="text.secondary">
+                Showing {filter === 'sonorants' ? 'sonorants only (m, n, ŋ, l, r, w, j)' : 'obstruents only (p, t, k, f, s, etc.)'}
+              </Typography>
+            )}
+          </Box>
           <Box sx={{ display: 'flex', gap: 1 }}>
             <Button variant="contained" onClick={onClose} size="small">
               Done

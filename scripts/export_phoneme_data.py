@@ -14,13 +14,15 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from data.mappings.phoneme_vectorizer import load_phoible_csv
 
+
 def main():
     # Paths
     root = Path(__file__).parent.parent
-    data_dir = root / 'data'
-    word_metadata_path = root / 'webapp' / 'frontend' / 'public' / 'data' / 'word_metadata.json'
-    english_csv = data_dir / 'phoible' / 'english' / 'phoible-english.csv'
-    output_path = root / 'webapp' / 'frontend' / 'public' / 'data' / 'phonemes.json'
+    data_dir = root / "data"
+    word_metadata_path = (
+        root / "webapp" / "frontend" / "public" / "data" / "word_metadata.json"
+    )
+    output_path = root / "webapp" / "frontend" / "public" / "data" / "phonemes.json"
 
     print(f"Loading word data from {word_metadata_path}")
 
@@ -31,21 +33,47 @@ def main():
     # Collect all unique phonemes from actual word data
     used_phonemes = set()
     for word_info in word_data.values():
-        if 'phonemes' in word_info:
-            for phoneme in word_info['phonemes']:
+        if "phonemes" in word_info:
+            for phoneme in word_info["phonemes"]:
                 used_phonemes.add(phoneme)
 
     print(f"Found {len(used_phonemes)} unique phonemes in word data")
 
     # Load Phoible data
-    print(f"Loading Phoible features from {english_csv}")
-    phoneme_data = load_phoible_csv(str(english_csv))
+    print("Loading Phoible features from main phoible.csv")
+    phoible_path = data_dir / "phoible" / "phoible.csv"
+    phoneme_data = load_phoible_csv(str(phoible_path))
     print(f"Loaded {len(phoneme_data)} Phoible entries")
+
+    # Filter to English
+    english_data = [p for p in phoneme_data if p.get("ISO6393") == "eng"]
+    print(f"Found {len(english_data)} English phonemes")
+
+    # Normalize Phoible symbols to standard IPA (same as Phase 2)
+    phoible_to_standard_ipa = {
+        "d̠ʒ": "dʒ",  # Voiced postalveolar affricate
+        "t̠ʃ": "tʃ",  # Voiceless postalveolar affricate
+        "ɚ": "ɚ",  # Unstressed r-colored schwa (already standard)
+        "ɡ": "ɡ",  # Voiced velar stop (already standard)
+    }
+
+    # Normalize phoneme symbols in data
+    for entry in english_data:
+        orig = entry["Phoneme"]
+        if orig in phoible_to_standard_ipa:
+            entry["Phoneme"] = phoible_to_standard_ipa[orig]
+
+    # Add ɝ (stressed r-colored vowel) as fallback - use ɚ features
+    schwa_r_entry = [p for p in english_data if p["Phoneme"] == "ɚ"]
+    if schwa_r_entry:
+        stressed_schwa_r = schwa_r_entry[0].copy()
+        stressed_schwa_r["Phoneme"] = "ɝ"
+        english_data.append(stressed_schwa_r)
 
     # Build phoneme dict from Phoible, filtered to used phonemes
     phonemes_dict = {}
-    for entry in phoneme_data:
-        ipa = entry['Phoneme']
+    for entry in english_data:
+        ipa = entry["Phoneme"]
 
         # Only include if actually used in our word data
         if ipa not in used_phonemes:
@@ -53,38 +81,55 @@ def main():
 
         if ipa not in phonemes_dict:
             # Extract features (all columns except metadata)
-            features = {k: v for k, v in entry.items() if k not in ['Phoneme', 'LanguageName', 'InventoryID', 'SegmentClass', 'Glottocode', 'ISO6393', 'SpecificDialect', 'GlyphID', 'Allophones', 'Marginal', 'Source']}
+            features = {
+                k: v
+                for k, v in entry.items()
+                if k
+                not in [
+                    "Phoneme",
+                    "LanguageName",
+                    "InventoryID",
+                    "SegmentClass",
+                    "Glottocode",
+                    "ISO6393",
+                    "SpecificDialect",
+                    "GlyphID",
+                    "Allophones",
+                    "Marginal",
+                    "Source",
+                ]
+            }
 
             # Determine type (vowel vs consonant)
             # Vowels have syllabic=+ or consonantal=-
-            phoneme_type = 'vowel' if features.get('syllabic') == '+' else 'consonant'
+            phoneme_type = "vowel" if features.get("syllabic") == "+" else "consonant"
 
             phonemes_dict[ipa] = {
-                'ipa': ipa,
-                'type': phoneme_type,
-                'features': features
+                "ipa": ipa,
+                "type": phoneme_type,
+                "features": features,
             }
 
     # Convert to sorted list
-    phonemes = sorted(phonemes_dict.values(), key=lambda x: x['ipa'])
+    phonemes = sorted(phonemes_dict.values(), key=lambda x: x["ipa"])
 
     # Separate by type for reporting
-    consonants = [p for p in phonemes if p['type'] == 'consonant']
-    vowels = [p for p in phonemes if p['type'] == 'vowel']
+    consonants = [p for p in phonemes if p["type"] == "consonant"]
+    vowels = [p for p in phonemes if p["type"] == "vowel"]
 
-    data = {
-        'phonemes': phonemes,
-        'count': len(phonemes)
-    }
+    data = {"phonemes": phonemes, "count": len(phonemes)}
 
     # Write JSON
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(output_path, 'w', encoding='utf-8') as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
-    print(f"\n✓ Exported {len(phonemes)} phonemes ({len(consonants)} consonants, {len(vowels)} vowels)")
+    print(
+        f"\n✓ Exported {len(phonemes)} phonemes ({len(consonants)} consonants, {len(vowels)} vowels)"
+    )
     print(f"✓ Output: {output_path}")
     print(f"✓ Size: {output_path.stat().st_size / 1024:.1f} KB")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

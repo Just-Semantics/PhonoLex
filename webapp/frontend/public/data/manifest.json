@@ -1,9 +1,14 @@
 {
   "version": "2.0.0",
-  "vocabulary_size": 24743,
+  "created": "1762511838.527301",
+  "vocabulary_size": 24744,
+  "minimal_pairs_count": 31399,
+  "phoneme_count": 39,
   "filter_criterion": "frequency + at least one psycholinguistic norm",
   "files": {
     "word_metadata.json": "Word properties, IPA, syllables, psycholinguistic norms",
-    "embeddings_quantized.json": "Int8 quantized syllable embeddings for similarity"
+    "embeddings.json": "Phoible-based syllable embeddings (onset/nucleus/coda)",
+    "minimal_pairs.json": "Precomputed minimal pair relationships",
+    "phoneme_features.json": "Phoneme inventory with Phoible features"
   }
 }

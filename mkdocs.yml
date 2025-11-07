@@ -1,0 +1,68 @@
+site_name: PhonoLex Documentation
+site_description: Phonological analysis and word list generation tool for researchers, clinicians, and educators
+site_author: Just Semantics
+site_url: https://phonolex.readthedocs.io
+repo_url: https://github.com/Just-Semantics/PhonoLex
+repo_name: Just-Semantics/PhonoLex
+
+theme:
+  name: material
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Quick Start: getting-started/quick-start.md
+    - Tools Overview: getting-started/tools-overview.md
+    - Practical Examples: getting-started/examples.md
+  - User Guide:
+    - Custom Word Lists: user-guide/custom-word-lists.md
+    - Contrastive Sets: user-guide/contrastive-sets.md
+    - Phonological Similarity: user-guide/phonological-similarity.md
+    - Lookup: user-guide/lookup.md
+  - Technical:
+    - Architecture: technical/architecture.md
+  - Reference:
+    - Psycholinguistic Norms: reference/psycholinguistic-norms.md
+    - PHOIBLE Features: reference/phoible-features.md
+  - About:
+    - Citations: about/citations.md
+    - License: about/license.md

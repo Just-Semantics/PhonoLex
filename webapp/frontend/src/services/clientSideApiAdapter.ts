@@ -86,13 +86,18 @@ class ClientSideAPIAdapter {
    */
   async findSimilarWords(
     word: string,
-    options?: { threshold?: number; limit?: number }
+    options?: {
+      threshold?: number;
+      limit?: number;
+      weights?: { onset: number; nucleus: number; coda: number };
+    }
   ): Promise<SimilarityResult[]> {
     await this.ensureLoaded();
     return clientSideData.findSimilarWords(
       word,
       options?.threshold || 0.85,
-      options?.limit || 50
+      options?.limit || 50,
+      options?.weights
     );
   }
 
@@ -359,6 +364,87 @@ class ClientSideAPIAdapter {
     await this.ensureLoaded();
     // Get computed ranges from clientSideData
     return clientSideData.getPropertyRanges();
+  }
+
+  /**
+   * Generate maximal opposition pairs from unknown phonemes
+   * Based on Gierut (1989-1992) research
+   */
+  async generateMaximalOppositionPairs(params: {
+    unknown_phonemes: string[];
+    top_n?: number;
+  }): Promise<Array<{
+    phoneme1: string;
+    phoneme2: string;
+    score: number;
+    major_class_diff: boolean;
+    feature_diffs: number;
+  }>> {
+    await this.ensureLoaded();
+    return clientSideData.generateMaximalOppositionPairs(
+      params.unknown_phonemes,
+      params.top_n || 10
+    );
+  }
+
+  /**
+   * Find word lists for a maximal opposition phoneme pair
+   */
+  async findMaximalOppositionWordLists(params: {
+    phoneme1: string;
+    phoneme2: string;
+    position?: 'initial' | 'medial' | 'final' | 'any';
+    max_pairs?: number;
+  }): Promise<Array<{
+    word1: Word;
+    word2: Word;
+    position: number;
+  }>> {
+    await this.ensureLoaded();
+    return clientSideData.findMaximalOppositionWordLists(
+      params.phoneme1,
+      params.phoneme2,
+      params.position || 'initial',
+      params.max_pairs || 10
+    );
+  }
+
+  /**
+   * Select representative targets for Multiple Opposition intervention
+   * Uses Maximal Classification + Maximal Distinction algorithms
+   */
+  selectRepresentativeTargets(params: {
+    substitute_phoneme: string;
+    target_phonemes: string[];
+    count?: number;
+  }): string[] {
+    return clientSideData.selectRepresentativeTargets(
+      params.substitute_phoneme,
+      params.target_phonemes,
+      params.count || 3
+    );
+  }
+
+  /**
+   * Generate minimal sets (triplets/quadruplets/quintuplets) for Multiple Opposition
+   * Based on Gierut (1989-1992) and Storkel (2022) research
+   */
+  async generateMultipleOppositionSets(params: {
+    substitute_phoneme: string;
+    target_phonemes: string[];
+    position?: 'initial' | 'medial' | 'final' | 'any';
+    max_sets?: number;
+  }): Promise<Array<{
+    words: Array<{ word: Word; phoneme: string }>;
+    position: number;
+  }>> {
+    await this.ensureLoaded();
+    return clientSideData.generateMultipleOppositionSets(
+      params.substitute_phoneme,
+      params.target_phonemes,
+      params.position || 'initial',
+      params.max_sets || 10
+    );
   }
 }
 

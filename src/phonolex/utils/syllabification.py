@@ -14,14 +14,15 @@ from ..embeddings.english_data_loader import PhonemeWithStress
 @dataclass
 class Syllable:
     """A syllable with onset-nucleus-coda structure"""
+
     onset: list[str]  # Consonants before nucleus
     nucleus: str  # Vowel (required)
     coda: list[str]  # Consonants after nucleus
     stress: int  # 0=unstressed, 1=primary, 2=secondary
 
     def __str__(self):
-        onset_str = ''.join(self.onset) if self.onset else ''
-        coda_str = ''.join(self.coda) if self.coda else ''
+        onset_str = "".join(self.onset) if self.onset else ""
+        coda_str = "".join(self.coda) if self.coda else ""
         return f"[{onset_str}·{self.nucleus}{self.stress}·{coda_str}]"
 
     def to_phoneme_list(self) -> list[str]:
@@ -31,8 +32,23 @@ class Syllable:
 
 # Define vowels (have stress markers in CMU)
 VOWELS = {
-    'i', 'ɪ', 'ɛ', 'æ', 'ɑ', 'ɔ', 'ʊ', 'u', 'ʌ', 'ə', 'ɝ', 'ɚ',  # Monophthongs
-    'eɪ', 'aɪ', 'ɔɪ', 'aʊ', 'oʊ'  # Diphthongs
+    "i",
+    "ɪ",
+    "ɛ",
+    "æ",
+    "ɑ",
+    "ɔ",
+    "ʊ",
+    "u",
+    "ʌ",
+    "ə",
+    "ɝ",
+    "ɚ",  # Monophthongs
+    "eɪ",
+    "aɪ",
+    "ɔɪ",
+    "aʊ",
+    "oʊ",  # Diphthongs
 }
 
 
@@ -124,12 +140,9 @@ def syllabify(phonemes_with_stress: list[PhonemeWithStress]) -> list[Syllable]:
 
         coda = [phonemes_with_stress[i].phoneme for i in range(vowel_pos + 1, coda_end)]
 
-        syllables.append(Syllable(
-            onset=onset,
-            nucleus=nucleus,
-            coda=coda,
-            stress=stress
-        ))
+        syllables.append(
+            Syllable(onset=onset, nucleus=nucleus, coda=coda, stress=stress)
+        )
 
     return syllables
 
@@ -147,7 +160,7 @@ def get_rhyme_part(syllables: list[Syllable]) -> Optional[str]:
     stressed = [s for s in syllables if s.stress == 1]
     target_syll = stressed[-1] if stressed else syllables[-1]
 
-    return target_syll.nucleus + ''.join(target_syll.coda)
+    return target_syll.nucleus + "".join(target_syll.coda)
 
 
 def demo():
@@ -165,7 +178,15 @@ def demo():
     print("SYLLABIFICATION DEMO")
     print("=" * 70)
 
-    examples = ['cat', 'bat', 'computer', 'banana', 'photograph', 'photography', 'understand']
+    examples = [
+        "cat",
+        "bat",
+        "computer",
+        "banana",
+        "photograph",
+        "photography",
+        "understand",
+    ]
 
     for word in examples:
         if word not in loader.lexicon_with_stress:
@@ -181,8 +202,10 @@ def demo():
         print("  Structure:")
         for i, syll in enumerate(syllables):
             stress_marker = "'" if syll.stress == 1 else "ˌ" if syll.stress == 2 else ""
-            print(f"    Syllable {i+1}: onset={syll.onset or '∅'}, nucleus={stress_marker}{syll.nucleus}, coda={syll.coda or '∅'}")
+            print(
+                f"    Syllable {i+1}: onset={syll.onset or '∅'}, nucleus={stress_marker}{syll.nucleus}, coda={syll.coda or '∅'}"
+            )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     demo()

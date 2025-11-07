@@ -28,7 +28,7 @@ class PhonemeEmbeddingDataset(Dataset):
         self,
         data_loader: PhonemeEmbeddingDataLoader,
         context_window: int = 2,
-        num_contrastive_pairs: int = 100000
+        num_contrastive_pairs: int = 100000,
     ):
         self.data_loader = data_loader
 
@@ -38,13 +38,17 @@ class PhonemeEmbeddingDataset(Dataset):
 
         # Load all data into memory
         print("\nLoading context examples...")
-        self.context_examples = list(data_loader.get_context_examples(window_size=context_window))
+        self.context_examples = list(
+            data_loader.get_context_examples(window_size=context_window)
+        )
 
         print("Loading morphology examples...")
         self.morphology_examples = list(data_loader.get_morphology_examples())
 
         print("Loading contrastive pairs...")
-        self.contrastive_pairs = list(data_loader.get_contrastive_pairs(num_pairs=num_contrastive_pairs))
+        self.contrastive_pairs = list(
+            data_loader.get_contrastive_pairs(num_pairs=num_contrastive_pairs)
+        )
 
         print("Loading inventories...")
         self.inventories = list(data_loader.get_inventory_examples())
@@ -83,7 +87,7 @@ class PhonemeEmbeddingDataset(Dataset):
         center_id = self.data_loader.get_phoneme_id(context_ex.center_phoneme)
 
         if center_id is not None:
-            batch['center_id'] = center_id
+            batch["center_id"] = center_id
 
             # Get context IDs (pad/truncate to fixed length)
             context_ids = []
@@ -96,14 +100,14 @@ class PhonemeEmbeddingDataset(Dataset):
                 # Pad to length 4
                 while len(context_ids) < 4:
                     context_ids.append(context_ids[0])  # Repeat first
-                batch['context_ids'] = context_ids[:4]
+                batch["context_ids"] = context_ids[:4]
 
         # 2. Feature reconstruction (always available)
         if center_id is not None:
             features = self.data_loader.get_phoneme_features(context_ex.center_phoneme)
             if features is not None:
-                batch['phoneme_id'] = center_id
-                batch['features'] = features
+                batch["phoneme_id"] = center_id
+                batch["features"] = features
 
         # 3. Contrastive learning (sample randomly)
         if np.random.random() < 0.5 and self.contrastive_pairs:
@@ -114,9 +118,9 @@ class PhonemeEmbeddingDataset(Dataset):
             p2_id = self.data_loader.get_phoneme_id(pair.phoneme2)
 
             if p1_id is not None and p2_id is not None:
-                batch['phoneme1_id'] = p1_id
-                batch['phoneme2_id'] = p2_id
-                batch['similarity'] = pair.similarity
+                batch["phoneme1_id"] = p1_id
+                batch["phoneme2_id"] = p2_id
+                batch["similarity"] = pair.similarity
 
         # 4. Morphology (sample randomly)
         # Skip for now - needs pronunciation lookup
@@ -134,9 +138,9 @@ class PhonemeEmbeddingDataset(Dataset):
                 p2_id = self.data_loader.get_phoneme_id(p2)
 
                 if p1_id is not None and p2_id is not None:
-                    batch['inv_phoneme1_id'] = p1_id
-                    batch['inv_phoneme2_id'] = p2_id
-                    batch['cooccur'] = [1.0]  # Positive example (list for collation)
+                    batch["inv_phoneme1_id"] = p1_id
+                    batch["inv_phoneme2_id"] = p2_id
+                    batch["cooccur"] = [1.0]  # Positive example (list for collation)
 
         return batch
 
@@ -168,10 +172,14 @@ def collate_fn(batch: list[dict]) -> dict[str, torch.Tensor]:
                 collated[key] = torch.tensor(values, dtype=torch.float32)
             else:
                 # List of ints (e.g., context_ids)
-                collated[key.replace('_id', '_ids')] = torch.tensor(values, dtype=torch.long)
+                collated[key.replace("_id", "_ids")] = torch.tensor(
+                    values, dtype=torch.long
+                )
         elif isinstance(values[0], (int, np.integer)):
             # Single integers
-            collated[key.replace('_id', '_ids')] = torch.tensor(values, dtype=torch.long)
+            collated[key.replace("_id", "_ids")] = torch.tensor(
+                values, dtype=torch.long
+            )
         elif isinstance(values[0], (float, np.floating)):
             # Single floats
             collated[key] = torch.tensor(values, dtype=torch.float32)
@@ -187,7 +195,7 @@ def train_epoch(
     dataloader: DataLoader,
     optimizer: optim.Optimizer,
     device: torch.device,
-    task_weights: dict[str, float]
+    task_weights: dict[str, float],
 ) -> dict[str, float]:
     """
     Train for one epoch
@@ -199,11 +207,11 @@ def train_epoch(
 
     total_loss = 0.0
     task_losses = {
-        'context': 0.0,
-        'morphology': 0.0,
-        'contrastive': 0.0,
-        'feature': 0.0,
-        'inventory': 0.0
+        "context": 0.0,
+        "morphology": 0.0,
+        "contrastive": 0.0,
+        "feature": 0.0,
+        "inventory": 0.0,
     }
     num_batches = 0
 
@@ -230,12 +238,12 @@ def train_epoch(
         num_batches += 1
 
         # Update progress bar
-        pbar.set_postfix({'loss': f'{loss.item():.4f}'})
+        pbar.set_postfix({"loss": f"{loss.item():.4f}"})
 
     # Average losses
     metrics = {
-        'total': total_loss / num_batches,
-        **{k: v / num_batches for k, v in task_losses.items()}
+        "total": total_loss / num_batches,
+        **{k: v / num_batches for k, v in task_losses.items()},
     }
 
     return metrics
@@ -249,7 +257,7 @@ def train(
     batch_size: int = 128,
     num_epochs: int = 10,
     learning_rate: float = 0.001,
-    device: str = "auto"
+    device: str = "auto",
 ):
     """
     Main training function
@@ -269,13 +277,13 @@ def train(
     print("=" * 70)
 
     # Auto-detect best device
-    if device == 'auto':
+    if device == "auto":
         if torch.cuda.is_available():
-            device = 'cuda'
+            device = "cuda"
         elif torch.backends.mps.is_available():
-            device = 'mps'
+            device = "mps"
         else:
-            device = 'cpu'
+            device = "cpu"
         print(f"\n✓ Auto-detected device: {device}")
 
     # Create output directory
@@ -284,15 +292,12 @@ def train(
 
     # Load data
     data_loader = PhonemeEmbeddingDataLoader(
-        data_dir=data_dir,
-        learning_datasets_dir=learning_datasets_dir
+        data_dir=data_dir, learning_datasets_dir=learning_datasets_dir
     )
 
     # Create dataset
     dataset = PhonemeEmbeddingDataset(
-        data_loader=data_loader,
-        context_window=2,
-        num_contrastive_pairs=100000
+        data_loader=data_loader, context_window=2, num_contrastive_pairs=100000
     )
 
     # Create dataloader
@@ -301,7 +306,7 @@ def train(
         batch_size=batch_size,
         shuffle=True,
         collate_fn=collate_fn,
-        num_workers=0
+        num_workers=0,
     )
 
     # Get feature matrix
@@ -312,7 +317,7 @@ def train(
         num_phonemes=len(data_loader.phoneme_to_id),
         feature_matrix=feature_matrix,
         embedding_dim=embedding_dim,
-        num_allomorphs=10  # Placeholder
+        num_allomorphs=10,  # Placeholder
     )
 
     # Move to device
@@ -324,11 +329,11 @@ def train(
 
     # Task weights
     task_weights = {
-        'context': 1.0,
-        'morphology': 0.0,  # Skip for now (needs pronunciation lookup)
-        'contrastive': 0.5,
-        'feature': 1.0,
-        'inventory': 0.3
+        "context": 1.0,
+        "morphology": 0.0,  # Skip for now (needs pronunciation lookup)
+        "contrastive": 0.5,
+        "feature": 1.0,
+        "inventory": 0.3,
     }
 
     print("\n" + "=" * 70)
@@ -345,7 +350,7 @@ def train(
         print(f"  {task}: {weight}")
 
     # Training loop
-    best_loss = float('inf')
+    best_loss = float("inf")
     history = []
 
     for epoch in range(num_epochs):
@@ -358,49 +363,59 @@ def train(
         print(f"\nEpoch {epoch + 1} Results:")
         print(f"  Total loss: {metrics['total']:.4f}")
         for task, loss in metrics.items():
-            if task != 'total' and loss > 0:
+            if task != "total" and loss > 0:
                 print(f"    {task}: {loss:.4f}")
 
         history.append(metrics)
 
         # Save best model
-        if metrics['total'] < best_loss:
-            best_loss = metrics['total']
+        if metrics["total"] < best_loss:
+            best_loss = metrics["total"]
             checkpoint_path = output_path / "best_model.pt"
-            torch.save({
-                'epoch': epoch,
-                'model_state_dict': model.state_dict(),
-                'optimizer_state_dict': optimizer.state_dict(),
-                'loss': best_loss,
-                'config': {
-                    'num_phonemes': len(data_loader.phoneme_to_id),
-                    'embedding_dim': embedding_dim,
-                    'feature_dim': 38
-                }
-            }, checkpoint_path)
+            torch.save(
+                {
+                    "epoch": epoch,
+                    "model_state_dict": model.state_dict(),
+                    "optimizer_state_dict": optimizer.state_dict(),
+                    "loss": best_loss,
+                    "config": {
+                        "num_phonemes": len(data_loader.phoneme_to_id),
+                        "embedding_dim": embedding_dim,
+                        "feature_dim": 38,
+                    },
+                },
+                checkpoint_path,
+            )
             print(f"  ✓ Saved best model to {checkpoint_path}")
 
     # Save final model
     final_path = output_path / "final_model.pt"
-    torch.save({
-        'model_state_dict': model.state_dict(),
-        'config': {
-            'num_phonemes': len(data_loader.phoneme_to_id),
-            'embedding_dim': embedding_dim,
-            'feature_dim': 38
-        }
-    }, final_path)
+    torch.save(
+        {
+            "model_state_dict": model.state_dict(),
+            "config": {
+                "num_phonemes": len(data_loader.phoneme_to_id),
+                "embedding_dim": embedding_dim,
+                "feature_dim": 38,
+            },
+        },
+        final_path,
+    )
 
     # Save training history
-    with open(output_path / "training_history.json", 'w') as f:
+    with open(output_path / "training_history.json", "w") as f:
         json.dump(history, f, indent=2)
 
     # Save phoneme vocabulary
-    with open(output_path / "phoneme_vocab.json", 'w') as f:
-        json.dump({
-            'phoneme_to_id': data_loader.phoneme_to_id,
-            'id_to_phoneme': data_loader.id_to_phoneme
-        }, f, indent=2)
+    with open(output_path / "phoneme_vocab.json", "w") as f:
+        json.dump(
+            {
+                "phoneme_to_id": data_loader.phoneme_to_id,
+                "id_to_phoneme": data_loader.id_to_phoneme,
+            },
+            f,
+            indent=2,
+        )
 
     print("\n" + "=" * 70)
     print("TRAINING COMPLETE")
@@ -412,16 +427,31 @@ def train(
     return model, history
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description='Train phoneme embeddings')
-    parser.add_argument('--embedding-dim', type=int, default=32, help='Embedding dimension')
-    parser.add_argument('--batch-size', type=int, default=128, help='Batch size')
-    parser.add_argument('--num-epochs', type=int, default=10, help='Number of epochs')
-    parser.add_argument('--learning-rate', type=float, default=0.001, help='Learning rate')
-    parser.add_argument('--device', type=str, default='auto', choices=['cpu', 'cuda', 'mps', 'auto'], help='Device (auto = auto-detect)')
-    parser.add_argument('--output-dir', type=str, default='models/phoneme_embeddings', help='Output directory')
+    parser = argparse.ArgumentParser(description="Train phoneme embeddings")
+    parser.add_argument(
+        "--embedding-dim", type=int, default=32, help="Embedding dimension"
+    )
+    parser.add_argument("--batch-size", type=int, default=128, help="Batch size")
+    parser.add_argument("--num-epochs", type=int, default=10, help="Number of epochs")
+    parser.add_argument(
+        "--learning-rate", type=float, default=0.001, help="Learning rate"
+    )
+    parser.add_argument(
+        "--device",
+        type=str,
+        default="auto",
+        choices=["cpu", "cuda", "mps", "auto"],
+        help="Device (auto = auto-detect)",
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        default="models/phoneme_embeddings",
+        help="Output directory",
+    )
 
     args = parser.parse_args()
 
@@ -432,5 +462,5 @@ if __name__ == '__main__':
         num_epochs=args.num_epochs,
         learning_rate=args.learning_rate,
         device=args.device,
-        output_dir=args.output_dir
+        output_dir=args.output_dir,
     )

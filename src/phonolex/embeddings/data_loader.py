@@ -25,6 +25,7 @@ import numpy as np
 @dataclass
 class PhonemeContextExample:
     """Example for context prediction (skip-gram style)"""
+
     center_phoneme: str
     context_phonemes: list[str]
     word: str  # For debugging
@@ -33,6 +34,7 @@ class PhonemeContextExample:
 @dataclass
 class MorphologyExample:
     """Example for morphological pattern learning"""
+
     lemma: str
     inflected: str
     lemma_phonemes: list[str]
@@ -45,6 +47,7 @@ class MorphologyExample:
 @dataclass
 class ContrastivePair:
     """Pair of phonemes with similarity label"""
+
     phoneme1: str
     phoneme2: str
     similarity: float  # 0.0 to 1.0
@@ -53,6 +56,7 @@ class ContrastivePair:
 @dataclass
 class InventoryExample:
     """Phoneme inventory for a language"""
+
     language: str
     inventory_id: int
     phonemes: list[str]
@@ -72,7 +76,7 @@ class PhonemeEmbeddingDataLoader:
     def __init__(
         self,
         data_dir: str = "data",
-        learning_datasets_dir: str = "data/learning_datasets"
+        learning_datasets_dir: str = "data/learning_datasets",
     ):
         self.data_dir = Path(data_dir)
         self.learning_dir = Path(learning_datasets_dir)
@@ -86,12 +90,12 @@ class PhonemeEmbeddingDataLoader:
 
         # Statistics
         self.stats = {
-            'total_phonemes': 0,
-            'total_languages': 0,
-            'context_examples': 0,
-            'morphology_examples': 0,
-            'contrastive_pairs': 0,
-            'inventories': 0
+            "total_phonemes": 0,
+            "total_languages": 0,
+            "context_examples": 0,
+            "morphology_examples": 0,
+            "contrastive_pairs": 0,
+            "inventories": 0,
         }
 
         print("=" * 70)
@@ -129,28 +133,55 @@ class PhonemeEmbeddingDataLoader:
 
         # Feature columns (38 features)
         feature_cols = [
-            'tone', 'stress', 'syllabic', 'short', 'long',
-            'consonantal', 'sonorant', 'continuant', 'delayedRelease', 'approximant',
-            'tap', 'trill', 'nasal', 'lateral',
-            'labial', 'round', 'labiodental',
-            'coronal', 'anterior', 'distributed', 'strident',
-            'dorsal', 'high', 'low', 'front', 'back', 'tense',
-            'retractedTongueRoot', 'advancedTongueRoot',
-            'periodicGlottalSource', 'epilaryngealSource',
-            'spreadGlottis', 'constrictedGlottis',
-            'fortis', 'lenis',
-            'raisedLarynxEjective', 'loweredLarynxImplosive', 'click'
+            "tone",
+            "stress",
+            "syllabic",
+            "short",
+            "long",
+            "consonantal",
+            "sonorant",
+            "continuant",
+            "delayedRelease",
+            "approximant",
+            "tap",
+            "trill",
+            "nasal",
+            "lateral",
+            "labial",
+            "round",
+            "labiodental",
+            "coronal",
+            "anterior",
+            "distributed",
+            "strident",
+            "dorsal",
+            "high",
+            "low",
+            "front",
+            "back",
+            "tense",
+            "retractedTongueRoot",
+            "advancedTongueRoot",
+            "periodicGlottalSource",
+            "epilaryngealSource",
+            "spreadGlottis",
+            "constrictedGlottis",
+            "fortis",
+            "lenis",
+            "raisedLarynxEjective",
+            "loweredLarynxImplosive",
+            "click",
         ]
 
         languages = set()
         phoneme_count = 0
 
-        with open(phoible_file, encoding='utf-8') as f:
+        with open(phoible_file, encoding="utf-8") as f:
             reader = csv.DictReader(f)
 
             for row in reader:
-                phoneme = row['Phoneme']
-                lang = row['LanguageName']
+                phoneme = row["Phoneme"]
+                lang = row["LanguageName"]
                 languages.add(lang)
 
                 # Extract features (handle trajectories by taking first value)
@@ -158,26 +189,28 @@ class PhonemeEmbeddingDataLoader:
                 for feat in feature_cols:
                     value = row[feat]
                     # Handle trajectory features (e.g., "+,-")
-                    if ',' in value:
-                        value = value.split(',')[0]  # Take first value for now
+                    if "," in value:
+                        value = value.split(",")[0]  # Take first value for now
 
                     # Convert to float: + -> 1.0, - -> -1.0, 0 -> 0.0
-                    if value == '+':
+                    if value == "+":
                         features.append(1.0)
-                    elif value == '-':
+                    elif value == "-":
                         features.append(-1.0)
-                    elif value == '0':
+                    elif value == "0":
                         features.append(0.0)
                     else:
                         features.append(0.0)  # Default
 
                 # Store (use first occurrence per phoneme for now)
                 if phoneme not in self.phoneme_to_features:
-                    self.phoneme_to_features[phoneme] = np.array(features, dtype=np.float32)
+                    self.phoneme_to_features[phoneme] = np.array(
+                        features, dtype=np.float32
+                    )
                     phoneme_count += 1
 
-        self.stats['total_phonemes'] = phoneme_count
-        self.stats['total_languages'] = len(languages)
+        self.stats["total_phonemes"] = phoneme_count
+        self.stats["total_languages"] = len(languages)
 
         print(f"  ✓ Loaded features for {phoneme_count} unique phonemes")
         print(f"  ✓ From {len(languages)} languages")
@@ -192,7 +225,9 @@ class PhonemeEmbeddingDataLoader:
 
         print(f"  ✓ Vocabulary size: {len(self.phoneme_to_id)}")
 
-    def get_context_examples(self, window_size: int = 2) -> Iterator[PhonemeContextExample]:
+    def get_context_examples(
+        self, window_size: int = 2
+    ) -> Iterator[PhonemeContextExample]:
         """
         Generate phonological context examples from CMU Dict
 
@@ -209,9 +244,9 @@ class PhonemeEmbeddingDataLoader:
         cmu_file = self.data_dir / "cmu" / "cmudict-0.7b"
         count = 0
 
-        with open(cmu_file, encoding='latin-1') as f:
+        with open(cmu_file, encoding="latin-1") as f:
             for line in f:
-                if line.startswith(';;;'):
+                if line.startswith(";;;"):
                     continue
 
                 parts = line.strip().split()
@@ -225,7 +260,7 @@ class PhonemeEmbeddingDataLoader:
                 ipa_phones = []
                 for arpa in arpa_phones:
                     # Remove stress markers
-                    base = arpa.rstrip('012')
+                    base = arpa.rstrip("012")
                     if base in self.arpa_to_ipa:
                         ipa = self.arpa_to_ipa[base]
                         # Only keep if in our vocabulary
@@ -240,17 +275,15 @@ class PhonemeEmbeddingDataLoader:
                     # Get context window
                     start = max(0, i - window_size)
                     end = min(len(ipa_phones), i + window_size + 1)
-                    context = ipa_phones[start:i] + ipa_phones[i+1:end]
+                    context = ipa_phones[start:i] + ipa_phones[i + 1 : end]
 
                     if context:
                         yield PhonemeContextExample(
-                            center_phoneme=center,
-                            context_phonemes=context,
-                            word=word
+                            center_phoneme=center, context_phonemes=context, word=word
                         )
                         count += 1
 
-        self.stats['context_examples'] = count
+        self.stats["context_examples"] = count
         print(f"  ✓ Generated {count:,} context examples")
 
     def get_morphology_examples(self) -> Iterator[MorphologyExample]:
@@ -274,7 +307,7 @@ class PhonemeEmbeddingDataLoader:
 
         with open(sig_file) as f:
             for line in f:
-                parts = line.strip().split('\t')
+                parts = line.strip().split("\t")
                 if len(parts) != 3:
                     continue
 
@@ -291,14 +324,16 @@ class PhonemeEmbeddingDataLoader:
                     inflected_phonemes=[],
                     stem_final_phoneme="",
                     morphological_features=features,
-                    allomorph=""
+                    allomorph="",
                 )
                 count += 1
 
-        self.stats['morphology_examples'] = count
+        self.stats["morphology_examples"] = count
         print(f"  ✓ Loaded {count:,} morphology examples")
 
-    def get_contrastive_pairs(self, num_pairs: int = 100000) -> Iterator[ContrastivePair]:
+    def get_contrastive_pairs(
+        self, num_pairs: int = 100000
+    ) -> Iterator[ContrastivePair]:
         """
         Generate contrastive phoneme pairs for metric learning
 
@@ -329,14 +364,10 @@ class PhonemeEmbeddingDataLoader:
             # Map from [-1, 1] to [0, 1]
             sim = (sim + 1.0) / 2.0
 
-            yield ContrastivePair(
-                phoneme1=p1,
-                phoneme2=p2,
-                similarity=float(sim)
-            )
+            yield ContrastivePair(phoneme1=p1, phoneme2=p2, similarity=float(sim))
             count += 1
 
-        self.stats['contrastive_pairs'] = count
+        self.stats["contrastive_pairs"] = count
         print(f"  ✓ Generated {count:,} contrastive pairs")
 
     def get_inventory_examples(self) -> Iterator[InventoryExample]:
@@ -351,30 +382,30 @@ class PhonemeEmbeddingDataLoader:
         phoible_file = self.data_dir / "phoible" / "phoible.csv"
 
         # Group by inventory
-        inventories = defaultdict(lambda: {'language': '', 'phonemes': []})
+        inventories = defaultdict(lambda: {"language": "", "phonemes": []})
 
-        with open(phoible_file, encoding='utf-8') as f:
+        with open(phoible_file, encoding="utf-8") as f:
             reader = csv.DictReader(f)
 
             for row in reader:
-                inv_id = int(row['InventoryID'])
-                lang = row['LanguageName']
-                phoneme = row['Phoneme']
+                inv_id = int(row["InventoryID"])
+                lang = row["LanguageName"]
+                phoneme = row["Phoneme"]
 
                 if phoneme in self.phoneme_to_id:
-                    inventories[inv_id]['language'] = lang
-                    inventories[inv_id]['phonemes'].append(phoneme)
+                    inventories[inv_id]["language"] = lang
+                    inventories[inv_id]["phonemes"].append(phoneme)
 
         count = 0
         for inv_id, data in inventories.items():
             yield InventoryExample(
-                language=data['language'],
+                language=data["language"],
                 inventory_id=inv_id,
-                phonemes=data['phonemes']
+                phonemes=data["phonemes"],
             )
             count += 1
 
-        self.stats['inventories'] = count
+        self.stats["inventories"] = count
         print(f"  ✓ Loaded {count} phoneme inventories")
 
     def get_phoneme_features(self, phoneme: str) -> Optional[np.ndarray]:
@@ -442,11 +473,15 @@ def main():
 
     print("\n1. Context Examples (first 5):")
     for _i, ex in enumerate(context_examples[:5]):
-        print(f"   {ex.center_phoneme} → context: {ex.context_phonemes} (word: {ex.word})")
+        print(
+            f"   {ex.center_phoneme} → context: {ex.context_phonemes} (word: {ex.word})"
+        )
 
     print("\n2. Contrastive Pairs (first 5):")
     for _i, pair in enumerate(contrastive_pairs[:5]):
-        print(f"   /{pair.phoneme1}/ vs /{pair.phoneme2}/ → similarity: {pair.similarity:.3f}")
+        print(
+            f"   /{pair.phoneme1}/ vs /{pair.phoneme2}/ → similarity: {pair.similarity:.3f}"
+        )
 
     print("\n3. Sample Inventories (first 3):")
     for _i, inv in enumerate(inventories[:3]):
@@ -464,5 +499,5 @@ def main():
     print("=" * 70)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

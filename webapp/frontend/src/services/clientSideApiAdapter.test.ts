@@ -1,11 +1,28 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { applyExclusions } from '../utils/phonemeUtils';
+import { api } from './clientSideApiAdapter';
+import { clientSideData } from './clientSideData';
+import { mockWordMetadata, mockPhonemeData } from '../test/fixtures/testData';
 
 /**
- * Unit tests for exclusion filtering logic
+ * Unit tests for exclusion filtering logic and API adapter methods
  *
  * These tests verify the actual production code works correctly.
  */
+
+// Mock data loading for integration tests
+beforeEach(() => {
+  // Mock the internal state of clientSideData
+  const mockMetadataMap = new Map(Object.entries(mockWordMetadata));
+  const mockPhonemesMap = new Map(mockPhonemeData.phonemes.map(p => [p.ipa, p]));
+
+  // @ts-expect-error - accessing private property for testing
+  clientSideData.wordMetadata = mockMetadataMap;
+  // @ts-expect-error - accessing private property for testing
+  clientSideData.phonemes = mockPhonemesMap;
+  // @ts-expect-error - accessing private property for testing
+  clientSideData.loaded = true;
+});
 
 // Mock word interface matching actual structure
 interface MockWord {
@@ -75,5 +92,90 @@ describe('Exclusion Filtering Logic', () => {
     expect(filteredEmpty).toHaveLength(2);
     expect(filteredEmpty).toEqual(words);
     expect(filteredUndefined).toEqual(words);
+  });
+});
+
+/**
+ * API Adapter Tests for Multiple Opposition
+ *
+ * Tests the adapter layer that wraps the Multiple Opposition algorithms
+ */
+
+describe('API Adapter - Representative Target Selection', () => {
+  it('should expose selectRepresentativeTargets method', () => {
+    expect(typeof api.selectRepresentativeTargets).toBe('function');
+  });
+
+  it('should pass through to clientSideData correctly', () => {
+    const result = api.selectRepresentativeTargets({
+      substitute_phoneme: 't',
+      target_phonemes: ['d', 'k', 'l'],
+      count: 2,
+    });
+
+    expect(Array.isArray(result)).toBe(true);
+  });
+
+  it('should use default count of 3 when not specified', () => {
+    const result = api.selectRepresentativeTargets({
+      substitute_phoneme: 't',
+      target_phonemes: ['d', 'k', 'l', 'r', 's'],
+    });
+
+    expect(Array.isArray(result)).toBe(true);
+    expect(result.length).toBeLessThanOrEqual(3);
+  });
+});
+
+describe('API Adapter - Multiple Opposition Set Generation', () => {
+  it('should expose generateMultipleOppositionSets method', async () => {
+    expect(typeof api.generateMultipleOppositionSets).toBe('function');
+  });
+
+  it('should return promise with array structure', async () => {
+    const result = await api.generateMultipleOppositionSets({
+      substitute_phoneme: 't',
+      target_phonemes: ['d', 'k'],
+      position: 'initial',
+      max_sets: 5,
+    });
+
+    expect(Array.isArray(result)).toBe(true);
+  });
+
+  it('should use default position of "initial" when not specified', async () => {
+    const result = await api.generateMultipleOppositionSets({
+      substitute_phoneme: 't',
+      target_phonemes: ['d', 'k'],
+      max_sets: 5,
+    });
+
+    expect(Array.isArray(result)).toBe(true);
+  });
+
+  it('should use default max_sets of 10 when not specified', async () => {
+    const result = await api.generateMultipleOppositionSets({
+      substitute_phoneme: 't',
+      target_phonemes: ['d', 'k'],
+      position: 'initial',
+    });
+
+    expect(Array.isArray(result)).toBe(true);
+    expect(result.length).toBeLessThanOrEqual(10);
+  });
+
+  it('should handle all position values', async () => {
+    const positions: Array<'initial' | 'medial' | 'final' | 'any'> = ['initial', 'medial', 'final', 'any'];
+
+    for (const position of positions) {
+      const result = await api.generateMultipleOppositionSets({
+        substitute_phoneme: 't',
+        target_phonemes: ['d', 'k'],
+        position,
+        max_sets: 5,
+      });
+
+      expect(Array.isArray(result)).toBe(true);
+    }
   });
 });

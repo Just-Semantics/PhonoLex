@@ -30,7 +30,7 @@ class PhonemeEmbeddingEvaluator:
         self,
         model_path: str,
         data_dir: str = "data",
-        learning_datasets_dir: str = "data/learning_datasets"
+        learning_datasets_dir: str = "data/learning_datasets",
     ):
         print("\n" + "=" * 70)
         print("PHONEME EMBEDDING EVALUATION")
@@ -38,21 +38,20 @@ class PhonemeEmbeddingEvaluator:
 
         # Load data
         self.data_loader = PhonemeEmbeddingDataLoader(
-            data_dir=data_dir,
-            learning_datasets_dir=learning_datasets_dir
+            data_dir=data_dir, learning_datasets_dir=learning_datasets_dir
         )
 
         # Load model
         print(f"\nLoading model from {model_path}...")
-        checkpoint = torch.load(model_path, map_location='cpu')
+        checkpoint = torch.load(model_path, map_location="cpu")
 
-        config = checkpoint['config']
+        config = checkpoint["config"]
         self.model = create_model(
-            num_phonemes=config['num_phonemes'],
-            embedding_dim=config['embedding_dim'],
-            num_allomorphs=10
+            num_phonemes=config["num_phonemes"],
+            embedding_dim=config["embedding_dim"],
+            num_allomorphs=10,
         )
-        self.model.load_state_dict(checkpoint['model_state_dict'])
+        self.model.load_state_dict(checkpoint["model_state_dict"])
         self.model.eval()
 
         print("  ✓ Model loaded")
@@ -102,10 +101,7 @@ class PhonemeEmbeddingEvaluator:
         print(f"\n  MSE: {mse:.4f}")
         print(f"  Mean correlation: {mean_corr:.4f}")
 
-        return {
-            'mse': float(mse),
-            'mean_correlation': float(mean_corr)
-        }
+        return {"mse": float(mse), "mean_correlation": float(mean_corr)}
 
     def evaluate_similarity(self, num_pairs: int = 1000) -> dict[str, float]:
         """
@@ -135,7 +131,9 @@ class PhonemeEmbeddingEvaluator:
             f2 = self.data_loader.get_phoneme_features(p2)
 
             if f1 is not None and f2 is not None:
-                feat_sim = np.dot(f1, f2) / (np.linalg.norm(f1) * np.linalg.norm(f2) + 1e-8)
+                feat_sim = np.dot(f1, f2) / (
+                    np.linalg.norm(f1) * np.linalg.norm(f2) + 1e-8
+                )
                 feature_sims.append(feat_sim)
 
                 # Embedding similarity
@@ -145,7 +143,9 @@ class PhonemeEmbeddingEvaluator:
                 e1 = self.embeddings[p1_id]
                 e2 = self.embeddings[p2_id]
 
-                emb_sim = np.dot(e1, e2) / (np.linalg.norm(e1) * np.linalg.norm(e2) + 1e-8)
+                emb_sim = np.dot(e1, e2) / (
+                    np.linalg.norm(e1) * np.linalg.norm(e2) + 1e-8
+                )
                 embedding_sims.append(emb_sim)
 
         # Compute correlation
@@ -153,10 +153,7 @@ class PhonemeEmbeddingEvaluator:
 
         print(f"\n  Spearman correlation: {corr:.4f} (p={p_value:.4e})")
 
-        return {
-            'spearman_correlation': float(corr),
-            'p_value': float(p_value)
-        }
+        return {"spearman_correlation": float(corr), "p_value": float(p_value)}
 
     def evaluate_natural_classes(self) -> dict[str, float]:
         """
@@ -173,7 +170,6 @@ class PhonemeEmbeddingEvaluator:
 
         # Define natural classes based on features
         # For simplicity, use binary features: voiced, consonantal, sonorant
-
 
         for phoneme, _idx in self.data_loader.phoneme_to_id.items():
             features = self.data_loader.get_phoneme_features(phoneme)
@@ -221,7 +217,7 @@ class PhonemeEmbeddingEvaluator:
         plt.scatter(embeddings_2d[:, 0], embeddings_2d[:, 1], alpha=0.5, s=10)
 
         # Annotate a few sample phonemes
-        sample_phonemes = ['p', 'b', 't', 'd', 'k', 'g', 's', 'z', 'a', 'i', 'u']
+        sample_phonemes = ["p", "b", "t", "d", "k", "g", "s", "z", "a", "i", "u"]
         for p in sample_phonemes:
             if p in self.data_loader.phoneme_to_id:
                 idx = self.data_loader.phoneme_to_id[p]
@@ -229,7 +225,7 @@ class PhonemeEmbeddingEvaluator:
                     p,
                     xy=(embeddings_2d[idx, 0], embeddings_2d[idx, 1]),
                     fontsize=12,
-                    fontweight='bold'
+                    fontweight="bold",
                 )
 
         plt.title("Phoneme Embedding Space (t-SNE)", fontsize=16)
@@ -252,9 +248,9 @@ class PhonemeEmbeddingEvaluator:
         """
         results = {}
 
-        results['feature_reconstruction'] = self.evaluate_feature_reconstruction()
-        results['similarity'] = self.evaluate_similarity(num_pairs=1000)
-        results['natural_classes'] = self.evaluate_natural_classes()
+        results["feature_reconstruction"] = self.evaluate_feature_reconstruction()
+        results["similarity"] = self.evaluate_similarity(num_pairs=1000)
+        results["natural_classes"] = self.evaluate_natural_classes()
 
         self.visualize()
 
@@ -267,18 +263,18 @@ def main():
     """
     import argparse
 
-    parser = argparse.ArgumentParser(description='Evaluate phoneme embeddings')
+    parser = argparse.ArgumentParser(description="Evaluate phoneme embeddings")
     parser.add_argument(
-        '--model-path',
+        "--model-path",
         type=str,
-        default='models/phoneme_embeddings/best_model.pt',
-        help='Path to trained model'
+        default="models/phoneme_embeddings/best_model.pt",
+        help="Path to trained model",
     )
     parser.add_argument(
-        '--output-dir',
+        "--output-dir",
         type=str,
-        default='outputs/evaluation',
-        help='Where to save evaluation results'
+        default="outputs/evaluation",
+        help="Where to save evaluation results",
     )
 
     args = parser.parse_args()
@@ -299,7 +295,7 @@ def main():
     output_path.mkdir(parents=True, exist_ok=True)
 
     results_file = output_path / "results.json"
-    with open(results_file, 'w') as f:
+    with open(results_file, "w") as f:
         json.dump(results, f, indent=2)
 
     print("\n" + "=" * 70)
@@ -312,15 +308,17 @@ def main():
     print("SUMMARY")
     print("=" * 70)
 
-    if 'feature_reconstruction' in results:
+    if "feature_reconstruction" in results:
         print("\nFeature Reconstruction:")
         print(f"  MSE: {results['feature_reconstruction']['mse']:.4f}")
-        print(f"  Correlation: {results['feature_reconstruction']['mean_correlation']:.4f}")
+        print(
+            f"  Correlation: {results['feature_reconstruction']['mean_correlation']:.4f}"
+        )
 
-    if 'similarity' in results:
+    if "similarity" in results:
         print("\nSimilarity:")
         print(f"  Spearman ρ: {results['similarity']['spearman_correlation']:.4f}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

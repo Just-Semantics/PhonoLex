@@ -27,10 +27,10 @@ def load_quantized(checkpoint_path: str):
     Returns:
         Dict[str, List[np.ndarray]] - word -> syllable embeddings (float32)
     """
-    checkpoint = torch.load(checkpoint_path, map_location='cpu', weights_only=False)
+    checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
 
-    quantized_data = checkpoint['quantized_embeddings']
-    scales = checkpoint['scales']
+    quantized_data = checkpoint["quantized_embeddings"]
+    scales = checkpoint["scales"]
 
     # Dequantize on-demand (lazy loading possible)
     dequantized = {}
@@ -50,7 +50,6 @@ def load_quantized(checkpoint_path: str):
 if __name__ == "__main__":
     # Test loading
     import sys
-    from pathlib import Path
 
     if len(sys.argv) > 1:
         path = sys.argv[1]

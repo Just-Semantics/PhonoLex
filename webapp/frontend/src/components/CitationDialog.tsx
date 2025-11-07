@@ -39,17 +39,20 @@ interface Citation {
 interface CitationDialogProps {
   open: boolean;
   onClose: () => void;
-  category: 'phonological' | 'lexical' | 'semantic' | 'affective' | 'embeddings' | 'data-sources' | null;
+  category: 'phonological' | 'lexical' | 'semantic' | 'affective' | 'embeddings' | 'data-sources' | 'clinical-interventions' | null;
 }
 
 const citations: Record<string, Citation[]> = {
   phonological: [
     {
-      authors: 'Moran, S., & McCloy, D.',
-      year: '2019',
-      title: 'PHOIBLE 2.0',
-      publisher: 'Max Planck Institute for the Science of Human History',
-      url: 'https://phoible.org/',
+      authors: 'Stoel-Gammon, C.',
+      year: '2010',
+      title: 'The Word Complexity Measure: Description and application to developmental phonology and disorders',
+      journal: 'Clinical Linguistics & Phonetics',
+      volume: '24',
+      issue: '4-5',
+      pages: '271-282',
+      doi: '10.3109/02699200903581059',
     },
     {
       authors: 'Hayes, B.',
@@ -63,16 +66,6 @@ const citations: Record<string, Citation[]> = {
       title: 'The \'whole larynx\' approach to laryngeal features',
       journal: 'Proceedings of the International Congress of Phonetic Sciences XVII',
       pages: '1406-1409',
-    },
-    {
-      authors: 'Stoel-Gammon, C.',
-      year: '2010',
-      title: 'The Word Complexity Measure: Description and application to developmental phonology and disorders',
-      journal: 'Clinical Linguistics & Phonetics',
-      volume: '24',
-      issue: '4-5',
-      pages: '271-282',
-      doi: '10.3109/02699200903581059',
     },
   ],
   lexical: [
@@ -172,6 +165,48 @@ const citations: Record<string, Citation[]> = {
       doi: '10.3758/BRM.41.4.977',
     },
   ],
+  'clinical-interventions': [
+    {
+      authors: 'Gierut, J. A.',
+      year: '1989',
+      title: 'Maximal opposition approach to phonological treatment',
+      journal: 'Journal of Speech and Hearing Disorders',
+      volume: '54',
+      issue: '1',
+      pages: '9-19',
+      doi: '10.1044/jshd.5401.09',
+    },
+    {
+      authors: 'Gierut, J. A.',
+      year: '1990',
+      title: 'Differential learning of phonological oppositions',
+      journal: 'Journal of Speech and Hearing Research',
+      volume: '33',
+      issue: '3',
+      pages: '540-549',
+      doi: '10.1044/jshr.3303.540',
+    },
+    {
+      authors: 'Gierut, J. A., & Neumann, H. J.',
+      year: '1992',
+      title: 'Teaching and learning /θ/: A non-confound',
+      journal: 'Clinical Linguistics & Phonetics',
+      volume: '6',
+      issue: '3',
+      pages: '191-200',
+      doi: '10.3109/02699209208985533',
+    },
+    {
+      authors: 'Storkel, H. L.',
+      year: '2022',
+      title: 'Minimal, Maximal, or Multiple: Which Contrastive Intervention Approach to Use With Children With Speech Sound Disorders?',
+      journal: 'Language, Speech, and Hearing Services in Schools',
+      volume: '53',
+      issue: '3',
+      pages: '632-645',
+      doi: '10.1044/2022_LSHSS-21-00137',
+    },
+  ],
 };
 
 const categoryTitles: Record<string, string> = {
@@ -181,6 +216,7 @@ const categoryTitles: Record<string, string> = {
   affective: 'Affective/Emotional Norms',
   embeddings: 'Embedding Architecture',
   'data-sources': 'Data Sources',
+  'clinical-interventions': 'Clinical Intervention Approaches',
 };
 
 const categoryDescriptions: Record<string, string> = {
@@ -190,6 +226,7 @@ const categoryDescriptions: Record<string, string> = {
   affective: 'Emotional valence, arousal, and dominance norms',
   embeddings: 'Hierarchical syllable embedding architecture',
   'data-sources': 'Primary datasets and corpora',
+  'clinical-interventions': 'Evidence-based phonological intervention methods for speech sound disorders',
 };
 
 const CitationDialog: React.FC<CitationDialogProps> = ({ open, onClose, category }) => {

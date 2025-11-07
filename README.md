@@ -1,42 +1,141 @@
 # PhonoLex
 
-Phonological analysis toolkit with hierarchical embeddings and client-side web application.
+**Comprehensive word analysis and list generation for phonological research, speech-language pathology, and language education.**
 
-[![Version](https://img.shields.io/badge/version-2.1.1--beta-blue.svg)](CHANGELOG.md)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.txt)
+[![Version](https://img.shields.io/badge/version-2.2.0--beta-blue.svg)](CHANGELOG.md)
+[![License](https://img.shields.io/badge/license-CC%20BY--SA%203.0-green.svg)](LICENSE.txt)
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](python/pyproject.toml)
 [![TypeScript](https://img.shields.io/badge/typescript-5.0+-blue.svg)](webapp/frontend/package.json)
 
 ## Overview
 
-PhonoLex implements a 4-layer embedding pipeline for phonological analysis, combining universal phonological features from Phoible with learned contextual representations. The system produces position-aware syllable embeddings that discriminate anagrams using onset-nucleus-coda structure, trained via next-phoneme prediction.
+PhonoLex uniquely combines three powerful dimensions for word analysis:
 
-**Components**:
-- 4-layer hierarchical embeddings (raw features → contextual syllable representations)
-- Client-side web application (no backend required)
-- 24,744 words with psycholinguistic properties and embeddings
-- Phonological features for 2,716 languages from Phoible
-- Tools for minimal pairs, rhyme detection, and similarity search
+1. **Universal Phonological Features** - PHOIBLE database (38 distinctive features across 2,716 languages)
+2. **Psycholinguistic Norms** - 8 properties from 4 major research datasets (frequency, imageability, valence, etc.)
+3. **Phoneme-Sequence Similarity** - v2.3 soft Levenshtein distance preserving consonant clusters and diphthongs
 
-### Word Similarity Results
+**Key Features**:
+- ⭐ **Custom Word List Builder** with multi-dimensional filtering
+- **Contrastive Intervention** for speech therapy (minimal pairs, maximal opposition, multiple opposition)
+- **Phonological Similarity Explorer** with adjustable onset/nucleus/coda weights
+- **Lookup** for word details, phoneme features, and phoneme comparison
+- **24,744 words** with comprehensive psycholinguistic norms
+- **Fully client-side** - no backend required, deploy anywhere
+- **99% compression** - 56.7 MB → 0.6 MB gzipped
 
-| Word Pair | Similarity | Type |
-|-----------|------------|------|
-| cat - bat | 0.995 | Rhyme |
-| make - take | 0.987 | Rhyme |
-| computer - commuter | 0.797 | Phonologically similar |
-| cat - act | 0.288 | Anagram |
-| cat - dog | 0.225 | Unrelated |
+### Four Core Tools
 
-The hierarchical syllable structure discriminates anagrams: `cat` [k-æ-t] has a single onset consonant while `act` [∅-æ-kt] has zero onset and a consonant cluster coda, producing different 384-dimensional embeddings despite identical phoneme content
+#### 1. Custom Word List Builder ⭐ THE POWER TOOL
+
+Pattern matching with multi-dimensional property filtering:
+
+**Phonological Complexity**:
+- Syllable count, phoneme count
+- WCM (Word Complexity Measure - Stoel-Gammon 2010)
+- MSH (Mean Syllable Height)
+
+**Lexical Properties**:
+- Frequency (SUBTLEX-US - per million words in film subtitles)
+- Age of Acquisition (Glasgow Norms)
+
+**Semantic Properties**:
+- Imageability (ease of mental imagery)
+- Familiarity (word familiarity)
+- Concreteness (concrete vs. abstract)
+
+**Affective Properties** (Warriner et al. 2013):
+- Valence (negative to positive)
+- Arousal (calm to excited)
+- Dominance (weak to powerful)
+
+**Example**: Find 1-syllable words starting with /s/, high imageability (>5), positive valence (>6), excluding words with /r/:
+
+```
+Pattern: STARTS_WITH "s"
+Filters: syllables=1, imageability=5-7, valence=6-9
+Exclusions: r
+Result: "sun", "smile", "sky", "sand", "sea"...
+```
+
+#### 2. Contrastive Intervention
+
+Research-based phonological intervention word lists (Gierut 1989-1992, Storkel 2022):
+
+- **Minimal Pairs**: Traditional target/substitute contrast (e.g., θ/t → "thin/tin", "bath/bat")
+- **Maximal Opposition**: Two unknowns with major class difference (sonorant vs. obstruent)
+- **Multiple Opposition**: Global phoneme collapse treatment (e.g., t→d,k,g)
+
+Position filtering (initial/medial/final) and IPA keyboard integration.
+
+#### 3. Phonological Similarity Explorer
+
+Adjustable onset/nucleus/coda weights for similarity computation:
+
+**Weight Presets**:
+- **Rhymes**: onset=0.0, nucleus=0.5, coda=0.5 (ignores onset)
+- **Alliteration**: onset=1.0, nucleus=0.0, coda=0.0 (onset only)
+- **Assonance**: onset=0.0, nucleus=1.0, coda=0.0 (vowels only)
+- **Consonance**: onset=0.5, nucleus=0.0, coda=0.5 (consonants only)
+- **Balanced**: all=0.33 (equal weighting)
+
+Real-time weight sliders and threshold selection.
+
+#### 4. Lookup
+
+- Word details with all phonological and psycholinguistic properties
+- Phoneme feature lookup (38 PHOIBLE distinctive features)
+- Phoneme comparison (feature-by-feature diff)
+- Feature-based phoneme search
+
+### Psycholinguistic Norms (8 Properties)
+
+PhonoLex integrates norms from 4 major research datasets:
+
+| Property | Source | Range | Description |
+|----------|--------|-------|-------------|
+| **Lexical** |
+| Frequency | SUBTLEX-US (Brysbaert & New, 2009) | 0-1000+ | Per million words |
+| Age of Acquisition | Glasgow Norms (Scott et al., 2019) | 1-7 | 1=earliest |
+| **Semantic** |
+| Imageability | Glasgow Norms | 1-7 | Mental imagery |
+| Familiarity | Glasgow Norms | 1-7 | Word familiarity |
+| Concreteness | Brysbaert et al. (2014) | 1-5 | Concrete vs. abstract |
+| **Affective** |
+| Valence | Warriner et al. (2013) | 1-9 | Negative→positive |
+| Arousal | Warriner et al. (2013) | 1-9 | Calm→excited |
+| Dominance | Warriner et al. (2013) | 1-9 | Weak→powerful |
+
+**Plus 4 Phonological Complexity Measures**:
+- Syllables (CMU Dictionary): 1-5
+- Phonemes (CMU Dictionary): 1-10+
+- WCM (Stoel-Gammon 2010): 0-15
+- MSH (Phonological analysis): 1-6
+
+**Vocabulary**: 24,744 English words from the CMU Pronouncing Dictionary.
+
+### Word Similarity Results (v2.3)
+
+| Word Pair | Similarity | Type | Notes |
+|-----------|------------|------|-------|
+| cat - bat | 0.90+ | Perfect rhyme | Nucleus + coda match |
+| cat - crest | 0.74 | Onset cluster | Proper length penalty |
+| cat - act | 0.20 | Anagram | Different syllable structures |
+| computer - commuter | 0.75-0.85 | Sound-alike | Multi-syllable similarity |
+| cat - dog | 0.20-0.30 | Unrelated | Low similarity |
+
+**v2.3 Innovation**: Phoneme-sequence soft Levenshtein distance preserves consonant clusters and diphthongs:
+- `cat`: onset=[[k]], nucleus=[[æ]], coda=[[t]]
+- `crest`: onset=[[k],[ɹ]], nucleus=[[ɛ]], coda=[[s],[t]]
+- **No averaging!** Each component is a sequence of phoneme vectors
 
 ---
 
 ## Quick Start
 
-### Web Application
+### Web Application (Client-Side)
 
-The web application is fully client-side and runs in the browser without server dependencies.
+The web application runs entirely in the browser without server dependencies.
 
 **Run locally**:
 ```bash
@@ -45,16 +144,17 @@ npm install
 npm run dev
 ```
 
-Access at http://localhost:3000. Available tools:
-- Word search with phonological and psycholinguistic filters
-- Minimal pair generation for phoneme contrasts
-- Rhyme detection (perfect, slant, syllable-based)
-- Word list export for research or clinical applications
-- Phonological similarity comparison
+Access at http://localhost:5173
 
-### Python Library
+**Deploy**: Build static files and deploy to any host (Netlify, Cloudflare Pages, GitHub Pages, Vercel):
+```bash
+npm run build
+# Upload dist/ folder to your static host
+```
 
-The Python library is required only for building embeddings from scratch. The web application uses pre-computed embeddings
+### Python Library (Optional - Only for Building Embeddings)
+
+**Note**: The web application uses pre-computed embeddings. You only need Python if you're building embeddings from scratch.
 
 ```bash
 git clone https://github.com/Just-Semantics/PhonoLex.git
@@ -67,705 +167,266 @@ pip install -e ./python[build]
 pip install -e ./python[dev]
 ```
 
-### Using Pre-computed Embeddings
-
-```python
-import torch
-
-# Load Layer 4 syllable embeddings
-checkpoint = torch.load('embeddings/layer4/syllable_embeddings_filtered.pt')
-word_to_syllable_embeddings = checkpoint['word_to_syllable_embeddings']
-
-# Get embeddings
-cat = word_to_syllable_embeddings['cat']  # List of 384-dim numpy arrays (one per syllable)
-bat = word_to_syllable_embeddings['bat']
-act = word_to_syllable_embeddings['act']
-
-# Compute similarity with hierarchical soft Levenshtein distance
-# See scripts/build_filtered_layer4_embeddings.py for implementation
-```
-
 ---
 
-## Four-Layer Architecture
+## Three-Phase Pipeline (v2.3)
 
-The embedding pipeline consists of four sequential layers. Only Layer 3 requires training; other layers are deterministic transformations
+**No training required!** All phases are deterministic computations from linguistic data.
 
 ```
-Layer 1: Raw Phoible Features (38-dim ternary: +, -, 0)
+Phase 1: Raw Phoible Features (38-dim ternary: +, -, 0)
     ↓ normalization & interpolation
-Layer 2: Normalized Feature Vectors (76-dim endpoints / 152-dim trajectories)
-    ↓ transformer learning + phonotactic patterns
-Layer 3: Contextual Phoneme Embeddings (128-dim) - ONLY TRAINED LAYER
-    ↓ syllable aggregation (onset-nucleus-coda structure)
-Layer 4: Hierarchical Syllable Embeddings (384-dim) - MAIN PRODUCTION EMBEDDINGS
-    ↓ soft Levenshtein distance on syllable sequences
+Phase 2: Normalized Phoneme Vectors (76-dim / 152-dim)
+    ↓ syllabification (onset-nucleus-coda decomposition)
+Phase 3: Phoneme-Sequence Syllable Structures
+    ↓ soft Levenshtein distance on phoneme sequences
 Word Similarity
 ```
 
-### Layer Details
+### Phase Details
 
-#### Layer 1: Raw Phoible Features (38-dim ternary)
-- **NOT trained** - extracted from Phoible database
-- **Output**: `embeddings/layer1/phoible_features.csv` (59 KB)
+#### Phase 1: Raw Phoible Features (38-dim ternary)
+- **Output**: `embeddings/phase1/phoible_features.csv` (59 KB)
 - **Coverage**: 94 English phonemes
 - **Format**: Ternary features (+, -, 0)
 - **Build time**: <1 second
 - **Use for**: Cross-linguistic comparison, feature analysis
 
-#### Layer 2: Normalized Feature Vectors (76-dim / 152-dim)
-- **NOT trained** - deterministic transformation
-- **Output**: `embeddings/layer2/normalized_76d.pkl` (59 KB), `normalized_152d.pkl` (115 KB)
-- **76-dim**: Endpoint vectors (start + end positions)
-- **152-dim**: Trajectory vectors (4-timestep interpolation for diphthongs)
+#### Phase 2: Normalized Feature Vectors (76-dim / 152-dim)
+- **Output**: `embeddings/phase2/normalized_76d.pkl` (59 KB), `normalized_152d.pkl` (115 KB)
+- **76-dim**: Monophthongs and consonants
+- **152-dim**: Diphthongs (trajectory vectors)
 - **Build time**: ~5 seconds
-- **Use for**: Continuous phoneme similarity, diphthong modeling, Layer 3 initialization
+- **Use for**: Continuous phoneme similarity, diphthong modeling
 
-#### Layer 3: Contextual Phoneme Embeddings (128-dim)
-- **TRAINED** - only layer that requires training
-- **Model**: `models/layer3/model.pt` (2.4 MB)
-- **Architecture**: PhonoLexBERT transformer (3 layers, 4 attention heads)
-- **Task**: Next-phoneme prediction (self-supervised)
-- **Accuracy**: 99.98% on 147K words
-- **Training data**: CMU Dictionary (125K) + ipa-dict (22K)
-- **Initialization**: Layer 2 normalized vectors
-- **Training time**: ~10 minutes on Apple Silicon
-- **Use for**: Contextual phoneme analysis, foundation for Layer 4
-
-#### Layer 4: Hierarchical Syllable Embeddings (384-dim)
-- **NOT trained** - built from frozen Layer 3 model
-- **Output**:
-  - `embeddings/layer4/syllable_embeddings_filtered.pt` (137 MB) - **RECOMMENDED**
-  - `embeddings/layer4/syllable_embeddings_filtered_quantized.pt` (42 MB) - Int8 quantized
-  - `embeddings/layer4/syllable_embeddings.pt` (1.0 GB) - Unfiltered (deprecated)
-- **Structure**: Onset (128-dim) + Nucleus (128-dim) + Coda (128-dim) = 384-dim per syllable
-- **Vocabulary**: 24,744 words (filtered with psycholinguistic norms)
-- **Build time**: ~5 minutes on CPU
-- **Use for**: Word similarity, rhyme detection, anagram discrimination
+#### Phase 3: Phoneme-Sequence Syllable Structures ⭐ Main Production
+- **Output**: `embeddings/phase3/syllable_embeddings_phoible.pt` (~112 MB)
+- **Structure**: Onset/nucleus/coda as **sequences of Phase 2 vectors** (no averaging!)
+- **Vocabulary**: 24,744 English words
+- **Build time**: ~5 minutes
+- **Use for**: Word similarity, rhyme detection, phonological interventions
 
 ### Building the Pipeline
 
 ```bash
-# Layer 1: Extract Phoible features (<1 second)
-python scripts/compute_layer1_phoible_features.py
+# Phase 1: Extract Phoible features (<1 second)
+python scripts/compute_phase1_features.py
 
-# Layer 2: Compute normalized vectors (~5 seconds)
-python scripts/compute_layer2_normalized_vectors.py
+# Phase 2: Compute normalized vectors (~5 seconds)
+python scripts/compute_phase2_normalized_vectors.py
 
-# Layer 3: Train contextual embeddings (~10 minutes on Apple Silicon)
-python scripts/train_layer3_contextual_embeddings.py
-
-# Layer 4: Build syllable embeddings (~5 minutes on CPU) - RECOMMENDED
-python scripts/build_filtered_layer4_embeddings.py
-
-# Optional: Quantize to int8 (75% additional size reduction)
-python scripts/quantize_embeddings.py
+# Phase 3: Build phoneme-sequence syllable structures (~5 minutes)
+python scripts/build_phase3_syllable_embeddings.py
 
 # Export data for web application
 python scripts/export_clientside_data.py
+# Creates: word_metadata.json, embeddings.json.gz, minimal_pairs.json.gz, etc.
+# Total: ~56 MB uncompressed, ~0.6 MB gzipped (99% compression!)
 ```
 
-**Complete documentation**: See [docs/EMBEDDINGS_ARCHITECTURE.md](docs/EMBEDDINGS_ARCHITECTURE.md)
+**Complete documentation**: See [docs/PHONEME_SEQUENCE_ARCHITECTURE_V2.3.md](docs/PHONEME_SEQUENCE_ARCHITECTURE_V2.3.md) and [docs/PHASE_ARCHITECTURE.md](docs/PHASE_ARCHITECTURE.md)
 
 ---
 
-## Web Application (v2.1 - Client-Side)
+## Usage Examples
 
-### Architecture
+### Python: Load Phase 3 Embeddings
 
-The web application runs entirely client-side without backend or database dependencies.
+```python
+import torch
 
-**Stack**:
-- Frontend: React 18 + TypeScript + Material-UI
-- Data: Static JSON files (~90 MB, gzips to ~45 MB)
-- Computation: In-browser (cosine similarity, pattern matching)
-- Deployment: Static host (Netlify, Cloudflare Pages, Vercel, GitHub Pages)
+# Load Phase 3 syllable embeddings
+checkpoint = torch.load('embeddings/phase3/syllable_embeddings_phoible.pt')
+word_to_syllable_embeddings = checkpoint['word_to_syllable_embeddings']
 
-**Architecture implications**:
-- No server costs or maintenance
-- No database (PostgreSQL, pgvector) required
-- In-memory queries without network latency
-- Deployable as static files
+# Get embeddings
+cat = word_to_syllable_embeddings['cat']  # List of syllable structures
+# Each syllable contains:
+#   onset: list of 76-dim vectors
+#   nucleus: list of 76-dim (monophthong) or 152-dim (diphthong) vectors
+#   coda: list of 76-dim vectors
 
-### Features
-
-**Custom Word List Builder**:
-- Pattern matching (starts with, ends with, contains)
-- Phoneme exclusion (blacklist)
-- 11 psycholinguistic property filters (frequency, AoA, concreteness, VAD, etc.)
-- Phonological complexity filters (syllables, phonemes, WCM, MSH)
-- Export vocabularies for research and clinical applications
-
-**Minimal Pairs Generator**:
-- Phoneme contrast specification (e.g., /t/ vs /d/)
-- Position filtering (word-initial, medial, final)
-- Export for SLP/clinical applications
-
-**Rhyme Detection**:
-- Perfect rhymes (cat - bat)
-- Slant rhymes (cat - cut)
-- Syllable-based rhymes
-- Configurable matching strictness
-
-**Search**:
-- Phonological property filters
-- Psycholinguistic norm filters
-- Pattern matching with wildcards
-- Vector similarity search
-
-**Word Comparison**:
-- Phonological similarity computation
-- Feature-level analysis
-- Syllable structure visualization
-
-### Data Coverage
-
-- 24,744 words (filtered vocabulary)
-- 100% frequency data (SUBTLEXus)
-- 97.8% concreteness ratings (Brysbaert)
-- 54.0% VAD ratings (valence, arousal, dominance)
-- 18.6% Glasgow norms (AoA, imageability, familiarity)
-
-### Development
-
-```bash
-cd webapp/frontend
-
-# Install dependencies
-npm install
-
-# Development server (http://localhost:3000)
-npm run dev
-
-# Production build
-npm run build
-
-# Preview production build
-npm run preview
-
-# Type checking
-npm run type-check
-
-# Linting
-npm run lint
-npm run lint:fix
+# Compute similarity using soft Levenshtein distance
+# See webapp/frontend/src/services/clientSideData.ts for implementation
 ```
 
-### Deployment
+### Web Application: Custom Word List
 
-**Netlify** (recommended - already configured):
-```bash
-netlify deploy --prod
-```
+1. Open **Custom Word List Builder**
+2. Add pattern: STARTS_WITH "s"
+3. Set filters:
+   - Syllables: 1-2
+   - Frequency: 100+ (common words)
+   - Imageability: 5-7 (high)
+   - Valence: 6-9 (positive)
+4. Add exclusion: "r" (no /r/ sound)
+5. Click **Build** → Get results with all properties
+6. Export to CSV/text
 
-**Manual deployment**:
-```bash
-cd webapp/frontend
-npm run build
-# Deploy dist/ folder to any static host
-```
+### Web Application: Minimal Pairs for Therapy
 
-**Configuration**: See [netlify.toml](netlify.toml) for build settings.
+1. Open **Contrastive Intervention**
+2. Select **Minimal Pairs** mode
+3. Enter target phoneme: θ (IPA keyboard available)
+4. Enter substitute phoneme: t
+5. Select position: **Word-Initial**
+6. Generate pairs: "thin/tin", "thick/tick", "thought/taught"...
 
 ---
 
-## Repository Structure
+## Data Sources & References
+
+### Phonological Features
+- **PHOIBLE 2.0**: Moran & McCloy (2019) - 38 distinctive features, 2,716 languages
+- **CMU Pronouncing Dictionary**: 125K words, General American English
+- **Syllabification**: English phonotactic constraints (Hayes 2009)
+- **WCM**: Stoel-Gammon (2010) - Word Complexity Measure
+
+### Psycholinguistic Norms
+- **SUBTLEX-US**: Brysbaert & New (2009) - Word frequency from film subtitles
+- **Glasgow Norms**: Scott et al. (2019) - Imageability, familiarity, AoA
+- **Concreteness**: Brysbaert et al. (2014) - 40K English words
+- **Valence/Arousal/Dominance**: Warriner et al. (2013) - 13,915 English lemmas
+
+### Clinical Interventions
+- **Maximal Opposition**: Gierut (1989, 1992) - Phonological treatment approach
+- **Multiple Opposition**: Storkel (2022) - Review of intervention approaches
+
+---
+
+## Project Structure
 
 ```
 PhonoLex/
-├── README.md                        # This file
-├── CLAUDE.md                        # Project instructions for Claude Code
-├── CHANGELOG.md                     # Version history
-├── LICENSE.txt                      # MIT License
-├── netlify.toml                     # Netlify deployment config
+├── webapp/frontend/          # React + TypeScript web application
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Builder.tsx                      # Custom Word List Builder
+│   │   │   └── tools/
+│   │   │       ├── ContrastiveInterventionTool.tsx  # Minimal/Maximal/Multiple Opposition
+│   │   │       ├── PhonologicalSimilarityTool.tsx   # Similarity explorer
+│   │   │       └── SearchTool.tsx                   # Lookup
+│   │   └── services/
+│   │       ├── clientSideData.ts           # Main data service
+│   │       └── clientSideApiAdapter.ts     # API compatibility layer
+│   └── public/data/                        # Static JSON data (~0.6 MB gzipped)
 │
-├── python/                          # Python dependencies (local dev only)
-│   ├── pyproject.toml              # Modern Python packaging (PEP 621)
-│   ├── requirements.txt            # Legacy pip requirements
-│   └── README.md                   # Python setup guide
+├── scripts/                  # Build scripts (no training required!)
+│   ├── compute_phase1_features.py
+│   ├── compute_phase2_normalized_vectors.py
+│   ├── build_phase3_syllable_embeddings.py
+│   └── export_clientside_data.py
 │
-├── src/phonolex/                    # Core library (embeddings, models, utils)
-│   ├── embeddings/
-│   │   ├── english_data_loader.py  # CMU + ipa-dict loader (147K words)
-│   │   └── ...                     # Other data loaders
-│   ├── models/
-│   │   └── phonolex_bert.py        # PhonoLexBERT transformer (Layer 3)
-│   └── utils/
-│       └── syllabification.py      # Onset-nucleus-coda parser
+├── src/phonolex/             # Core library
+│   ├── embeddings/           # Data loaders (CMU, Phoible, norms)
+│   ├── tools/                # Maximal opposition algorithms
+│   └── utils/                # Syllabification, utilities
 │
-├── scripts/                         # Layer generation pipeline
-│   ├── compute_layer1_phoible_features.py       # Layer 1 (<1 sec)
-│   ├── compute_layer2_normalized_vectors.py     # Layer 2 (~5 sec)
-│   ├── train_layer3_contextual_embeddings.py    # Layer 3 (~10 min) - trained
-│   ├── build_filtered_layer4_embeddings.py      # Layer 4 (~5 min) - RECOMMENDED
-│   ├── build_layer4_syllable_embeddings.py      # Layer 4 unfiltered (deprecated)
-│   ├── quantize_embeddings.py                   # Int8 quantization
-│   └── export_clientside_data.py                # Export for webapp
+├── docs/                     # Documentation
+│   ├── PHONEME_SEQUENCE_ARCHITECTURE_V2.3.md  # v2.3 architecture
+│   ├── PHASE_ARCHITECTURE.md                  # Phase pipeline
+│   ├── MAXIMAL_OPPOSITION_TOOL.md            # Clinical intervention guide
+│   └── ...
 │
-├── embeddings/                      # Pre-computed embeddings
-│   ├── layer1/phoible_features.csv              # 38-dim ternary (59 KB)
-│   ├── layer2/normalized_76d.pkl                # 76-dim continuous (59 KB)
-│   ├── layer2/normalized_152d.pkl               # 152-dim trajectories (115 KB)
-│   ├── layer4/syllable_embeddings_filtered.pt   # 384-dim filtered (137 MB) - recommended
-│   └── layer4/syllable_embeddings_filtered_quantized.pt  # Int8 (42 MB)
-│
-├── models/                          # Trained models
-│   └── layer3/model.pt             # PhonoLexBERT (2.4 MB)
-│
-├── data/                            # Source data
-│   ├── cmu/                        # CMU Dictionary (125K words)
-│   ├── phoible/                    # Phoible database (2,716 languages)
-│   ├── mappings/                   # ARPAbet ↔ IPA conversion
-│   ├── learning_datasets/          # ipa-dict, SIGMORPHON
-│   └── norms/                      # Psycholinguistic norms
-│
-├── webapp/                          # Web application (v2.1)
-│   └── frontend/                   # React + TypeScript
-│       ├── src/
-│       │   ├── services/
-│       │   │   ├── clientSideData.ts           # Main data service
-│       │   │   ├── clientSideApiAdapter.ts     # API compatibility
-│       │   │   └── phonolexApi.ts              # Exports adapter
-│       │   ├── components/                     # UI components
-│       │   └── types/phonology.ts              # TypeScript types
-│       ├── public/data/                        # Static JSON data (~90 MB)
-│       │   ├── word_metadata.json              # 24K words (14 MB)
-│       │   ├── embeddings_quantized.json       # Int8 embeddings (75 MB)
-│       │   ├── phonemes.json                   # Phoneme features (37 KB)
-│       │   └── manifest.json                   # Data package metadata
-│       └── dist/                               # Build output
-│
-├── docs/                            # Documentation
-│   ├── INDEX.md                                # Documentation index
-│   ├── EMBEDDINGS_ARCHITECTURE.md              # Complete architecture
-│   ├── CLIENT_SIDE_DATA_PACKAGE.md             # Client-side data format
-│   ├── MIGRATION_TO_CLIENT_SIDE.md             # v2.0 → v2.1 migration
-│   ├── VOCABULARY_FILTERING.md                 # Filtering strategy
-│   ├── TRAINING_SCRIPTS_SUMMARY.md             # Script reference
-│   └── development/
-│       └── LEARNING_DATASETS.md                # Dataset documentation
-│
-└── archive/                         # Historical code (not for active use)
-    ├── webapp_v1/                  # Flask backend (deprecated)
-    └── webapp_v2_backend/          # FastAPI backend (archived Oct 2025)
+└── data/                     # Source data (CMU, Phoible, mappings, norms)
 ```
 
 ---
 
-## Data Sources & Coverage
+## Performance
 
-### English Pronunciations
+### Client-Side Performance
+- **Data Loading**: 1-2 seconds (initial load, cached thereafter)
+- **Pattern Search**: 10-50ms for full vocabulary scan
+- **Similarity Search**: 50-100ms for full vocabulary comparison
+- **Filtering**: 5-20ms for multi-property filters
+- **Memory**: ~60MB for all data in browser
 
-**CMU Pronouncing Dictionary**:
-- 125,764 words with ARPAbet transcriptions
-- Primary pronunciations only (no variants)
-- Stress markers: 0 (unstressed), 1 (primary), 2 (secondary)
-- Dialect: General American English
-- Converted to IPA for processing
-
-**ipa-dict**:
-- 22,000 additional words (US + UK variants)
-- IPA transcriptions
-- Supplements CMU coverage
-
-**Total training corpus**: 147,000 words
-
-### Universal Phonological Features (Phoible)
-
-- **2,716 languages** worldwide
-- **105,484 phonemes** across all languages
-- **38 distinctive features** (Hayes 2009 + Moisik & Esling 2011)
-- **94 English phonemes** extracted for Layer 1
-
-### Psycholinguistic Norms
-
-**SUBTLEXus** (100% coverage):
-- Word frequency from subtitles
-- Most ecologically valid frequency measure
-
-**Brysbaert Concreteness** (97.8% coverage):
-- Concreteness ratings (1-5 scale)
-- Based on 40,000+ words
-
-**Glasgow Norms** (18.6% coverage):
-- Age of Acquisition (AoA)
-- Imageability
-- Familiarity
-
-**VAD Ratings** (54.0% coverage):
-- Valence (positive/negative emotion)
-- Arousal (activation level)
-- Dominance (control/power)
-
-### Morphology
-
-**SIGMORPHON 2020**:
-- English inflectional paradigms
-- Task 0: Lemma + features → inflected form
+### Data Coverage
+- **24,744 words** with comprehensive psycholinguistic norms
+- **39 English phonemes** with PHOIBLE features
+- **General American English** dialect (CMU primary pronunciations)
+- **99% compression**: 56.7 MB → 0.6 MB gzipped
 
 ---
 
-## Applications
+## Architecture History
 
-### 1. Speech-Language Pathology (SLP)
+- **v2.2.0-beta (Nov 2025)**: Phoneme-sequence soft Levenshtein (current)
+  - No averaging - sequences preserved
+  - 99% compression (56.7 MB → 0.6 MB gzipped)
+  - 24,744 words with comprehensive norms
 
-**Minimal Pairs for Articulation Therapy**:
-```python
-# Generate /s/ vs /θ/ minimal pairs for therapy
-pairs = find_minimal_pairs(phoneme1='s', phoneme2='θ',
-                          word_length='short', complexity='low')
-# → sank/thank, sick/thick, sink/think
-```
+- **v2.2.1 (Oct 2025)**: Phoible component-wise averaging (deprecated)
+  - Averaging destroyed structural information
+  - 228-dim syllable embeddings
 
-**Developmentally Appropriate Word Lists**:
-```python
-# Export words acquired by age 5
-early_words = filter_words(aoa_max=5.0, frequency_min=10.0)
-```
+- **v2.1 (Sep 2025)**: Client-side migration
+  - Removed backend (FastAPI + PostgreSQL)
+  - Fully static site deployment
 
-### 2. Phonological Research
-
-**Similarity Studies**:
-```python
-# Compare similarity metrics
-similarity = compute_similarity('computer', 'commuter')
-# Layer 4: 0.794 (hierarchical syllable-based)
-```
-
-**Phonotactic Analysis**:
-```python
-# Check if phoneme sequence is valid
-prob = model.predict_next_phoneme(['s', 't', 'r'])  # High (English allows)
-prob = model.predict_next_phoneme(['ŋ', 'k', 'r'])  # Low (invalid in English)
-```
-
-### 3. Natural Language Processing
-
-**Rhyme Generation for Poetry**:
-```python
-# Find rhymes for word generation
-rhymes = find_rhymes('cat', mode='perfect', limit=20)
-# → bat, mat, fat, sat, hat, rat, pat, chat, flat, that
-```
-
-**Spelling Error Correction**:
-```python
-# Find phonologically similar words for spell-check
-suggestions = find_similar('recieve', threshold=0.8)
-# → receive, deceive
-```
-
-### 4. Language Learning
-
-**Pronunciation Comparison**:
-```python
-# Compare learner vs target pronunciation
-similarity = compare_pronunciations(
-    learner=['k', 'o', 'm', 'p', 'j', 'u', 't', 'ɚ'],  # Learner's /kompjutɚ/
-    target=['k', 'ə', 'm', 'p', 'j', 'u', 't', 'ɚ']     # Native /kəmpjutɚ/
-)
-# Low similarity indicates mispronunciation
-```
-
-**Minimal Pair Drills**:
-```python
-# Generate contrast sets for phoneme training
-pairs = find_minimal_pairs(phoneme1='r', phoneme2='l')
-# → right/light, read/lead, rock/lock
-```
-
-### 5. Computational Linguistics
-
-**Phonological Embeddings for Downstream Tasks**:
-```python
-# Use Layer 4 embeddings as features
-word_embedding = get_layer4_embedding('cat')  # 384-dim per syllable
-# Concatenate or pool for classification tasks
-```
-
-**Cross-Linguistic Phonological Transfer**:
-```python
-# Compare phonemes across languages using Layer 1
-english_t = get_phoible_features('t', language='eng')
-spanish_t = get_phoible_features('t', language='spa')
-# Analyze feature differences
-```
-
----
-
-## Performance Metrics
-
-### Layer 3 Training Results
-
-- **Next-phoneme prediction**: 99.98% accuracy
-- **Training time**: ~10 minutes on Apple Silicon (M1/M2)
-- **Dataset**: 147K words (CMU + ipa-dict)
-- **Model size**: 2.4 MB
-- **Inference speed**: ~0.1 ms per word (CPU)
-
-### Layer 4 Similarity Performance
-
-Verified results on Layer 4 embeddings:
-
-| Type | Examples | Similarity Range |
-|------|----------|------------------|
-| Rhymes | cat-bat: 0.995, make-take: 0.987 | 0.99+ |
-| Phonologically similar | computer-commuter: 0.797 | 0.75-0.85 |
-| Anagrams | cat-act: 0.288 | ~0.30 |
-| Unrelated | cat-dog: 0.225 | 0.20-0.30 |
-
-### Vocabulary Filtering Impact (v2.1)
-
-| Metric | Unfiltered | Filtered | Reduction |
-|--------|-----------|----------|-----------|
-| Words | 48,000 | 24,744 | 49% |
-| Embeddings size | 1.0 GB | 137 MB | 86% |
-| Quantized size | 333 MB | 42 MB | 87% |
-| Frequency coverage | 100% | 100% | - |
-| Concreteness coverage | 84% | 97.8% | +13.8% |
-
-Filtering criterion: Frequency + at least one additional psycholinguistic norm (concreteness, AoA, imageability, familiarity, or VAD). This ensures research and clinical applications have high-quality psycholinguistic data beyond frequency alone.
-
-See [docs/VOCABULARY_FILTERING.md](docs/VOCABULARY_FILTERING.md) for analysis.
-
----
-
-## Comparison with Alternative Approaches
-
-### Anagram Discrimination (cat vs act)
-
-| Approach | Similarity | Note |
-|----------|-----------|------|
-| Skip-gram (bag-of-phonemes) | 0.99 | Position-invariant |
-| Mean pooling | 0.94 | Order information lost |
-| First-mid-last concatenation | 0.31 | Partial position encoding |
-| Sequential (Levenshtein on phonemes) | 0.68 | No syllable structure |
-| Hierarchical syllable (Layer 4) | 0.288 | Syllable boundary encoding |
-
-### Mechanism
-
-Syllable structure provides discrimination:
-
-**cat** [kæt]:
-- onset=[k], nucleus=æ, coda=[t]
-- Template: C-V-C
-
-**act** [ækt]:
-- onset=[], nucleus=æ, coda=[k,t]
-- Template: V-CC
-
-Different syllable structures produce different 384-dim embeddings (128-dim for onset, nucleus, coda each). The model learns these distinctions from the 4-layer hierarchy without explicit syllable boundary labels
-
----
-
-## Technical Details
-
-### Model Architecture (Layer 3)
-
-```python
-PhonoLexBERT(
-    vocab_size=42,              # 39 phonemes + special tokens
-    d_model=128,                # Embedding dimension
-    nhead=4,                    # Attention heads
-    num_layers=3,               # Transformer layers
-    dim_feedforward=512,        # FFN hidden size
-    max_len=36,                 # Max phoneme sequence length
-    dropout=0.1
-)
-```
-
-**Training Configuration**:
-- Task: Next-phoneme prediction (self-supervised)
-- Loss: CrossEntropyLoss
-- Optimizer: Adam (lr=0.001)
-- Batch size: 64
-- Epochs: 20
-- Time: ~10 minutes on Apple Silicon
-
-**Initialization**:
-- Phoneme embeddings: Layer 2 normalized vectors (76-dim → 128-dim)
-- Positional encoding: Sinusoidal (learnable option available)
-
-### Syllable Embeddings (Layer 4)
-
-```python
-# For each syllable in word
-syllable_embedding = concat([
-    mean_pool(onset_phonemes),     # 128-dim (or zeros if no onset)
-    nucleus_phoneme,               # 128-dim (always present)
-    mean_pool(coda_phonemes)       # 128-dim (or zeros if no coda)
-])  # Total: 384-dim per syllable
-
-# Word representation
-word = [syllable_1, syllable_2, ..., syllable_n]  # Variable length
-```
-
-**Similarity Computation**:
-Soft Levenshtein distance on syllable embedding sequences:
-- Match cost: `1 - cosine_similarity(syll1, syll2)`
-- Insert/delete cost: `1.0`
-- Final similarity: `1 - (edit_distance / max(len1, len2))`
-
-### Client-Side Data Format (v2.1)
-
-**word_metadata.json** (14 MB):
-```json
-{
-  "words": [
-    {
-      "word": "cat",
-      "ipa": "kæt",
-      "syllables": [{"onset": ["k"], "nucleus": "æ", "coda": ["t"]}],
-      "phoneme_count": 3,
-      "syllable_count": 1,
-      "freq": 123.45,
-      "concreteness": 4.82,
-      "aoa": 2.5,
-      "valence": 6.2,
-      "arousal": 3.8,
-      "dominance": 5.1
-    }
-  ]
-}
-```
-
-**embeddings_quantized.json** (75 MB):
-```json
-{
-  "cat": {
-    "syllables": [
-      {
-        "onset": [23, 45, 67, ...],    // 128 int8 values
-        "nucleus": [12, 34, 56, ...],   // 128 int8 values
-        "coda": [78, 90, 12, ...]       // 128 int8 values
-      }
-    ],
-    "scale": 0.0123  // Dequantization: value * scale
-  }
-}
-```
-
-See [docs/CLIENT_SIDE_DATA_PACKAGE.md](docs/CLIENT_SIDE_DATA_PACKAGE.md) for complete format specification.
-
----
-
-## Potential Extensions
-
-### Implementation
-
-1. Stress-aware weighting for stressed syllables in similarity computation
-2. Cross-lingual training on multiple languages from Phoible
-3. Perceptual validation against human similarity judgments
-4. Progressive Web App features (offline support, caching)
-
-### Research
-
-1. Generative models for valid phoneme sequences
-2. Learning sub-phonemic distinctive features from data
-3. Prosody integration (rhythm, intonation, tone)
-4. Joint semantic-phonological embeddings
-5. End-to-end syllabification with transformers
-
----
-
-## Documentation
-
-### Primary Documentation
-
-- [docs/EMBEDDINGS_ARCHITECTURE.md](docs/EMBEDDINGS_ARCHITECTURE.md) - Complete 4-layer architecture
-- [docs/CLIENT_SIDE_DATA_PACKAGE.md](docs/CLIENT_SIDE_DATA_PACKAGE.md) - Client-side data format
-- [docs/VOCABULARY_FILTERING.md](docs/VOCABULARY_FILTERING.md) - Filtering strategy
-- [docs/TRAINING_SCRIPTS_SUMMARY.md](docs/TRAINING_SCRIPTS_SUMMARY.md) - Script reference
-
-### Development
-
-- [docs/MIGRATION_TO_CLIENT_SIDE.md](docs/MIGRATION_TO_CLIENT_SIDE.md) - v2.0 → v2.1 migration
-- [docs/development/LEARNING_DATASETS.md](docs/development/LEARNING_DATASETS.md) - Dataset documentation
-- [docs/INDEX.md](docs/INDEX.md) - Documentation index
-
-### Historical
-
-- [docs/ARCHITECTURE_V2.md](docs/ARCHITECTURE_V2.md) - Archived v2.0 backend architecture
+- **v2.0 (Aug 2025)**: Database-centric (archived)
+  - FastAPI + PostgreSQL + pgvector
+  - See `archive/webapp_v2_backend/`
 
 ---
 
 ## Contributing
 
-Areas for contribution:
+Contributions welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Submit a pull request
 
-- Multilingual support (extend beyond English)
-- Additional psycholinguistic norms (integrate more datasets)
-- Performance optimization (similarity computation)
-- New phonological tools (stress patterns, syllable complexity metrics)
-- Testing (unit tests, integration tests, user testing)
-
-Open an issue to discuss major changes before submitting pull requests.
-
----
-
-## References
-
-### Data Sources
-
-- **Phoible**: Moran, Steven & McCloy, Daniel (eds.) 2019. PHOIBLE 2.0. Jena: Max Planck Institute for the Science of Human History. https://phoible.org/
-- **CMU Pronouncing Dictionary**: http://www.speech.cs.cmu.edu/cgi-bin/cmudict
-- **ipa-dict**: https://github.com/open-dict-data/ipa-dict
-- **SIGMORPHON**: https://sigmorphon.github.io/sharedtasks/2020/
-- **SUBTLEXus**: Brysbaert, M., & New, B. (2009). Moving beyond Kučera and Francis.
-- **Concreteness**: Brysbaert, M., Warriner, A.B., & Kuperman, V. (2014). Concreteness ratings.
-- **Glasgow Norms**: Scott, G.G., Keitelova, S., Houghton, J. & The Glasgow Norms Associates (2019).
-- **VAD**: Warriner, A.B., Kuperman, V., & Brysbaert, M. (2013). Norms of valence, arousal, and dominance.
-
-### Theoretical Foundations
-
-- **Hayes, Bruce** (2009). *Introductory Phonology*. Wiley-Blackwell.
-- **Moisik, Scott R. & Esling, John H.** (2011). The 'whole larynx' approach to laryngeal features. *Proceedings of the International Congress of Phonetic Sciences XVII*, 1406-1409.
-- **Chomsky, Noam & Halle, Morris** (1968). *The Sound Pattern of English*. Harper & Row.
-
----
-
-## Citation
-
-If you use PhonoLex in your research, please cite:
-
-```bibtex
-@software{phonolex2025,
-  title = {PhonoLex: Hierarchical Phonological Embeddings with Client-Side Analysis},
-  author = {[Your Name]},
-  year = {2025},
-  version = {2.1.1-beta},
-  url = {https://github.com/Just-Semantics/PhonoLex},
-  note = {Four-layer phonological embedding pipeline with onset-nucleus-coda structure}
-}
-```
+See [CLAUDE.md](CLAUDE.md) for development guide.
 
 ---
 
 ## License
 
-- **Code**: MIT License (see [LICENSE.txt](LICENSE.txt))
-- **Phoible data**: Creative Commons Attribution-ShareAlike 3.0 Unported License
-- **CMU Pronouncing Dictionary**: Public domain
-- **Other datasets**: See individual dataset licenses in [docs/development/LEARNING_DATASETS.md](docs/development/LEARNING_DATASETS.md)
+**CC BY-SA 3.0** (Creative Commons Attribution-ShareAlike 3.0)
+
+ShareAlike license required due to PHOIBLE data usage.
+
+---
+
+## Citation
+
+If you use PhonoLex in research or clinical work, please cite:
+
+**PhonoLex**:
+```
+Neumann, J. (2025). PhonoLex: Comprehensive word analysis with phonological features
+and psycholinguistic norms (Version 2.2.0-beta). https://github.com/Just-Semantics/PhonoLex
+```
+
+**PHOIBLE**:
+```
+Moran, Steven & McCloy, Daniel (eds.) 2019.
+PHOIBLE 2.0. Jena: Max Planck Institute for the Science of Human History.
+(Available online at http://phoible.org)
+```
+
+**Psycholinguistic Norms**: See individual dataset citations in [webapp/frontend/src/components/CitationDialog.tsx](webapp/frontend/src/components/CitationDialog.tsx)
+
+---
+
+## Support
+
+- **Documentation**: [docs/](docs/)
+- **Issues**: [GitHub Issues](https://github.com/Just-Semantics/PhonoLex/issues)
+- **Email**: contact@justsemantics.net
 
 ---
 
 ## Acknowledgments
 
-**Data sources**:
-- Phoible Project (Max Planck Institute for the Science of Human History)
-- CMU Speech Group (Carnegie Mellon University)
-- SIGMORPHON shared tasks
-- Glasgow Norms Associates
-- Marc Brysbaert's psycholinguistics lab
+Built with data from:
+- PHOIBLE 2.0 (Moran & McCloy 2019)
+- CMU Pronouncing Dictionary
+- SUBTLEX-US (Brysbaert & New 2009)
+- Glasgow Norms (Scott et al. 2019)
+- Concreteness ratings (Brysbaert et al. 2014)
+- Valence/Arousal/Dominance norms (Warriner et al. 2013)
 
-**Technologies**:
-- PyTorch (model training)
-- React + TypeScript (web application)
-- Material-UI (UI components)
-- NumPy & SciPy (numerical operations)
-- Vite (frontend build tool)
-
----
-
-**Version 2.1.1-beta** | [Changelog](CHANGELOG.md) | [Documentation](docs/INDEX.md) | [GitHub](https://github.com/Just-Semantics/PhonoLex)
+Clinical intervention approaches based on research by Gierut (1989, 1992) and Storkel (2022).

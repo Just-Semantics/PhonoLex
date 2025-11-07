@@ -65,22 +65,22 @@ class WordFilter:
         """Load SUBTLEXus frequency data"""
         freq_path = self.data_dir / "subtlex_frequency.txt"
 
-        with open(freq_path, encoding='utf-8') as f:
-            reader = csv.DictReader(f, delimiter='\t')
+        with open(freq_path, encoding="utf-8") as f:
+            reader = csv.DictReader(f, delimiter="\t")
             for row in reader:
-                word = row['Word'].lower()
-                if row['SUBTLWF']:  # Has frequency data
+                word = row["Word"].lower()
+                if row["SUBTLWF"]:  # Has frequency data
                     self.freq_words.add(word)
 
     def load_concreteness(self):
         """Load concreteness ratings"""
         conc_path = self.data_dir / "norms" / "concreteness.txt"
 
-        with open(conc_path, encoding='utf-8') as f:
-            reader = csv.DictReader(f, delimiter='\t')
+        with open(conc_path, encoding="utf-8") as f:
+            reader = csv.DictReader(f, delimiter="\t")
             for row in reader:
-                word = row['Word'].lower()
-                if row['Conc.M']:  # Has concreteness rating
+                word = row["Word"].lower()
+                if row["Conc.M"]:  # Has concreteness rating
                     self.conc_words.add(word)
 
     def load_glasgow_norms(self):
@@ -91,12 +91,12 @@ class WordFilter:
             df = pd.read_excel(glasgow_path, header=1)
 
             for _, row in df.iterrows():
-                word = str(row['word']).lower()
-                if pd.notna(row['M.6']):  # AoA
+                word = str(row["word"]).lower()
+                if pd.notna(row["M.6"]):  # AoA
                     self.aoa_words.add(word)
-                if pd.notna(row['M.4']):  # Imageability
+                if pd.notna(row["M.4"]):  # Imageability
                     self.img_words.add(word)
-                if pd.notna(row['M.5']):  # Familiarity
+                if pd.notna(row["M.5"]):  # Familiarity
                     self.fam_words.add(word)
         except Exception as e:
             print(f"  Warning: Could not load Glasgow norms: {e}")
@@ -105,11 +105,11 @@ class WordFilter:
         """Load Valence-Arousal-Dominance ratings"""
         vad_path = self.data_dir / "norms" / "Ratings_VAD_WarrinerEtAl.csv"
 
-        with open(vad_path, encoding='utf-8') as f:
+        with open(vad_path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
-                word = row['word'].lower()
-                if row['valence'] or row['arousal'] or row['dominance']:
+                word = row["word"].lower()
+                if row["valence"] or row["arousal"] or row["dominance"]:
                     self.vad_words.add(word)
 
     def should_include_word(self, word: str) -> bool:
@@ -135,11 +135,11 @@ class WordFilter:
 
         # Must have at least one other norm
         has_other_norm = (
-            word in self.conc_words or
-            word in self.aoa_words or
-            word in self.img_words or
-            word in self.fam_words or
-            word in self.vad_words
+            word in self.conc_words
+            or word in self.aoa_words
+            or word in self.img_words
+            or word in self.fam_words
+            or word in self.vad_words
         )
 
         return has_other_norm
@@ -169,12 +169,12 @@ class WordFilter:
         word = word.lower()
 
         return {
-            'frequency': word in self.freq_words,
-            'concreteness': word in self.conc_words,
-            'aoa': word in self.aoa_words,
-            'imageability': word in self.img_words,
-            'familiarity': word in self.fam_words,
-            'vad': word in self.vad_words
+            "frequency": word in self.freq_words,
+            "concreteness": word in self.conc_words,
+            "aoa": word in self.aoa_words,
+            "imageability": word in self.img_words,
+            "familiarity": word in self.fam_words,
+            "vad": word in self.vad_words,
         }
 
 
