@@ -11,20 +11,20 @@ Last updated: 2025-10-28
 PhonoLex uses a four-layer hierarchy from raw phonological features to word-level representations:
 
 ```
-Layer 1: Raw Phoible Features (38-dim ternary)
+Phase 1: Raw Phoible Features (38-dim ternary)
     ↓ normalization & interpolation
-Layer 2: Normalized Feature Vectors (76-dim / 152-dim)
+Phase 2: Normalized Feature Vectors (76-dim / 152-dim)
     ↓ contextual learning via transformer
 Layer 3: Contextual Phoneme Embeddings (128-dim)
     ↓ syllable aggregation (onset-nucleus-coda)
-Layer 4: Hierarchical Syllable Embeddings (384-dim)
+Phase 3: Hierarchical Syllable Embeddings (384-dim)
     ↓ soft Levenshtein distance
 Word Similarity
 ```
 
 ---
 
-## Layer 1: Raw Phoible Features
+## Phase 1: Raw Phoible Features
 
 **Format**: 38-dim ternary (+, -, 0)  
 **Source**: Phoible database  
@@ -34,13 +34,13 @@ Word Similarity
 ### Location
 ```
 data/phoible/phoible.csv                   # All languages (raw)
-embeddings/layer1/phoible_features.csv     # English phonemes (extracted)
+embeddings/phase1/phoible_features.csv     # English phonemes (extracted)
 ```
 
 ### Extraction Command
 ```bash
-python scripts/compute_layer1_phoible_features.py
-# Output: embeddings/layer1/phoible_features.csv (94 phonemes)
+python scripts/compute_phase1_phoible_features.py
+# Output: embeddings/phase1/phoible_features.csv (94 phonemes)
 ```
 
 ### Properties
@@ -57,23 +57,23 @@ python scripts/compute_layer1_phoible_features.py
 
 ---
 
-## Layer 2: Normalized Feature Vectors
+## Phase 2: Normalized Feature Vectors
 
 **Format**: 76-dim (endpoints) or 152-dim (trajectories)
-**Computation**: Deterministic transformation of Layer 1
+**Computation**: Deterministic transformation of Phase 1
 **Learned**: ❌ No (computed)
 
 ### Location
 ```
-embeddings/layer2/normalized_76d.pkl     # 76-dim endpoint vectors
-embeddings/layer2/normalized_152d.pkl    # 152-dim trajectory vectors
+embeddings/phase2/normalized_76d.pkl     # 76-dim endpoint vectors
+embeddings/phase2/normalized_152d.pkl    # 152-dim trajectory vectors
 ```
 
 ### Computation Command
 ```bash
-python scripts/compute_layer2_normalized_vectors.py
-# Output: embeddings/layer2/normalized_76d.pkl (59KB)
-#         embeddings/layer2/normalized_152d.pkl (115KB)
+python scripts/compute_phase2_normalized_vectors.py
+# Output: embeddings/phase2/normalized_76d.pkl (59KB)
+#         embeddings/phase2/normalized_152d.pkl (115KB)
 ```
 
 ### Code
@@ -120,7 +120,7 @@ trajectory = vec.trajectory_152d   # 152-dim (4 timesteps per feature)
 - Sinusoidal positional encoding
 - 128-dim embeddings per phoneme
 
-**Initialization**: Layer 2 embeddings (loaded from embeddings/layer2/normalized_76d.pkl → 128-dim projection)
+**Initialization**: Phase 2 embeddings (loaded from embeddings/phase2/normalized_76d.pkl → 128-dim projection)
 
 **Task**: Next-phoneme prediction
 - Input: Phoneme sequence up to position i
@@ -159,15 +159,15 @@ python scripts/train_layer3_contextual_embeddings.py
 - Contextual phoneme similarity
 - Allomorph prediction (phonological conditioning)
 - Phonotactic validity checking
-- Foundation for Layer 4
+- Foundation for Phase 3
 
 ---
 
-## Layer 4: Hierarchical Syllable Embeddings
+## Phase 3: Hierarchical Syllable Embeddings
 
 **Format**: 384-dim syllable embeddings (128 onset + 128 nucleus + 128 coda)
-**Output**: `embeddings/layer4/syllable_embeddings.pt`
-**Building Script**: `scripts/build_layer4_syllable_embeddings.py`
+**Output**: `embeddings/phase3/syllable_embeddings.pt`
+**Building Script**: `scripts/build_phase3_syllable_embeddings.py`
 **Learned**: ❌ No (computed from frozen Layer 3)
 
 ### Building Process
@@ -189,9 +189,9 @@ python scripts/train_layer3_contextual_embeddings.py
 
 ### Building Command
 ```bash
-python scripts/build_layer4_syllable_embeddings.py
+python scripts/build_phase3_syllable_embeddings.py
 # Requires: models/layer3/model.pt (trained)
-# Output: embeddings/layer4/syllable_embeddings.pt (1.0GB)
+# Output: embeddings/phase3/syllable_embeddings.pt (1.0GB)
 ```
 
 ### Properties
@@ -214,7 +214,7 @@ def hierarchical_similarity(syllables1, syllables2):
     sim_matrix = syll1_matrix @ syll2_matrix.T  # [len1, len2]
 
     # Dynamic programming with soft costs
-    # ... (see scripts/build_layer4_syllable_embeddings.py)
+    # ... (see scripts/build_phase3_syllable_embeddings.py)
 
     return similarity_score  # [0.0, 1.0]
 ```
@@ -234,7 +234,7 @@ def hierarchical_similarity(syllables1, syllables2):
 
 **Key Achievement**: cat-act = 0.200 (even better than Layer 3 alone!)
 - Layer 3: cat-act = 0.677 (contextual, but sequence-based)
-- Layer 4: cat-act = 0.200 (syllable structure makes the difference)
+- Phase 3: cat-act = 0.200 (syllable structure makes the difference)
 
 ### Use Cases
 - Word similarity (rhyme detection, sound-alikes)
@@ -248,11 +248,11 @@ def hierarchical_similarity(syllables1, syllables2):
 ## Complete Pipeline Example
 
 ```python
-# Layer 1: Raw Phoible features
+# Phase 1: Raw Phoible features
 phoneme = 't'
 features = {'voiced': '-', 'consonantal': '+', ...}  # 38 features
 
-# Layer 2: Normalized vectors
+# Phase 2: Normalized vectors
 vectorizer = PhonemeVectorizer()
 vec_76d = vectorizer.encode_endpoints_76d(phoneme_data)  # Continuous
 
@@ -260,7 +260,7 @@ vec_76d = vectorizer.encode_endpoints_76d(phoneme_data)  # Continuous
 model_l3 = load_layer3_model()
 contextual_embs = model_l3(['k', 'æ', 't'])  # [3, 128] - context-aware
 
-# Layer 4: Syllable embeddings
+# Phase 3: Syllable embeddings
 syllables = syllabify(['k', 'æ', 't'])  # [Syllable(onset=['k'], nucleus='æ', coda=['t'])]
 syll_emb = aggregate_to_syllable(syllables, contextual_embs)  # [384]
 
@@ -277,17 +277,17 @@ sim = hierarchical_similarity([syll_cat], [syll_act])  # 0.200 (anagram)
 PhonoLex/
 ├── data/
 │   ├── phoible/
-│   │   └── phoible.csv                           # Layer 1 source (all languages)
+│   │   └── phoible.csv                           # Phase 1 source (all languages)
 │   └── mappings/
-│       └── phoneme_vectorizer.py                 # Layer 2 computation
+│       └── phoneme_vectorizer.py                 # Phase 2 computation
 │
 ├── embeddings/                                    # Pre-computed embeddings
-│   ├── layer1/
+│   ├── phase1/
 │   │   └── phoible_features.csv                  # 38-dim ternary (94 phonemes)
-│   ├── layer2/
+│   ├── phase2/
 │   │   ├── normalized_76d.pkl                    # 76-dim endpoints
 │   │   └── normalized_152d.pkl                   # 152-dim trajectories
-│   └── layer4/
+│   └── phase3/
 │       └── syllable_embeddings.pt                # 384-dim syllable vectors (1.0GB) ⭐
 │
 ├── models/                                        # Trained models
@@ -295,10 +295,10 @@ PhonoLex/
 │       └── model.pt                              # PhonoLexBERT (128-dim) ⭐
 │
 ├── scripts/                                       # Layer generation scripts
-│   ├── compute_layer1_phoible_features.py        # Extract Layer 1
-│   ├── compute_layer2_normalized_vectors.py      # Compute Layer 2
+│   ├── compute_phase1_phoible_features.py        # Extract Phase 1
+│   ├── compute_phase2_normalized_vectors.py      # Compute Phase 2
 │   ├── train_layer3_contextual_embeddings.py     # Train Layer 3
-│   └── build_layer4_syllable_embeddings.py       # Build Layer 4
+│   └── build_phase3_syllable_embeddings.py       # Build Phase 3
 │
 ├── src/phonolex/models/
 │   └── phonolex_bert.py                          # PhonoLexBERT model class
@@ -313,24 +313,24 @@ PhonoLex/
 
 Complete pipeline for generating all 4 layers:
 
-### Layer 1 (Extract Phoible Features)
+### Phase 1 (Extract Phoible Features)
 
 ```bash
-python scripts/compute_layer1_phoible_features.py
+python scripts/compute_phase1_phoible_features.py
 
 # Input: data/phoible/phoible.csv
-# Output: embeddings/layer1/phoible_features.csv (94 phonemes, 59KB)
+# Output: embeddings/phase1/phoible_features.csv (94 phonemes, 59KB)
 # Time: <1 second
 ```
 
-### Layer 2 (Compute Normalized Vectors)
+### Phase 2 (Compute Normalized Vectors)
 
 ```bash
-python scripts/compute_layer2_normalized_vectors.py
+python scripts/compute_phase2_normalized_vectors.py
 
-# Input: embeddings/layer1/phoible_features.csv
-# Output: embeddings/layer2/normalized_76d.pkl (59KB)
-#         embeddings/layer2/normalized_152d.pkl (115KB)
+# Input: embeddings/phase1/phoible_features.csv
+# Output: embeddings/phase2/normalized_76d.pkl (59KB)
+#         embeddings/phase2/normalized_152d.pkl (115KB)
 # Time: <5 seconds
 ```
 
@@ -339,20 +339,20 @@ python scripts/compute_layer2_normalized_vectors.py
 ```bash
 python scripts/train_layer3_contextual_embeddings.py
 
-# Input: embeddings/layer2/normalized_76d.pkl (for initialization)
+# Input: embeddings/phase2/normalized_76d.pkl (for initialization)
 #        CMU Dictionary (125K) + ipa-dict (22K) = 147K words
 # Output: models/layer3/model.pt (2.4MB)
 # Time: ~10 minutes on Apple Silicon
 # Accuracy: 99.98% (next-phoneme prediction)
 ```
 
-### Layer 4 (Build Hierarchical Syllable Embeddings)
+### Phase 3 (Build Hierarchical Syllable Embeddings)
 
 ```bash
-python scripts/build_layer4_syllable_embeddings.py
+python scripts/build_phase3_syllable_embeddings.py
 
 # Input: models/layer3/model.pt (frozen)
-# Output: embeddings/layer4/syllable_embeddings.pt (1.0GB)
+# Output: embeddings/phase3/syllable_embeddings.pt (1.0GB)
 # Time: ~5 minutes on CPU
 ```
 
@@ -362,12 +362,12 @@ python scripts/build_layer4_syllable_embeddings.py
 
 | Layer | Computation | Time | Size |
 |-------|-------------|------|------|
-| Layer 1 | Database lookup | Instant | 38 values |
-| Layer 2 | Vectorization | <1ms | 76-152 floats |
+| Phase 1 | Database lookup | Instant | 38 values |
+| Phase 2 | Vectorization | <1ms | 76-152 floats |
 | Layer 3 | Transformer forward | ~0.1ms/word | 128 floats/phoneme |
-| Layer 4 | Syllable aggregation | ~0.5ms/word | 384 floats/syllable |
+| Phase 3 | Syllable aggregation | ~0.5ms/word | 384 floats/syllable |
 
-**Word similarity** (Layer 4):
+**Word similarity** (Phase 3):
 - Single-syllable comparison: ~0.01ms (cosine)
 - Multi-syllable comparison: ~1-5ms (Levenshtein DP)
 - Batch comparison: ~1000 words/second
@@ -378,20 +378,20 @@ python scripts/build_layer4_syllable_embeddings.py
 
 ### Why 4 Layers?
 
-1. **Layer 1 (Raw)**: Universal linguistic knowledge, cross-linguistic
-2. **Layer 2 (Normalized)**: Continuous representation, computable
+1. **Phase 1 (Raw)**: Universal linguistic knowledge, cross-linguistic
+2. **Phase 2 (Normalized)**: Continuous representation, computable
 3. **Layer 3 (Contextual)**: Position-aware, learned from data
-4. **Layer 4 (Syllable)**: Hierarchical structure, best discrimination
+4. **Phase 3 (Syllable)**: Hierarchical structure, best discrimination
 
 ### Why Not Just Layer 3?
 
 Layer 3 alone gives 0.677 similarity for anagrams (cat-act).  
-Layer 4 with syllable structure gives 0.200 - **much better discrimination**.
+Phase 3 with syllable structure gives 0.200 - **much better discrimination**.
 
-### Why Freeze Layer 3 in Layer 4?
+### Why Freeze Layer 3 in Phase 3?
 
 Layer 3 already learned optimal contextual representations (99.98% accuracy).  
-Layer 4 just reorganizes them by syllable structure - no retraining needed.
+Phase 3 just reorganizes them by syllable structure - no retraining needed.
 
 ### Why Next-Phoneme Prediction (not MLM)?
 
@@ -409,14 +409,14 @@ MLM is better for bidirectional context, but we want sequential patterns.
 | Mean pooling | 0.94 | 0.95 | ❌ Position-invariant |
 | Concatenate positions | 0.31 | 0.85 | ⚠️ Crude |
 | **Layer 3 (contextual)** | **0.677** | **0.993** | ✅ Good |
-| **Layer 4 (hierarchical)** | **0.200** | **0.993** | ✅ **Excellent** |
+| **Phase 3 (hierarchical)** | **0.200** | **0.993** | ✅ **Excellent** |
 
 ---
 
 ## Future Extensions
 
 ### Immediate
-- [ ] Add stress information to Layer 4 (currently all stress=0)
+- [ ] Add stress information to Phase 3 (currently all stress=0)
 - [ ] Multi-language support (train Layer 3 on other languages)
 - [ ] Database integration (PostgreSQL + pgvector)
 

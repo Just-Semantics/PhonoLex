@@ -48,7 +48,7 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
   const [settingsDrawerOpen, setSettingsDrawerOpen] = useState(false);
   const [contactDrawerOpen, setContactDrawerOpen] = useState(false);
   const [citationDialogOpen, setCitationDialogOpen] = useState(false);
-  const [activeCitationCategory, setActiveCitationCategory] = useState<'phonological' | 'lexical' | 'semantic' | 'affective' | 'embeddings' | 'data-sources' | null>(null);
+  const [activeCitationCategory, setActiveCitationCategory] = useState<'phonological' | 'lexical' | 'semantic' | 'affective' | 'embeddings' | 'data-sources' | 'clinical-interventions' | null>(null);
 
   const handleCitationClick = (category: typeof activeCitationCategory) => {
     setActiveCitationCategory(category);
@@ -93,7 +93,7 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
             />
             PhonoLex
             <Chip
-              label="v2.1.1-beta"
+              label="v2.3.0-beta"
               size="small"
               sx={{
                 height: { xs: 18, sm: 20 },
@@ -194,27 +194,39 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
           </Typography>
 
           <Typography variant="body1" paragraph>
-            <strong>PhonoLex</strong> combines universal phonological features, learned phonological embeddings,
-            and psycholinguistic norms for word analysis, similarity computation, and list generation.
+            <strong>PhonoLex</strong> combines universal phonological features (Phoible), phoneme-sequence soft
+            Levenshtein similarity, and psycholinguistic norms for word analysis, similarity computation, and list generation.
           </Typography>
 
           <Divider sx={{ my: 3 }} />
 
           <Typography variant="h6" gutterBottom fontWeight={600}>
-            Capabilities
+            Tools
           </Typography>
           <List dense>
             <ListItem>
-              <ListItemText primary="Minimal pair generation with phonological constraints" />
+              <ListItemText
+                primary="Custom Word List Builder"
+                secondary="Pattern matching with phonological, lexical, semantic, and affective property filters"
+              />
             </ListItem>
             <ListItem>
-              <ListItemText primary="Multi-property filtering: lexical, semantic, affective norms" />
+              <ListItemText
+                primary="Contrastive Intervention"
+                secondary="Minimal pairs, maximal opposition, and multiple opposition for speech therapy"
+              />
             </ListItem>
             <ListItem>
-              <ListItemText primary="Hierarchical phonological embeddings for similarity computation" />
+              <ListItemText
+                primary="Phonological Similarity Explorer"
+                secondary="Adjustable onset/nucleus/coda weights for rhymes, alliteration, and consonance"
+              />
             </ListItem>
             <ListItem>
-              <ListItemText primary="Phonological complexity measures (WCM, MSH, syllable structure)" />
+              <ListItemText
+                primary="Lookup"
+                secondary="Word lookup, phoneme features, phoneme comparison, and feature-based phoneme search"
+              />
             </ListItem>
           </List>
 
@@ -225,50 +237,49 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
           </Typography>
 
           <Typography variant="body2" color="text.secondary" paragraph>
-            PhonoLex uses a four-layer hierarchical architecture to represent phonological structure:
+            PhonoLex v2.3 uses <strong>phoneme-sequence soft Levenshtein distance</strong> to preserve the
+            sequential structure of consonant clusters and diphthongs without averaging.
           </Typography>
 
           <Box component="ol" sx={{ pl: 3, mb: 2, '& li': { mb: 1 } }}>
             <Typography component="li" variant="body2" color="text.secondary">
-              <strong>Layer 1 (Raw Features):</strong> Universal phonological features from PHOIBLE database
+              <strong>Phase 1 (Raw Features):</strong> Universal phonological features from PHOIBLE database
               (38 distinctive features covering 2,716 languages)
             </Typography>
             <Typography component="li" variant="body2" color="text.secondary">
-              <strong>Layer 2 (Normalized Vectors):</strong> Continuous representations of phonemes with
-              interpolated trajectories for diphthongs
+              <strong>Phase 2 (Normalized Vectors):</strong> Continuous 76-dim vectors for consonants/monophthongs,
+              152-dim trajectory vectors for diphthongs
             </Typography>
             <Typography component="li" variant="body2" color="text.secondary">
-              <strong>Layer 3 (Contextual Embeddings):</strong> BERT-style transformer trained on 147K words
-              (CMU Dictionary + ipa-dict) to capture phonotactic patterns
-            </Typography>
-            <Typography component="li" variant="body2" color="text.secondary">
-              <strong>Layer 4 (Syllable Structure):</strong> Onset-nucleus-coda embeddings aggregated from
-              Layer 3, enabling position-aware similarity (discriminates anagrams: "cat" ≠ "act")
+              <strong>Phase 3 (Syllable Structures):</strong> Onset/nucleus/coda represented as <strong>sequences of
+              phoneme vectors</strong> (NO averaging!). Example: "crest" onset = [k_vec, ɹ_vec] (2 vectors), not averaged.
             </Typography>
           </Box>
 
           <Typography variant="body2" color="text.secondary" paragraph>
-            <strong>Similarity Computation:</strong>
+            <strong>Three-Level Similarity Hierarchy:</strong>
           </Typography>
 
           <Box component="ul" sx={{ pl: 3, mb: 2, '& li': { mb: 0.5 } }}>
             <Typography component="li" variant="body2" color="text.secondary">
-              <strong>Exact rhymes:</strong> Phoneme-level matching from specified syllable position (e.g., last 2 syllables)
+              <strong>Phoneme level:</strong> Cosine similarity between phoneme vectors (76-dim or 152-dim)
             </Typography>
             <Typography component="li" variant="body2" color="text.secondary">
-              <strong>Near rhymes:</strong> Syllable embedding similarity using soft Levenshtein distance
-              (respects rhyme mode constraints while allowing vowel/consonant variation)
+              <strong>Component level:</strong> Soft Levenshtein distance on phoneme sequences within onset/nucleus/coda
             </Typography>
             <Typography component="li" variant="body2" color="text.secondary">
-              <strong>Overall similarity:</strong> Hierarchical comparison of syllable sequences capturing
-              onset-nucleus-coda structure
+              <strong>Syllable level:</strong> Weighted average of component similarities (user-adjustable weights)
+            </Typography>
+            <Typography component="li" variant="body2" color="text.secondary">
+              <strong>Word level:</strong> Soft Levenshtein distance on syllable sequences
             </Typography>
           </Box>
 
           <Typography variant="body2" color="text.secondary" paragraph>
             <strong>Data Sources:</strong> CMU Pronouncing Dictionary (125K words), PHOIBLE (phonological features),
             SUBTLEX-US (frequency), MRC Psycholinguistic Database (imageability, familiarity), Warriner norms (valence,
-            arousal, dominance), and additional psycholinguistic datasets.
+            arousal, dominance), and additional psycholinguistic datasets. Filtered vocabulary: 17,920 words with
+            frequency + ≥1 psycholinguistic norm.
           </Typography>
 
           <Divider sx={{ my: 3 }} />
@@ -300,6 +311,13 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
           </Typography>
 
           <List sx={{ py: 0 }}>
+            <ListItemButton onClick={() => handleCitationClick('clinical-interventions')} sx={{ borderRadius: 1 }}>
+              <ListItemText
+                primary="Clinical Intervention Approaches"
+                secondary="Maximal opposition, contrastive approaches for SSD"
+              />
+              <ChevronRightIcon />
+            </ListItemButton>
             <ListItemButton onClick={() => handleCitationClick('phonological')} sx={{ borderRadius: 1 }}>
               <ListItemText
                 primary="Phonological Complexity"
@@ -330,8 +348,8 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
             </ListItemButton>
             <ListItemButton onClick={() => handleCitationClick('embeddings')} sx={{ borderRadius: 1 }}>
               <ListItemText
-                primary="Phonological Embeddings"
-                secondary="BERT-style architecture, hierarchical syllable structure"
+                primary="Phonological Similarity Architecture"
+                secondary="Phoneme-sequence soft Levenshtein, Phoible features, syllable structure"
               />
               <ChevronRightIcon />
             </ListItemButton>
@@ -367,7 +385,7 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
 
           <Box sx={{ mt: 3, p: 2, bgcolor: 'primary.50', borderRadius: 1 }}>
             <Typography variant="caption" color="text.secondary" align="center" display="block">
-              PhonoLex v2.1.1-beta • Built with React + TypeScript (Client-Side)
+              PhonoLex v2.3.0-beta • Built with React + TypeScript (Client-Side)
               <br />
               Licensed under CC BY-SA 3.0 • Data resource for phonological research
             </Typography>
@@ -489,7 +507,7 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
 
           <Box sx={{ mt: 4, p: 2, bgcolor: 'primary.50', borderRadius: 1 }}>
             <Typography variant="caption" color="text.secondary" align="center" display="block">
-              PhonoLex v2.1.1-beta • Licensed under CC BY-SA 3.0
+              PhonoLex v2.3.0-beta • Licensed under CC BY-SA 3.0
               <br />
               ShareAlike license required due to PHOIBLE data
             </Typography>

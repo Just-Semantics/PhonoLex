@@ -1,7 +1,7 @@
 /**
- * Search Tool Component
+ * Lookup Tool Component
  *
- * Informational lookup for words and phonemes
+ * Informational lookup for words and phonemes, including phoneme comparison
  */
 
 import React, { useState } from 'react';
@@ -29,6 +29,9 @@ import {
   FormControl,
   InputLabel,
   IconButton,
+  TableContainer,
+  TableHead,
+  Paper,
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -38,9 +41,10 @@ import {
   Add as AddIcon,
   Remove as RemoveIcon,
   Keyboard as KeyboardIcon,
+  SwapHoriz as SwapIcon,
 } from '@mui/icons-material';
 import api from '../../services/phonolexApi';
-import type { Word } from '../../services/phonolexApi';
+import type { Word, PhonemeComparison } from '../../services/phonolexApi';
 import PhonemePickerDialog from '../PhonemePickerDialog';
 import { validatePhonemeInput } from '../../utils/ipaValidation';
 
@@ -69,8 +73,11 @@ interface SimilarityResult {
 const SearchTool: React.FC = () => {
   const [mode, setMode] = useState<SearchMode>('word');
   const [query, setQuery] = useState('');
+  const [query2, setQuery2] = useState(''); // Second phoneme for comparison
   const [wordResult, setWordResult] = useState<Word | null>(null);
   const [phonemeResult, setPhonemeResult] = useState<PhonemeResult | null>(null);
+  const [phoneme2Result, setPhoneme2Result] = useState<PhonemeResult | null>(null);
+  const [comparisonResult, setComparisonResult] = useState<PhonemeComparison | null>(null);
   const [phonemeSearchResult, setPhonemeSearchResult] = useState<PhonemeSearchResult | null>(null);
   const [similarityResults, setSimilarityResults] = useState<SimilarityResult[] | null>(null);
   const [availableFeatures, setAvailableFeatures] = useState<string[]>([]);
@@ -81,7 +88,9 @@ const SearchTool: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [phonemePickerOpen, setPhonemePickerOpen] = useState(false);
+  const [activePhonemeField, setActivePhonemeField] = useState<'phoneme1' | 'phoneme2'>('phoneme1');
   const [ipaWarning, setIpaWarning] = useState<string | null>(null);
+  const [ipaWarning2, setIpaWarning2] = useState<string | null>(null);
 
   // Load available features from phoneme data on mount
   React.useEffect(() => {
@@ -108,6 +117,8 @@ const SearchTool: React.FC = () => {
     setError(null);
     setWordResult(null);
     setPhonemeResult(null);
+    setPhoneme2Result(null);
+    setComparisonResult(null);
     setPhonemeSearchResult(null);
     setSimilarityResults(null);
 
@@ -139,8 +150,20 @@ const SearchTool: React.FC = () => {
           setError('Please enter a phoneme (IPA)');
           return;
         }
-        const data = await api.getPhoneme(query.trim());
-        setPhonemeResult(data);
+
+        // Get first phoneme
+        const p1Raw = await api.getPhoneme(query.trim());
+        setPhonemeResult(p1Raw);
+
+        // If second phoneme is provided, get it and compare
+        if (query2.trim()) {
+          const p2Raw = await api.getPhoneme(query2.trim());
+          setPhoneme2Result(p2Raw);
+
+          // Get comparison
+          const comp = await api.comparePhonemes(query.trim(), query2.trim());
+          setComparisonResult(comp as unknown as PhonemeComparison);
+        }
       } else if (mode === 'phoneme-features') {
         // phoneme-features mode
         const validFilters = featureFilters.filter(f => f.feature && f.value);
@@ -165,8 +188,11 @@ const SearchTool: React.FC = () => {
     if (newMode !== null) {
       setMode(newMode);
       setQuery('');
+      setQuery2('');
       setWordResult(null);
       setPhonemeResult(null);
+      setPhoneme2Result(null);
+      setComparisonResult(null);
       setPhonemeSearchResult(null);
       setSimilarityResults(null);
       setError(null);
@@ -191,6 +217,48 @@ const SearchTool: React.FC = () => {
     if (e.key === 'Enter') {
       handleSearch();
     }
+  };
+
+  const handleSwap = () => {
+    const temp = query;
+    setQuery(query2);
+    setQuery2(temp);
+
+    if (phonemeResult && phoneme2Result) {
+      const tempPhoneme = phonemeResult;
+      setPhonemeResult(phoneme2Result);
+      setPhoneme2Result(tempPhoneme);
+    }
+  };
+
+  const openPhonemePicker = (field: 'phoneme1' | 'phoneme2') => {
+    setActivePhonemeField(field);
+    setPhonemePickerOpen(true);
+  };
+
+  const handlePhonemeSelect = (phoneme: string) => {
+    if (activePhonemeField === 'phoneme1') {
+      setQuery((prev) => prev + phoneme);
+    } else {
+      setQuery2((prev) => prev + phoneme);
+    }
+  };
+
+  // Get feature comparison data
+  const getFeatureComparison = () => {
+    if (!phonemeResult || !phoneme2Result || !phonemeResult.features || !phoneme2Result.features) return [];
+
+    const allFeatures = new Set([
+      ...Object.keys(phonemeResult.features),
+      ...Object.keys(phoneme2Result.features),
+    ]);
+
+    return Array.from(allFeatures).map((feature) => ({
+      feature,
+      phoneme1Value: phonemeResult.features?.[feature] || '',
+      phoneme2Value: phoneme2Result.features?.[feature] || '',
+      match: phonemeResult.features?.[feature] === phoneme2Result.features?.[feature],
+    }));
   };
 
   return (
@@ -218,53 +286,132 @@ const SearchTool: React.FC = () => {
           </ToggleButton>
         </ToggleButtonGroup>
 
-        {/* Word/Phoneme Search Input */}
-        {mode !== 'phoneme-features' && (
+        {/* Word Search Input */}
+        {mode === 'word' && (
           <Box sx={{ position: 'relative' }}>
             <TextField
-              label={mode === 'word' ? 'Enter a word' : 'Select or type phoneme (IPA)'}
+              label="Enter a word"
               value={query}
-              onChange={(e) => {
-                const newValue = e.target.value;
-                setQuery(newValue);
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyPress={handleKeyPress}
+              size="medium"
+              placeholder="e.g., cat, computer, beautiful"
+              fullWidth
+              autoFocus
+            />
+          </Box>
+        )}
 
-                // Validate IPA input in phoneme mode
-                if (mode === 'phoneme' && newValue.trim()) {
-                  const validation = validatePhonemeInput(newValue);
-                  if (!validation.isValid && validation.suggestion) {
-                    setIpaWarning(validation.suggestion);
+        {/* Phoneme Search Inputs (with optional second phoneme for comparison) */}
+        {mode === 'phoneme' && (
+          <Stack spacing={2}>
+            <Box sx={{ position: 'relative' }}>
+              <TextField
+                label="Select or type phoneme (IPA)"
+                value={query}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  setQuery(newValue);
+
+                  // Validate IPA input
+                  if (newValue.trim()) {
+                    const validation = validatePhonemeInput(newValue);
+                    if (!validation.isValid && validation.suggestion) {
+                      setIpaWarning(validation.suggestion);
+                    } else {
+                      setIpaWarning(null);
+                    }
                   } else {
                     setIpaWarning(null);
                   }
-                } else {
-                  setIpaWarning(null);
-                }
-              }}
-              onKeyPress={handleKeyPress}
-              size="medium"
-              placeholder={mode === 'word' ? 'e.g., cat, computer, beautiful' : 'Use keyboard icon → to select IPA'}
-              fullWidth
-              autoFocus
-              InputProps={mode === 'phoneme' ? {
-                endAdornment: (
-                  <IconButton
-                    onClick={() => setPhonemePickerOpen(true)}
-                    edge="end"
-                    color="primary"
-                  >
-                    <KeyboardIcon />
-                  </IconButton>
-                )
-              } : undefined}
-            />
+                }}
+                onKeyPress={handleKeyPress}
+                size="medium"
+                placeholder="Use keyboard icon → to select IPA"
+                fullWidth
+                autoFocus
+                InputProps={{
+                  endAdornment: (
+                    <IconButton
+                      onClick={() => openPhonemePicker('phoneme1')}
+                      edge="end"
+                      color="primary"
+                    >
+                      <KeyboardIcon />
+                    </IconButton>
+                  )
+                }}
+              />
 
-            {/* IPA Warning */}
-            {mode === 'phoneme' && ipaWarning && (
-              <Alert severity="warning" sx={{ mt: 1 }}>
-                {ipaWarning}
-              </Alert>
-            )}
-          </Box>
+              {/* IPA Warning */}
+              {ipaWarning && (
+                <Alert severity="warning" sx={{ mt: 1 }}>
+                  {ipaWarning}
+                </Alert>
+              )}
+            </Box>
+
+            {/* Optional second phoneme for comparison */}
+            <Box>
+              <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>
+                Optional: Compare with second phoneme
+              </Typography>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <TextField
+                  label="Second phoneme (optional)"
+                  value={query2}
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    setQuery2(newValue);
+
+                    // Validate IPA input
+                    if (newValue.trim()) {
+                      const validation = validatePhonemeInput(newValue);
+                      if (!validation.isValid && validation.suggestion) {
+                        setIpaWarning2(validation.suggestion);
+                      } else {
+                        setIpaWarning2(null);
+                      }
+                    } else {
+                      setIpaWarning2(null);
+                    }
+                  }}
+                  onKeyPress={handleKeyPress}
+                  size="medium"
+                  placeholder="Use keyboard icon → to select IPA"
+                  fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton
+                        onClick={() => openPhonemePicker('phoneme2')}
+                        edge="end"
+                        color="primary"
+                      >
+                        <KeyboardIcon />
+                      </IconButton>
+                    )
+                  }}
+                />
+                {query2.trim() && (
+                  <IconButton
+                    onClick={handleSwap}
+                    color="primary"
+                    size="small"
+                    title="Swap phonemes"
+                  >
+                    <SwapIcon />
+                  </IconButton>
+                )}
+              </Stack>
+
+              {/* IPA Warning for second phoneme */}
+              {ipaWarning2 && (
+                <Alert severity="warning" sx={{ mt: 1 }}>
+                  {ipaWarning2}
+                </Alert>
+              )}
+            </Box>
+          </Stack>
         )}
 
         {/* Feature Filters */}
@@ -326,7 +473,7 @@ const SearchTool: React.FC = () => {
           disabled={loading}
           fullWidth
         >
-          {loading ? 'Searching...' : 'Search'}
+          {loading ? 'Searching...' : mode === 'phoneme' && query2.trim() ? 'Compare Phonemes' : 'Lookup'}
         </Button>
       </Stack>
 
@@ -525,8 +672,8 @@ const SearchTool: React.FC = () => {
         </Card>
       )}
 
-      {/* Phoneme Result */}
-      {phonemeResult && phonemeResult.phoneme && (
+      {/* Phoneme Result (single phoneme) */}
+      {phonemeResult && phonemeResult.phoneme && !phoneme2Result && (
         <Card sx={{ mt: 3 }} elevation={2}>
           <CardContent>
             <Typography variant="h5" gutterBottom fontWeight={600} fontFamily="monospace">
@@ -565,6 +712,159 @@ const SearchTool: React.FC = () => {
         </Card>
       )}
 
+      {/* Phoneme Comparison Result (two phonemes) */}
+      {phonemeResult && phoneme2Result && comparisonResult && (
+        <Box sx={{ mt: 3 }}>
+          {/* Summary */}
+          <Paper sx={{ p: { xs: 2, sm: 3 }, mb: 3 }}>
+            <Stack spacing={3}>
+              {/* Phoneme 1 */}
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography variant="h2" sx={{ fontSize: { xs: '2.5rem', sm: '3rem' } }}>
+                  {phonemeResult.phoneme}
+                </Typography>
+                <Typography variant="subtitle1" color="text.secondary">
+                  {phonemeResult.type}
+                </Typography>
+              </Box>
+
+              {/* Feature Distance */}
+              <Box
+                sx={{
+                  textAlign: 'center',
+                  py: 2,
+                  bgcolor: 'primary.50',
+                  borderRadius: 2,
+                }}
+              >
+                <Typography variant="caption" color="text.secondary" display="block">
+                  Feature Distance (0-1 scale)
+                </Typography>
+                <Typography variant="h3" color="primary" sx={{ fontSize: { xs: '2rem', sm: '2.5rem' } }}>
+                  {comparisonResult.similarity_score.toFixed(2)}
+                </Typography>
+                <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 1 }}>
+                  {Object.keys(comparisonResult.different_features).length} differences
+                </Typography>
+              </Box>
+
+              {/* Phoneme 2 */}
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography variant="h2" sx={{ fontSize: { xs: '2.5rem', sm: '3rem' } }}>
+                  {phoneme2Result.phoneme}
+                </Typography>
+                <Typography variant="subtitle1" color="text.secondary">
+                  {phoneme2Result.type}
+                </Typography>
+              </Box>
+            </Stack>
+
+            {Object.keys(comparisonResult.different_features).length > 0 && (
+              <Box sx={{ mt: 3 }}>
+                <Typography variant="subtitle2" gutterBottom>
+                  Differing Features:
+                </Typography>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                  {Object.entries(comparisonResult.different_features).map(([feature]) => (
+                    <Chip
+                      key={feature}
+                      label={feature}
+                      size="small"
+                      color="warning"
+                    />
+                  ))}
+                </Box>
+              </Box>
+            )}
+
+            {Object.keys(comparisonResult.shared_features).length > 0 && (
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="subtitle2" gutterBottom>
+                  Shared Features:
+                </Typography>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                  {Object.entries(comparisonResult.shared_features).map(([feature]) => (
+                    <Chip
+                      key={feature}
+                      label={feature}
+                      size="small"
+                      color="success"
+                      variant="outlined"
+                    />
+                  ))}
+                </Box>
+              </Box>
+            )}
+          </Paper>
+
+          {/* Feature Table */}
+          <Card>
+            <CardContent sx={{ p: { xs: 1, sm: 2 } }}>
+              <Typography variant="h6" gutterBottom sx={{ px: { xs: 1, sm: 0 } }}>
+                Feature Comparison
+              </Typography>
+
+              <TableContainer sx={{ overflowX: 'auto' }}>
+                <Table size="small" sx={{ minWidth: 400 }}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Feature</TableCell>
+                      <TableCell align="center">{phonemeResult.phoneme}</TableCell>
+                      <TableCell align="center">{phoneme2Result.phoneme}</TableCell>
+                      <TableCell align="center">Match</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {getFeatureComparison()
+                      .sort((a, b) => {
+                        // Sort: differences first, then matches
+                        if (a.match !== b.match) return a.match ? 1 : -1;
+                        return a.feature.localeCompare(b.feature);
+                      })
+                      .map((row) => (
+                        <TableRow
+                          key={row.feature}
+                          sx={{
+                            backgroundColor: row.match ? undefined : 'warning.light',
+                            opacity: row.match ? 0.7 : 1,
+                          }}
+                        >
+                          <TableCell>
+                            <Typography variant="body2" fontFamily="monospace">
+                              {row.feature}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Chip
+                              label={row.phoneme1Value || 'N/A'}
+                              size="small"
+                              color={row.phoneme1Value === '+' ? 'primary' : 'default'}
+                            />
+                          </TableCell>
+                          <TableCell align="center">
+                            <Chip
+                              label={row.phoneme2Value || 'N/A'}
+                              size="small"
+                              color={row.phoneme2Value === '+' ? 'primary' : 'default'}
+                            />
+                          </TableCell>
+                          <TableCell align="center">
+                            {row.match ? (
+                              <Chip label="✓" size="small" color="success" />
+                            ) : (
+                              <Chip label="✗" size="small" color="warning" />
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </CardContent>
+          </Card>
+        </Box>
+      )}
+
       {/* Phoneme Search Results */}
       {phonemeSearchResult && (
         <Box sx={{ mt: 3 }}>
@@ -595,7 +895,7 @@ const SearchTool: React.FC = () => {
       <PhonemePickerDialog
         open={phonemePickerOpen}
         onClose={() => setPhonemePickerOpen(false)}
-        onSelect={(phoneme) => setQuery((prev) => prev + phoneme)}
+        onSelect={handlePhonemeSelect}
       />
     </Box>
   );

@@ -29,7 +29,7 @@ PhonoLex v2.0 implements **systematic vocabulary filtering** to reduce database 
 | Metric | Before (Freq Only) | After (Freq + Norm) | Change |
 |--------|-------------------|---------------------|---------|
 | **Word Count** | 48,720 | 24,744 | **-49.2%** ⬇️ |
-| **Layer 4 Embeddings** | ~1.0 GB | **~0.5 GB** | **-49%** ⬇️ |
+| **Phase 3 Embeddings** | ~1.0 GB | **~0.5 GB** | **-49%** ⬇️ |
 | **Database Size** | ~500 MB | **~250 MB** | **-50%** ⬇️ |
 
 ### Norm Coverage (Filtered 24K Words)
@@ -119,7 +119,7 @@ if word_filter.should_include_word("cat"):
 ### Integration Points
 
 1. **[`populate_words.py`](../webapp/backend/migrations/populate_words.py)**: Filters during database population
-2. **[`build_filtered_layer4_embeddings.py`](../scripts/build_filtered_layer4_embeddings.py)**: Creates embeddings only for filtered words
+2. **[`build_filtered_phase3_embeddings.py`](../scripts/build_filtered_phase3_embeddings.py)**: Creates embeddings only for filtered words
 3. **[`populate_edges.py`](../webapp/backend/migrations/populate_edges.py)**: Automatically uses filtered words (looks up from database)
 4. **[`populate_norms.py`](../webapp/backend/migrations/populate_norms.py)**: Automatically updates only filtered words
 
@@ -140,7 +140,7 @@ python webapp/backend/migrations/populate_words.py
 python webapp/backend/migrations/populate_norms.py
 
 # 4. Build filtered embeddings
-python scripts/build_filtered_layer4_embeddings.py
+python scripts/build_filtered_phase3_embeddings.py
 
 # 5. Generate graph edges
 python webapp/backend/migrations/populate_edges.py
@@ -264,16 +264,16 @@ This filtering strategy **enables pure Cloudflare deployment**:
 
 3. **Rebuild embeddings**:
    ```bash
-   python scripts/build_filtered_layer4_embeddings.py
+   python scripts/build_filtered_phase3_embeddings.py
    ```
 
 4. **Update application code** to use filtered embeddings:
    ```python
    # Old
-   checkpoint = torch.load('embeddings/layer4/syllable_embeddings.pt')
+   checkpoint = torch.load('embeddings/phase3/syllable_embeddings.pt')
 
    # New
-   checkpoint = torch.load('embeddings/layer4/syllable_embeddings_filtered.pt')
+   checkpoint = torch.load('embeddings/phase3/syllable_embeddings_filtered.pt')
    ```
 
 ### For New Projects
@@ -282,7 +282,7 @@ Just use the default commands - filtering is automatic:
 
 ```bash
 python webapp/backend/migrations/populate_words.py
-python scripts/build_filtered_layer4_embeddings.py
+python scripts/build_filtered_phase3_embeddings.py
 ```
 
 ---
@@ -290,7 +290,7 @@ python scripts/build_filtered_layer4_embeddings.py
 ## FAQ
 
 **Q: Can I still access the full 125K word vocabulary?**
-A: Yes! The CMU dictionary and Layer 3 model support all 125K words. The filtering only affects the database and Layer 4 embeddings. You can always compute embeddings on-demand for any word.
+A: Yes! The CMU dictionary and Layer 3 model support all 125K words. The filtering only affects the database and Phase 3 embeddings. You can always compute embeddings on-demand for any word.
 
 **Q: What if I need a word that was filtered out?**
 A: You can:

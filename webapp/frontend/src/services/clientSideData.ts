@@ -5,9 +5,12 @@
  * entirely in the browser - no backend required!
  *
  * Data loaded:
- * - word_metadata.json (14 MB) - All word properties
- * - embeddings_quantized.json (75 MB) - Syllable embeddings for similarity
+ * - word_metadata.json (~8 MB) - All word properties
+ * - embeddings.json (~138 MB → 1.5 MB gzipped) - Phoible syllable embeddings
  * - arpa_to_ipa.json (1.2 KB) - ARPAbet mapping reference
+ *
+ * Embeddings are pure Phoible features - no training or quantization needed!
+ * Structure: onset(76) + nucleus(76) + coda(76) = 228 dims per syllable
  */
 
 import type {
@@ -28,9 +31,9 @@ import { tokenizePhonemes as tokenize, containsSequence } from '../utils/phoneme
 interface WordMetadata {
   word: string;
   ipa: string;
-  arpa: string;
+  arpa?: string;  // Optional - not present in Phase 3 exports
   phonemes: string[];
-  phonemes_arpa: string[];
+  phonemes_arpa?: string[];  // Optional - not present in Phase 3 exports
   syllables: Array<{
     onset: string[];
     nucleus: string;
@@ -53,10 +56,11 @@ interface WordMetadata {
 }
 
 interface EmbeddingsData {
-  embeddings: Record<string, number[][]>; // word -> syllables -> int8 values
-  scales: Record<string, number | number[]>; // dequantization scales
+  embeddings: Record<string, number[][]>; // word -> syllables -> float32 values
   embedding_dim: number;
-  quantization: string;
+  syllable_structure: string;
+  source: string;
+  normalization: string;
 }
 
 interface PhonemeData {
@@ -110,7 +114,7 @@ class ClientSideDataService {
       // Load all data in parallel (gzipped files)
       const [metadataRes, embeddingsRes, arpaRes, phonemesRes] = await Promise.all([
         fetch('/data/word_metadata.json.gz'),
-        fetch('/data/embeddings_quantized.json.gz'),
+        fetch('/data/embeddings.json.gz'),
         fetch('/data/arpa_to_ipa.json.gz'),
         fetch('/data/phonemes.json.gz'),
       ]);
@@ -120,7 +124,7 @@ class ClientSideDataService {
         throw new Error(`Failed to load word_metadata.json.gz: ${metadataRes.status} ${metadataRes.statusText}`);
       }
       if (!embeddingsRes.ok) {
-        throw new Error(`Failed to load embeddings_quantized.json.gz: ${embeddingsRes.status} ${embeddingsRes.statusText}`);
+        throw new Error(`Failed to load embeddings.json.gz: ${embeddingsRes.status} ${embeddingsRes.statusText}`);
       }
       if (!arpaRes.ok) {
         throw new Error(`Failed to load arpa_to_ipa.json.gz: ${arpaRes.status} ${arpaRes.statusText}`);
@@ -144,7 +148,7 @@ class ClientSideDataService {
       try {
         embeddingsJson = await embeddingsRes.json();
       } catch (error) {
-        throw new Error(`Failed to parse embeddings_quantized.json.gz: ${error instanceof Error ? error.message : String(error)}`);
+        throw new Error(`Failed to parse embeddings.json.gz: ${error instanceof Error ? error.message : String(error)}`);
       }
 
       try {
@@ -565,7 +569,8 @@ class ClientSideDataService {
   async findSimilarWords(
     word: string,
     threshold: number = 0.85,
-    limit: number = 50
+    limit: number = 50,
+    weights?: { onset: number; nucleus: number; coda: number }
   ): Promise<SimilarityResult[]> {
     await this.ensureLoaded();
 
@@ -594,8 +599,14 @@ class ClientSideDataService {
 
       const similarity = this.computeSoftLevenshteinSimilarity(
         targetEmbeddings,
-        candidateEmbeddings
+        candidateEmbeddings,
+        weights // Pass custom weights if provided
       );
+
+      // Debug logging for first few results
+      if (results.length < 3) {
+        console.log(`Similarity for ${candidateWord}:`, similarity, 'with weights:', weights);
+      }
 
       if (similarity >= threshold) {
         results.push({
@@ -936,6 +947,438 @@ class ClientSideDataService {
 
 
   // ==========================================================================
+  // Maximal Opposition (Gierut 1989-1992, Storkel 2022)
+  // ==========================================================================
+
+  /**
+   * Check if two phonemes differ by major class (sonorant vs. obstruent)
+   * This is the critical criterion for maximal opposition intervention
+   */
+  private hasMajorClassDifference(ipa1: string, ipa2: string): boolean {
+    const p1 = this.phonemes.get(ipa1);
+    const p2 = this.phonemes.get(ipa2);
+
+    if (!p1 || !p2) return false;
+
+    // Both must be consonants
+    if (p1.type !== 'consonant' || p2.type !== 'consonant') {
+      return false;
+    }
+
+    // One must be sonorant, the other obstruent
+    const son1 = p1.features.sonorant === '+';
+    const son2 = p2.features.sonorant === '+';
+
+    return son1 !== son2;
+  }
+
+  /**
+   * Count how many distinctive features differ between two phonemes
+   */
+  private countFeatureDifferences(ipa1: string, ipa2: string): number {
+    const p1 = this.phonemes.get(ipa1);
+    const p2 = this.phonemes.get(ipa2);
+
+    if (!p1 || !p2) return 0;
+
+    let diffCount = 0;
+    const allFeatures = new Set([...Object.keys(p1.features), ...Object.keys(p2.features)]);
+
+    for (const feature of allFeatures) {
+      const val1 = p1.features[feature] || '0';
+      const val2 = p2.features[feature] || '0';
+
+      if (val1 !== val2) {
+        diffCount++;
+      }
+    }
+
+    return diffCount;
+  }
+
+  /**
+   * Calculate maximal opposition score for a phoneme pair
+   * Higher scores = better candidates for maximal opposition intervention
+   *
+   * Scoring:
+   * - Major class difference: +100 (REQUIRED)
+   * - Each feature difference: +1
+   */
+  private calculateMaximalOppositionScore(ipa1: string, ipa2: string): number {
+    let score = 0;
+
+    // CRITICAL: Major class difference (required)
+    if (this.hasMajorClassDifference(ipa1, ipa2)) {
+      score += 100;
+    } else {
+      return 0; // Not suitable for maximal opposition without major class difference
+    }
+
+    // Feature differences
+    score += this.countFeatureDifferences(ipa1, ipa2);
+
+    return score;
+  }
+
+  /**
+   * Generate maximal opposition pairs from a list of unknown phonemes
+   * Based on Gierut's research showing better generalization than minimal pairs
+   */
+  async generateMaximalOppositionPairs(
+    unknownPhonemes: string[],
+    topN: number = 10
+  ): Promise<Array<{
+    phoneme1: string;
+    phoneme2: string;
+    score: number;
+    major_class_diff: boolean;
+    feature_diffs: number;
+  }>> {
+    await this.ensureLoaded();
+
+    const pairs: Array<{
+      phoneme1: string;
+      phoneme2: string;
+      score: number;
+      major_class_diff: boolean;
+      feature_diffs: number;
+    }> = [];
+
+    // Generate all pairs of unknown phonemes
+    for (let i = 0; i < unknownPhonemes.length; i++) {
+      for (let j = i + 1; j < unknownPhonemes.length; j++) {
+        const p1 = unknownPhonemes[i];
+        const p2 = unknownPhonemes[j];
+
+        const score = this.calculateMaximalOppositionScore(p1, p2);
+
+        // Only include pairs with major class difference (score >= 100)
+        if (score >= 100) {
+          pairs.push({
+            phoneme1: p1,
+            phoneme2: p2,
+            score,
+            major_class_diff: true,
+            feature_diffs: score - 100, // Subtract the 100 pt bonus
+          });
+        }
+      }
+    }
+
+    // Sort by score (best first) and return top N
+    pairs.sort((a, b) => b.score - a.score);
+    return pairs.slice(0, topN);
+  }
+
+  /**
+   * Find minimal pair word lists for a maximal opposition phoneme pair
+   * These are used for intervention activities
+   */
+  async findMaximalOppositionWordLists(
+    phoneme1: string,
+    phoneme2: string,
+    position: 'initial' | 'medial' | 'final' | 'any' = 'initial',
+    maxPairs: number = 10
+  ): Promise<Array<{
+    word1: Word;
+    word2: Word;
+    position: number;
+  }>> {
+    await this.ensureLoaded();
+
+    const pairs: Array<{
+      word1: Word;
+      word2: Word;
+      position: number;
+    }> = [];
+
+    // Group words by phoneme length for efficient comparison
+    const byLength: Map<number, Array<[string, WordMetadata]>> = new Map();
+    for (const [word, metadata] of this.wordMetadata.entries()) {
+      const len = metadata.phoneme_count;
+      if (!byLength.has(len)) {
+        byLength.set(len, []);
+      }
+      byLength.get(len)!.push([word, metadata]);
+    }
+
+    // Find minimal pairs
+    for (const [length, words] of byLength.entries()) {
+      if (length < 2) continue; // Need at least 2 phonemes
+
+      for (let i = 0; i < words.length && pairs.length < maxPairs; i++) {
+        const [, meta1] = words[i];
+
+        for (let j = i + 1; j < words.length && pairs.length < maxPairs; j++) {
+          const [, meta2] = words[j];
+
+          // Find differences
+          let diffPos = -1;
+          let diffCount = 0;
+          for (let k = 0; k < meta1.phonemes.length; k++) {
+            if (meta1.phonemes[k] !== meta2.phonemes[k]) {
+              diffPos = k;
+              diffCount++;
+            }
+          }
+
+          // Must differ by exactly one phoneme
+          if (diffCount !== 1) continue;
+
+          // Check position constraint
+          if (position === 'initial' && diffPos !== 0) continue;
+          if (position === 'final' && diffPos !== length - 1) continue;
+          if (position === 'medial' && (diffPos === 0 || diffPos === length - 1)) continue;
+
+          // Check if the differing phonemes match our target pair
+          const ph1 = meta1.phonemes[diffPos];
+          const ph2 = meta2.phonemes[diffPos];
+
+          if ((ph1 === phoneme1 && ph2 === phoneme2) ||
+              (ph1 === phoneme2 && ph2 === phoneme1)) {
+            pairs.push({
+              word1: this.metadataToWord(meta1),
+              word2: this.metadataToWord(meta2),
+              position: diffPos,
+            });
+
+            if (pairs.length >= maxPairs) break;
+          }
+        }
+        if (pairs.length >= maxPairs) break;
+      }
+      if (pairs.length >= maxPairs) break;
+    }
+
+    return pairs;
+  }
+
+  // ==========================================================================
+  // Multiple Opposition (Gierut 1989-1992, Storkel 2022)
+  // ==========================================================================
+
+  /**
+   * Select representative targets from a collapse using Maximal Classification + Maximal Distinction
+   *
+   * Maximal Classification: Select targets that represent the breadth of the phonological collapse
+   * Maximal Distinction: Maximize phonological distance from the substitute phoneme
+   *
+   * @param substitutePhoneme - The phoneme the child produces (e.g., 't')
+   * @param targetPhonemes - All phonemes the child should produce (e.g., ['θ', 'k', 'l', 'kr'])
+   * @param count - How many representative targets to select (typically 3-5)
+   * @returns Selected representative target phonemes
+   */
+  selectRepresentativeTargets(
+    substitutePhoneme: string,
+    targetPhonemes: string[],
+    count: number = 3
+  ): string[] {
+    if (targetPhonemes.length === 0) return [];
+    if (targetPhonemes.length <= count) return [...targetPhonemes];
+
+    // Calculate distance from substitute for each target (Maximal Distinction)
+    const targetDistances = targetPhonemes.map(target => ({
+      phoneme: target,
+      distanceFromSubstitute: this.countFeatureDifferences(substitutePhoneme, target),
+    }));
+
+    // Sort by distance from substitute (furthest first)
+    targetDistances.sort((a, b) => b.distanceFromSubstitute - a.distanceFromSubstitute);
+
+    // Greedy selection algorithm for Maximal Classification:
+    // 1. Start with the target most distant from substitute
+    // 2. Iteratively add targets that maximize diversity (distance from already-selected targets)
+    const selected: string[] = [targetDistances[0].phoneme];
+    const remaining = targetDistances.slice(1);
+
+    while (selected.length < count && remaining.length > 0) {
+      let bestIdx = -1;
+      let bestAvgDistance = -1;
+
+      // Find remaining target with maximum average distance from already-selected targets
+      for (let i = 0; i < remaining.length; i++) {
+        const candidate = remaining[i].phoneme;
+
+        // Calculate average distance from all selected targets
+        let totalDistance = 0;
+        for (const selectedTarget of selected) {
+          totalDistance += this.countFeatureDifferences(candidate, selectedTarget);
+        }
+        const avgDistance = totalDistance / selected.length;
+
+        if (avgDistance > bestAvgDistance) {
+          bestAvgDistance = avgDistance;
+          bestIdx = i;
+        }
+      }
+
+      if (bestIdx >= 0) {
+        selected.push(remaining[bestIdx].phoneme);
+        remaining.splice(bestIdx, 1);
+      } else {
+        break;
+      }
+    }
+
+    return selected;
+  }
+
+  /**
+   * Generate minimal sets (triplets/quadruplets/quintuplets) for Multiple Opposition intervention
+   *
+   * Finds groups of 3-5 words that:
+   * - All have the same length
+   * - Differ at exactly one position
+   * - One word has the substitute phoneme at that position
+   * - Other words have different target phonemes at that position
+   *
+   * @param substitutePhoneme - The phoneme the child produces (e.g., 't')
+   * @param targetPhonemes - Selected representative targets (e.g., ['θ', 'l', 'kr'])
+   * @param position - Where contrast should occur ('initial', 'medial', 'final', 'any')
+   * @param maxSets - Maximum number of minimal sets to return
+   * @returns Array of minimal sets, each containing 3-5 words
+   */
+  async generateMultipleOppositionSets(
+    substitutePhoneme: string,
+    targetPhonemes: string[],
+    position: 'initial' | 'medial' | 'final' | 'any' = 'initial',
+    maxSets: number = 10
+  ): Promise<Array<{
+    words: Array<{ word: Word; phoneme: string }>;
+    position: number;
+  }>> {
+    await this.ensureLoaded();
+
+    const allPhonemes = [substitutePhoneme, ...targetPhonemes];
+    const minSetSize = 3; // At least triplets
+    const maxSetSize = Math.min(5, allPhonemes.length); // Up to quintuplets, or all phonemes
+
+    const sets: Array<{
+      words: Array<{ word: Word; phoneme: string }>;
+      position: number;
+    }> = [];
+
+    // Group words by length for efficient comparison
+    const byLength: Map<number, Array<[string, WordMetadata]>> = new Map();
+    for (const [word, metadata] of this.wordMetadata.entries()) {
+      const len = metadata.phoneme_count;
+      if (!byLength.has(len)) {
+        byLength.set(len, []);
+      }
+      byLength.get(len)!.push([word, metadata]);
+    }
+
+    // For each word length
+    for (const [length, words] of byLength.entries()) {
+      if (length < 2) continue;
+
+      // Build position-phoneme index for fast lookup
+      // Map: position -> phoneme -> [words with that phoneme at that position]
+      const positionIndex = new Map<number, Map<string, WordMetadata[]>>();
+
+      for (let pos = 0; pos < length; pos++) {
+        // Skip positions that don't match constraint
+        if (position === 'initial' && pos !== 0) continue;
+        if (position === 'final' && pos !== length - 1) continue;
+        if (position === 'medial' && (pos === 0 || pos === length - 1)) continue;
+
+        const phonemeMap = new Map<string, WordMetadata[]>();
+
+        for (const [, meta] of words) {
+          const phoneme = meta.phonemes[pos];
+          if (allPhonemes.includes(phoneme)) {
+            if (!phonemeMap.has(phoneme)) {
+              phonemeMap.set(phoneme, []);
+            }
+            phonemeMap.get(phoneme)!.push(meta);
+          }
+        }
+
+        positionIndex.set(pos, phonemeMap);
+      }
+
+      // Find minimal sets at each position
+      for (const [pos, phonemeMap] of positionIndex.entries()) {
+        // Need at least minSetSize different phonemes represented
+        if (phonemeMap.size < minSetSize) continue;
+
+        // Get words for each phoneme
+        const phonemeWords = new Map<string, WordMetadata[]>();
+        for (const phoneme of allPhonemes) {
+          if (phonemeMap.has(phoneme)) {
+            phonemeWords.set(phoneme, phonemeMap.get(phoneme)!);
+          }
+        }
+
+        // Must have substitute + at least 2 targets
+        if (!phonemeWords.has(substitutePhoneme)) continue;
+        if (phonemeWords.size < minSetSize) continue;
+
+        // Try to build minimal sets
+        // For each word with substitute phoneme, find matching words with target phonemes
+        const substituteWords = phonemeWords.get(substitutePhoneme)!;
+
+        for (const subWord of substituteWords) {
+          if (sets.length >= maxSets) break;
+
+          // Find words that differ ONLY at position pos
+          const matchingWords: Array<{ meta: WordMetadata; phoneme: string }> = [];
+          const usedPhonemes = new Set<string>([substitutePhoneme]); // Track phonemes already in the set
+
+          for (const [targetPhoneme, targetWords] of phonemeWords.entries()) {
+            if (targetPhoneme === substitutePhoneme) continue;
+            if (usedPhonemes.has(targetPhoneme)) continue; // Skip if phoneme already used
+
+            for (const targetWord of targetWords) {
+              // Check if words differ only at position pos
+              let differenceCount = 0;
+              for (let k = 0; k < length; k++) {
+                if (subWord.phonemes[k] !== targetWord.phonemes[k]) {
+                  if (k === pos) {
+                    differenceCount++;
+                  } else {
+                    // Different at another position - not a minimal pair
+                    differenceCount = 999;
+                    break;
+                  }
+                }
+              }
+
+              if (differenceCount === 1) {
+                matchingWords.push({ meta: targetWord, phoneme: targetPhoneme });
+                usedPhonemes.add(targetPhoneme); // Mark this phoneme as used
+                break; // Only take one word per phoneme
+              }
+            }
+          }
+
+          // Need at least 2 different targets (for triplet: substitute + 2 targets)
+          if (matchingWords.length >= minSetSize - 1) {
+            // Take best targets (up to maxSetSize - 1)
+            const selectedTargets = matchingWords.slice(0, maxSetSize - 1);
+
+            sets.push({
+              words: [
+                { word: this.metadataToWord(subWord), phoneme: substitutePhoneme },
+                ...selectedTargets.map(t => ({ word: this.metadataToWord(t.meta), phoneme: t.phoneme }))
+              ],
+              position: pos,
+            });
+
+            if (sets.length >= maxSets) break;
+          }
+        }
+
+        if (sets.length >= maxSets) break;
+      }
+
+      if (sets.length >= maxSets) break;
+    }
+
+    return sets;
+  }
+
+  // ==========================================================================
   // Statistics
   // ==========================================================================
 
@@ -1080,7 +1523,7 @@ class ClientSideDataService {
       arpa: metadata.arpa,
       phonemes: metadata.phonemes.map((ipa, i) => ({
         ipa,
-        arpa: metadata.phonemes_arpa[i],
+        arpa: metadata.phonemes_arpa?.[i],  // Optional chaining for Phase 3 data
         position: i,
       })),
       syllables: metadata.syllables,
@@ -1101,21 +1544,15 @@ class ClientSideDataService {
   }
 
   /**
-   * Get dequantized embeddings for a word
+   * Get Phoible embeddings for a word (no dequantization needed)
    */
   private getWordEmbeddings(word: string): number[][] | null {
     if (!this.embeddings) return null;
 
-    const quantized = this.embeddings.embeddings[word.toLowerCase()];
-    if (!quantized) return null;
+    const embeddings = this.embeddings.embeddings[word.toLowerCase()];
+    if (!embeddings) return null;
 
-    const scale = this.embeddings.scales[word.toLowerCase()];
-    if (!scale) return null;
-
-    // Dequantize each syllable
-    return quantized.map((syllable) =>
-      syllable.map((val) => val * (Array.isArray(scale) ? scale[0] : scale))
-    );
+    return embeddings;
   }
 
   /**
@@ -1123,11 +1560,22 @@ class ClientSideDataService {
    *
    * Uses dynamic programming with soft costs based on syllable similarity.
    * See docs/EMBEDDINGS_ARCHITECTURE.md for algorithm details.
+   *
+   * @param syllables1 First word's syllable embeddings
+   * @param syllables2 Second word's syllable embeddings
+   * @param weights Optional component weights for similarity calculation
    */
   private computeSoftLevenshteinSimilarity(
     syllables1: number[][],
-    syllables2: number[][]
+    syllables2: number[][],
+    weights?: { onset: number; nucleus: number; coda: number }
   ): number {
+    // Null/undefined check
+    if (!syllables1 || !syllables2 || !Array.isArray(syllables1) || !Array.isArray(syllables2)) {
+      console.warn('Invalid syllables arrays passed to computeSoftLevenshteinSimilarity:', { syllables1, syllables2 });
+      return 0;
+    }
+
     const len1 = syllables1.length;
     const len2 = syllables2.length;
 
@@ -1138,7 +1586,14 @@ class ClientSideDataService {
 
     for (let i = 0; i < len1; i++) {
       for (let j = 0; j < len2; j++) {
-        simMatrix[i][j] = this.cosineSimilarity(syllables1[i], syllables2[j]);
+        // Validate syllable embeddings exist
+        if (!syllables1[i] || !syllables2[j]) {
+          console.warn(`Missing syllable embedding: syllables1[${i}]=${!!syllables1[i]}, syllables2[${j}]=${!!syllables2[j]}`);
+          simMatrix[i][j] = 0;
+          continue;
+        }
+        // Use weighted similarity with custom or default weights
+        simMatrix[i][j] = this.cosineSimilarityWeighted(syllables1[i], syllables2[j], weights);
       }
     }
 
@@ -1182,6 +1637,18 @@ class ClientSideDataService {
    * Cosine similarity between two vectors
    */
   private cosineSimilarity(vec1: number[], vec2: number[]): number {
+    // Null/undefined check
+    if (!vec1 || !vec2 || !Array.isArray(vec1) || !Array.isArray(vec2)) {
+      console.warn('Invalid vectors passed to cosineSimilarity:', { vec1, vec2 });
+      return 0;
+    }
+
+    // Length check
+    if (vec1.length !== vec2.length) {
+      console.warn(`Vector length mismatch: vec1=${vec1.length}, vec2=${vec2.length}`);
+      return 0;
+    }
+
     let dot = 0;
     let mag1 = 0;
     let mag2 = 0;
@@ -1198,6 +1665,73 @@ class ClientSideDataService {
     if (mag1 === 0 || mag2 === 0) return 0;
 
     return dot / (mag1 * mag2);
+  }
+
+  /**
+   * Weighted component cosine similarity for syllable embeddings.
+   *
+   * Computes similarity with user-adjustable weights for onset, nucleus, and coda.
+   * Default equal weights (1/3 each) ensure balanced comparison.
+   *
+   * @param vec1 228-dim syllable embedding [onset(76) + nucleus(76) + coda(76)]
+   * @param vec2 228-dim syllable embedding [onset(76) + nucleus(76) + coda(76)]
+   * @param weights Optional weights { onset, nucleus, coda }. Defaults to equal (0.33 each)
+   * @returns Weighted average similarity
+   */
+  private cosineSimilarityWeighted(
+    vec1: number[],
+    vec2: number[],
+    weights: { onset: number; nucleus: number; coda: number } = { onset: 0.33, nucleus: 0.33, coda: 0.33 }
+  ): number {
+    // Null/undefined check
+    if (!vec1 || !vec2 || !Array.isArray(vec1) || !Array.isArray(vec2)) {
+      console.warn('Invalid vectors passed to cosineSimilarityWeighted:', { vec1, vec2 });
+      return 0;
+    }
+
+    // Dimension check
+    if (vec1.length !== 228 || vec2.length !== 228) {
+      console.warn(`Unexpected embedding dimensions: vec1=${vec1.length}, vec2=${vec2.length}. Expected 228.`);
+      return 0;
+    }
+
+    // Component boundaries for Phase 3 Phoible embeddings (76 dims each)
+    const ONSET_START = 0;
+    const ONSET_END = 76;
+    const NUCLEUS_START = 76;
+    const NUCLEUS_END = 152;
+    const CODA_START = 152;
+    const CODA_END = 228;
+
+    // Create weighted copies of the vectors by scaling each component
+    // Use sqrt of weights to preserve magnitude relationships
+    const weighted1 = new Float32Array(228);
+    const weighted2 = new Float32Array(228);
+
+    const sqrtOnset = Math.sqrt(weights.onset);
+    const sqrtNucleus = Math.sqrt(weights.nucleus);
+    const sqrtCoda = Math.sqrt(weights.coda);
+
+    // Scale onset component
+    for (let i = ONSET_START; i < ONSET_END; i++) {
+      weighted1[i] = vec1[i] * sqrtOnset;
+      weighted2[i] = vec2[i] * sqrtOnset;
+    }
+
+    // Scale nucleus component
+    for (let i = NUCLEUS_START; i < NUCLEUS_END; i++) {
+      weighted1[i] = vec1[i] * sqrtNucleus;
+      weighted2[i] = vec2[i] * sqrtNucleus;
+    }
+
+    // Scale coda component
+    for (let i = CODA_START; i < CODA_END; i++) {
+      weighted1[i] = vec1[i] * sqrtCoda;
+      weighted2[i] = vec2[i] * sqrtCoda;
+    }
+
+    // Compute cosine similarity on weighted vectors
+    return this.cosineSimilarity(Array.from(weighted1), Array.from(weighted2));
   }
 }
 

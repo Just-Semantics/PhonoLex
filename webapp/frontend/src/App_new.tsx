@@ -2,12 +2,10 @@
  * PhonoLex - Modern Phonological Analysis Tool
  *
  * Flat card-based interface with progressive disclosure:
- * - Minimal Pairs
- * - Rhyme Sets
- * - Word Search
- * - Similarity Search
  * - Custom Builder
- * - Phoneme Comparison
+ * - Contrastive Intervention (Minimal Pairs, Maximal Opposition, Multiple Opposition)
+ * - Phonological Similarity Explorer
+ * - Lookup (Words, Phonemes, Phoneme Comparison)
  */
 
 import React from 'react';
@@ -22,20 +20,18 @@ import {
 import {
   Build as BuildIcon,
   Search as SearchIcon,
-  Compare as CompareIcon,
-  SwapHoriz as MinimalPairIcon,
-  MusicNote as RhymeIcon,
+  CompareArrows as ContrastiveIcon,
+  Tune as SimilarityIcon,
 } from '@mui/icons-material';
 import { theme } from './theme/theme';
 
 // Import components
 import AppHeader from './components/AppHeader';
 import ExpandableToolCard from './components/ExpandableToolCard';
-import MinimalPairsTool from './components/tools/MinimalPairsTool';
-import RhymeSetsTool from './components/tools/RhymeSetsTool';
+import ContrastiveInterventionTool from './components/tools/ContrastiveInterventionTool';
+import PhonologicalSimilarityTool from './components/tools/PhonologicalSimilarityTool';
 import SearchTool from './components/tools/SearchTool';
 import Builder from './components/Builder';
-import Compare from './components/Compare';
 
 const App: React.FC = () => {
 
@@ -64,47 +60,36 @@ const App: React.FC = () => {
             icon={<BuildIcon />}
             title="Custom Word List Builder"
             description="Pattern matching with phonological, lexical, semantic, and affective property filters"
-            defaultExpanded={true}
             color="primary.main"
           >
             <Builder />
           </ExpandableToolCard>
 
-          {/* Minimal Pairs */}
+          {/* Contrastive Intervention */}
           <ExpandableToolCard
-            icon={<MinimalPairIcon />}
-            title="Minimal Pairs"
-            description="Word pairs differing by single phoneme for contrastive analysis"
+            icon={<ContrastiveIcon />}
+            title="Contrastive Intervention"
+            description="Research-based phonological interventions: minimal pairs, maximal opposition, and multiple opposition"
             color="secondary.main"
           >
-            <MinimalPairsTool />
+            <ContrastiveInterventionTool />
           </ExpandableToolCard>
 
-          {/* Rhyme Sets */}
+          {/* Phonological Similarity Explorer */}
           <ExpandableToolCard
-            icon={<RhymeIcon />}
-            title="Rhyme Sets"
-            description="Generate rhyming word sets with configurable match criteria"
+            icon={<SimilarityIcon />}
+            title="Phonological Similarity Explorer"
+            description="Find similar words with adjustable onset, nucleus, and coda weights - perfect for rhymes, alliteration, and more"
             color="#D4A747"
           >
-            <RhymeSetsTool />
+            <PhonologicalSimilarityTool />
           </ExpandableToolCard>
 
-          {/* Phoneme Comparison */}
-          <ExpandableToolCard
-            icon={<CompareIcon />}
-            title="Phoneme Comparison"
-            description="Compare distinctive features and compute phonological distance"
-            color="info.main"
-          >
-            <Compare />
-          </ExpandableToolCard>
-
-          {/* Word Search */}
+          {/* Lookup */}
           <ExpandableToolCard
             icon={<SearchIcon />}
-            title="Search"
-            description="Lookup words, phonemes, or compute phonological similarity"
+            title="Lookup"
+            description="Look up words and phonemes, compare phoneme features, or search by distinctive features"
             color="#7A7A78"
           >
             <SearchTool />

@@ -7,11 +7,12 @@ in the browser, eliminating the need for backend servers and databases.
 
 Outputs:
 1. word_metadata.json - All word properties, IPA, syllables, psycholinguistic norms
-2. embeddings_quantized.bin - Int8 quantized syllable embeddings (42MB)
+2. embeddings.json - Phoible-based syllable embeddings (onset/nucleus/coda, 228-dim)
 3. minimal_pairs.json - Precomputed minimal pairs relationships
 4. phoneme_features.json - Phoneme inventory with Phoible features
 
-Total size: ~60-80MB (suitable for browser loading)
+Total size: ~50MB uncompressed, ~2MB gzipped (perfect for browser loading)
+No quantization needed - Phoible embeddings compress extremely well!
 """
 
 import sys
@@ -31,15 +32,16 @@ from src.phonolex.utils.syllabification import syllabify
 
 
 def load_filtered_embeddings():
-    """Load the filtered quantized embeddings"""
-    print("\n[1/5] Loading filtered quantized embeddings...")
-    emb_path = project_root / "embeddings/layer4/syllable_embeddings_filtered_quantized.pt"
+    """Load the Phoible-based embeddings (no quantization needed)"""
+    print("\n[1/5] Loading Phoible-based embeddings...")
+    emb_path = project_root / "embeddings/phase3/syllable_embeddings_phoible.pt"
 
     checkpoint = torch.load(emb_path, map_location='cpu', weights_only=False)
 
-    print(f"  ✓ Loaded {len(checkpoint['quantized_embeddings']):,} words")
+    print(f"  ✓ Loaded {len(checkpoint['word_to_syllable_embeddings']):,} words")
     print(f"  ✓ Embedding dim: {checkpoint['embedding_dim']}")
-    print(f"  ✓ Quantization: {checkpoint['quantization']}")
+    print(f"  ✓ Source: {checkpoint['source']}")
+    print(f"  ✓ No quantization needed (small size + high compressibility)")
 
     return checkpoint
 
@@ -145,16 +147,22 @@ def compute_minimal_pairs(word_metadata):
 
 
 def load_phoneme_features():
-    """Load phoneme features from Phoible"""
+    """Load phoneme features from existing phonemes.json"""
     print("\n[4/5] Loading phoneme features...")
 
-    features_path = project_root / "data/phoible/phoible_features.json"
+    # Load from the already-exported phonemes.json in public/data
+    features_path = project_root / "webapp/frontend/public/data/phonemes.json"
 
     with open(features_path, 'r') as f:
-        features_data = json.load(f)
+        phonemes_data = json.load(f)
 
-    print(f"  ✓ Loaded features for {len(features_data):,} phonemes")
-    return features_data
+    # Convert from array format to dict format (ipa -> features)
+    features_dict = {}
+    for phoneme in phonemes_data['phonemes']:
+        features_dict[phoneme['ipa']] = phoneme
+
+    print(f"  ✓ Loaded features for {len(features_dict):,} phonemes")
+    return features_dict
 
 
 def export_data(embeddings_checkpoint, word_metadata, minimal_pairs, phoneme_features, output_dir):
@@ -174,26 +182,26 @@ def export_data(embeddings_checkpoint, word_metadata, minimal_pairs, phoneme_fea
     print(f"  ✓ word_metadata.json ({size_mb:.1f} MB)")
 
     # 2. Export embeddings in browser-friendly format
-    # Save quantized embeddings dict directly (can be loaded with fetch + parsed)
-    embeddings_path = output_dir / "embeddings_quantized.json"
+    # No quantization needed - Phoible embeddings are already small and compress well
+    embeddings_path = output_dir / "embeddings.json"
 
     # Convert numpy arrays to lists for JSON serialization
     embeddings_json = {}
-    for word, syllable_arrays in embeddings_checkpoint['quantized_embeddings'].items():
+    for word, syllable_arrays in embeddings_checkpoint['word_to_syllable_embeddings'].items():
         embeddings_json[word] = [arr.tolist() for arr in syllable_arrays]
 
-    # Also include scales for dequantization
     export_data = {
         'embeddings': embeddings_json,
-        'scales': {k: float(v) for k, v in embeddings_checkpoint['scales'].items()},
         'embedding_dim': int(embeddings_checkpoint['embedding_dim']),
-        'quantization': embeddings_checkpoint['quantization']
+        'syllable_structure': embeddings_checkpoint['syllable_structure'],
+        'source': embeddings_checkpoint['source'],
+        'normalization': embeddings_checkpoint['normalization'],
     }
 
     with open(embeddings_path, 'w') as f:
         json.dump(export_data, f, separators=(',', ':'))
     size_mb = embeddings_path.stat().st_size / 1024 / 1024
-    print(f"  ✓ embeddings_quantized.json ({size_mb:.1f} MB)")
+    print(f"  ✓ embeddings.json ({size_mb:.1f} MB)")
 
     # 3. Export minimal pairs
     pairs_path = output_dir / "minimal_pairs.json"
@@ -219,7 +227,7 @@ def export_data(embeddings_checkpoint, word_metadata, minimal_pairs, phoneme_fea
         'filter_criterion': 'frequency + at least one psycholinguistic norm',
         'files': {
             'word_metadata.json': 'Word properties, IPA, syllables, psycholinguistic norms',
-            'embeddings_quantized.json': 'Int8 quantized syllable embeddings for similarity',
+            'embeddings.json': 'Phoible-based syllable embeddings (onset/nucleus/coda)',
             'minimal_pairs.json': 'Precomputed minimal pair relationships',
             'phoneme_features.json': 'Phoneme inventory with Phoible features'
         }
@@ -248,7 +256,7 @@ def export_data(embeddings_checkpoint, word_metadata, minimal_pairs, phoneme_fea
         print(f"    {json_file.name} → {gz_file.name} ({compressed_size:.1f} MB, {ratio:.0f}% reduction)")
 
         # Delete large uncompressed files (>50MB GitHub limit) - only keep .gz
-        if original_size > 50 and json_file.name == 'embeddings_quantized.json':
+        if original_size > 50 and json_file.name == 'embeddings.json':
             json_file.unlink()
             print(f"    Deleted uncompressed {json_file.name} (exceeds 50MB GitHub limit)")
 
@@ -265,7 +273,7 @@ def main():
 
     # Load filtered embeddings
     embeddings_checkpoint = load_filtered_embeddings()
-    filtered_words = sorted(embeddings_checkpoint['quantized_embeddings'].keys())
+    filtered_words = sorted(embeddings_checkpoint['word_to_syllable_embeddings'].keys())
 
     # Load word metadata
     word_metadata = load_word_metadata(filtered_words)
