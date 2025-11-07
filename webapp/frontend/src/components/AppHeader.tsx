@@ -91,7 +91,7 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
             />
             PhonoLex
             <Chip
-              label="v2.3.0-beta"
+              label="v2.2.0-beta"
               size="small"
               sx={{
                 height: { xs: 18, sm: 20 },
@@ -373,7 +373,7 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
 
           <Box sx={{ mt: 3, p: 2, bgcolor: 'primary.50', borderRadius: 1 }}>
             <Typography variant="caption" color="text.secondary" align="center" display="block">
-              PhonoLex v2.3.0-beta • Built with React + TypeScript (Client-Side)
+              PhonoLex v2.2.0-beta • Built with React + TypeScript (Client-Side)
               <br />
               Licensed under CC BY-SA 3.0 • Data resource for phonological research
             </Typography>
@@ -450,7 +450,7 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
 
           <Box sx={{ mt: 4, p: 2, bgcolor: 'primary.50', borderRadius: 1 }}>
             <Typography variant="caption" color="text.secondary" align="center" display="block">
-              PhonoLex v2.3.0-beta • Licensed under CC BY-SA 3.0
+              PhonoLex v2.2.0-beta • Licensed under CC BY-SA 3.0
               <br />
               ShareAlike license required due to PHOIBLE data
             </Typography>
