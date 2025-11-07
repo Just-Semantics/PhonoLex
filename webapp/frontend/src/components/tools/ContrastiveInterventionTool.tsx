@@ -46,7 +46,7 @@ import {
 import api from '../../services/phonolexApi';
 import type { Word, MinimalPair } from '../../services/phonolexApi';
 import PhonemePickerDialog from '../PhonemePickerDialog';
-import WordResultsDisplay from '../WordResultsDisplay';
+import ContrastiveGroupsTable from '../shared/ContrastiveGroupsTable';
 import { validatePhonemeInput } from '../../utils/ipaValidation';
 
 type InterventionMode = 'minimal' | 'maximal' | 'multiple';
@@ -789,7 +789,12 @@ const ContrastiveInterventionTool: React.FC = () => {
 
         {/* Results: Minimal Pairs */}
         {mode === 'minimal' && minimalResults && minimalResults.length > 0 && (
-          <WordResultsDisplay results={minimalResults} />
+          <ContrastiveGroupsTable
+            pairs={minimalResults}
+            mode="minimal"
+            enableSelection={true}
+            exportFilename={`phonolex_minimal_pairs_${phoneme1}_${phoneme2}.csv`}
+          />
         )}
 
         {mode === 'minimal' && minimalResults && minimalResults.length === 0 && (
@@ -841,10 +846,10 @@ const ContrastiveInterventionTool: React.FC = () => {
 
         {/* Results: Word Lists for Selected Pair */}
         {mode === 'maximal' && selectedPair && (
-          <Paper sx={{ p: { xs: 2, sm: 3 } }}>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2, fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
+          <Box>
+            <Alert severity="info" sx={{ mb: 2 }}>
               Word pairs for /{selectedPair.phoneme1}/ - /{selectedPair.phoneme2}/ in {position} position
-            </Typography>
+            </Alert>
 
             {loading && (
               <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
@@ -853,37 +858,18 @@ const ContrastiveInterventionTool: React.FC = () => {
             )}
 
             {wordLists && wordLists.length > 0 && (
-              <Stack spacing={1}>
-                {wordLists.map((pair, index) => (
-                  <Paper key={index} sx={{ p: { xs: 1.5, sm: 2 }, bgcolor: 'action.hover' }}>
-                    <Stack direction="row" spacing={{ xs: 1.5, sm: 3 }} alignItems="center">
-                      <Typography variant="body1" sx={{ minWidth: { xs: 20, sm: 30 }, fontSize: { xs: '0.9375rem', sm: '1rem' } }}>
-                        {index + 1}.
-                      </Typography>
-                      <Box sx={{ flexGrow: 1 }}>
-                        <Stack direction="row" spacing={2} divider={<Typography>-</Typography>}>
-                          <Box>
-                            <Typography variant="body1" fontWeight="bold" sx={{ fontSize: { xs: '0.9375rem', sm: '1rem' } }}>
-                              {pair.word1.word}
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
-                              /{pair.word1.ipa}/
-                            </Typography>
-                          </Box>
-                          <Box>
-                            <Typography variant="body1" fontWeight="bold" sx={{ fontSize: { xs: '0.9375rem', sm: '1rem' } }}>
-                              {pair.word2.word}
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
-                              /{pair.word2.ipa}/
-                            </Typography>
-                          </Box>
-                        </Stack>
-                      </Box>
-                    </Stack>
-                  </Paper>
-                ))}
-              </Stack>
+              <ContrastiveGroupsTable
+                pairs={wordLists.map(pair => ({
+                  word1: pair.word1,
+                  word2: pair.word2,
+                  position: pair.position,
+                  phoneme1: selectedPair.phoneme1,
+                  phoneme2: selectedPair.phoneme2,
+                }))}
+                mode="maximal"
+                enableSelection={true}
+                exportFilename={`phonolex_maximal_${selectedPair.phoneme1}_${selectedPair.phoneme2}.csv`}
+              />
             )}
 
             {!loading && wordLists && wordLists.length === 0 && (
@@ -891,16 +877,12 @@ const ContrastiveInterventionTool: React.FC = () => {
                 No word pairs found for this phoneme combination in {position} position. Try selecting a different position.
               </Alert>
             )}
-          </Paper>
+          </Box>
         )}
 
         {/* Results: Multiple Opposition Sets */}
         {mode === 'multiple' && representativeTargets && (
-          <Paper sx={{ p: { xs: 2, sm: 3 } }}>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2, fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
-              Selected representative targets using Maximal Classification + Maximal Distinction algorithms
-            </Typography>
-
+          <Box>
             <Alert severity="info" sx={{ mb: 2 }}>
               <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.5 }}>
                 Collapse: [{substitutePhoneme}] → /{representativeTargets.join(', ')}/
@@ -917,54 +899,18 @@ const ContrastiveInterventionTool: React.FC = () => {
             )}
 
             {multipleSets && multipleSets.length > 0 && (
-              <>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 2, fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
-                  Minimal {multipleSets[0].words.length === 3 ? 'Triplets' : multipleSets[0].words.length === 4 ? 'Quadruplets' : 'Sets'} for intervention (showing {multipleSets.length})
-                </Typography>
-
-                <Stack spacing={2}>
-                  {multipleSets.map((set, setIndex) => (
-                    <Paper key={setIndex} sx={{ p: { xs: 1.5, sm: 2 }, bgcolor: 'action.hover' }}>
-                      <Typography variant="body2" fontWeight={600} sx={{ mb: 1, fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
-                        Set {setIndex + 1}:
-                      </Typography>
-                      <Stack direction="row" spacing={{ xs: 1, sm: 2 }} flexWrap="wrap" useFlexGap>
-                        {set.words.map((wordData, wordIndex) => (
-                          <Box
-                            key={wordIndex}
-                            sx={{
-                              display: 'flex',
-                              flexDirection: 'column',
-                              alignItems: 'center',
-                              minWidth: { xs: 60, sm: 80 },
-                            }}
-                          >
-                            <Typography
-                              variant="body1"
-                              fontWeight="bold"
-                              sx={{
-                                fontSize: { xs: '0.9375rem', sm: '1rem' },
-                                color: wordData.phoneme === substitutePhoneme ? 'error.main' : 'text.primary',
-                              }}
-                            >
-                              {wordData.word.word}
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
-                              /{wordData.word.ipa}/
-                            </Typography>
-                            <Chip
-                              label={`/${wordData.phoneme}/`}
-                              size="small"
-                              color={wordData.phoneme === substitutePhoneme ? 'error' : 'primary'}
-                              sx={{ mt: 0.5, fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}
-                            />
-                          </Box>
-                        ))}
-                      </Stack>
-                    </Paper>
-                  ))}
-                </Stack>
-              </>
+              <ContrastiveGroupsTable
+                groups={multipleSets.map(set => ({
+                  words: set.words.map(w => ({
+                    ...w,
+                    position: set.position,
+                  })),
+                }))}
+                mode="multiple"
+                substitutePhoneme={substitutePhoneme}
+                enableSelection={true}
+                exportFilename={`phonolex_multiple_opposition_${substitutePhoneme}.csv`}
+              />
             )}
 
             {!loading && multipleSets && multipleSets.length === 0 && (
@@ -972,7 +918,7 @@ const ContrastiveInterventionTool: React.FC = () => {
                 No minimal sets found for this collapse in {position} position. Try selecting a different position or different target phonemes.
               </Alert>
             )}
-          </Paper>
+          </Box>
         )}
       </Stack>
 

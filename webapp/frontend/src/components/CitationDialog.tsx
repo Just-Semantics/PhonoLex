@@ -45,11 +45,14 @@ interface CitationDialogProps {
 const citations: Record<string, Citation[]> = {
   phonological: [
     {
-      authors: 'Moran, S., & McCloy, D.',
-      year: '2019',
-      title: 'PHOIBLE 2.0',
-      publisher: 'Max Planck Institute for the Science of Human History',
-      url: 'https://phoible.org/',
+      authors: 'Stoel-Gammon, C.',
+      year: '2010',
+      title: 'The Word Complexity Measure: Description and application to developmental phonology and disorders',
+      journal: 'Clinical Linguistics & Phonetics',
+      volume: '24',
+      issue: '4-5',
+      pages: '271-282',
+      doi: '10.3109/02699200903581059',
     },
     {
       authors: 'Hayes, B.',
@@ -63,16 +66,6 @@ const citations: Record<string, Citation[]> = {
       title: 'The \'whole larynx\' approach to laryngeal features',
       journal: 'Proceedings of the International Congress of Phonetic Sciences XVII',
       pages: '1406-1409',
-    },
-    {
-      authors: 'Stoel-Gammon, C.',
-      year: '2010',
-      title: 'The Word Complexity Measure: Description and application to developmental phonology and disorders',
-      journal: 'Clinical Linguistics & Phonetics',
-      volume: '24',
-      issue: '4-5',
-      pages: '271-282',
-      doi: '10.3109/02699200903581059',
     },
   ],
   lexical: [

@@ -194,19 +194,19 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
           <List dense>
             <ListItem>
               <ListItemText
-                primary="Custom Word List Builder"
+                primary="Custom Word Lists"
                 secondary="Pattern matching with phonological, lexical, semantic, and affective property filters"
               />
             </ListItem>
             <ListItem>
               <ListItemText
-                primary="Contrastive Intervention"
+                primary="Contrastive Sets"
                 secondary="Minimal pairs, maximal opposition, and multiple opposition for speech therapy"
               />
             </ListItem>
             <ListItem>
               <ListItemText
-                primary="Phonological Similarity Explorer"
+                primary="Phonological Similarity"
                 secondary="Adjustable onset/nucleus/coda weights for rhymes, alliteration, and consonance"
               />
             </ListItem>
@@ -292,24 +292,42 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
           <Divider sx={{ my: 3 }} />
 
           <Typography variant="h6" gutterBottom fontWeight={600}>
-            Research & Data Sources
+            References
           </Typography>
           <Typography variant="body2" color="text.secondary" paragraph>
-            Click any category below to view detailed citations and references
+            Click any category below to view detailed citations
           </Typography>
 
           <List sx={{ py: 0 }}>
-            <ListItemButton onClick={() => handleCitationClick('clinical-interventions')} sx={{ borderRadius: 1 }}>
+            {/* Data Sources & Methodology */}
+            <Typography variant="caption" color="text.secondary" sx={{ px: 2, py: 1, display: 'block', fontWeight: 600 }}>
+              Data Sources & Methodology
+            </Typography>
+            <ListItemButton onClick={() => handleCitationClick('data-sources')} sx={{ borderRadius: 1 }}>
               <ListItemText
-                primary="Clinical Intervention Approaches"
-                secondary="Maximal opposition, contrastive approaches for SSD"
+                primary="Primary Data Sources"
+                secondary="CMU Dictionary, PHOIBLE, SUBTLEX-US"
               />
               <ChevronRightIcon />
             </ListItemButton>
+            <ListItemButton onClick={() => handleCitationClick('embeddings')} sx={{ borderRadius: 1 }}>
+              <ListItemText
+                primary="Phonological Similarity Architecture"
+                secondary="Phoneme-sequence soft Levenshtein with Phoible features"
+              />
+              <ChevronRightIcon />
+            </ListItemButton>
+
+            <Divider sx={{ my: 1.5 }} />
+
+            {/* Psycholinguistic Measurements */}
+            <Typography variant="caption" color="text.secondary" sx={{ px: 2, py: 1, display: 'block', fontWeight: 600 }}>
+              Psycholinguistic Measurements
+            </Typography>
             <ListItemButton onClick={() => handleCitationClick('phonological')} sx={{ borderRadius: 1 }}>
               <ListItemText
                 primary="Phonological Complexity"
-                secondary="WCM, distinctive features, phonotactic constraints"
+                secondary="WCM, MSH, distinctive features"
               />
               <ChevronRightIcon />
             </ListItemButton>
@@ -329,22 +347,22 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
             </ListItemButton>
             <ListItemButton onClick={() => handleCitationClick('affective')} sx={{ borderRadius: 1 }}>
               <ListItemText
-                primary="Affective/Emotional Norms"
+                primary="Affective Properties"
                 secondary="Valence, arousal, dominance"
               />
               <ChevronRightIcon />
             </ListItemButton>
-            <ListItemButton onClick={() => handleCitationClick('embeddings')} sx={{ borderRadius: 1 }}>
+
+            <Divider sx={{ my: 1.5 }} />
+
+            {/* Clinical Applications */}
+            <Typography variant="caption" color="text.secondary" sx={{ px: 2, py: 1, display: 'block', fontWeight: 600 }}>
+              Clinical Applications
+            </Typography>
+            <ListItemButton onClick={() => handleCitationClick('clinical-interventions')} sx={{ borderRadius: 1 }}>
               <ListItemText
-                primary="Phonological Similarity Architecture"
-                secondary="Phoneme-sequence soft Levenshtein, Phoible features, syllable structure"
-              />
-              <ChevronRightIcon />
-            </ListItemButton>
-            <ListItemButton onClick={() => handleCitationClick('data-sources')} sx={{ borderRadius: 1 }}>
-              <ListItemText
-                primary="Primary Data Sources"
-                secondary="CMU Dictionary, PHOIBLE, SUBTLEX-US, ipa-dict"
+                primary="Intervention Approaches"
+                secondary="Minimal pairs, maximal opposition, multiple opposition"
               />
               <ChevronRightIcon />
             </ListItemButton>
@@ -364,7 +382,7 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
             <Button
               variant="outlined"
               startIcon={<DocsIcon />}
-              href="https://docs.example.com"
+              href="https://phonolex.readthedocs.io"
               target="_blank"
             >
               Documentation

@@ -28,6 +28,7 @@ import {
 } from '@mui/icons-material';
 import api from '../../services/phonolexApi';
 import { SimilarityResult } from '../../types/phonology';
+import WordListTable from '../shared/WordListTable';
 
 interface SimilarityWeights {
   onset: number;
@@ -263,44 +264,13 @@ const PhonologicalSimilarityTool: React.FC = () => {
       {/* Results Display */}
       {results && results.length > 0 && sortedResults && (
         <Box sx={{ mt: 3 }}>
-          <Alert severity="success" sx={{ mb: 2 }}>
-            Found {results.length} similar words for "{targetWord}" (sorted by similarity)
-          </Alert>
-
-          <Stack spacing={1}>
-            {sortedResults.map((result, i) => (
-              <Paper
-                key={i}
-                variant="outlined"
-                sx={{
-                  p: 1.5,
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  '&:hover': { bgcolor: 'action.hover' },
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Typography variant="caption" color="text.secondary" sx={{ minWidth: 24, textAlign: 'right' }}>
-                    #{i + 1}
-                  </Typography>
-                  <Box>
-                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                      {result.word.word}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      /{result.word.ipa}/ • {result.word.syllable_count} syllable{result.word.syllable_count !== 1 ? 's' : ''}
-                    </Typography>
-                  </Box>
-                </Box>
-                <Chip
-                  label={result.similarity.toFixed(3)}
-                  color={result.similarity >= 0.95 ? 'success' : result.similarity >= 0.85 ? 'primary' : 'default'}
-                  size="small"
-                />
-              </Paper>
-            ))}
-          </Stack>
+          <WordListTable
+            words={sortedResults}
+            showSimilarity={true}
+            enableSelection={true}
+            defaultSort="similarity"
+            exportFilename={`phonolex_similar_to_${targetWord}.csv`}
+          />
         </Box>
       )}
 

@@ -38,13 +38,39 @@ def main():
     print(f"Found {len(used_phonemes)} unique phonemes in word data")
 
     # Load Phoible data
-    print(f"Loading Phoible features from {english_csv}")
-    phoneme_data = load_phoible_csv(str(english_csv))
+    print(f"Loading Phoible features from main phoible.csv")
+    phoible_path = data_dir / 'phoible' / 'phoible.csv'
+    phoneme_data = load_phoible_csv(str(phoible_path))
     print(f"Loaded {len(phoneme_data)} Phoible entries")
+
+    # Filter to English
+    english_data = [p for p in phoneme_data if p.get('ISO6393') == 'eng']
+    print(f"Found {len(english_data)} English phonemes")
+
+    # Normalize Phoible symbols to standard IPA (same as Phase 2)
+    phoible_to_standard_ipa = {
+        'd̠ʒ': 'dʒ',  # Voiced postalveolar affricate
+        't̠ʃ': 'tʃ',  # Voiceless postalveolar affricate
+        'ɚ': 'ɚ',    # Unstressed r-colored schwa (already standard)
+        'ɡ': 'ɡ',    # Voiced velar stop (already standard)
+    }
+
+    # Normalize phoneme symbols in data
+    for entry in english_data:
+        orig = entry['Phoneme']
+        if orig in phoible_to_standard_ipa:
+            entry['Phoneme'] = phoible_to_standard_ipa[orig]
+
+    # Add ɝ (stressed r-colored vowel) as fallback - use ɚ features
+    schwa_r_entry = [p for p in english_data if p['Phoneme'] == 'ɚ']
+    if schwa_r_entry:
+        stressed_schwa_r = schwa_r_entry[0].copy()
+        stressed_schwa_r['Phoneme'] = 'ɝ'
+        english_data.append(stressed_schwa_r)
 
     # Build phoneme dict from Phoible, filtered to used phonemes
     phonemes_dict = {}
-    for entry in phoneme_data:
+    for entry in english_data:
         ipa = entry['Phoneme']
 
         # Only include if actually used in our word data

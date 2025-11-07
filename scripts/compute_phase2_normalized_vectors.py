@@ -36,6 +36,29 @@ def demo_normalized_vectors():
     # Get English phonemes
     english_data = [p for p in phoible_data if p.get('ISO6393') == 'eng']
 
+    # Normalize Phoible symbols to standard IPA (strip diacritics)
+    # Phoible uses retraction diacritics for affricates, we want clean symbols
+    phoible_to_standard_ipa = {
+        'd̠ʒ': 'dʒ',  # Voiced postalveolar affricate
+        't̠ʃ': 'tʃ',  # Voiceless postalveolar affricate
+        'ɚ': 'ɚ',    # Unstressed r-colored schwa (already standard)
+        'ɡ': 'ɡ',    # Voiced velar stop (already standard)
+    }
+
+    # Normalize phoneme symbols in data
+    for entry in english_data:
+        orig = entry['Phoneme']
+        if orig in phoible_to_standard_ipa:
+            entry['Phoneme'] = phoible_to_standard_ipa[orig]
+
+    # Add ɝ (stressed r-colored vowel) as fallback - use ɚ features
+    # Phoible doesn't distinguish ɝ/ɚ, but CMU does
+    schwa_r_entry = [p for p in english_data if p['Phoneme'] == 'ɚ']
+    if schwa_r_entry:
+        stressed_schwa_r = schwa_r_entry[0].copy()
+        stressed_schwa_r['Phoneme'] = 'ɝ'
+        english_data.append(stressed_schwa_r)
+
     # Initialize vectorizer
     vectorizer = PhonemeVectorizer(encoding_scheme='three_way')
 

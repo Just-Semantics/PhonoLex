@@ -41,7 +41,7 @@ import {
 } from '@mui/icons-material';
 import api from '../services/phonolexApi';
 import type { BuilderRequest, Pattern, PatternType, Word } from '../services/phonolexApi';
-import WordResultsDisplay from './WordResultsDisplay';
+import WordListTable from './shared/WordListTable';
 import PhonemePickerDialog from './PhonemePickerDialog';
 import { validatePhonemeInput } from '../utils/ipaValidation';
 
@@ -865,7 +865,13 @@ const Builder: React.FC = () => {
       {/* Results */}
       {results && !loading && (
         <Box sx={{ mt: 3 }}>
-          <WordResultsDisplay results={results} />
+          <WordListTable
+            words={results}
+            showSimilarity={false}
+            enableSelection={true}
+            defaultSort="word"
+            exportFilename="phonolex_custom_word_list.csv"
+          />
         </Box>
       )}
 

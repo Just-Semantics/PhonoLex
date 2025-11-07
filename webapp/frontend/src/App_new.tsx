@@ -2,9 +2,9 @@
  * PhonoLex - Modern Phonological Analysis Tool
  *
  * Flat card-based interface with progressive disclosure:
- * - Custom Builder
- * - Contrastive Intervention (Minimal Pairs, Maximal Opposition, Multiple Opposition)
- * - Phonological Similarity Explorer
+ * - Custom Word Lists
+ * - Contrastive Sets (Minimal Pairs, Maximal Opposition, Multiple Opposition)
+ * - Phonological Similarity
  * - Lookup (Words, Phonemes, Phoneme Comparison)
  */
 
@@ -55,30 +55,30 @@ const App: React.FC = () => {
         {/* Tool Cards - Flat, Progressive Disclosure */}
         <Box sx={{ maxWidth: 900, mx: 'auto' }}>
 
-          {/* Custom Builder - THE POWER TOOL */}
+          {/* Custom Word Lists - THE POWER TOOL */}
           <ExpandableToolCard
             icon={<BuildIcon />}
-            title="Custom Word List Builder"
+            title="Custom Word Lists"
             description="Pattern matching with phonological, lexical, semantic, and affective property filters"
             color="primary.main"
           >
             <Builder />
           </ExpandableToolCard>
 
-          {/* Contrastive Intervention */}
+          {/* Contrastive Sets */}
           <ExpandableToolCard
             icon={<ContrastiveIcon />}
-            title="Contrastive Intervention"
+            title="Contrastive Sets"
             description="Research-based phonological interventions: minimal pairs, maximal opposition, and multiple opposition"
             color="secondary.main"
           >
             <ContrastiveInterventionTool />
           </ExpandableToolCard>
 
-          {/* Phonological Similarity Explorer */}
+          {/* Phonological Similarity */}
           <ExpandableToolCard
             icon={<SimilarityIcon />}
-            title="Phonological Similarity Explorer"
+            title="Phonological Similarity"
             description="Find similar words with adjustable onset, nucleus, and coda weights - perfect for rhymes, alliteration, and more"
             color="#D4A747"
           >

@@ -97,12 +97,25 @@ const SearchTool: React.FC = () => {
     const loadFeatures = async () => {
       try {
         const phonemeList = await api.listPhonemes();
-        // Extract all unique feature names from the phonemes
-        const featureSet = new Set<string>();
+        // Extract feature names that have non-zero values ('+' or '-') for at least one English phoneme
+        const featureValues = new Map<string, Set<string>>();
+
         phonemeList.phonemes.forEach(p => {
-          Object.keys(p.features || {}).forEach(feat => featureSet.add(feat));
+          Object.entries(p.features || {}).forEach(([feat, value]) => {
+            if (!featureValues.has(feat)) {
+              featureValues.set(feat, new Set());
+            }
+            featureValues.get(feat)!.add(value);
+          });
         });
-        setAvailableFeatures(Array.from(featureSet).sort());
+
+        // Filter to features that have at least one non-'0' value
+        const relevantFeatures = Array.from(featureValues.entries())
+          .filter(([_feat, values]) => values.has('+') || values.has('-'))
+          .map(([feat, _values]) => feat)
+          .sort();
+
+        setAvailableFeatures(relevantFeatures);
       } catch (err) {
         console.error('Failed to load phoneme features:', err);
         // Fallback to a basic set if API fails

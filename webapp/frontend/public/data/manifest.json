@@ -1,8 +1,8 @@
 {
   "version": "2.0.0",
-  "created": "1762469740.7511113",
-  "vocabulary_size": 17920,
-  "minimal_pairs_count": 23954,
+  "created": "1762511838.527301",
+  "vocabulary_size": 24744,
+  "minimal_pairs_count": 31399,
   "phoneme_count": 35,
   "filter_criterion": "frequency + at least one psycholinguistic norm",
   "files": {

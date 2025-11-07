@@ -31,6 +31,110 @@ from src.phonolex.embeddings.english_data_loader import EnglishPhonologyLoader
 from src.phonolex.utils.syllabification import syllabify
 
 
+def compute_wcm_score(phonemes, syllables):
+    """
+    Compute Word Complexity Measure (WCM) score.
+
+    8 parameters from Stoel-Gammon (2010):
+    1. >2 syllables: +1
+    2. Non-initial stress: +1
+    3. Word-final consonant: +1
+    4. Consonant cluster: +1 per cluster
+    5. Velar: +1 per velar
+    6. Liquid/rhotic: +1 each
+    7. Fricative/affricate: +1 each
+    8. Voiced fricative/affricate: +1 additional
+    """
+    # Define phoneme categories
+    velars = {'k', 'g', 'ŋ'}
+    liquids_rhotics = {'l', 'ɹ', 'r', 'ɚ', 'ɝ'}
+    fricatives_affricates = {'f', 'v', 'θ', 'ð', 's', 'z', 'ʃ', 'ʒ', 'h', 'tʃ', 'dʒ'}
+    voiced_fric_affric = {'v', 'ð', 'z', 'ʒ', 'dʒ'}
+    vowels = {'i', 'ɪ', 'e', 'ɛ', 'æ', 'ɑ', 'ɔ', 'o', 'ʊ', 'u', 'ʌ', 'ə', 'ɚ', 'ɝ',
+             'eɪ', 'aɪ', 'ɔɪ', 'aʊ', 'oʊ'}
+
+    score = 0
+
+    # 1. More than 2 syllables
+    if len(syllables) > 2:
+        score += 1
+
+    # 2. Non-initial stress (get stress from syllable objects)
+    stress_positions = [i for i, syl in enumerate(syllables) if getattr(syl, 'stress', 0) in [1, 2]]
+    if stress_positions and stress_positions[0] > 0:
+        score += 1
+
+    # 3. Word-final consonant
+    if phonemes and phonemes[-1] not in vowels:
+        score += 1
+
+    # 4. Consonant clusters (onset or coda with 2+ consonants)
+    for syl in syllables:
+        if len(syl.onset) >= 2:
+            score += 1
+        if len(syl.coda) >= 2:
+            score += 1
+
+    # 5-8. Sound class counts
+    for p in phonemes:
+        # Strip stress markers for classification
+        p_base = p.replace('ˈ', '').replace('ˌ', '')
+
+        if p_base in velars:
+            score += 1
+        if p_base in liquids_rhotics:
+            score += 1
+        if p_base in fricatives_affricates:
+            score += 1
+        if p_base in voiced_fric_affric:
+            score += 1  # Additional point for voiced
+
+    return score
+
+
+def compute_msh_stage(phonemes, syllables):
+    """
+    Assign Motor Speech Hierarchy (MSH) stage.
+
+    Stages (Namasivayam et al., 2021):
+    I-II: Vowels, /h/
+    III: Mandibular (/p, b, m/)
+    IV: Labial-facial (/f, w, ɹ/)
+    V: Lingual (/t, d, k, g, n, s, z, l/)
+    VI: Sequenced (clusters, multisyllabic)
+    """
+    # Define phoneme categories
+    vowels = {'i', 'ɪ', 'e', 'ɛ', 'æ', 'ɑ', 'ɔ', 'o', 'ʊ', 'u', 'ʌ', 'ə', 'ɚ', 'ɝ',
+             'eɪ', 'aɪ', 'ɔɪ', 'aʊ', 'oʊ'}
+    mandibular = {'p', 'b', 'm'}
+    labial_facial = {'f', 'w', 'ɹ'}
+    lingual = {'t', 'd', 'k', 'g', 'n', 's', 'z', 'l'}
+
+    # Check for clusters or multisyllabic
+    has_clusters = any(len(syl.onset) >= 2 or len(syl.coda) >= 2 for syl in syllables)
+    is_multisyllabic = len(syllables) > 2
+
+    if has_clusters or is_multisyllabic:
+        return 6  # Sequenced
+
+    # Determine highest stage from phonemes
+    max_stage = 1  # Default: vowels/h
+
+    for p in phonemes:
+        p_base = p.replace('ˈ', '').replace('ˌ', '')
+
+        if p_base in lingual:
+            max_stage = max(max_stage, 5)
+        elif p_base in labial_facial:
+            max_stage = max(max_stage, 4)
+        elif p_base in mandibular:
+            max_stage = max(max_stage, 3)
+        elif p_base in vowels or p_base == 'h':
+            max_stage = max(max_stage, 2)
+
+    return max_stage
+
+
 def load_filtered_embeddings():
     """Load the Phoible-based embeddings (no quantization needed)"""
     print("\n[1/5] Loading Phoible-based embeddings...")
@@ -81,6 +185,10 @@ def load_word_metadata(filtered_words):
         # Get psycholinguistic properties
         word_norms = norms.get(word, {})
 
+        # Compute clinical measures (WCM and MSH)
+        wcm_score = compute_wcm_score(ipa_phones, syllables_list)
+        msh_stage = compute_msh_stage(ipa_phones, syllables_list)
+
         word_metadata[word] = {
             'word': word,
             'ipa': ' '.join(ipa_phones),
@@ -88,6 +196,9 @@ def load_word_metadata(filtered_words):
             'syllables': syllables_data,
             'phoneme_count': len(ipa_phones),
             'syllable_count': len(syllables_list),
+            # Clinical measures
+            'wcm_score': wcm_score,
+            'msh_stage': msh_stage,
             # Psycholinguistic norms
             'frequency': word_norms.get('frequency'),
             'log_frequency': word_norms.get('log_frequency'),
