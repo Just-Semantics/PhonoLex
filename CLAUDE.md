@@ -607,7 +607,6 @@ git push origin feature/your-feature
 **Current Version**: v2.3.0-beta (Client-Side, Phoneme-Sequence Architecture)
 
 Potential future enhancements:
-- Settings panel with display preferences, default filters, IPA/ARPAbet toggle
 - Multi-language support (extend beyond English using Phoible's cross-linguistic features)
 - Progressive Web App (PWA) features for offline use
 - Web Workers for computationally intensive operations
