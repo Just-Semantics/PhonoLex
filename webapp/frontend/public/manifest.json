@@ -1,7 +1,7 @@
 {
-  "name": "PhonoLex v2.0.0",
+  "name": "PhonoLex v2.3.0",
   "short_name": "PhonoLex",
-  "description": "Phonological analysis tool for word filtering, minimal pairs, and similarity computation",
+  "description": "Phonological analysis and word list generation tool with psycholinguistic norms",
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#1E5A5A",
