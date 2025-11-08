@@ -1,0 +1,8 @@
+# robots.txt for PhonoLex
+
+User-agent: *
+Allow: /
+Disallow: /logo-preview
+
+# Sitemaps
+Sitemap: https://phonolex.justsemantics.net/sitemap.xml
