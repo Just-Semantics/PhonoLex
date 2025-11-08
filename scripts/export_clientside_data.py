@@ -204,6 +204,14 @@ def load_word_metadata(filtered_words):
     print("  Loading psycholinguistic norms...")
     norms = loader.load_psycholinguistic_properties()
 
+    # Load phonotactic probability
+    print("  Loading phonotactic probability...")
+    phono_prob_path = project_root / "data/phonotactic_probability_24k.json"
+    with open(phono_prob_path, "r") as f:
+        phono_prob_data = json.load(f)
+    phono_probs = phono_prob_data["word_probabilities"]
+    print(f"  ✓ Loaded phonotactic probability for {len(phono_probs):,} words")
+
     word_metadata = {}
 
     for word in tqdm(filtered_words, desc="  Processing words"):
@@ -224,6 +232,9 @@ def load_word_metadata(filtered_words):
 
         # Get psycholinguistic properties
         word_norms = norms.get(word, {})
+
+        # Get phonotactic probability
+        word_phono_prob = phono_probs.get(word, {})
 
         # Compute clinical measures (WCM and MSH)
         wcm_score = compute_wcm_score(ipa_phones, syllables_list)
@@ -249,6 +260,10 @@ def load_word_metadata(filtered_words):
             "valence": word_norms.get("valence"),
             "arousal": word_norms.get("arousal"),
             "dominance": word_norms.get("dominance"),
+            # Phonotactic probability (Vitevitch & Luce 2004)
+            "phono_prob_avg": word_phono_prob.get("phono_prob_avg"),
+            "phono_prob_sum_log": word_phono_prob.get("phono_prob_sum_log"),
+            "positional_prob_avg": word_phono_prob.get("positional_prob_avg"),
         }
 
     print(f"  ✓ Processed {len(word_metadata):,} words with metadata")
