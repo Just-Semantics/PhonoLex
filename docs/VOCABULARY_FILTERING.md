@@ -50,7 +50,7 @@ PhonoLex v2.0 implemented **systematic vocabulary filtering** to reduce database
 - **~50%** have concreteness ratings
 - **~27%** have VAD ratings (emotional properties)
 - **~9%** have Glasgow norms (AoA, imageability, familiarity)
-- **~51%** have phonotactic probability (Vitevitch & Luce 2004)
+- **100%** have phonotactic probability (Vitevitch & Luce 2004 - computed on full 117K CMU for unbiased biphone estimates)
 - **100%** have frequency data
 
 ---

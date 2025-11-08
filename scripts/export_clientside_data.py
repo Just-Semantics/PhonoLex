@@ -201,13 +201,13 @@ def load_word_metadata(filtered_words):
     print("  Loading psycholinguistic norms...")
     norms = loader.load_psycholinguistic_properties()
 
-    # Load phonotactic probability
+    # Load phonotactic probability (computed on full CMU for unbiased estimates)
     print("  Loading phonotactic probability...")
-    phono_prob_path = project_root / "data/phonotactic_probability_24k.json"
+    phono_prob_path = project_root / "data/phonotactic_probability_full.json"
     with open(phono_prob_path, "r") as f:
         phono_prob_data = json.load(f)
     phono_probs = phono_prob_data["word_probabilities"]
-    print(f"  ✓ Loaded phonotactic probability for {len(phono_probs):,} words")
+    print(f"  ✓ Loaded phonotactic probability from full CMU ({len(phono_probs):,} total words)")
 
     word_metadata = {}
 

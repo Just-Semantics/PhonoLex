@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - ~50% have concreteness ratings
     - ~27% have VAD ratings (emotional properties)
     - ~9% have Glasgow norms (AoA, imageability, familiarity)
-    - ~51% have phonotactic probability
+    - **100% have phonotactic probability** (computed on full 117K CMU for unbiased estimates)
     - 100% have frequency data
   - **Size impact**:
     - Phase 3 embeddings: ~112 MB → ~304 MB (+171%)
