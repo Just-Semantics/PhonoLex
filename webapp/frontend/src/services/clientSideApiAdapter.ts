@@ -90,6 +90,8 @@ class ClientSideAPIAdapter {
       threshold?: number;
       limit?: number;
       weights?: { onset: number; nucleus: number; coda: number };
+      position?: 'all' | 'initial' | 'final' | 'medial';
+      syllableCount?: number;
     }
   ): Promise<SimilarityResult[]> {
     await this.ensureLoaded();
@@ -97,7 +99,9 @@ class ClientSideAPIAdapter {
       word,
       options?.threshold || 0.85,
       options?.limit || 50,
-      options?.weights
+      options?.weights,
+      options?.position || 'all',
+      options?.syllableCount || 1
     );
   }
 

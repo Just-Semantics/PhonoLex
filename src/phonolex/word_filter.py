@@ -1,18 +1,26 @@
 """
 Central word filtering module for PhonoLex v2.3.
 
-Implements the filtering criterion:
-HasFrequency AND (InWordNet OR HasNormsOtherThanFreq)
+Implements the filtering criterion (v2.0 conservative):
+HasFrequency AND HasAtLeastOneNorm
 
 This means:
 1. **Has frequency data** (mandatory - must appear in SUBTLEX-US)
-2. **AND must meet ONE of**:
-   - Valid in WordNet (excludes subtitle artifacts like "ree", "vo")
-   - Has psycholinguistic norms (concreteness, AoA, imageability, familiarity, VAD)
+2. **AND has at least one additional psycholinguistic norm**:
+   - Concreteness, AoA, imageability, familiarity, or VAD
 
-This approach uses linguistic validators (WordNet, research norms) rather than
-arbitrary frequency thresholds to filter subtitle artifacts and proper names
-while keeping all legitimate English words.
+This conservative approach ensures all words have research-validated
+psycholinguistic properties beyond just frequency, naturally filtering out:
+- Subtitle artifacts (character names, abbreviations like "vo")
+- Most proper nouns (names like "michael", "george" - lack norms)
+- Most plurals and inflections (guys, wanted, playing - lack norms)
+- Most contractions (t, m, don, re, d - lack norms)
+
+While preserving:
+- Essential function words (pronouns, articles, prepositions with norms)
+- High-quality content words with research validation
+
+Result: ~24,744 English words with comprehensive psycholinguistic properties.
 """
 
 import csv
@@ -130,14 +138,18 @@ class WordFilter:
         """
         Check if word meets inclusion criteria.
 
-        Filtering criterion:
-        HasFrequency AND (InWordNet OR HasNormsOtherThanFreq)
+        Filtering criterion (v2.0 conservative):
+        HasFrequency AND HasAtLeastOneNorm
 
         This means:
         1. Word MUST have frequency data (in SUBTLEX-US)
-        2. AND word must meet ONE of:
-           - Valid in WordNet (excludes subtitle artifacts like "ree", "vo")
-           - Has psycholinguistic norms (concreteness, AoA, imageability, familiarity, VAD)
+        2. AND word MUST have at least ONE additional psycholinguistic norm
+           (concreteness, AoA, imageability, familiarity, VAD)
+
+        This approach ensures all words have research-validated psycholinguistic
+        properties, filtering out most plurals, inflections, and proper nouns
+        (which typically lack psycholinguistic norms) while preserving essential
+        function words (pronouns, articles, prepositions) that have norms.
 
         Args:
             word: Word string (will be lowercased)
@@ -154,20 +166,11 @@ class WordFilter:
         if word not in self.freq_words:
             return False
 
-        # Requirement 2: Must meet ONE of:
-        # - Valid in WordNet OR
-        # - Has psycholinguistic norms (excluding frequency)
+        # Requirement 2: Has at least one psycholinguistic norm (excluding frequency)
+        if not self._has_norms(word):
+            return False
 
-        # Check WordNet
-        if WORDNET_AVAILABLE:
-            if len(wn.synsets(word)) > 0:
-                return True
-
-        # Check psycholinguistic norms (excluding frequency)
-        if self._has_norms(word):
-            return True
-
-        return False
+        return True
 
     def _get_frequency(self, word: str) -> float | None:
         """Get frequency for a word from cache"""
