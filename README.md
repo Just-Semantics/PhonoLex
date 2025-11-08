@@ -20,11 +20,11 @@ PhonoLex uniquely combines three powerful dimensions for word analysis:
 - **Contrastive Intervention** for speech therapy (minimal pairs, maximal opposition, multiple opposition)
 - **Phonological Similarity Explorer** with adjustable onset/nucleus/coda weights
 - **Lookup** for word details, phoneme features, and phoneme comparison
-- **24,744 words** with comprehensive psycholinguistic norms
+- **48,720 words** with comprehensive psycholinguistic norms
 - **Fully client-side** - no backend required, deploy anywhere
-- **99% compression** - 56.7 MB → 0.6 MB gzipped
+- **98% compression** - 525 MB → 10.4 MB gzipped
 
-### Four Core Tools
+### Five Core Tools
 
 #### 1. Custom Word List Builder ⭐ THE POWER TOOL
 
@@ -81,7 +81,19 @@ Adjustable onset/nucleus/coda weights for similarity computation:
 
 Real-time weight sliders and threshold selection.
 
-#### 4. Lookup
+#### 4. Text Analysis
+
+Analyze passages for readability across phonological, lexical, semantic, and affective dimensions:
+
+- **Aggregate percentile statistics** across 14 psycholinguistic properties
+- **Interactive highlighting** by feature with color gradients
+- **Preset passages**: Grandfather, Rainbow, and Caterpillar (standard phonetics samples)
+- **Coverage tracking**: percentage of words in vocabulary
+- **Unknown word marking**: dotted underlines for out-of-vocabulary words
+
+**Use cases**: Assess therapy script complexity, select reading materials, control stimulus properties for research
+
+#### 5. Lookup
 
 - Word details with all phonological and psycholinguistic properties
 - Phoneme feature lookup (38 PHOIBLE distinctive features)
@@ -112,7 +124,7 @@ PhonoLex integrates norms from 4 major research datasets:
 - WCM (Stoel-Gammon 2010): 0-15
 - MSH (Phonological analysis): 1-6
 
-**Vocabulary**: 24,744 English words from the CMU Pronouncing Dictionary.
+**Vocabulary**: 48,720 English words from the CMU Pronouncing Dictionary.
 
 ### Word Similarity Results (v2.3)
 
@@ -200,9 +212,9 @@ Word Similarity
 - **Use for**: Continuous phoneme similarity, diphthong modeling
 
 #### Phase 3: Phoneme-Sequence Syllable Structures ⭐ Main Production
-- **Output**: `embeddings/phase3/syllable_embeddings_phoible.pt` (~112 MB)
+- **Output**: `embeddings/phase3/syllable_embeddings_phoible.pt` (~304 MB)
 - **Structure**: Onset/nucleus/coda as **sequences of Phase 2 vectors** (no averaging!)
-- **Vocabulary**: 24,744 English words
+- **Vocabulary**: 48,720 English words
 - **Build time**: ~5 minutes
 - **Use for**: Word similarity, rhyme detection, phonological interventions
 
@@ -221,7 +233,7 @@ python scripts/build_phase3_syllable_embeddings.py
 # Export data for web application
 python scripts/export_clientside_data.py
 # Creates: word_metadata.json, embeddings.json.gz, minimal_pairs.json.gz, etc.
-# Total: ~56 MB uncompressed, ~0.6 MB gzipped (99% compression!)
+# Total: ~525 MB uncompressed, ~10.4 MB gzipped (98% compression!)
 ```
 
 **Complete documentation**: See [docs/PHONEME_SEQUENCE_ARCHITECTURE_V2.3.md](docs/PHONEME_SEQUENCE_ARCHITECTURE_V2.3.md) and [docs/PHASE_ARCHITECTURE.md](docs/PHASE_ARCHITECTURE.md)
@@ -343,19 +355,20 @@ PhonoLex/
 - **Memory**: ~60MB for all data in browser
 
 ### Data Coverage
-- **24,744 words** with comprehensive psycholinguistic norms
+- **48,720 words** with comprehensive psycholinguistic norms
+- **112,964 minimal pairs** precomputed for contrastive intervention
 - **39 English phonemes** with PHOIBLE features
 - **General American English** dialect (CMU primary pronunciations)
-- **99% compression**: 56.7 MB → 0.6 MB gzipped
+- **98% compression**: 525 MB → 10.4 MB gzipped
 
 ---
 
 ## Architecture History
 
-- **v2.3.0-beta (Jan 2025)**: Phonotactic probability integration (current)
+- **v2.3.0-beta (Jan 2025)**: Phonotactic probability integration + vocabulary expansion (current)
   - No averaging - sequences preserved
-  - 99% compression (56.7 MB → 0.6 MB gzipped)
-  - 24,744 words with comprehensive norms
+  - 98% compression (525 MB → 10.4 MB gzipped)
+  - 48,720 words with comprehensive norms (relaxed filtering: frequency-only requirement)
 
 - **v2.2.1 (Oct 2025)**: Phoible component-wise averaging (deprecated)
   - Averaging destroyed structural information

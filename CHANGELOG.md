@@ -5,9 +5,44 @@ All notable changes to PhonoLex will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.3.0-beta] - 2025-01-07
+## [2.3.0-beta] - 2025-01-08
 
 ### Added
+- **📈 Vocabulary Expansion: 24,744 → 48,720 words (+97%)**
+  - Relaxed filtering strategy from "frequency + 1 norm" to "frequency only"
+  - Rationale: Phase 3 moved to pure Phoible features (no training overhead), removing motivation for strict filtering
+  - Frequency-only maximizes vocabulary coverage while maintaining quality
+  - Filters out: archaic words, typos, CMU dictionary artifacts
+  - Includes: technical terms, proper nouns (if in SUBTLEX)
+  - **99%+ text coverage** for typical English passages
+  - Psycholinguistic norms available but not required for inclusion
+  - **Norm coverage (48K words)**:
+    - ~50% have concreteness ratings
+    - ~27% have VAD ratings (emotional properties)
+    - ~9% have Glasgow norms (AoA, imageability, familiarity)
+    - **100% have phonotactic probability** (computed on full 117K CMU for unbiased estimates)
+    - 100% have frequency data
+  - **Size impact**:
+    - Phase 3 embeddings: ~112 MB → ~304 MB (+171%)
+    - Client-side data (gzipped): ~0.6 MB → ~10.4 MB (+1633%)
+    - Still achieves **98% compression** overall
+  - Updated filtering module: `src/phonolex/word_filter.py`
+  - Documentation: `docs/VOCABULARY_FILTERING.md`
+- **📊 Percentile Computation for Text Analysis**
+  - Added percentile ranks for all 14 psycholinguistic properties
+  - Enables interactive text analysis with color-coded highlighting
+  - Properties: syllables, phonemes, WCM, phonotactic probability (3 metrics), frequency, AoA, imageability, familiarity, concreteness, valence, arousal, dominance
+  - Computed during export: `scripts/export_clientside_data.py`
+- **📖 Text Analysis Tool with Preset Passages**
+  - Analyze passages for readability across phonological, lexical, semantic, and affective dimensions
+  - Interactive highlighting by feature with color gradients
+  - Aggregate percentile statistics across 14 properties
+  - Three preset phonetics passages:
+    - Grandfather Passage (standard phonetics passage)
+    - Rainbow Passage (classic phonetics passage)
+    - Caterpillar Passage (pediatric speech sample)
+  - Unknown words marked with dotted underline (madlibs-style)
+  - Component: `webapp/frontend/src/components/tools/TextAnalysisTool.tsx`
 - **📊 Phonotactic Probability (Vitevitch & Luce 2004)**
   - Computed on full CMU Pronouncing Dictionary (117,177 words) for unbiased estimates
   - Three metrics per word:
@@ -58,15 +93,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - New frontend service: `webapp/frontend/src/services/clientSideData_v2.ts`
 
 ### Performance
-- **🚀 File Size**: 99% compression ratio
-  - Uncompressed: 56.7 MB JSON
-  - Gzipped: 0.6 MB (99% compression!)
-  - Total download: ~1.4 MB (structures + metadata)
+- **🚀 File Size**: 98% compression ratio (expanded vocabulary)
+  - Uncompressed: ~525 MB JSON (48,720 words)
+  - Gzipped: ~10.4 MB (98% compression!)
+  - Total download: ~10.4 MB (structures + metadata)
 - **Query Performance**
-  - Load time: ~500ms (one-time, cached)
-  - Full-vocab similarity scan: ~50-100ms (17,920 words)
-  - Single comparison: ~0.005ms
-  - Phoneme sequence DP: ~0.001ms (typical onset/coda length)
+  - Load time: ~1-2 seconds (one-time, cached)
+  - Full-vocab similarity scan: ~50-100ms (48,720 words)
+  - Pattern search: ~10-50ms (full vocabulary scan)
+  - Filtering: ~5-20ms (multi-property filters)
+  - Memory usage: ~60MB in browser
 
 ### Examples
 - **cat** vs **crest**: 0.74 (onset [k] vs [k,ɹ], coda [t] vs [s,t])

@@ -123,7 +123,7 @@ Phase 1 (Phoible) → Phase 2 (Normalized) → Phase 3 (Syllable Aggregation) �
 +  "G": "ɡ",
 ```
 
-**Result**: All 17,920 words now have complete embeddings (was 17,914 before)
+**Result**: All 48,720 words now have complete embeddings (expanded from 17,920 in v2.2.1)
 
 ## Performance Comparison
 

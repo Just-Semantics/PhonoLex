@@ -172,8 +172,8 @@ python scripts/export_clientside_data_v2.py
 3. **Compute**: On-demand soft Levenshtein similarity in browser
 
 **Performance**:
-- Load time: ~500ms (one-time, cached)
-- Similarity query: ~50-100ms for full vocabulary scan (17,920 words)
+- Load time: ~1-2 seconds (one-time, cached)
+- Similarity query: ~50-100ms for full vocabulary scan (48,720 words)
 - Memory: ~60 MB (structures kept in RAM)
 
 ## Implementation Details
@@ -259,8 +259,8 @@ function softLevenshtein(seq1: Vec[], seq2: Vec[]): number {
 
 | Operation | Time | Notes |
 |-----------|------|-------|
-| Load data | ~500ms | One-time, cached |
-| Find similar words | ~50-100ms | Scans 17,920 words |
+| Load data | ~1-2s | One-time, cached |
+| Find similar words | ~50-100ms | Scans 48,720 words |
 | Single comparison | ~0.005ms | One word pair |
 | Phoneme sequence DP | ~0.001ms | Typical onset/coda |
 
@@ -268,8 +268,8 @@ function softLevenshtein(seq1: Vec[], seq2: Vec[]): number {
 
 ### Vocabulary Coverage
 
-- **24,744 words** with syllable structures
-- **Includes**: All words from CMU Pronouncing Dictionary
+- **48,720 words** with syllable structures
+- **Includes**: All words from CMU Pronouncing Dictionary with frequency data (SUBTLEXus)
 - **Quality**: Comprehensive vocabulary for research and clinical applications
 
 ## Comparison with Previous Approaches

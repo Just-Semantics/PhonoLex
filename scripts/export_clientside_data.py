@@ -132,6 +132,65 @@ def load_filtered_embeddings():
     return checkpoint
 
 
+def compute_percentiles(word_metadata):
+    """Compute percentiles for all numeric properties"""
+    print("\n  Computing percentiles for all properties...")
+
+    # Properties to compute percentiles for
+    properties = [
+        # Phonological
+        "syllable_count",
+        "phoneme_count",
+        "wcm_score",
+        # Phonotactic
+        "phono_prob_avg",
+        "phono_prob_sum_log",
+        "positional_prob_avg",
+        # Lexical
+        "frequency",
+        "aoa",
+        # Semantic
+        "imageability",
+        "familiarity",
+        "concreteness",
+        # Affective
+        "valence",
+        "arousal",
+        "dominance",
+    ]
+
+    # For each property, collect all non-null values and sort them
+    property_values = {}
+    for prop in properties:
+        values = []
+        for word_data in word_metadata.values():
+            val = word_data.get(prop)
+            if val is not None:
+                values.append(val)
+
+        if values:
+            values.sort()
+            property_values[prop] = values
+            print(f"    {prop}: {len(values):,} values")
+
+    # Now compute percentile for each word
+    for word, word_data in word_metadata.items():
+        for prop in properties:
+            val = word_data.get(prop)
+            if val is not None and prop in property_values:
+                sorted_vals = property_values[prop]
+                # Find percentile rank (0-100)
+                # Use bisect to find insertion point
+                import bisect
+                idx = bisect.bisect_left(sorted_vals, val)
+                percentile = (idx / len(sorted_vals)) * 100
+                word_data[f"{prop}_percentile"] = round(percentile, 1)
+            else:
+                word_data[f"{prop}_percentile"] = None
+
+    print(f"  ✓ Computed percentiles for {len(properties)} properties")
+
+
 def load_word_metadata(filtered_words):
     """Load word metadata from CMU dictionary and psycholinguistic norms"""
     print("\n[2/5] Loading word metadata...")
@@ -142,13 +201,13 @@ def load_word_metadata(filtered_words):
     print("  Loading psycholinguistic norms...")
     norms = loader.load_psycholinguistic_properties()
 
-    # Load phonotactic probability
+    # Load phonotactic probability (computed on full CMU for unbiased estimates)
     print("  Loading phonotactic probability...")
-    phono_prob_path = project_root / "data/phonotactic_probability_24k.json"
+    phono_prob_path = project_root / "data/phonotactic_probability_full.json"
     with open(phono_prob_path, "r") as f:
         phono_prob_data = json.load(f)
     phono_probs = phono_prob_data["word_probabilities"]
-    print(f"  ✓ Loaded phonotactic probability for {len(phono_probs):,} words")
+    print(f"  ✓ Loaded phonotactic probability from full CMU ({len(phono_probs):,} total words)")
 
     word_metadata = {}
 
@@ -202,7 +261,10 @@ def load_word_metadata(filtered_words):
             "positional_prob_avg": word_phono_prob.get("positional_prob_avg"),
         }
 
-    print(f"  ✓ Processed {len(word_metadata):,} words with metadata")
+    # Compute percentiles for all properties
+    compute_percentiles(word_metadata)
+
+    print(f"  ✓ Processed {len(word_metadata):,} words with metadata and percentiles")
     return word_metadata
 
 

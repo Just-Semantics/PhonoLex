@@ -330,7 +330,7 @@ Understanding what similarity scores mean in different contexts:
 | Word lookup | 5-10 ms | O(1) hash lookup |
 | Syllabification | 1-2 ms | O(n) where n = phoneme count |
 | Soft Levenshtein (per component) | 0.1-0.5 ms | O(m × n) where m, n = sequence lengths |
-| Full vocabulary scan | 50-100 ms | 24,744 comparisons |
+| Full vocabulary scan | 50-100 ms | 48,720 comparisons |
 | Top-20 results | 60-120 ms | Full scan + sort |
 
 **Factors Affecting Speed**:
@@ -414,7 +414,7 @@ Overall: ~0.80 (high similarity)
 
 ### Vocabulary Coverage
 
-- **Full vocabulary**: 24,744 words from CMU Pronouncing Dictionary
+- **Full vocabulary**: 48,720 words from CMU Pronouncing Dictionary
 - **Dialect**: General American English (primary pronunciations only)
 - **Excluded**: Pronunciation variants, proper nouns, non-English loanwords
 

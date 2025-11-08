@@ -1,15 +1,28 @@
-# Vocabulary Filtering Strategy (v2.0+)
+# Vocabulary Filtering Strategy
 
-**Last Updated**: 2025-10-29
-**Status**: ✅ Implemented
+**Last Updated**: 2025-01-08
+**Status**: 🔄 Relaxed in v2.3
+
+> **Note**: This document describes the v2.0 filtering strategy (frequency + 1 norm) which was **relaxed in v2.3** to frequency-only. The v2.0 strategy is kept here for historical reference.
 
 ---
 
-## Overview
+## Current Strategy (v2.3)
 
-PhonoLex v2.0 implements **systematic vocabulary filtering** to reduce database size while improving data quality. Only words with comprehensive psycholinguistic properties are included.
+**Words must have**:
+1. ✅ **Frequency data** (SUBTLEXus) — **Only requirement**
 
-### Filtering Criterion
+**Result**: 48,720 English words with comprehensive phonological properties
+
+**Rationale**: Phase 3 moved to pure Phoible features (no training overhead), removing the motivation for strict filtering. Frequency-only maximizes vocabulary coverage while maintaining quality (filters out archaic/typo/nonsense words).
+
+---
+
+## Historical: v2.0 Filtering Strategy
+
+PhonoLex v2.0 implemented **systematic vocabulary filtering** to reduce database size during the trained-embedding era.
+
+### v2.0 Filtering Criterion (Deprecated)
 
 **Words must have**:
 1. ✅ **Frequency data** (SUBTLEXus)
@@ -22,48 +35,55 @@ PhonoLex v2.0 implements **systematic vocabulary filtering** to reduce database 
 
 ---
 
-## Impact
+## Historical v2.0 Impact
 
-### Size Reduction
+### Size Reduction (v2.0)
 
-| Metric | Before (Freq Only) | After (Freq + Norm) | Change |
-|--------|-------------------|---------------------|---------|
-| **Word Count** | 48,720 | 24,744 | **-49.2%** ⬇️ |
-| **Phase 3 Embeddings** | ~1.0 GB | **~0.5 GB** | **-49%** ⬇️ |
-| **Database Size** | ~500 MB | **~250 MB** | **-50%** ⬇️ |
+| Metric | v2.0 (Freq + Norm) | v2.3 (Freq Only) | Change |
+|--------|-------------------|------------------|---------|
+| **Word Count** | 24,744 | **48,720** | **+97%** ⬆️ |
+| **Phase 3 Embeddings** | ~112 MB | **~304 MB** | **+171%** ⬆️ |
+| **Client-Side Data (gzipped)** | ~0.6 MB | **~10.4 MB** | **+1633%** ⬆️ |
 
-### Norm Coverage (Filtered 24K Words)
+### Norm Coverage (v2.3 - 48K Words)
 
-- **97.8%** have concreteness ratings
-- **54.0%** have VAD ratings (emotional properties)
-- **18.6%** have Glasgow norms (AoA, imageability, familiarity)
+- **~50%** have concreteness ratings
+- **~27%** have VAD ratings (emotional properties)
+- **~9%** have Glasgow norms (AoA, imageability, familiarity)
+- **100%** have phonotactic probability (Vitevitch & Luce 2004 - computed on full 117K CMU for unbiased biphone estimates)
 - **100%** have frequency data
 
 ---
 
-## Quality Improvement
+## v2.3 Quality Approach
 
-### Words Removed (23,976)
+### Frequency-Only Filtering (Current)
 
-Words with frequency but **no other psycholinguistic properties**:
+**Words included** (48,720):
+- All words with SUBTLEXus frequency data
+- Filters out: archaic words, typos, CMU dictionary artifacts
+- Includes: technical terms, proper nouns (if in SUBTLEX)
+- Psycholinguistic norms available but not required
 
-❌ Proper nouns (personal names, place names)
-❌ Technical/specialized jargon
-❌ Rare/obscure words
-❌ Compound words with limited research utility
+**Benefits**:
+✅ **99%+ text coverage** for typical English passages
+✅ Maximized vocabulary for pattern matching and phonological analysis
+✅ Technical/specialized terms included when contextually important
+✅ Optional property filters in UI (users can require norms if desired)
 
-**Example removed**: "zygomorphically", "eigenvalue", "john", "mcdonald"
+**Example words now included**: "eigenvalue", "algorithm", "cryptocurrency" (if in SUBTLEX)
 
-### Words Retained (24,744)
+### v2.0 Quality Improvement (Historical)
 
-Words with **comprehensive psycholinguistic characterization**:
+**Words removed in v2.0** (23,976):
+- Words with frequency but no additional psycholinguistic properties
+- Proper nouns, technical jargon, rare/obscure words
+- **Restored in v2.3** to maximize coverage
 
-✅ Common vocabulary with clinical utility
-✅ Research-grade words with multiple norms
-✅ Age-appropriate for therapy targets
-✅ Characterized for emotional content
-
-**Example retained**: "cat", "dog", "happy", "run", "computer"
+**Words retained in v2.0** (24,744):
+- Words with comprehensive psycholinguistic characterization
+- Common vocabulary with multiple norms
+- **Subset of current v2.3 vocabulary**
 
 ---
 
