@@ -55,6 +55,22 @@ interface WordMetadata {
   phono_prob_avg: number | null;
   phono_prob_sum_log: number | null;
   positional_prob_avg: number | null;
+
+  // Percentiles (optional - may be added dynamically)
+  syllable_count_percentile?: number | null;
+  phoneme_count_percentile?: number | null;
+  wcm_score_percentile?: number | null;
+  frequency_percentile?: number | null;
+  aoa_percentile?: number | null;
+  imageability_percentile?: number | null;
+  familiarity_percentile?: number | null;
+  concreteness_percentile?: number | null;
+  valence_percentile?: number | null;
+  arousal_percentile?: number | null;
+  dominance_percentile?: number | null;
+  phono_prob_avg_percentile?: number | null;
+  phono_prob_sum_log_percentile?: number | null;
+  positional_prob_avg_percentile?: number | null;
 }
 
 interface EmbeddingsData {
@@ -568,7 +584,9 @@ class ClientSideDataService {
     word: string,
     threshold: number = 0.85,
     limit: number = 50,
-    weights?: { onset: number; nucleus: number; coda: number }
+    weights?: { onset: number; nucleus: number; coda: number },
+    position: 'all' | 'initial' | 'final' | 'medial' = 'all',
+    syllableCount: number = 1
   ): Promise<SimilarityResult[]> {
     await this.ensureLoaded();
 
@@ -579,6 +597,13 @@ class ClientSideDataService {
 
     const targetEmbeddings = this.getWordEmbeddings(word);
     if (!targetEmbeddings) {
+      return [];
+    }
+
+    // Extract specified syllable positions from target word
+    const targetSyllables = this.extractSyllables(targetEmbeddings, position, syllableCount);
+    if (targetSyllables.length === 0) {
+      console.warn(`No syllables extracted from target word "${word}" with position="${position}", count=${syllableCount}`);
       return [];
     }
 
@@ -595,15 +620,21 @@ class ClientSideDataService {
         continue;
       }
 
+      // Extract specified syllable positions from candidate word
+      const candidateSyllables = this.extractSyllables(candidateEmbeddings, position, syllableCount);
+      if (candidateSyllables.length === 0) {
+        continue; // Skip words that don't have enough syllables
+      }
+
       const similarity = this.computeSoftLevenshteinSimilarity(
-        targetEmbeddings,
-        candidateEmbeddings,
+        targetSyllables,
+        candidateSyllables,
         weights // Pass custom weights if provided
       );
 
       // Debug logging for first few results
       if (results.length < 3) {
-        console.log(`Similarity for ${candidateWord}:`, similarity, 'with weights:', weights);
+        console.log(`Similarity for ${candidateWord}:`, similarity, 'with position:', position, 'count:', syllableCount, 'weights:', weights);
       }
 
       if (similarity >= threshold) {
@@ -1556,6 +1587,31 @@ class ClientSideDataService {
   }
 
   /**
+   * Extract specific syllable positions from a word's syllable array.
+   *
+   * @param syllables Full syllable array
+   * @param position Which syllables to extract
+   * @param count Number of syllables to extract (for initial/final)
+   * @returns Extracted syllables
+   */
+  private extractSyllables(
+    syllables: number[][],
+    position: 'all' | 'initial' | 'final' | 'medial',
+    count: number = 1
+  ): number[][] {
+    if (!syllables || syllables.length === 0) return [];
+    if (position === 'all') return syllables;
+    if (position === 'final') return syllables.slice(-count);
+    if (position === 'initial') return syllables.slice(0, count);
+    if (position === 'medial') {
+      // Exclude first and last syllables
+      if (syllables.length <= 2) return [];
+      return syllables.slice(1, -1);
+    }
+    return syllables;
+  }
+
+  /**
    * Compute soft Levenshtein similarity between syllable sequences
    *
    * Uses dynamic programming with soft costs based on syllable similarity.
@@ -1776,8 +1832,8 @@ class ClientSideDataService {
       .map(w => w.replace(/[^\w]/g, ''))
       .filter(w => w.length > 0);
 
-    const totalWords = words.length;
     const uniqueWords = [...new Set(words)];
+    const totalUniqueWords = uniqueWords.length;
 
     // Analyze each unique word
     const wordDetails: Array<{
@@ -1786,7 +1842,7 @@ class ClientSideDataService {
     }> = [];
 
     const unknownWords: string[] = [];
-    let analyzedCount = 0;
+    let uniqueAnalyzedCount = 0; // Unique tokens analyzed
 
     for (const word of uniqueWords) {
       const metadata = this.wordMetadata.get(word);
@@ -1795,24 +1851,24 @@ class ClientSideDataService {
         continue;
       }
 
-      analyzedCount += words.filter(w => w === word).length;
+      uniqueAnalyzedCount += 1; // Count each unique word once
 
       // Extract percentiles
       const percentiles: Record<string, number | null> = {
-        syllable_count_percentile: (metadata as any).syllable_count_percentile ?? null,
-        phoneme_count_percentile: (metadata as any).phoneme_count_percentile ?? null,
-        wcm_score_percentile: (metadata as any).wcm_score_percentile ?? null,
-        phono_prob_avg_percentile: (metadata as any).phono_prob_avg_percentile ?? null,
-        phono_prob_sum_log_percentile: (metadata as any).phono_prob_sum_log_percentile ?? null,
-        positional_prob_avg_percentile: (metadata as any).positional_prob_avg_percentile ?? null,
-        frequency_percentile: (metadata as any).frequency_percentile ?? null,
-        aoa_percentile: (metadata as any).aoa_percentile ?? null,
-        imageability_percentile: (metadata as any).imageability_percentile ?? null,
-        familiarity_percentile: (metadata as any).familiarity_percentile ?? null,
-        concreteness_percentile: (metadata as any).concreteness_percentile ?? null,
-        valence_percentile: (metadata as any).valence_percentile ?? null,
-        arousal_percentile: (metadata as any).arousal_percentile ?? null,
-        dominance_percentile: (metadata as any).dominance_percentile ?? null,
+        syllable_count_percentile: metadata.syllable_count_percentile ?? null,
+        phoneme_count_percentile: metadata.phoneme_count_percentile ?? null,
+        wcm_score_percentile: metadata.wcm_score_percentile ?? null,
+        phono_prob_avg_percentile: metadata.phono_prob_avg_percentile ?? null,
+        phono_prob_sum_log_percentile: metadata.phono_prob_sum_log_percentile ?? null,
+        positional_prob_avg_percentile: metadata.positional_prob_avg_percentile ?? null,
+        frequency_percentile: metadata.frequency_percentile ?? null,
+        aoa_percentile: metadata.aoa_percentile ?? null,
+        imageability_percentile: metadata.imageability_percentile ?? null,
+        familiarity_percentile: metadata.familiarity_percentile ?? null,
+        concreteness_percentile: metadata.concreteness_percentile ?? null,
+        valence_percentile: metadata.valence_percentile ?? null,
+        arousal_percentile: metadata.arousal_percentile ?? null,
+        dominance_percentile: metadata.dominance_percentile ?? null,
       };
 
       wordDetails.push({
@@ -1863,10 +1919,10 @@ class ClientSideDataService {
     };
 
     return {
-      total_words: totalWords,
-      analyzed_words: analyzedCount,
+      total_words: totalUniqueWords,
+      analyzed_words: uniqueAnalyzedCount,
       unknown_words: unknownWords,
-      coverage_percent: (analyzedCount / totalWords) * 100,
+      coverage_percent: (uniqueAnalyzedCount / totalUniqueWords) * 100,
       aggregate_percentiles: aggregatePercentiles,
       word_details: wordDetails,
     };

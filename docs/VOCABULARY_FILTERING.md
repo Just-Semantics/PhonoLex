@@ -1,7 +1,7 @@
 # Vocabulary Filtering Strategy
 
 **Last Updated**: 2025-11-08
-**Status**: ✅ Hybrid filtering in v2.3
+**Status**: ✅ Conservative filtering in v2.3 (v2.0 criterion)
 
 ---
 
@@ -9,24 +9,24 @@
 
 **Filtering criterion**:
 ```
-HasFrequency AND (InWordNet OR HasNorms)
+HasFrequency AND HasAtLeastOneNorm
 ```
 
 **Requirements**:
 1. ✅ **Has frequency data** (SUBTLEX-US) - mandatory
-2. ✅ **AND must meet ONE of**:
-   - **Valid in WordNet** (filters subtitle artifacts like "ree", "vo")
-   - **Has psycholinguistic norms** (concreteness, AoA, imageability, familiarity, VAD)
+2. ✅ **AND has at least ONE psycholinguistic norm**:
+   - Concreteness, AoA, imageability, familiarity, or VAD
 
-**Result**: 45,363 English words with comprehensive phonological properties
+**Result**: 24,744 English words with comprehensive phonological properties
 
 **Rationale**:
-- **Frequency data mandatory**: All words must appear in SUBTLEX-US to ensure contemporary English usage
-- **SUBTLEX includes artifacts**: Film subtitle data contains character names, abbreviations ("V.O."), and typos
-- **WordNet validation**: Excludes non-words while preserving legitimate vocabulary
-- **Norms validation**: Research-validated words from psycholinguistic datasets
-- **No arbitrary thresholds**: Uses linguistic validators rather than frequency cutoffs
-- **Coverage**: 99%+ text coverage for typical English passages
+- **Conservative dual validation** ensures research-grade vocabulary
+- **Frequency data**: Contemporary usage (SUBTLEX-US film subtitles)
+- **Psycholinguistic norms**: Research-validated properties for clinical/research use
+- **No arbitrary thresholds**: Uses research datasets rather than frequency cutoffs
+- **Natural filtering**: Most plurals, inflections, proper nouns lack psycholinguistic norms
+- **Preserves function words**: Pronouns, articles, prepositions with norms are kept
+- **Coverage**: High-quality vocabulary for therapy, research, and education
 
 ---
 
@@ -47,35 +47,40 @@ PhonoLex v2.0 implemented **systematic vocabulary filtering** to reduce database
 
 ---
 
-## Historical v2.0 Impact
+## v2.3 Impact
 
 ### Size Comparison
 
-| Metric | v2.0 (Freq + Norm) | v2.3 (Hybrid) | Change |
-|--------|-------------------|---------------|---------|
-| **Word Count** | 24,744 | **45,363** | **+83%** ⬆️ |
-| **Phase 3 Embeddings** | ~112 MB | **~287 MB** | **+156%** ⬆️ |
-| **Client-Side Data (gzipped)** | ~0.6 MB | **~10.7 MB** | **+1683%** ⬆️ |
+| Metric | Value |
+|--------|-------|
+| **Word Count** | **24,744** |
+| **Phase 3 Embeddings** | **~160 MB** |
+| **Client-Side Data (gzipped)** | **~6.8 MB** |
+| **Minimal Pairs** | **31,109** |
 
 ### Examples of Filtering Behavior
 
-| Word | Freq | WordNet? | Norms? | Result | Reason |
-|------|------|----------|--------|--------|--------|
-| ree | 19 | ❌ | ❌ | **EXCLUDED** | Subtitle artifact (not in WordNet, no norms) |
-| vo | 30 | ❌ | ❌ | **EXCLUDED** | Abbreviation ("V.O." - not validated) |
-| you | 2,134,713 | ❌ | ✅ | **KEPT** | Has psycholinguistic norms |
-| the | 1,501,908 | ❌ | ✅ | **KEPT** | Has psycholinguistic norms |
-| cat | 3,383 | ✅ | ✅ | **KEPT** | Valid in WordNet |
-| re | 311,072 | ✅ | ❌ | **KEPT** | Valid in WordNet (musical note) |
-| zygote | 3 | ✅ | ✅ | **KEPT** | Valid in WordNet (technical term) |
+| Word | Freq | Norms? | Result | Reason |
+|------|------|--------|--------|--------|
+| ree | 19 | ❌ | **EXCLUDED** | No psycholinguistic norms |
+| vo | 30 | ❌ | **EXCLUDED** | Abbreviation - no norms |
+| guys | 631 | ❌ | **EXCLUDED** | Plural - lacks norms |
+| wanted | 502 | ❌ | **EXCLUDED** | Past tense - lacks norms |
+| michael | 198 | ❌ | **EXCLUDED** | Proper noun - lacks norms |
+| cat | 3,383 | ✅ | **KEPT** | Has frequency + norms |
+| dog | 5,892 | ✅ | **KEPT** | Has frequency + norms |
+| you | 2,134,713 | ✅ | **KEPT** | Pronoun with norms |
+| the | 1,501,908 | ✅ | **KEPT** | Article with norms |
+| he | 850,482 | ✅ | **KEPT** | Pronoun with norms |
+| zygote | 3 | ✅ | **KEPT** | Technical term with norms |
 
-### Norm Coverage (v2.3 - 45K Words)
+### Norm Coverage (v2.3 - 24,744 Words)
 
-- **~50%** have concreteness ratings
-- **~27%** have VAD ratings (emotional properties)
-- **~9%** have Glasgow norms (AoA, imageability, familiarity)
+- **~98%** have concreteness ratings (24,189 / 24,744)
+- **~54%** have VAD ratings (13,355 / 24,744)
+- **~19%** have Glasgow norms (4,612 / 24,744)
 - **100%** have phonotactic probability (Vitevitch & Luce 2004 - computed on full 117K CMU for unbiased biphone estimates)
-- **100%** have frequency data
+- **100%** have frequency data (SUBTLEX-US - required by filter)
 
 ---
 

@@ -39,6 +39,8 @@ interface SimilarityWeights {
 interface PresetConfig {
   name: string;
   weights: SimilarityWeights;
+  position: 'all' | 'initial' | 'final' | 'medial';
+  syllableCount: number;
   description: string;
 }
 
@@ -46,27 +48,37 @@ const PRESETS: PresetConfig[] = [
   {
     name: 'Rhymes',
     weights: { onset: 0.0, nucleus: 0.5, coda: 0.5 },
-    description: 'Focus on nucleus + coda (perfect for rhyme detection)',
+    position: 'final',
+    syllableCount: 1,
+    description: 'Final syllable',
   },
   {
     name: 'Balanced',
     weights: { onset: 0.33, nucleus: 0.33, coda: 0.33 },
-    description: 'Equal weight to all syllable components',
+    position: 'all',
+    syllableCount: 1,
+    description: 'Equal weighting',
   },
   {
     name: 'Alliteration',
-    weights: { onset: 1.0, nucleus: 0.0, coda: 0.0 },
-    description: 'Focus on initial sounds only',
+    weights: { onset: 1.0, nucleus: 0.5, coda: 0.0 },
+    position: 'initial',
+    syllableCount: 1,
+    description: 'Initial syllable',
   },
   {
     name: 'Assonance',
     weights: { onset: 0.0, nucleus: 1.0, coda: 0.0 },
-    description: 'Focus on vowel sounds only',
+    position: 'all',
+    syllableCount: 1,
+    description: 'Vowels only',
   },
   {
     name: 'Consonance',
     weights: { onset: 0.5, nucleus: 0.0, coda: 0.5 },
-    description: 'Focus on consonant sounds (onset + coda)',
+    position: 'all',
+    syllableCount: 1,
+    description: 'Consonants only',
   },
 ];
 
@@ -74,6 +86,8 @@ const PhonologicalSimilarityTool: React.FC = () => {
   const [targetWord, setTargetWord] = useState('cat');
   const [weights, setWeights] = useState<SimilarityWeights>(PRESETS[0].weights); // Default to Rhymes
   const [threshold, setThreshold] = useState(0.75);
+  const [position, setPosition] = useState<'all' | 'initial' | 'final' | 'medial'>(PRESETS[0].position); // Default to Rhymes
+  const [syllableCount, setSyllableCount] = useState(PRESETS[0].syllableCount); // Default to Rhymes
   const [results, setResults] = useState<SimilarityResult[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -82,11 +96,13 @@ const PhonologicalSimilarityTool: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      console.log('Searching for:', targetWord, 'with weights:', weights, 'threshold:', threshold);
+      console.log('Searching for:', targetWord, 'with weights:', weights, 'threshold:', threshold, 'position:', position, 'count:', syllableCount);
       const data = await api.findSimilarWords(targetWord, {
         threshold,
         limit: 200,
         weights,
+        position,
+        syllableCount,
       });
       console.log('Received results:', data?.length, 'words');
       console.log('First result:', data?.[0]);
@@ -102,10 +118,15 @@ const PhonologicalSimilarityTool: React.FC = () => {
 
   const applyPreset = (preset: PresetConfig) => {
     setWeights(preset.weights);
+    setPosition(preset.position);
+    setSyllableCount(preset.syllableCount);
   };
 
   const resetWeights = () => {
-    setWeights(PRESETS[0].weights); // Reset to Rhymes preset
+    const rhymesPreset = PRESETS[0];
+    setWeights(rhymesPreset.weights);
+    setPosition(rhymesPreset.position);
+    setSyllableCount(rhymesPreset.syllableCount);
   };
 
   // Sort results by similarity (highest first)
@@ -142,7 +163,9 @@ const PhonologicalSimilarityTool: React.FC = () => {
                 color={
                   weights.onset === preset.weights.onset &&
                   weights.nucleus === preset.weights.nucleus &&
-                  weights.coda === preset.weights.coda
+                  weights.coda === preset.weights.coda &&
+                  position === preset.position &&
+                  syllableCount === preset.syllableCount
                     ? 'primary'
                     : 'default'
                 }
@@ -151,6 +174,47 @@ const PhonologicalSimilarityTool: React.FC = () => {
             ))}
           </Stack>
         </Box>
+
+        {/* Syllable Position Selection */}
+        <Paper variant="outlined" sx={{ p: 2 }}>
+          <Typography variant="subtitle2" gutterBottom>
+            Syllable Position
+          </Typography>
+          <Stack direction="row" spacing={2}>
+            <FormControl size="small" fullWidth>
+              <InputLabel>Position</InputLabel>
+              <Select
+                value={position}
+                label="Position"
+                onChange={(e) => setPosition(e.target.value as 'all' | 'initial' | 'final' | 'medial')}
+              >
+                <MenuItem value="all">All syllables</MenuItem>
+                <MenuItem value="final">Final (rhyme detection)</MenuItem>
+                <MenuItem value="initial">Initial (alliteration)</MenuItem>
+                <MenuItem value="medial">Medial (exclude first & last)</MenuItem>
+              </Select>
+            </FormControl>
+
+            <FormControl size="small" sx={{ minWidth: 120 }} disabled={position === 'all' || position === 'medial'}>
+              <InputLabel>Count</InputLabel>
+              <Select
+                value={syllableCount}
+                label="Count"
+                onChange={(e) => setSyllableCount(e.target.value as number)}
+              >
+                <MenuItem value={1}>1 syllable</MenuItem>
+                <MenuItem value={2}>2 syllables</MenuItem>
+                <MenuItem value={3}>3 syllables</MenuItem>
+              </Select>
+            </FormControl>
+          </Stack>
+          <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
+            {position === 'final' && 'Final syllable(s) only'}
+            {position === 'initial' && 'Initial syllable(s) only'}
+            {position === 'medial' && 'Middle syllables only'}
+            {position === 'all' && 'All syllables'}
+          </Typography>
+        </Paper>
 
         {/* Weight Sliders */}
         <Paper variant="outlined" sx={{ p: 2 }}>
