@@ -2,14 +2,17 @@
 Central word filtering module for PhonoLex v2.3.
 
 Implements the filtering criterion:
-- **Base requirement**: MUST have frequency data (SUBTLEX)
-- **Then must meet ONE of**:
-  1. Valid in WordNet (excludes subtitle artifacts like "ree", "vo")
-  2. Frequency ≥ 50 (keeps high-frequency function words)
-  3. Has psycholinguistic norms (keeps research-validated words)
+HasFrequency AND (InWordNet OR HasNormsOtherThanFreq)
 
-This hybrid approach filters out subtitle artifacts and proper names
-while keeping all legitimate English words (~46K words from CMU dictionary).
+This means:
+1. **Has frequency data** (mandatory - must appear in SUBTLEX-US)
+2. **AND must meet ONE of**:
+   - Valid in WordNet (excludes subtitle artifacts like "ree", "vo")
+   - Has psycholinguistic norms (concreteness, AoA, imageability, familiarity, VAD)
+
+This approach uses linguistic validators (WordNet, research norms) rather than
+arbitrary frequency thresholds to filter subtitle artifacts and proper names
+while keeping all legitimate English words.
 """
 
 import csv
@@ -127,12 +130,14 @@ class WordFilter:
         """
         Check if word meets inclusion criteria.
 
-        Base requirement: MUST have frequency data (SUBTLEX)
+        Filtering criterion:
+        HasFrequency AND (InWordNet OR HasNormsOtherThanFreq)
 
-        Then must meet ONE of:
-        1. Valid in WordNet (filters subtitle artifacts)
-        2. Frequency ≥ 50 (keeps high-frequency function words)
-        3. Has psycholinguistic norms (keeps research-validated words)
+        This means:
+        1. Word MUST have frequency data (in SUBTLEX-US)
+        2. AND word must meet ONE of:
+           - Valid in WordNet (excludes subtitle artifacts like "ree", "vo")
+           - Has psycholinguistic norms (concreteness, AoA, imageability, familiarity, VAD)
 
         Args:
             word: Word string (will be lowercased)
@@ -145,23 +150,20 @@ class WordFilter:
 
         word = word.lower()
 
-        # Base requirement: MUST have frequency data
+        # Requirement 1: Has frequency data (mandatory)
         if word not in self.freq_words:
             return False
 
-        # Then must meet ONE of:
+        # Requirement 2: Must meet ONE of:
+        # - Valid in WordNet OR
+        # - Has psycholinguistic norms (excluding frequency)
 
-        # Criterion 1: Valid in WordNet
+        # Check WordNet
         if WORDNET_AVAILABLE:
             if len(wn.synsets(word)) > 0:
                 return True
 
-        # Criterion 2: High frequency (≥50)
-        freq = self._get_frequency(word)
-        if freq is not None and freq >= 50:
-            return True
-
-        # Criterion 3: Has psycholinguistic norms
+        # Check psycholinguistic norms (excluding frequency)
         if self._has_norms(word):
             return True
 

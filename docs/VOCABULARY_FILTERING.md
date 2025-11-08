@@ -7,21 +7,25 @@
 
 ## Current Strategy (v2.3)
 
-**Base requirement**:
-- ✅ **MUST have frequency data** (SUBTLEX-US)
+**Filtering criterion**:
+```
+HasFrequency AND (InWordNet OR HasNorms)
+```
 
-**Then must meet ONE of**:
-1. ✅ **Valid in WordNet** (filters subtitle artifacts like "ree", "vo")
-2. ✅ **Frequency ≥ 50** (keeps high-frequency function words)
-3. ✅ **Has psycholinguistic norms** (keeps research-validated words)
+**Requirements**:
+1. ✅ **Has frequency data** (SUBTLEX-US) - mandatory
+2. ✅ **AND must meet ONE of**:
+   - **Valid in WordNet** (filters subtitle artifacts like "ree", "vo")
+   - **Has psycholinguistic norms** (concreteness, AoA, imageability, familiarity, VAD)
 
-**Result**: 45,388 English words with comprehensive phonological properties
+**Result**: 45,363 English words with comprehensive phonological properties
 
 **Rationale**:
 - **Frequency data mandatory**: All words must appear in SUBTLEX-US to ensure contemporary English usage
 - **SUBTLEX includes artifacts**: Film subtitle data contains character names, abbreviations ("V.O."), and typos
-- **WordNet alone insufficient**: Only contains content words (nouns, verbs, adjectives, adverbs) - excludes all function words (you, the, and, etc.)
-- **Hybrid approach optimal**: Frequency + (WordNet OR high-frequency OR norms) keeps all legitimate English words while filtering artifacts
+- **WordNet validation**: Excludes non-words while preserving legitimate vocabulary
+- **Norms validation**: Research-validated words from psycholinguistic datasets
+- **No arbitrary thresholds**: Uses linguistic validators rather than frequency cutoffs
 - **Coverage**: 99%+ text coverage for typical English passages
 
 ---
@@ -49,18 +53,18 @@ PhonoLex v2.0 implemented **systematic vocabulary filtering** to reduce database
 
 | Metric | v2.0 (Freq + Norm) | v2.3 (Hybrid) | Change |
 |--------|-------------------|---------------|---------|
-| **Word Count** | 24,744 | **45,388** | **+83%** ⬆️ |
+| **Word Count** | 24,744 | **45,363** | **+83%** ⬆️ |
 | **Phase 3 Embeddings** | ~112 MB | **~287 MB** | **+156%** ⬆️ |
-| **Client-Side Data (gzipped)** | ~0.6 MB | **~9.8 MB** | **+1533%** ⬆️ |
+| **Client-Side Data (gzipped)** | ~0.6 MB | **~10.7 MB** | **+1683%** ⬆️ |
 
 ### Examples of Filtering Behavior
 
 | Word | Freq | WordNet? | Norms? | Result | Reason |
 |------|------|----------|--------|--------|--------|
-| ree | 19 | ❌ | ❌ | **EXCLUDED** | Subtitle artifact (character name) |
-| vo | 30 | ❌ | ❌ | **EXCLUDED** | Abbreviation ("V.O." - voice over) |
-| you | 2,134,713 | ❌ | ✅ | **KEPT** | Function word (freq ≥ 50 + has norms) |
-| the | 1,501,908 | ❌ | ✅ | **KEPT** | Function word (freq ≥ 50 + has norms) |
+| ree | 19 | ❌ | ❌ | **EXCLUDED** | Subtitle artifact (not in WordNet, no norms) |
+| vo | 30 | ❌ | ❌ | **EXCLUDED** | Abbreviation ("V.O." - not validated) |
+| you | 2,134,713 | ❌ | ✅ | **KEPT** | Has psycholinguistic norms |
+| the | 1,501,908 | ❌ | ✅ | **KEPT** | Has psycholinguistic norms |
 | cat | 3,383 | ✅ | ✅ | **KEPT** | Valid in WordNet |
 | re | 311,072 | ✅ | ❌ | **KEPT** | Valid in WordNet (musical note) |
 | zygote | 3 | ✅ | ✅ | **KEPT** | Valid in WordNet (technical term) |
