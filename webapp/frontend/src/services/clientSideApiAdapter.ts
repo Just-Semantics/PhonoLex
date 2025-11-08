@@ -444,6 +444,39 @@ class ClientSideAPIAdapter {
       params.max_sets || 10
     );
   }
+
+  /**
+   * Analyze text for phonological and psycholinguistic properties
+   */
+  async analyzeText(text: string): Promise<{
+    total_words: number;
+    analyzed_words: number;
+    unknown_words: string[];
+    coverage_percent: number;
+    aggregate_percentiles: {
+      syllable_count: number | null;
+      phoneme_count: number | null;
+      wcm_score: number | null;
+      phono_prob_avg: number | null;
+      phono_prob_sum_log: number | null;
+      positional_prob_avg: number | null;
+      frequency: number | null;
+      aoa: number | null;
+      imageability: number | null;
+      familiarity: number | null;
+      concreteness: number | null;
+      valence: number | null;
+      arousal: number | null;
+      dominance: number | null;
+    };
+    word_details: Array<{
+      word: string;
+      percentiles: Record<string, number | null>;
+    }>;
+  }> {
+    await this.ensureLoaded();
+    return clientSideData.analyzeText(text);
+  }
 }
 
 // Export singleton instance

@@ -1,17 +1,15 @@
 """
-Central word filtering module for PhonoLex v2.0.
+Central word filtering module for PhonoLex v2.3.
 
 Implements the filtering criterion:
 - Word must have frequency data (SUBTLEXus)
-- Word must have at least one additional psycholinguistic norm:
-  - Concreteness (Brysbaert et al. 2014)
-  - Age of Acquisition (Glasgow Norms)
-  - Imageability (Glasgow Norms)
-  - Familiarity (Glasgow Norms)
-  - Valence/Arousal/Dominance (Warriner et al.)
 
-This reduces the vocabulary from 48K → 24K words (49% reduction)
-while improving data quality for research and clinical applications.
+This ensures we only include real words from contemporary English,
+filtering out archaic terms, typos, and nonsense while maximizing
+vocabulary coverage (~50K words from CMU dictionary).
+
+Additional psycholinguistic norms (concreteness, AoA, etc.) are loaded
+and available when present, but not required for inclusion.
 """
 
 import csv
@@ -116,7 +114,7 @@ class WordFilter:
         """
         Check if word meets inclusion criteria.
 
-        Criterion: Must have frequency AND at least one other norm.
+        Criterion: Must have frequency data (relaxed from v2.0).
 
         Args:
             word: Word string (will be lowercased)
@@ -129,20 +127,9 @@ class WordFilter:
 
         word = word.lower()
 
-        # Must have frequency
-        if word not in self.freq_words:
-            return False
-
-        # Must have at least one other norm
-        has_other_norm = (
-            word in self.conc_words
-            or word in self.aoa_words
-            or word in self.img_words
-            or word in self.fam_words
-            or word in self.vad_words
-        )
-
-        return has_other_norm
+        # Only requirement: must have frequency data
+        # This filters out archaic/nonsense words while maximizing coverage
+        return word in self.freq_words
 
     def get_eligible_words(self) -> set[str]:
         """Get all words that meet the inclusion criterion"""

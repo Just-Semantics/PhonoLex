@@ -22,6 +22,7 @@ import {
   Search as SearchIcon,
   CompareArrows as ContrastiveIcon,
   Tune as SimilarityIcon,
+  Description as TextAnalysisIcon,
 } from '@mui/icons-material';
 import { theme } from './theme/theme';
 import api from './services/phonolexApi';
@@ -32,6 +33,7 @@ import ExpandableToolCard from './components/ExpandableToolCard';
 import ContrastiveInterventionTool from './components/tools/ContrastiveInterventionTool';
 import PhonologicalSimilarityTool from './components/tools/PhonologicalSimilarityTool';
 import SearchTool from './components/tools/SearchTool';
+import TextAnalysisTool from './components/tools/TextAnalysisTool';
 import Builder from './components/Builder';
 
 const App: React.FC = () => {
@@ -91,6 +93,16 @@ const App: React.FC = () => {
             color="#D4A747"
           >
             <PhonologicalSimilarityTool />
+          </ExpandableToolCard>
+
+          {/* Text Analysis */}
+          <ExpandableToolCard
+            icon={<TextAnalysisIcon />}
+            title="Text Analysis"
+            description="Analyze passages for readability across phonological, lexical, semantic, and affective dimensions with interactive highlighting"
+            color="#4CAF50"
+          >
+            <TextAnalysisTool />
           </ExpandableToolCard>
 
           {/* Lookup */}

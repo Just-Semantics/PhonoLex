@@ -1733,6 +1733,144 @@ class ClientSideDataService {
     // Compute cosine similarity on weighted vectors
     return this.cosineSimilarity(Array.from(weighted1), Array.from(weighted2));
   }
+
+  // ==========================================================================
+  // Text Analysis
+  // ==========================================================================
+
+  /**
+   * Analyze a text passage for phonological and psycholinguistic properties
+   */
+  async analyzeText(text: string): Promise<{
+    total_words: number;
+    analyzed_words: number;
+    unknown_words: string[];
+    coverage_percent: number;
+    aggregate_percentiles: {
+      syllable_count: number | null;
+      phoneme_count: number | null;
+      wcm_score: number | null;
+      phono_prob_avg: number | null;
+      phono_prob_sum_log: number | null;
+      positional_prob_avg: number | null;
+      frequency: number | null;
+      aoa: number | null;
+      imageability: number | null;
+      familiarity: number | null;
+      concreteness: number | null;
+      valence: number | null;
+      arousal: number | null;
+      dominance: number | null;
+    };
+    word_details: Array<{
+      word: string;
+      percentiles: Record<string, number | null>;
+    }>;
+  }> {
+    await this.ensureLoaded();
+
+    // Tokenize text into words (remove punctuation)
+    const words = text
+      .toLowerCase()
+      .split(/\s+/)
+      .map(w => w.replace(/[^\w]/g, ''))
+      .filter(w => w.length > 0);
+
+    const totalWords = words.length;
+    const uniqueWords = [...new Set(words)];
+
+    // Analyze each unique word
+    const wordDetails: Array<{
+      word: string;
+      percentiles: Record<string, number | null>;
+    }> = [];
+
+    const unknownWords: string[] = [];
+    let analyzedCount = 0;
+
+    for (const word of uniqueWords) {
+      const metadata = this.wordMetadata.get(word);
+      if (!metadata) {
+        unknownWords.push(word);
+        continue;
+      }
+
+      analyzedCount += words.filter(w => w === word).length;
+
+      // Extract percentiles
+      const percentiles: Record<string, number | null> = {
+        syllable_count_percentile: (metadata as any).syllable_count_percentile ?? null,
+        phoneme_count_percentile: (metadata as any).phoneme_count_percentile ?? null,
+        wcm_score_percentile: (metadata as any).wcm_score_percentile ?? null,
+        phono_prob_avg_percentile: (metadata as any).phono_prob_avg_percentile ?? null,
+        phono_prob_sum_log_percentile: (metadata as any).phono_prob_sum_log_percentile ?? null,
+        positional_prob_avg_percentile: (metadata as any).positional_prob_avg_percentile ?? null,
+        frequency_percentile: (metadata as any).frequency_percentile ?? null,
+        aoa_percentile: (metadata as any).aoa_percentile ?? null,
+        imageability_percentile: (metadata as any).imageability_percentile ?? null,
+        familiarity_percentile: (metadata as any).familiarity_percentile ?? null,
+        concreteness_percentile: (metadata as any).concreteness_percentile ?? null,
+        valence_percentile: (metadata as any).valence_percentile ?? null,
+        arousal_percentile: (metadata as any).arousal_percentile ?? null,
+        dominance_percentile: (metadata as any).dominance_percentile ?? null,
+      };
+
+      wordDetails.push({
+        word,
+        percentiles,
+      });
+    }
+
+    // Compute aggregate percentiles (average across all words)
+    const computeAverage = (property: string): number | null => {
+      const values = wordDetails
+        .map(w => w.percentiles[`${property}_percentile`])
+        .filter(v => v !== null) as number[];
+
+      if (values.length === 0) return null;
+
+      // Weight by frequency of word in text
+      let weightedSum = 0;
+      let totalWeight = 0;
+
+      for (const wordDetail of wordDetails) {
+        const wordCount = words.filter(w => w === wordDetail.word).length;
+        const percentile = wordDetail.percentiles[`${property}_percentile`];
+        if (percentile !== null) {
+          weightedSum += percentile * wordCount;
+          totalWeight += wordCount;
+        }
+      }
+
+      return totalWeight > 0 ? weightedSum / totalWeight : null;
+    };
+
+    const aggregatePercentiles = {
+      syllable_count: computeAverage('syllable_count'),
+      phoneme_count: computeAverage('phoneme_count'),
+      wcm_score: computeAverage('wcm_score'),
+      phono_prob_avg: computeAverage('phono_prob_avg'),
+      phono_prob_sum_log: computeAverage('phono_prob_sum_log'),
+      positional_prob_avg: computeAverage('positional_prob_avg'),
+      frequency: computeAverage('frequency'),
+      aoa: computeAverage('aoa'),
+      imageability: computeAverage('imageability'),
+      familiarity: computeAverage('familiarity'),
+      concreteness: computeAverage('concreteness'),
+      valence: computeAverage('valence'),
+      arousal: computeAverage('arousal'),
+      dominance: computeAverage('dominance'),
+    };
+
+    return {
+      total_words: totalWords,
+      analyzed_words: analyzedCount,
+      unknown_words: unknownWords,
+      coverage_percent: (analyzedCount / totalWords) * 100,
+      aggregate_percentiles: aggregatePercentiles,
+      word_details: wordDetails,
+    };
+  }
 }
 
 // Export singleton instance

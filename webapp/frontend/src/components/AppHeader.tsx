@@ -287,7 +287,7 @@ const AppHeader: React.FC<AppHeaderProps> = () => {
           <Typography variant="body2" color="text.secondary" paragraph>
             <strong>Data Sources:</strong> CMU Pronouncing Dictionary (125K words), PHOIBLE (phonological features),
             SUBTLEX-US (frequency), Glasgow Norms, Brysbaert et al., Warriner et al., and additional psycholinguistic
-            datasets. Filtered vocabulary: 24,744 English words with comprehensive phonological and psycholinguistic properties.
+            datasets. Filtered vocabulary: 48,720 English words with comprehensive phonological and psycholinguistic properties.
           </Typography>
 
           <Divider sx={{ my: 3 }} />
