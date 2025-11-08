@@ -23,15 +23,6 @@ import {
 import { Close as CloseIcon } from '@mui/icons-material';
 import api from '../services/phonolexApi';
 
-// English CMU phoneme set (41 phonemes from CMU Pronouncing Dictionary)
-// Extracted from src/phonolex/embeddings/english_data_loader.py
-// Includes stress-dependent phonemes: ə/ʌ (AH0/AH1) and ɚ/ɝ (ER0/ER1)
-const ENGLISH_CMU_PHONEMES = new Set([
-  'aɪ', 'aʊ', 'b', 'd', 'dʒ', 'eɪ', 'f', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
-  'oʊ', 'p', 's', 't', 'tʃ', 'u', 'v', 'w', 'z', 'æ', 'ð', 'ŋ', 'ɑ', 'ɔ',
-  'ɔɪ', 'ə', 'ɚ', 'ɛ', 'ɝ', 'ɡ', 'ɪ', 'ɹ', 'ʃ', 'ʊ', 'ʌ', 'ʒ', 'θ'
-]);
-
 interface PhonemePickerDialogProps {
   open: boolean;
   onClose: () => void;
@@ -59,7 +50,7 @@ const PhonemePickerDialog: React.FC<PhonemePickerDialogProps> = ({
   const [vowels, setVowels] = React.useState<string[]>([]);
   const [loading, setLoading] = React.useState(true);
 
-  // Load phonemes from API when dialog opens (English CMU only)
+  // Load phonemes from exported data when dialog opens
   React.useEffect(() => {
     const loadPhonemes = async () => {
       setLoading(true);
@@ -69,14 +60,9 @@ const PhonemePickerDialog: React.FC<PhonemePickerDialogProps> = ({
         const vows: string[] = [];
 
         data.phonemes.forEach((p: Phoneme) => {
-          // Filter to English CMU phonemes only
-          if (!ENGLISH_CMU_PHONEMES.has(p.ipa)) {
-            return;
-          }
-
           const phonemeType = p.type || p.segment_class;
           if (phonemeType === 'consonant') {
-            // Apply sonorant/obstruent filter if specified
+            // Apply sonorant/obstruent filter if specified (data-driven from Phoible features)
             if (filter === 'sonorants') {
               // Sonorants: consonantal:+ AND sonorant:+
               if (p.features.sonorant === '+') {
@@ -91,7 +77,8 @@ const PhonemePickerDialog: React.FC<PhonemePickerDialogProps> = ({
               // No filter - include all consonants
               cons.push(p.ipa);
             }
-          } else if (phonemeType === 'vowel') {
+          } else if (phonemeType === 'vowel' && !filter) {
+            // Only include vowels when no consonant class filter is active
             vows.push(p.ipa);
           }
         });
@@ -145,7 +132,7 @@ const PhonemePickerDialog: React.FC<PhonemePickerDialogProps> = ({
 
             {filter && (
               <Typography variant="caption" color="text.secondary" display="block">
-                Showing {filter === 'sonorants' ? 'sonorants only (m, n, ŋ, l, r, w, j)' : 'obstruents only (p, t, k, f, s, etc.)'}
+                Showing {filter === 'sonorants' ? 'sonorants only' : 'obstruents only'}
               </Typography>
             )}
           </Box>
@@ -166,15 +153,23 @@ const PhonemePickerDialog: React.FC<PhonemePickerDialogProps> = ({
           </Box>
         ) : (
           <>
-            <Tabs value={tabIndex} onChange={(_, val) => setTabIndex(val)} sx={{ mb: 3 }}>
-              <Tab label={`Consonants (${consonants.length})`} />
-              <Tab label={`Vowels (${vowels.length})`} />
-            </Tabs>
+            {!filter && (
+              <Tabs value={tabIndex} onChange={(_, val) => setTabIndex(val)} sx={{ mb: 3 }}>
+                <Tab label={`Consonants (${consonants.length})`} />
+                <Tab label={`Vowels (${vowels.length})`} />
+              </Tabs>
+            )}
 
-            {tabIndex === 0 && (
+            {filter && (
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2, fontWeight: 500 }}>
+                {filter === 'sonorants' ? 'Sonorants' : 'Obstruents'} ({consonants.length})
+              </Typography>
+            )}
+
+            {(tabIndex === 0 || filter) && (
               <Box>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                  Tap any consonant to select it
+                  {filter ? 'Tap to select' : 'Tap any consonant to select it'}
                 </Typography>
                 <Box
                   sx={{
@@ -215,7 +210,7 @@ const PhonemePickerDialog: React.FC<PhonemePickerDialogProps> = ({
               </Box>
             )}
 
-            {tabIndex === 1 && (
+            {tabIndex === 1 && !filter && (
               <Box>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                   Tap any vowel to select it

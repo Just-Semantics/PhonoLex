@@ -200,11 +200,11 @@ const ContrastiveInterventionTool: React.FC = () => {
       }
 
       if (sonorantList.length === 0) {
-        throw new Error('Please enter at least one sonorant (m, n, ŋ, l, r, w, j)');
+        throw new Error('Please enter at least one sonorant');
       }
 
       if (obstruentList.length === 0) {
-        throw new Error('Please enter at least one obstruent (p, t, k, f, s, ʃ, etc.)');
+        throw new Error('Please enter at least one obstruent');
       }
 
       // Combine both lists for API call
