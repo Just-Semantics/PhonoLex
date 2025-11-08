@@ -6,7 +6,7 @@ This document provides technical details on PhonoLex's architecture and computat
 
 PhonoLex is a fully client-side web application that performs phonological analysis using:
 
-- **24,744 English words** from the CMU Pronouncing Dictionary
+- **48,720 English words** from the CMU Pronouncing Dictionary
 - **38 distinctive phonological features** from the PHOIBLE database (covering 2,716 languages)
 - **12 psycholinguistic properties** from 4 major research datasets
 - **Phoneme-sequence similarity** using soft Levenshtein distance
@@ -20,10 +20,10 @@ Frontend (React + TypeScript)
     ↓
 Data Service (clientSideData.ts)
     ↓
-Static JSON Files (~56 MB uncompressed, ~0.6 MB gzipped)
-    ├── word_metadata.json (24,744 words with all properties)
+Static JSON Files (~525 MB uncompressed, ~10.4 MB gzipped)
+    ├── word_metadata.json (48,720 words with all properties)
     ├── embeddings.json.gz (phoneme-sequence syllable structures)
-    ├── minimal_pairs.json.gz (31,399 precomputed minimal pairs)
+    ├── minimal_pairs.json.gz (112,964 precomputed minimal pairs)
     ├── phoneme_features.json.gz (38 PHOIBLE features for 35 phonemes)
     ├── syllable_structures.json.gz (syllable decompositions)
     └── arpa_to_ipa.json.gz (CMU ARPA to IPA mapping)
@@ -33,7 +33,7 @@ Static JSON Files (~56 MB uncompressed, ~0.6 MB gzipped)
 - Zero server costs
 - No network latency
 - Works offline
-- 99% compression (56.7 MB → 0.6 MB with gzip)
+- 98% compression (525 MB → 10.4 MB with gzip)
 - Instant queries after initial load
 
 ## Three-Phase Pipeline
@@ -287,12 +287,12 @@ Where each syllable is compared using the weighted component similarity from abo
 
 **Source:** CMU Pronouncing Dictionary (primary pronunciations only)
 
-**Size:** 24,744 words
+**Size:** 48,720 words
 
 **Selection criteria:**
 - Primary pronunciations only (no variants)
 - Valid IPA mapping available
-- Frequency data available AND at least one psycholinguistic property
+- Frequency data available (relaxed from v2.0's "frequency + 1 norm" requirement)
 
 **Phoneme inventory:** 35 English phonemes (General American dialect)
 
@@ -529,7 +529,7 @@ Requires modern browser with:
 
 ### 5. Computational Complexity
 
-**Similarity search:** O(n) where n = vocabulary size (24,744)
+**Similarity search:** O(n) where n = vocabulary size (48,720)
 - Each comparison requires soft Levenshtein on syllable sequences
 - Threshold filtering helps reduce result set
 
@@ -643,10 +643,10 @@ All data files are available in `webapp/frontend/public/data/`:
 {
   "version": "2.0.0",
   "created": "1762511838.527301",
-  "vocabulary_size": 24744,
-  "minimal_pairs_count": 31399,
+  "vocabulary_size": 48720,
+  "minimal_pairs_count": 112964,
   "phoneme_count": 35,
-  "filter_criterion": "frequency + at least one psycholinguistic norm",
+  "filter_criterion": "frequency only (relaxed in v2.3)",
   "files": {
     "word_metadata.json": "Word properties, IPA, syllables, psycholinguistic norms",
     "embeddings.json": "Phoible-based syllable embeddings",

@@ -9,7 +9,7 @@ The Contrastive Sets tool provides three clinical intervention methods:
 2. **Maximal Opposition** - Two unknown phonemes with major class difference (Gierut 1989-1992)
 3. **Multiple Opposition** - Global collapse treatment with minimal sets (Gierut 1989-1992, Storkel 2022)
 
-**Vocabulary:** 24,744 English words with 31,399 precomputed minimal pair relationships
+**Vocabulary:** 48,720 English words with 112,964 precomputed minimal pair relationships
 
 ## Minimal Pairs
 
@@ -446,7 +446,7 @@ Goal: Find words that form minimal sets (differ at the SAME POSITION only)
 
 ## Data Sources
 
-**Minimal pairs:** 31,399 precomputed relationships from 24,744 words
+**Minimal pairs:** 112,964 precomputed relationships from 48,720 words
 
 **Features:** 38 PHOIBLE distinctive features (Moran & McCloy 2019, Hayes 2009)
 

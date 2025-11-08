@@ -12,7 +12,7 @@ The Lookup tool provides four modes:
 
 ## Word Lookup
 
-Search for any word (24,744 words available) to view comprehensive information across 4 domains.
+Search for any word (48,720 words available) to view comprehensive information across 4 domains.
 
 ### Phonological Complexity (4 properties)
 
@@ -578,14 +578,14 @@ Results: All affricates (tʃ, dʒ)
 
 **Data Size**:
 - Phoneme features: ~2 KB (39 phonemes × 38 features × 1 byte)
-- Word metadata: ~4.5 MB uncompressed (24,744 words)
+- Word metadata: ~12 MB uncompressed (48,720 words)
 - Minimal pairs: ~600 KB gzipped
 
 ## Vocabulary and Coverage
 
 | Category | Coverage | Notes |
 |----------|----------|-------|
-| **Words** | 24,744 | CMU Pronouncing Dictionary (primary pronunciations) |
+| **Words** | 48,720 | CMU Pronouncing Dictionary (primary pronunciations) |
 | **Phonemes** | 39 | General American English |
 | **Phonological properties** | 100% | Syllables, phonemes, IPA |
 | **WCM/MSH** | ~95% | Computed for most words |

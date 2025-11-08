@@ -123,7 +123,7 @@ python scripts/export_clientside_data.py
 |-------|--------------|-----------------|----------|
 | Phase 1 | 59 KB | 18 KB | 94 phonemes |
 | Phase 2 | 174 KB | 52 KB | 94 phonemes |
-| Phase 3 | 111.6 MB | 1.5 MB | 17,920 words |
+| Phase 3 | ~304 MB | ~10.4 MB | 48,720 words |
 
 **Key Insight**: Phoible features compress 99% due to sparse structure!
 
@@ -241,7 +241,7 @@ embeddings/
 │   ├── normalized_76d.pkl             # 76-dim endpoints
 │   └── normalized_152d.pkl            # 152-dim trajectories (optional)
 └── phase3/
-    └── syllable_embeddings_phoible.pt # 228-dim syllables (17,920 words)
+    └── syllable_embeddings_phoible.pt # Phoneme-sequence syllables (48,720 words)
 
 scripts/
 ├── compute_phase1_features.py         # Extract from Phoible

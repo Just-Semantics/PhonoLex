@@ -10,7 +10,7 @@ Build word lists by combining:
 - **Phoneme exclusions** (exclude words containing specific phonemes)
 - **AND logic** (words must match ALL criteria)
 
-**Vocabulary size:** 24,744 English words from the CMU Pronouncing Dictionary
+**Vocabulary size:** 48,720 English words from the CMU Pronouncing Dictionary
 
 ## Basic Usage
 
@@ -370,7 +370,7 @@ See [Practical Examples](../getting-started/examples.md) for detailed walkthroug
 - Words without any psycholinguistic properties
 - Non-English loanwords without standard pronunciations
 
-**Total vocabulary:** 24,744 words
+**Total vocabulary:** 48,720 words
 
 ### Technical Limitations
 

@@ -4,7 +4,7 @@ Complete documentation of all 15 word properties available in PhonoLex: 4 phonol
 
 ## Overview
 
-PhonoLex integrates word properties from multiple research datasets to provide comprehensive psycholinguistic characterization of 24,744 English words. Properties span five domains:
+PhonoLex integrates word properties from multiple research datasets to provide comprehensive psycholinguistic characterization of 48,720 English words. Properties span five domains:
 
 1. **Phonological Complexity** (4 properties): Syllables, Phonemes, WCM, MSH
 2. **Phonotactic Probability** (3 properties): Biphone Probability, Sum Log Probability, Positional Segment Probability
@@ -12,7 +12,7 @@ PhonoLex integrates word properties from multiple research datasets to provide c
 4. **Semantic Properties** (3 properties): Imageability, Familiarity, Concreteness
 5. **Affective Properties** (3 properties): Valence, Arousal, Dominance
 
-**Total vocabulary**: 24,744 words from CMU Pronouncing Dictionary (General American English, primary pronunciations only)
+**Total vocabulary**: 48,720 words from CMU Pronouncing Dictionary (General American English, primary pronunciations only)
 
 **Data coverage**: Varies by property (40-100%). Words without a property value are excluded when filtering by that property.
 
@@ -24,7 +24,7 @@ PhonoLex integrates word properties from multiple research datasets to provide c
 
 **Range**: 1-5 syllables
 
-**Coverage**: 100% (all 24,744 words)
+**Coverage**: 100% (all 48,720 words)
 
 **Description**: Number of syllables in the word, determined by syllabification algorithm using maximal onset principle and sonority sequencing.
 
@@ -53,7 +53,7 @@ PhonoLex integrates word properties from multiple research datasets to provide c
 
 **Range**: 1-10+ phonemes
 
-**Coverage**: 100% (all 24,744 words)
+**Coverage**: 100% (all 48,720 words)
 
 **Description**: Number of phoneme segments in the IPA transcription. Diphthongs count as single phonemes (e.g., /aɪ/ in "time").
 
@@ -307,7 +307,7 @@ MSH = (2.0 + 3.0) / 2 = 2.5
 
 **Range**: 0-1 (continuous)
 
-**Coverage**: ~100% (24,744 words)
+**Coverage**: ~100% (48,720 words)
 
 **Description**: Mean biphone probability across all phoneme pairs in the word. Higher values indicate more typical, phonotactically "legal" sound sequences in English.
 
@@ -364,7 +364,7 @@ Average biphone probability: (0.0823 + 0.0412) / 2 = 0.0618
 
 **Range**: Negative values (typically -10 to 0)
 
-**Coverage**: ~100% (24,744 words)
+**Coverage**: ~100% (48,720 words)
 
 **Description**: Sum of log₁₀ probabilities for all biphones in the word. This is the standard metric from Vitevitch & Luce (2004).
 
@@ -403,7 +403,7 @@ Sum log probability: -1.08 + (-1.39) = -2.47
 
 **Range**: 0-1 (continuous)
 
-**Coverage**: ~100% (24,744 words)
+**Coverage**: ~100% (48,720 words)
 
 **Description**: Mean probability of individual phonemes occurring in their syllable positions (onset/nucleus/coda), averaged across all phonemes in the word.
 
@@ -885,7 +885,7 @@ Low Arousal
 | **Semantic** | Imageability, Familiarity, Concreteness | 47% |
 | **Affective** | Valence, Arousal, Dominance | 50% |
 
-**Overall**: 24,744 words with at least phonological properties. Psycholinguistic property coverage varies (40-99%).
+**Overall**: 48,720 words with at least phonological properties. Psycholinguistic property coverage varies (40-99%).
 
 **Missing data handling**: Words without a property are excluded when filtering by that property in Custom Word Lists tool.
 
@@ -912,7 +912,7 @@ See [Custom Word Lists](../user-guide/custom-word-lists.md) for complete documen
 
 ### Word Lookup
 
-View all available properties for any word in the 24,744-word vocabulary.
+View all available properties for any word in the 48,720-word vocabulary.
 
 See [Lookup - Word Lookup](../user-guide/lookup.md#word-lookup) for details.
 

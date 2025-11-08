@@ -10,7 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 2. **Psycholinguistic Norms** - 11 properties from 5 major research datasets
 3. **Phoneme-Sequence Similarity** - v2.3 soft Levenshtein distance preserving consonant clusters and diphthongs
 
-###  Four Core Tools
+###  Five Core Tools
 
 1. **Custom Word List Builder** ⭐ THE POWER TOOL
    - Pattern matching (STARTS_WITH, ENDS_WITH, CONTAINS) with IPA phonemes
@@ -44,7 +44,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
    - Real-time weight sliders
    - Threshold selection
 
-4. **Lookup**
+4. **Text Analysis**
+   - Analyze passages for readability across phonological, lexical, semantic, and affective dimensions
+   - Interactive highlighting by feature with color gradients
+   - Aggregate percentile statistics across 14 properties
+   - Three preset phonetics passages (Grandfather, Rainbow, Caterpillar)
+   - Unknown words marked with dotted underline (madlibs-style)
+   - Use cases: Assess therapy script complexity, select reading materials, control stimulus properties
+
+5. **Lookup**
    - Word details with all phonological and psycholinguistic properties
    - Phoneme feature lookup (38 distinctive features)
    - Phoneme comparison (feature-by-feature diff)
@@ -78,7 +86,7 @@ PhonoLex integrates psycholinguistic norms from 5 major research datasets:
 - WCM (Stoel-Gammon 2010): 0-15 - Word Complexity Measure
 - MSH (Phonological analysis): 1-6 - Mean Syllable Height
 
-**Vocabulary**: 24,744 English words from the CMU Pronouncing Dictionary.
+**Vocabulary**: 48,720 English words from the CMU Pronouncing Dictionary.
 
 ### Key Innovation (v2.3 Architecture)
 
@@ -126,10 +134,10 @@ PhonoLex/
 │       │       │   └── SearchTool.tsx                   # Lookup
 │       │       └── ...
 │       └── public/
-│           └── data/        # Static JSON data files (~56MB, gzips to ~600KB!)
-│               ├── word_metadata.json      # 24,744 words with all properties
+│           └── data/        # Static JSON data files (~525MB, gzips to ~10.4MB!)
+│               ├── word_metadata.json      # 48,720 words with all properties
 │               ├── embeddings.json.gz      # Phoneme-sequence syllable structures
-│               ├── minimal_pairs.json.gz   # Precomputed minimal pairs
+│               ├── minimal_pairs.json.gz   # Precomputed 112,964 minimal pairs
 │               ├── phoneme_features.json.gz # PHOIBLE features for all phonemes
 │               └── ...
 │
@@ -164,8 +172,9 @@ PhonoLex/
 - **Client-side computation** - All features run in browser
 - Data pre-exported to JSON files in `webapp/frontend/public/data/`
 - Backend code archived in `archive/webapp_v2_backend/`
-- **24,744 words** with comprehensive psycholinguistic norms
-- **99% compression**: 56.7 MB → 0.6 MB gzipped!
+- **48,720 words** with comprehensive psycholinguistic norms
+- **112,964 minimal pairs** precomputed for contrastive intervention
+- **98% compression**: 525 MB → 10.4 MB gzipped!
 
 ## Development Environment Setup
 
@@ -242,7 +251,7 @@ python scripts/compute_phase2_normalized_vectors.py
 python scripts/build_phase3_syllable_embeddings.py
 # Output: embeddings/phase3/syllable_embeddings_phoible.pt
 # Time: ~5 minutes on CPU
-# Processes: 24,744 words from CMU Pronouncing Dictionary
+# Processes: 48,720 words from CMU Pronouncing Dictionary
 ```
 
 See [docs/PHONEME_SEQUENCE_ARCHITECTURE_V2.3.md](docs/PHONEME_SEQUENCE_ARCHITECTURE_V2.3.md) and [docs/PHASE_ARCHITECTURE.md](docs/PHASE_ARCHITECTURE.md) for complete documentation.
@@ -255,12 +264,12 @@ After building embeddings, export data for the web app:
 # Export all word data to webapp/frontend/public/data/
 python scripts/export_clientside_data.py
 # This creates:
-# - word_metadata.json - 24,744 words with all properties and psycholinguistic norms
+# - word_metadata.json - 48,720 words with all properties and psycholinguistic norms
 # - embeddings.json.gz - Phoneme-sequence syllable structures (v2.3)
-# - minimal_pairs.json.gz - Precomputed minimal pairs
+# - minimal_pairs.json.gz - Precomputed 112,964 minimal pairs
 # - phoneme_features.json.gz - PHOIBLE features for phoneme comparison
 # - syllable_structures.json.gz - Syllable decompositions
-# Total size: ~56 MB uncompressed, ~0.6 MB gzipped (99% compression!)
+# Total size: ~525 MB uncompressed, ~10.4 MB gzipped (98% compression!)
 ```
 
 ### Running the Web Application
@@ -329,14 +338,14 @@ The current production architecture is **fully client-side**:
 
 **Stack**:
 - **Frontend**: React 18 + TypeScript + MUI
-- **Data Storage**: Static JSON files (~56 MB uncompressed, ~0.6 MB gzipped)
+- **Data Storage**: Static JSON files (~525 MB uncompressed, ~10.4 MB gzipped)
 - **Computation**: In-browser JavaScript (no backend)
 - **Deployment**: Any static host (Netlify, Cloudflare Pages, etc.)
 
 **Data Files** (in `webapp/frontend/public/data/`):
-- `word_metadata.json`: 24,744 words with phonological properties and psycholinguistic norms
+- `word_metadata.json`: 48,720 words with phonological properties and psycholinguistic norms
 - `embeddings.json.gz`: Phoneme-sequence syllable structures (v2.3)
-- `minimal_pairs.json.gz`: Precomputed minimal pairs
+- `minimal_pairs.json.gz`: Precomputed 112,964 minimal pairs
 - `phoneme_features.json.gz`: PHOIBLE features for 39 English phonemes
 - `syllable_structures.json.gz`: Onset-nucleus-coda decompositions
 
@@ -346,7 +355,7 @@ The current production architecture is **fully client-side**:
 - Faster queries (no network latency)
 - Offline-capable (PWA-ready)
 - Simple deployment
-- 99% compression with gzip
+- 98% compression with gzip
 
 See [docs/CLIENT_SIDE_DATA_PACKAGE.md](docs/CLIENT_SIDE_DATA_PACKAGE.md) for data format details.
 
@@ -520,7 +529,7 @@ When starting work on different aspects:
 |-------|-------------|------|------|
 | Phase 1 | Database lookup | <1 second | 59KB |
 | Phase 2 | Vectorization | ~5 seconds | 174KB |
-| Phase 3 | Syllable structures | ~5 minutes | ~112MB |
+| Phase 3 | Syllable structures | ~5 minutes | ~304MB |
 
 ### Client-Side Performance
 
@@ -534,11 +543,12 @@ When starting work on different aspects:
 
 - **Phase 1**: 39 English phonemes (extracted from Phoible)
 - **Phase 2**: 39 phonemes with continuous vectors
-- **Phase 3**: 24,744 words with phoneme-sequence syllable structures (v2.3)
-- **Client-side data**: 24,744 words with comprehensive psycholinguistic norms
+- **Phase 3**: 48,720 words with phoneme-sequence syllable structures (v2.3)
+- **Client-side data**: 48,720 words with comprehensive psycholinguistic norms
+- **Minimal pairs**: 112,964 precomputed minimal pairs for contrastive intervention
 - **Dialect**: General American English (CMU primary pronunciations only)
 - **Universal**: 105,484 phonemes across 2,716 languages (Phoible database)
-- **Compression**: 56.7 MB → 0.6 MB gzipped (99% reduction!)
+- **Compression**: 525 MB → 10.4 MB gzipped (98% reduction!)
 
 ### Expected Similarity Scores (v2.3)
 
