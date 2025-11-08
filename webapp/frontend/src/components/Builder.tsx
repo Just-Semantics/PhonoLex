@@ -535,7 +535,7 @@ const Builder: React.FC = () => {
                         <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           Phonotactic Probability: {filters.phono_prob_avg[0].toFixed(3)} - {filters.phono_prob_avg[1].toFixed(3)}
                           <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
-                            How common the sound sequences are (Vitevitch & Luce, 2004). Higher = more typical English patterns
+                            Sound sequence typicality (Vitevitch & Luce, 2004)
                           </Typography>
                         </Typography>
                         <Slider
