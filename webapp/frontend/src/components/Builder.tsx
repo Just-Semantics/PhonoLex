@@ -515,7 +515,7 @@ const Builder: React.FC = () => {
                         <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
                           MSH Stage: {filters.msh[0]} - {filters.msh[1]}
                           <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
-                            Motor Speech Hierarchy - Developmental complexity
+                            Motor Speech Hierarchy (Namasivayam et al., 2021)
                           </Typography>
                         </Typography>
                         <Slider
