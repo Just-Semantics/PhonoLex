@@ -9,10 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **📈 Vocabulary Expansion: 24,744 → 45,388 words (+83%)**
-  - **Hybrid filtering** (must meet ONE of):
-    1. Valid in WordNet (filters subtitle artifacts like "ree", "vo")
-    2. Frequency ≥ 50 (keeps high-frequency function words)
-    3. Has psycholinguistic norms (keeps research-validated words)
+  - **Hybrid filtering**:
+    - Base requirement: MUST have frequency data (SUBTLEX-US)
+    - Then must meet ONE of:
+      1. Valid in WordNet (filters subtitle artifacts like "ree", "vo")
+      2. Frequency ≥ 50 (keeps high-frequency function words)
+      3. Has psycholinguistic norms (keeps research-validated words)
   - **Eliminates SUBTLEX artifacts**: Film subtitle data includes character names, abbreviations ("V.O."), typos
   - **Keeps all legitimate words**: Function words (you, the, and), content words (cat, dog), technical terms
   - **99%+ text coverage** for typical English passages

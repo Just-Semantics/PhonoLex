@@ -2,7 +2,8 @@
 Central word filtering module for PhonoLex v2.3.
 
 Implements the filtering criterion:
-- Word must meet ONE of:
+- **Base requirement**: MUST have frequency data (SUBTLEX)
+- **Then must meet ONE of**:
   1. Valid in WordNet (excludes subtitle artifacts like "ree", "vo")
   2. Frequency ≥ 50 (keeps high-frequency function words)
   3. Has psycholinguistic norms (keeps research-validated words)
@@ -126,7 +127,9 @@ class WordFilter:
         """
         Check if word meets inclusion criteria.
 
-        Hybrid criterion (must meet ONE of):
+        Base requirement: MUST have frequency data (SUBTLEX)
+
+        Then must meet ONE of:
         1. Valid in WordNet (filters subtitle artifacts)
         2. Frequency ≥ 50 (keeps high-frequency function words)
         3. Has psycholinguistic norms (keeps research-validated words)
@@ -142,16 +145,21 @@ class WordFilter:
 
         word = word.lower()
 
+        # Base requirement: MUST have frequency data
+        if word not in self.freq_words:
+            return False
+
+        # Then must meet ONE of:
+
         # Criterion 1: Valid in WordNet
         if WORDNET_AVAILABLE:
             if len(wn.synsets(word)) > 0:
                 return True
 
         # Criterion 2: High frequency (≥50)
-        if word in self.freq_words:
-            freq = self._get_frequency(word)
-            if freq is not None and freq >= 50:
-                return True
+        freq = self._get_frequency(word)
+        if freq is not None and freq >= 50:
+            return True
 
         # Criterion 3: Has psycholinguistic norms
         if self._has_norms(word):

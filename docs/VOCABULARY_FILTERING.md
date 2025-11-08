@@ -7,7 +7,10 @@
 
 ## Current Strategy (v2.3)
 
-**Hybrid filtering criterion** - Words must meet **ONE of**:
+**Base requirement**:
+- ✅ **MUST have frequency data** (SUBTLEX-US)
+
+**Then must meet ONE of**:
 1. ✅ **Valid in WordNet** (filters subtitle artifacts like "ree", "vo")
 2. ✅ **Frequency ≥ 50** (keeps high-frequency function words)
 3. ✅ **Has psycholinguistic norms** (keeps research-validated words)
@@ -15,9 +18,10 @@
 **Result**: 45,388 English words with comprehensive phonological properties
 
 **Rationale**:
+- **Frequency data mandatory**: All words must appear in SUBTLEX-US to ensure contemporary English usage
 - **SUBTLEX includes artifacts**: Film subtitle data contains character names, abbreviations ("V.O."), and typos
 - **WordNet alone insufficient**: Only contains content words (nouns, verbs, adjectives, adverbs) - excludes all function words (you, the, and, etc.)
-- **Hybrid approach optimal**: WordNet validation + frequency threshold keeps all legitimate English words while filtering artifacts
+- **Hybrid approach optimal**: Frequency + (WordNet OR high-frequency OR norms) keeps all legitimate English words while filtering artifacts
 - **Coverage**: 99%+ text coverage for typical English passages
 
 ---
