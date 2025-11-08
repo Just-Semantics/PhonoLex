@@ -2,20 +2,30 @@
 Central word filtering module for PhonoLex v2.3.
 
 Implements the filtering criterion:
-- Word must have frequency data (SUBTLEXus)
+HasFrequency AND (InWordNet OR HasNormsOtherThanFreq)
 
-This ensures we only include real words from contemporary English,
-filtering out archaic terms, typos, and nonsense while maximizing
-vocabulary coverage (~50K words from CMU dictionary).
+This means:
+1. **Has frequency data** (mandatory - must appear in SUBTLEX-US)
+2. **AND must meet ONE of**:
+   - Valid in WordNet (excludes subtitle artifacts like "ree", "vo")
+   - Has psycholinguistic norms (concreteness, AoA, imageability, familiarity, VAD)
 
-Additional psycholinguistic norms (concreteness, AoA, etc.) are loaded
-and available when present, but not required for inclusion.
+This approach uses linguistic validators (WordNet, research norms) rather than
+arbitrary frequency thresholds to filter subtitle artifacts and proper names
+while keeping all legitimate English words.
 """
 
 import csv
 from pathlib import Path
 
 import pandas as pd
+
+try:
+    from nltk.corpus import wordnet as wn
+    WORDNET_AVAILABLE = True
+except ImportError:
+    WORDNET_AVAILABLE = False
+    print("Warning: WordNet not available. Install with: python -m nltk.downloader wordnet")
 
 
 class WordFilter:
@@ -31,6 +41,7 @@ class WordFilter:
 
     def __init__(self):
         self.freq_words: set[str] = set()
+        self.freq_values: dict[str, float] = {}  # Cache frequency values
         self.conc_words: set[str] = set()
         self.aoa_words: set[str] = set()
         self.img_words: set[str] = set()
@@ -55,9 +66,13 @@ class WordFilter:
 
         # Report statistics
         total_eligible = self.get_eligible_words()
-        print("✓ Filtering criterion loaded:")
+        print("✓ Filtering criteria loaded:")
         print(f"  - {len(self.freq_words):,} words with frequency")
-        print(f"  - {len(total_eligible):,} words meeting criterion (freq + any norm)")
+        if WORDNET_AVAILABLE:
+            # Count WordNet words
+            wn_count = sum(1 for w in self.freq_words if len(wn.synsets(w)) > 0)
+            print(f"  - ~{wn_count:,} words valid in WordNet")
+        print(f"  - {len(total_eligible):,} words meeting hybrid criterion")
 
     def load_frequency(self):
         """Load SUBTLEXus frequency data"""
@@ -69,6 +84,7 @@ class WordFilter:
                 word = row["Word"].lower()
                 if row["SUBTLWF"]:  # Has frequency data
                     self.freq_words.add(word)
+                    self.freq_values[word] = float(row["SUBTLWF"])
 
     def load_concreteness(self):
         """Load concreteness ratings"""
@@ -114,7 +130,14 @@ class WordFilter:
         """
         Check if word meets inclusion criteria.
 
-        Criterion: Must have frequency data (relaxed from v2.0).
+        Filtering criterion:
+        HasFrequency AND (InWordNet OR HasNormsOtherThanFreq)
+
+        This means:
+        1. Word MUST have frequency data (in SUBTLEX-US)
+        2. AND word must meet ONE of:
+           - Valid in WordNet (excludes subtitle artifacts like "ree", "vo")
+           - Has psycholinguistic norms (concreteness, AoA, imageability, familiarity, VAD)
 
         Args:
             word: Word string (will be lowercased)
@@ -127,9 +150,38 @@ class WordFilter:
 
         word = word.lower()
 
-        # Only requirement: must have frequency data
-        # This filters out archaic/nonsense words while maximizing coverage
-        return word in self.freq_words
+        # Requirement 1: Has frequency data (mandatory)
+        if word not in self.freq_words:
+            return False
+
+        # Requirement 2: Must meet ONE of:
+        # - Valid in WordNet OR
+        # - Has psycholinguistic norms (excluding frequency)
+
+        # Check WordNet
+        if WORDNET_AVAILABLE:
+            if len(wn.synsets(word)) > 0:
+                return True
+
+        # Check psycholinguistic norms (excluding frequency)
+        if self._has_norms(word):
+            return True
+
+        return False
+
+    def _get_frequency(self, word: str) -> float | None:
+        """Get frequency for a word from cache"""
+        return self.freq_values.get(word)
+
+    def _has_norms(self, word: str) -> bool:
+        """Check if word has any psycholinguistic norms"""
+        return (
+            word in self.conc_words or
+            word in self.aoa_words or
+            word in self.img_words or
+            word in self.fam_words or
+            word in self.vad_words
+        )
 
     def get_eligible_words(self) -> set[str]:
         """Get all words that meet the inclusion criterion"""

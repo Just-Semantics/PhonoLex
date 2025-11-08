@@ -8,23 +8,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.3.0-beta] - 2025-01-08
 
 ### Added
-- **📈 Vocabulary Expansion: 24,744 → 48,720 words (+97%)**
-  - Relaxed filtering strategy from "frequency + 1 norm" to "frequency only"
-  - Rationale: Phase 3 moved to pure Phoible features (no training overhead), removing motivation for strict filtering
-  - Frequency-only maximizes vocabulary coverage while maintaining quality
-  - Filters out: archaic words, typos, CMU dictionary artifacts
-  - Includes: technical terms, proper nouns (if in SUBTLEX)
+- **📈 Vocabulary Expansion: 24,744 → 45,388 words (+83%)**
+  - **Hybrid filtering**:
+    - Base requirement: MUST have frequency data (SUBTLEX-US)
+    - Then must meet ONE of:
+      1. Valid in WordNet (filters subtitle artifacts like "ree", "vo")
+      2. Frequency ≥ 50 (keeps high-frequency function words)
+      3. Has psycholinguistic norms (keeps research-validated words)
+  - **Eliminates SUBTLEX artifacts**: Film subtitle data includes character names, abbreviations ("V.O."), typos
+  - **Keeps all legitimate words**: Function words (you, the, and), content words (cat, dog), technical terms
   - **99%+ text coverage** for typical English passages
   - Psycholinguistic norms available but not required for inclusion
-  - **Norm coverage (48K words)**:
+  - **Norm coverage (45K words)**:
     - ~50% have concreteness ratings
     - ~27% have VAD ratings (emotional properties)
     - ~9% have Glasgow norms (AoA, imageability, familiarity)
     - **100% have phonotactic probability** (computed on full 117K CMU for unbiased estimates)
     - 100% have frequency data
   - **Size impact**:
-    - Phase 3 embeddings: ~112 MB → ~304 MB (+171%)
-    - Client-side data (gzipped): ~0.6 MB → ~10.4 MB (+1633%)
+    - Phase 3 embeddings: 287 MB (down from 304 MB)
+    - Client-side data (gzipped): ~9.8 MB (down from 10.4 MB)
     - Still achieves **98% compression** overall
   - Updated filtering module: `src/phonolex/word_filter.py`
   - Documentation: `docs/VOCABULARY_FILTERING.md`
@@ -93,13 +96,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - New frontend service: `webapp/frontend/src/services/clientSideData_v2.ts`
 
 ### Performance
-- **🚀 File Size**: 98% compression ratio (expanded vocabulary)
-  - Uncompressed: ~525 MB JSON (48,720 words)
-  - Gzipped: ~10.4 MB (98% compression!)
-  - Total download: ~10.4 MB (structures + metadata)
+- **🚀 File Size**: 98% compression ratio
+  - Uncompressed: ~500 MB JSON (45,388 words)
+  - Gzipped: ~9.8 MB (98% compression!)
+  - Total download: ~9.8 MB (structures + metadata)
 - **Query Performance**
   - Load time: ~1-2 seconds (one-time, cached)
-  - Full-vocab similarity scan: ~50-100ms (48,720 words)
+  - Full-vocab similarity scan: ~50-100ms (45,388 words)
   - Pattern search: ~10-50ms (full vocabulary scan)
   - Filtering: ~5-20ms (multi-property filters)
   - Memory usage: ~60MB in browser
