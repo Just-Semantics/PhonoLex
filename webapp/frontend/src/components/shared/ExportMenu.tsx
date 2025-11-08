@@ -103,7 +103,7 @@ function exportGroupsPlainText(data: MinimalPair[] | ContrastiveGroup[], dataTyp
  */
 function downloadWordsCSV(words: Word[], filename: string): void {
   const headers = [
-    'Word', 'IPA', 'Syllables', 'Phonemes', 'WCM', 'MSH',
+    'Word', 'IPA', 'Syllables', 'Phonemes', 'WCM',
     'Frequency', 'AoA', 'Imageability', 'Familiarity', 'Concreteness',
     'Valence', 'Arousal', 'Dominance'
   ];
@@ -114,7 +114,6 @@ function downloadWordsCSV(words: Word[], filename: string): void {
     w.syllable_count?.toString() || '',
     w.phoneme_count?.toString() || '',
     w.wcm_score?.toFixed(2) || '',
-    w.msh_stage?.toString() || '',
     w.frequency?.toFixed(1) || '',
     w.aoa?.toFixed(1) || '',
     w.imageability?.toFixed(1) || '',
@@ -134,7 +133,7 @@ function downloadWordsCSV(words: Word[], filename: string): void {
 function downloadPairsCSV(pairs: MinimalPair[], filename: string): void {
   const headers = [
     'Group', 'Word', 'IPA', 'Phoneme', 'Position',
-    'Syllables', 'Phonemes', 'WCM', 'MSH',
+    'Syllables', 'Phonemes', 'WCM',
     'Frequency', 'AoA', 'Imageability', 'Familiarity', 'Concreteness',
     'Valence', 'Arousal', 'Dominance'
   ];
@@ -150,7 +149,6 @@ function downloadPairsCSV(pairs: MinimalPair[], filename: string): void {
       pair.word1.syllable_count?.toString() || '',
       pair.word1.phoneme_count?.toString() || '',
       pair.word1.wcm_score?.toFixed(2) || '',
-      pair.word1.msh_stage?.toString() || '',
       pair.word1.frequency?.toFixed(1) || '',
       pair.word1.aoa?.toFixed(1) || '',
       pair.word1.imageability?.toFixed(1) || '',
@@ -170,7 +168,6 @@ function downloadPairsCSV(pairs: MinimalPair[], filename: string): void {
       pair.word2.syllable_count?.toString() || '',
       pair.word2.phoneme_count?.toString() || '',
       pair.word2.wcm_score?.toFixed(2) || '',
-      pair.word2.msh_stage?.toString() || '',
       pair.word2.frequency?.toFixed(1) || '',
       pair.word2.aoa?.toFixed(1) || '',
       pair.word2.imageability?.toFixed(1) || '',
@@ -191,7 +188,7 @@ function downloadPairsCSV(pairs: MinimalPair[], filename: string): void {
 function downloadGroupsCSV(groups: ContrastiveGroup[], filename: string): void {
   const headers = [
     'Group', 'Word', 'IPA', 'Phoneme', 'Position',
-    'Syllables', 'Phonemes', 'WCM', 'MSH',
+    'Syllables', 'Phonemes', 'WCM',
     'Frequency', 'AoA', 'Imageability', 'Familiarity', 'Concreteness',
     'Valence', 'Arousal', 'Dominance'
   ];
@@ -206,7 +203,6 @@ function downloadGroupsCSV(groups: ContrastiveGroup[], filename: string): void {
       w.word.syllable_count?.toString() || '',
       w.word.phoneme_count?.toString() || '',
       w.word.wcm_score?.toFixed(2) || '',
-      w.word.msh_stage?.toString() || '',
       w.word.frequency?.toFixed(1) || '',
       w.word.aoa?.toFixed(1) || '',
       w.word.imageability?.toFixed(1) || '',

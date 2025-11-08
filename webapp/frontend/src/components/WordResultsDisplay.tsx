@@ -4,7 +4,7 @@
  * Displays word results from API calls with:
  * - Table view with sortable columns
  * - Export to CSV functionality
- * - Phonological property display (WCM, MSH, syllables)
+ * - Phonological property display (WCM, syllables)
  * - Similarity scores (when applicable)
  */
 
@@ -45,7 +45,7 @@ import {
 } from '@mui/icons-material';
 import type { Word, MinimalPair, SimilarWord } from '../services/phonolexApi';
 
-type SortField = 'word' | 'wcm' | 'msh' | 'syllable_count' | 'similarity' | 'frequency' | 'aoa' | 'imageability' | 'familiarity' | 'concreteness' | 'valence' | 'arousal' | 'dominance';
+type SortField = 'word' | 'wcm' | 'syllable_count' | 'similarity' | 'frequency' | 'aoa' | 'imageability' | 'familiarity' | 'concreteness' | 'valence' | 'arousal' | 'dominance';
 type SortDirection = 'asc' | 'desc';
 
 // Display word types with discriminated union
@@ -53,7 +53,6 @@ type DisplayWordBase = {
   word: string;
   ipa: string;
   wcm_score: number | null;
-  msh_stage: number | null;
   syllable_count: number | null;
   frequency: number | null;
   aoa: number | null;
@@ -69,7 +68,6 @@ type DisplayWordPair = DisplayWordBase & {
   isPair: true;
   _raw: {
     wcm_score: [number | null, number | null];
-    msh_stage: [number | null, number | null];
     syllable_count: [number | null, number | null];
     frequency: [number | null, number | null];
     aoa: [number | null, number | null];
@@ -169,7 +167,6 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
         word: `${pair.word1.word} / ${pair.word2.word}`,
         ipa: `${pair.word1.ipa?.replace(/\n/g, ' ')} / ${pair.word2.ipa?.replace(/\n/g, ' ')}`,
         wcm_score: avg(pair.word1.wcm_score, pair.word2.wcm_score),
-        msh_stage: avg(pair.word1.msh_stage, pair.word2.msh_stage),
         syllable_count: avg(pair.word1.syllable_count, pair.word2.syllable_count),
         frequency: avg(pair.word1.frequency, pair.word2.frequency),
         aoa: avg(pair.word1.aoa, pair.word2.aoa),
@@ -182,7 +179,6 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
         // Store raw values for display
         _raw: {
           wcm_score: [pair.word1.wcm_score, pair.word2.wcm_score],
-          msh_stage: [pair.word1.msh_stage, pair.word2.msh_stage],
           syllable_count: [pair.word1.syllable_count, pair.word2.syllable_count],
           frequency: [pair.word1.frequency, pair.word2.frequency],
           aoa: [pair.word1.aoa, pair.word2.aoa],
@@ -219,10 +215,6 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
         case 'wcm':
           aVal = a.wcm_score || 0;
           bVal = b.wcm_score || 0;
-          break;
-        case 'msh':
-          aVal = a.msh_stage || 0;
-          bVal = b.msh_stage || 0;
           break;
         case 'syllable_count':
           aVal = a.syllable_count || 0;
@@ -701,15 +693,6 @@ const WordResultsDisplay: React.FC<Props> = ({ results, showSimilarity = false }
                   onClick={() => handleSort('wcm')}
                 >
                   WCM
-                </TableSortLabel>
-              </TableCell>
-              <TableCell align="center">
-                <TableSortLabel
-                  active={sortField === 'msh'}
-                  direction={sortField === 'msh' ? sortDirection : 'asc'}
-                  onClick={() => handleSort('msh')}
-                >
-                  Complexity
                 </TableSortLabel>
               </TableCell>
               <TableCell align="center">

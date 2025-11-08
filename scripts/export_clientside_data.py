@@ -117,68 +117,6 @@ def compute_wcm_score(phonemes, syllables):
     return score
 
 
-def compute_msh_stage(phonemes, syllables):
-    """
-    Assign Motor Speech Hierarchy (MSH) stage.
-
-    Stages (Namasivayam et al., 2021):
-    I-II: Vowels, /h/
-    III: Mandibular (/p, b, m/)
-    IV: Labial-facial (/f, w, ɹ/)
-    V: Lingual (/t, d, k, g, n, s, z, l/)
-    VI: Sequenced (clusters, multisyllabic)
-    """
-    # Define phoneme categories
-    vowels = {
-        "i",
-        "ɪ",
-        "e",
-        "ɛ",
-        "æ",
-        "ɑ",
-        "ɔ",
-        "o",
-        "ʊ",
-        "u",
-        "ʌ",
-        "ə",
-        "ɚ",
-        "ɝ",
-        "eɪ",
-        "aɪ",
-        "ɔɪ",
-        "aʊ",
-        "oʊ",
-    }
-    mandibular = {"p", "b", "m"}
-    labial_facial = {"f", "w", "ɹ"}
-    lingual = {"t", "d", "k", "g", "n", "s", "z", "l"}
-
-    # Check for clusters or multisyllabic
-    has_clusters = any(len(syl.onset) >= 2 or len(syl.coda) >= 2 for syl in syllables)
-    is_multisyllabic = len(syllables) > 2
-
-    if has_clusters or is_multisyllabic:
-        return 6  # Sequenced
-
-    # Determine highest stage from phonemes
-    max_stage = 1  # Default: vowels/h
-
-    for p in phonemes:
-        p_base = p.replace("ˈ", "").replace("ˌ", "")
-
-        if p_base in lingual:
-            max_stage = max(max_stage, 5)
-        elif p_base in labial_facial:
-            max_stage = max(max_stage, 4)
-        elif p_base in mandibular:
-            max_stage = max(max_stage, 3)
-        elif p_base in vowels or p_base == "h":
-            max_stage = max(max_stage, 2)
-
-    return max_stage
-
-
 def load_filtered_embeddings():
     """Load the Phoible-based embeddings (no quantization needed)"""
     print("\n[1/5] Loading Phoible-based embeddings...")
@@ -236,9 +174,8 @@ def load_word_metadata(filtered_words):
         # Get phonotactic probability
         word_phono_prob = phono_probs.get(word, {})
 
-        # Compute clinical measures (WCM and MSH)
+        # Compute clinical measures (WCM)
         wcm_score = compute_wcm_score(ipa_phones, syllables_list)
-        msh_stage = compute_msh_stage(ipa_phones, syllables_list)
 
         word_metadata[word] = {
             "word": word,
@@ -249,7 +186,6 @@ def load_word_metadata(filtered_words):
             "syllable_count": len(syllables_list),
             # Clinical measures
             "wcm_score": wcm_score,
-            "msh_stage": msh_stage,
             # Psycholinguistic norms
             "frequency": word_norms.get("frequency"),
             "log_frequency": word_norms.get("log_frequency"),

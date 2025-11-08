@@ -55,15 +55,6 @@ const citations: Record<string, Citation[]> = {
       doi: '10.3109/02699200903581059',
     },
     {
-      authors: 'Namasivayam, A. K., Huynh, A., Granata, F., Law, V., & van Lieshout, P.',
-      year: '2021',
-      title: 'SMASH: A tool for hierarchical classification of speech motor control',
-      journal: 'Journal of Communication Disorders',
-      volume: '89',
-      pages: '106066',
-      doi: '10.1016/j.jcomdis.2020.106066',
-    },
-    {
       authors: 'Vitevitch, M. S., & Luce, P. A.',
       year: '2004',
       title: 'A Web-based interface to calculate phonotactic probability for words and nonwords in English',

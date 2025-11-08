@@ -43,7 +43,6 @@ interface WordMetadata {
   phoneme_count: number;
   syllable_count: number;
   wcm_score: number | null;
-  msh_stage: number | null;
   frequency: number | null;
   log_frequency: number | null;
   concreteness: number | null;
@@ -247,10 +246,6 @@ class ClientSideDataService {
       if (request.min_wcm !== undefined && (metadata.wcm_score === null || metadata.wcm_score < request.min_wcm)) matches = false;
       if (request.max_wcm !== undefined && (metadata.wcm_score === null || metadata.wcm_score > request.max_wcm)) matches = false;
 
-      // MSH
-      if (request.min_msh !== undefined && (metadata.msh_stage === null || metadata.msh_stage < request.min_msh)) matches = false;
-      if (request.max_msh !== undefined && (metadata.msh_stage === null || metadata.msh_stage > request.max_msh)) matches = false;
-
       // Frequency
       if (request.min_frequency !== undefined && (metadata.frequency === null || metadata.frequency < request.min_frequency)) matches = false;
       if (request.max_frequency !== undefined && (metadata.frequency === null || metadata.frequency > request.max_frequency)) matches = false;
@@ -371,10 +366,6 @@ class ClientSideDataService {
           // WCM
           if (f.min_wcm !== undefined && (metadata.wcm_score === null || metadata.wcm_score < f.min_wcm)) matches = false;
           if (f.max_wcm !== undefined && (metadata.wcm_score === null || metadata.wcm_score > f.max_wcm)) matches = false;
-
-          // MSH
-          if (f.min_msh !== undefined && (metadata.msh_stage === null || metadata.msh_stage < f.min_msh)) matches = false;
-          if (f.max_msh !== undefined && (metadata.msh_stage === null || metadata.msh_stage > f.max_msh)) matches = false;
 
           // Frequency
           if (f.min_frequency !== undefined && (metadata.frequency === null || metadata.frequency < f.min_frequency)) matches = false;
@@ -1427,7 +1418,6 @@ class ClientSideDataService {
       syllables: { min: Infinity, max: -Infinity },
       phonemes: { min: Infinity, max: -Infinity },
       wcm: { min: Infinity, max: -Infinity },
-      msh: { min: Infinity, max: -Infinity },
       phono_prob_avg: { min: Infinity, max: -Infinity },
       frequency: { min: Infinity, max: -Infinity },
       aoa: { min: Infinity, max: -Infinity },
@@ -1453,10 +1443,6 @@ class ClientSideDataService {
       if (metadata.wcm_score !== null && metadata.wcm_score !== undefined) {
         ranges.wcm.min = Math.min(ranges.wcm.min, metadata.wcm_score);
         ranges.wcm.max = Math.max(ranges.wcm.max, metadata.wcm_score);
-      }
-      if (metadata.msh_stage !== null && metadata.msh_stage !== undefined) {
-        ranges.msh.min = Math.min(ranges.msh.min, metadata.msh_stage);
-        ranges.msh.max = Math.max(ranges.msh.max, metadata.msh_stage);
       }
       if (metadata.phono_prob_avg !== null && metadata.phono_prob_avg !== undefined) {
         ranges.phono_prob_avg.min = Math.min(ranges.phono_prob_avg.min, metadata.phono_prob_avg);
@@ -1542,7 +1528,6 @@ class ClientSideDataService {
       phoneme_count: metadata.phoneme_count,
       syllable_count: metadata.syllable_count,
       wcm_score: metadata.wcm_score,
-      msh_stage: metadata.msh_stage,
       frequency: metadata.frequency,
       log_frequency: metadata.log_frequency,
       aoa: metadata.aoa,
