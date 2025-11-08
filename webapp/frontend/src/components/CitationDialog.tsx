@@ -55,16 +55,6 @@ const citations: Record<string, Citation[]> = {
       doi: '10.3109/02699200903581059',
     },
     {
-      authors: 'Namasivayam, A. K., Huynh, A., Bali, R., Granata, F., Law, V., Rampersaud, D., Hard, J., Ward, R., Helms-Park, R., van Lieshout, P., & Hayden, D.',
-      year: '2021',
-      title: 'Development and Validation of a Probe Word List to Assess Speech Motor Skills in Children',
-      journal: 'American Journal of Speech-Language Pathology',
-      volume: '30',
-      issue: '2',
-      pages: '622-648',
-      doi: '10.1044/2020_AJSLP-20-0013',
-    },
-    {
       authors: 'Vitevitch, M. S., & Luce, P. A.',
       year: '2004',
       title: 'A Web-based interface to calculate phonotactic probability for words and nonwords in English',

@@ -53,7 +53,7 @@ import SelectionToolbar from './SelectionToolbar';
 // Types
 // ============================================================================
 
-type SortField = 'word' | 'wcm_score' | 'msh_stage' | 'syllable_count' | 'similarity' |
+type SortField = 'word' | 'wcm_score' | 'syllable_count' | 'similarity' |
   'phono_prob_avg' | 'frequency' | 'aoa' | 'imageability' | 'familiarity' | 'concreteness' |
   'valence' | 'arousal' | 'dominance';
 type SortDirection = 'asc' | 'desc';
@@ -150,10 +150,6 @@ const WordListTable: React.FC<WordListTableProps> = ({
         case 'wcm_score':
           aVal = a.wcm_score || 0;
           bVal = b.wcm_score || 0;
-          break;
-        case 'msh_stage':
-          aVal = a.msh_stage || 0;
-          bVal = b.msh_stage || 0;
           break;
         case 'syllable_count':
           aVal = a.syllable_count || 0;
@@ -621,17 +617,6 @@ const WordListTable: React.FC<WordListTableProps> = ({
                     </Tooltip>
                   </TableCell>
                   <TableCell align="center">
-                    <Tooltip title="Motor Speech Hierarchy (1-6)">
-                      <TableSortLabel
-                        active={sortField === 'msh_stage'}
-                        direction={sortField === 'msh_stage' ? sortDirection : 'asc'}
-                        onClick={() => handleSort('msh_stage')}
-                      >
-                        MSH
-                      </TableSortLabel>
-                    </Tooltip>
-                  </TableCell>
-                  <TableCell align="center">
                     <Tooltip title="Phonotactic Probability (0-1, higher = more typical)">
                       <TableSortLabel
                         active={sortField === 'phono_prob_avg'}
@@ -808,13 +793,6 @@ const WordListTable: React.FC<WordListTableProps> = ({
                           (word.wcm_score || 0) < 10 ? 'warning' : 'error'
                         }
                       />
-                    </TableCell>
-
-                    {/* MSH */}
-                    <TableCell align="center">
-                      <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'monospace' }}>
-                        {word.msh_stage?.toString() || '-'}
-                      </Typography>
                     </TableCell>
 
                     {/* Phonotactic Probability */}

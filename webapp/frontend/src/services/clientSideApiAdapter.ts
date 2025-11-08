@@ -239,8 +239,6 @@ class ClientSideAPIAdapter {
   async generateComplexityList(params: {
     min_wcm?: number;
     max_wcm?: number;
-    min_msh?: number;
-    max_msh?: number;
     limit?: number;
   }): Promise<Word[]> {
     await this.ensureLoaded();

@@ -3,7 +3,7 @@
  *
  * Custom word list builder with:
  * - Pattern matching (STARTS_WITH, ENDS_WITH, CONTAINS)
- * - Property filters (syllables, WCM, MSH, AoA)
+ * - Property filters (syllables, WCM, phonotactic probability, AoA)
  * - Exclusion rules (phoneme blacklist, feature blacklist)
  * - Combined queries with AND logic
  */
@@ -55,7 +55,6 @@ const Builder: React.FC = () => {
     syllables: [1, 5],
     phonemes: [1, 10],
     wcm: [0, 15],
-    msh: [1, 6],
     phono_prob_avg: [0, 1],
     frequency: [0, 1000],
     aoa: [2, 10],
@@ -74,7 +73,6 @@ const Builder: React.FC = () => {
     syllables: [1, 5] as [number, number],
     phonemes: [1, 10] as [number, number],
     wcm: [0, 15] as [number, number],
-    msh: [1, 6] as [number, number],
     phono_prob_avg: [0, 1] as [number, number],
 
     // Lexical Properties
@@ -106,7 +104,6 @@ const Builder: React.FC = () => {
           syllables: ranges.syllables as [number, number],
           phonemes: ranges.phonemes as [number, number],
           wcm: ranges.wcm as [number, number],
-          msh: ranges.msh as [number, number],
           phono_prob_avg: ranges.phono_prob_avg as [number, number],
           frequency: ranges.frequency as [number, number],
           aoa: ranges.aoa as [number, number],
@@ -232,10 +229,6 @@ const Builder: React.FC = () => {
           filtersObj.min_wcm = filters.wcm[0];
           filtersObj.max_wcm = filters.wcm[1];
         }
-        if (filters.msh[0] !== dbRanges.msh[0] || filters.msh[1] !== dbRanges.msh[1]) {
-          filtersObj.min_msh = filters.msh[0];
-          filtersObj.max_msh = filters.msh[1];
-        }
         if (filters.frequency[0] !== dbRanges.frequency[0] || filters.frequency[1] !== dbRanges.frequency[1]) {
           filtersObj.min_frequency = filters.frequency[0];
           filtersObj.max_frequency = filters.frequency[1];
@@ -300,7 +293,6 @@ const Builder: React.FC = () => {
       syllables: dbRanges.syllables as [number, number],
       phonemes: dbRanges.phonemes as [number, number],
       wcm: dbRanges.wcm as [number, number],
-      msh: dbRanges.msh as [number, number],
       phono_prob_avg: dbRanges.phono_prob_avg as [number, number],
       frequency: dbRanges.frequency as [number, number],
       aoa: dbRanges.aoa as [number, number],
@@ -505,26 +497,6 @@ const Builder: React.FC = () => {
                           min={dbRanges.wcm[0]}
                           max={dbRanges.wcm[1]}
                           step={1}
-                          valueLabelDisplay="auto"
-                          sx={{ '& .MuiSlider-markLabel': { fontSize: { xs: '0.625rem', sm: '0.75rem' } } }}
-                        />
-                      </Box>
-
-                      {/* MSH */}
-                      <Box>
-                        <Typography variant="body2" gutterBottom sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
-                          MSH Stage: {filters.msh[0]} - {filters.msh[1]}
-                          <Typography variant="caption" color="text.secondary" display="block" sx={{ fontSize: { xs: '0.6875rem', sm: '0.75rem' } }}>
-                            Motor Speech Hierarchy (Namasivayam et al., 2021)
-                          </Typography>
-                        </Typography>
-                        <Slider
-                          value={filters.msh}
-                          onChange={(_, value) => handleFilterChange('msh', value as [number, number])}
-                          min={dbRanges.msh[0]}
-                          max={dbRanges.msh[1]}
-                          step={1}
-                          marks
                           valueLabelDisplay="auto"
                           sx={{ '& .MuiSlider-markLabel': { fontSize: { xs: '0.625rem', sm: '0.75rem' } } }}
                         />

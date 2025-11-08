@@ -81,7 +81,6 @@ export interface Word {
 
   // Clinical measures
   wcm_score: number | null;  // Word Complexity Measure
-  msh_stage: number | null;  // Motor Speech Hierarchy stage
 
   // Phonotactic probability (Vitevitch & Luce 2004)
   phono_prob_avg: number | null;  // Mean biphone probability (0-1, higher = more common sound sequences)
@@ -142,8 +141,6 @@ export interface WordFilterRequest {
   // Clinical measures
   min_wcm?: number;
   max_wcm?: number;
-  min_msh?: number;
-  max_msh?: number;
 
   // Phonotactic probability
   min_phono_prob_avg?: number;
